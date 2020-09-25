@@ -1,11 +1,10 @@
 # liquidchat
-⭐ Open-source chat application similar to Discord-
+⭐ Open-source chat application similar to Discord-  
 
-🚩 **Planned features:**
-- 👥 Friend Features (Adding/Removing friends)
-- 🔺 DMs (Private messages between 2-20 users)
-- 🥰 Emojis
-
+🚩 **Planned features:**  
+-- 👥 Friend Features (Adding/Removing friends)  
+-- 🔺 DMs (Private messages between 2-20 users)  
+-- 🥰 Emojis 
 
 ### How to build client (Windows)
 > run `npm run buildproduction`  
@@ -22,4 +21,6 @@
 > change `fileEnpoint` in `App.js` to your server's adress:8081
 
 ✔️ Releases: https://github.com/LamkasDev/liquidchat-releases  
-🔥 API: https://github.com/LamkasDev/liquidchat.js
+🔥 API: https://github.com/LamkasDev/liquidchat.js  
+💛 Official website: (soon)™️  
+🔴 Found a bug or want to contribute?: [Open a pull request!](https://github.com/LamkasDev/liquidchat/pulls)
