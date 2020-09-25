@@ -2,9 +2,9 @@
 ⭐ Open-source chat application similar to Discord-  
 
 🚩 **Planned features:**  
--- 👥 Friend Features (Adding/Removing friends)  
--- 🔺 DMs (Private messages between 2-20 users)  
--- 🥰 Emojis 
+-- Friend Features (Adding/Removing friends)  
+-- DMs (Private messages between 2-20 users)  
+-- Emojis 
 
 ✔️ Releases: https://github.com/LamkasDev/liquidchat/releases
 🔥 API: https://github.com/LamkasDev/liquidchat.js  
