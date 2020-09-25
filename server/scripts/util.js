@@ -22,6 +22,7 @@ class Util {
         this.app.cors = require("cors")
         this.app.bcrypt = require('bcrypt');
         this.app.sql = require('mysql2');
+        this.app.https = require("https");
 
         this.app.readJSON = path =>
             JSON.parse(this.app.fs.readFileSync(process.cwd() + path))
@@ -61,8 +62,13 @@ class Util {
 
     //Setups a http server
     setupServer() {
-        this.app.server = this.app.listen(8080);
-        console.log("[MAIN_SERVER] Started up http server on port 8080-");
+        const options = {
+            key: this.app.fs.readFileSync("keys/key.pem"),
+            cert: this.app.fs.readFileSync("keys/cert.pem")
+        };
+        
+        this.app.server = this.app.https.createServer(options, this.app).listen(8080);
+        console.log("[MAIN_SERVER] Started up https server on port 8080-");
     }
 
     //Setups a websocket server
