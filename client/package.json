@@ -1,0 +1,74 @@
+{
+  "name": "LiquidChat",
+  "version": "0.1.0",
+  "proxy": "http://localhost:8080",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "axios": "^0.19.2",
+    "electron-is-dev": "^1.2.0",
+    "electron-log": "^4.2.4",
+    "electron-updater": "^4.3.4",
+    "electron-webrtc": "^0.3.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.1",
+    "socket.io-client": "^2.3.0",
+    "websocket": "^1.0.32"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "package": "electron-builder build --win -c.extraMetadata.main=build/electron/electron.js --publish never",
+    "createproduction": "react-scripts build && mkdir build\\electron && move build\\electron.js build\\electron\\electron.js && xcopy src build\\src /e /i /h && move build\\src\\public\\icon.ico build\\icon.ico && electron-builder build --win -c.extraMetadata.main=build/electron/electron.js --publish never"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "build": {
+    "appId": "com.electron.chatapp",
+    "files": [
+      "./node_modules/**/*",
+      "./build/**/*",
+      "package.json"
+    ],
+    "extends": null,
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "LamkasDev",
+        "repo": "liquidchat-releases"
+      }
+    ],
+    "nsis": {
+      "artifactName": "${productName} Installer.${ext}",
+      "shortcutName": "LiquidChat"
+    }
+  },
+  "devDependencies": {
+    "electron-builder": "^22.8.0",
+    "electron": "7.0.0"
+  },
+  "postinstall": "electron-builder install-app-deps",
+  "main": "./public/electron.js",
+  "homepage": "./"
+}

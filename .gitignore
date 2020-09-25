@@ -1,0 +1,11 @@
+client/build
+client/dist
+client/node_modules
+
+server/node_modules
+server/data/config_persistent.txt
+
+icon/
+database.json
+.vscode
+*.dat

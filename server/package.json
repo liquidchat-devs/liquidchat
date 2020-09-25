@@ -1,0 +1,30 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "cookie": "^0.4.1",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "formidable": "^1.2.2",
+    "fs-extra": "^9.0.1",
+    "mysql2": "^2.1.0",
+    "socket.io": "^2.3.0",
+    "websocket": "^1.0.32"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
