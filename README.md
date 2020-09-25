@@ -15,11 +15,12 @@
 ##### How to build client (Windows)
 > run `npm run buildproduction`  
 > the installer will be built into `client/dist`
-###### How to host API yourself
+
+##### How to host API yourself
 > run `node server.js`
-###### How to host files yourself
+##### How to host files yourself
 > run `http-server -p 8081`
 
-###### How to point your client into own server
+##### How to point your client into own server
 > change `APIEndpoint` in `App.js` to your server's adress:8080  
 > change `fileEnpoint` in `App.js` to your server's adress:8081
