@@ -161,6 +161,72 @@ class API {
           }
         })
     }
+
+    async API_fetchFriendRequests() {
+        const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchFriendRequests?id=' + this.mainClass.state.session.userID, { withCredentials: true }));
+        var friendRequests = reply.data
+
+        this.API_fetchUsersForMessages(friendRequests)
+        this.mainClass.setState({
+            friendRequests: friendRequests
+        });
+    }
+
+    async API_fetchUsersForFriendRequests(friendRequests) {
+        const queue = new Map();
+        friendRequests.forEach(friendRequest => {
+          if(!queue.has(friendRequest.target.id)) {
+            this.API_fetchUser(friendRequest.author.id)
+            queue.set(friendRequest.target.id, 1)
+          }
+        })
+    }
+    //#endregion
+
+    //#region User Actions
+    async API_updateAvatar(file) {
+        var data = new FormData();
+        data.append("fileUploaded", file)
+
+        await axios({
+            method: 'post',
+            url: this.mainClass.state.APIEndpoint + '/updateAvatar?fileName=' + file.name,
+            processData: false,
+            contentType: false,
+            cache: false,
+            enctype: 'multipart/form-data',
+            data: data,
+            withCredentials: true
+        });
+
+        return true;
+    }
+
+    async API_sendFriendRequest(userID) {
+        await axios.post(this.mainClass.state.APIEndpoint + '/sendFriendRequest', {
+            target: {
+                id: userID
+            }
+        }, { withCredentials: true });
+
+        return true;
+    }
+
+    async API_acceptFriendRequest(id) {
+        await axios.post(this.mainClass.state.APIEndpoint + '/acceptFriendRequest', {
+            id: id
+        }, { withCredentials: true });
+
+        return true;
+    }
+
+    async API_declineFriendRequest(id) {
+        await axios.post(this.mainClass.state.APIEndpoint + '/declineFriendRequest', {
+            id: id
+        }, { withCredentials: true });
+
+        return true;
+    }
     //#endregion
 
     //#region Authorization
@@ -246,24 +312,6 @@ class API {
         await axios({
             method: 'post',
             url: this.mainClass.state.APIEndpoint + '/upload?fileName=' + file.name,
-            processData: false,
-            contentType: false,
-            cache: false,
-            enctype: 'multipart/form-data',
-            data: data,
-            withCredentials: true
-        });
-
-        return true;
-    }
-
-    async API_updateAvatar(file) {
-        var data = new FormData();
-        data.append("fileUploaded", file)
-
-        await axios({
-            method: 'post',
-            url: this.mainClass.state.APIEndpoint + '/updateAvatar?fileName=' + file.name,
             processData: false,
             contentType: false,
             cache: false,

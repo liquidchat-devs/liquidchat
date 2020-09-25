@@ -34,6 +34,18 @@ module.exports = {
             if(err) { throw err; }
         });
     },
+
+    deleteFriendRequest(db, id) {
+        if(db.DEBUG) {
+            console.log(" - [db] Deleting FriendRequest(id: " + id + ") from the database..."); 
+        }
+
+        var query = "DELETE FROM friendRequests WHERE id='" + id + "'";
+        db.sqlConn.promise().query(query)
+        .then((result, err) => {
+            if(err) { throw err; }
+        });
+    },
     
     deleteAllData(db) {
         if(db.DEBUG) {

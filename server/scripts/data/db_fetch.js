@@ -93,6 +93,39 @@ module.exports = {
         return res
     },
 
+    async fetchFriendRequest(db, id) {
+        if(db.DEBUG) {
+            console.log(" - [db] Loading FriendRequest(id: " + id + ") from the database..."); 
+        }
+
+        var query0 = "SELECT * FROM friendRequests WHERE id='" + id + "'";
+        var result = await db.sqlConn.promise().query(query0);
+        if(result.length < 1 || result[0].length < 1) {
+            return undefined;
+        }
+    
+        return this.formatFriendRequest(result[0][0])
+    },
+
+    async fetchFriendRequests(db, id) {
+        if(db.DEBUG) {
+            console.log(" - [db] Loading FriendRequests from User(id: " + id + ") from the database..."); 
+        }
+
+        var query0 = "SELECT * FROM friendRequests WHERE authorID='" + id + "'";
+        var result = await db.sqlConn.promise().query(query0);
+        if(result.length < 1 || result[0].length < 1) {
+            return [];
+        }
+
+        var res = result[0]
+        res.forEach(_res => {
+            _res = this.formatFriendRequest(_res)
+        });
+    
+        return res
+    },
+
     formatMessage(message) {
         message.author = { id: message.authorID }
         delete message.authorID
@@ -110,5 +143,14 @@ module.exports = {
         delete channel.authorID
 
         return channel;
+    },
+
+    formatFriendRequest(friendRequest) {
+        friendRequest.author = { id: friendRequest.authorID }
+        delete friendRequest.authorID
+        friendRequest.target = { id: friendRequest.targetID }
+        delete friendRequest.targetID
+
+        return friendRequest;
     }
 }

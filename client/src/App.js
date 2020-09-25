@@ -28,6 +28,7 @@ class App extends React.Component {
     //Data
     users: new Map(),
     channels: new Map(),
+    friendRequests: new Map(),
 
     //Channel selector
     firstChannelElement: -1,
@@ -46,8 +47,8 @@ class App extends React.Component {
 
     //API
     API: new API(this),
-    APIEndpoint: "http://api.nekonetwork.net:8080",
-    fileEndpoint: "http://api.nekonetwork.net:8081",
+    APIEndpoint: "https://nekonetwork.net:8080",
+    fileEndpoint: "http://nekonetwork.net:8081",
     applicationName: "> LiquidChat (dev)"
   };
 
@@ -173,7 +174,7 @@ class App extends React.Component {
             <div className="flex">
               <ChannelSelector
               API={this.state.API} switchDialogState={this.switchDialogState} channelTypes={this.state.channelTypes} switchChannelTypes={this.switchChannelTypes}
-              session={this.state.session} fileEndpoint={this.state.fileEndpoint}
+              session={this.state.session} fileEndpoint={this.state.fileEndpoint} friendRequests={this.state.friendRequests}
               channels={this.state.channels} setFirstChannel={this.setFirstChannel} switchChannel={this.switchChannel} currentVoiceGroup={this.state.currentVoiceGroup} getUser={this.getUser}/>
               <div className="chat-wrapper">
                 <ChannelHeader

@@ -52,9 +52,20 @@ export class ChannelSelector extends React.Component {
     }
   }
 
+  acceptFriendRequest(id) {
+    this.props.API.API_acceptFriendRequest(id);
+  }
+
+  declineFriendRequest(id) {
+    this.props.API.API_declineFriendRequest(id);
+  }
+
   render() {
     let channels = Array.from(this.props.channels.values());
+    let friendRequests = Array.from(this.props.friendRequests.values());
     let voiceGroup = this.props.currentVoiceGroup;
+
+    friendRequests = [{ sourceID: "0fd4395ce1cb6b94a128f9345cf00ee0", targetID: "0fd4395ce1cb6b94a128f9345cf00ee0" }]
     
     channels = channels.filter(channel => { return ((channel.type === 0 || channel.type === 1) && this.props.channelTypes === 2) || (channel.type === 2 && this.props.channelTypes === 1); })
     const channelList = channels.map((channel, i) => {
@@ -94,28 +105,65 @@ export class ChannelSelector extends React.Component {
       )
     });
 
-    return (
-      <div className="channels headerColor">
-        <div className={this.props.channelTypes === 1 ? "white headerColor channel selectedChannelColor" : "white headerColor channel"} onClick={() => { this.props.switchChannelTypes(1) }}>
-          DMs
-        </div>
-        <div className={this.props.channelTypes === 2 ? "white headerColor channel selectedChannelColor" : "white headerColor channel"} onClick={() => { this.props.switchChannelTypes(2) }}>
-          Global
-        </div>
-        <div className="white headerColor channel">
-          -
-        </div>
-        {channelList}
-        {voiceGroup !== -1 ? 
-          <div className="white headerColor vcInfo selectedChannelColor">
-            <div className="button2 alignmiddle chatColor" onClick={(e) => { this.handleEdit(e); }}>
-              <p className="white text1">> Disconnect</p>
+    const friendRequestsList = friendRequests.map((friendRequest, i) => {
+      const user = this.props.getUser(friendRequest.targetID)
+
+      return (
+        <div className="friendRequestEntry selectedChannelColor">
+          <div className="flex">
+            <img className="avatar3 marginleft1 margintop1" src={this.props.fileEndpoint + "/" + user.avatar} key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
+            <div className="white marginleft2 margintop1">
+              {user.username}
             </div>
           </div>
-        : null}
-        <div className="white headerColor channel" onClick={() => { this.props.switchDialogState(1) }}>
-          +
+          <div className="flex">
+            <div className="white channel acceptColor" onClick={() => { this.acceptFriendRequest(friendRequest.id); }}>
+              Accept
+            </div>
+            <div className="white channel declineColor" onClick={() => { this.declineFriendRequest(friendRequest.id); }}>
+              Decline
+            </div>
+          </div>
         </div>
+      )
+    });
+
+    return (
+      <div className="flex">
+        <div className="channels headerColor">
+          <div className={this.props.channelTypes === 3 ? "white headerColor channel selectedChannelColor" : "white headerColor channel"} onClick={() => { this.props.switchChannelTypes(3) }}>
+            Friends
+          </div>
+          <div className={this.props.channelTypes === 1 ? "white headerColor channel selectedChannelColor" : "white headerColor channel"} onClick={() => { this.props.switchChannelTypes(1) }}>
+            DMs
+          </div>
+          <div className={this.props.channelTypes === 2 ? "white headerColor channel selectedChannelColor" : "white headerColor channel"} onClick={() => { this.props.switchChannelTypes(2) }}>
+            Global
+          </div>
+        </div>
+        {this.props.channelTypes === 1 || this.props.channelTypes === 2 ?
+          <div className="channels headerColor">
+            {channelList}
+            {voiceGroup !== -1 ? 
+              <div className="white headerColor vcInfo selectedChannelColor">
+                <div className="button2 alignmiddle chatColor" onClick={(e) => { this.handleEdit(e); }}>
+                  <p className="white text1">> Disconnect</p>
+                </div>
+              </div>
+            : null}
+            {this.props.channelTypes === 2 ?
+              <div className="white headerColor channel" onClick={() => { this.props.switchDialogState(1) }}>
+              +
+              </div>
+            : null}
+          </div>
+        :
+        <div className="channels headerColor">
+          {friendRequestsList}
+          <div className="white headerColor channel" onClick={() => { this.props.switchDialogState(7) }}>
+            Add Friend
+          </div>
+        </div>}
       </div>
     );
   }
@@ -152,7 +200,10 @@ export class DialogManager extends React.Component {
         return <ProfileBox API={this.props.API} fileEndpoint={this.props.fileEndpoint} switchDialogState={this.props.switchDialogState} session={this.props.session} selectedUser={this.props.selectedUser}/>
 
       case 6:
-        return <ProfileOptionsBox copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedUser={this.props.selectedUser} boxX={this.props.boxX} boxY={this.props.boxY}/>
+        return <ProfileOptionsBox copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedUser={this.props.selectedUser} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
+
+      case 7:
+        return <AddFriendBox switchDialogState={this.props.switchDialogState}/>
 
       default:
         return null;
@@ -235,6 +286,63 @@ export class CreateChannelDialog extends React.Component {
   }
 }
 
+export class AddFriendBox extends React.Component {
+  state = {
+    friendUsername: "",
+    friendRequestResult: 0
+  };
+
+  handleChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  handleSubmit = async e => {
+    e.preventDefault();
+    const res = await this.props.API.API_sendFriendRequest(this.state.friendUsername);
+    this.setState({
+      friendRequestResult: res,
+    });
+    
+    if(res === 1) { this.props.switchDialogState(-1); }
+    return true;
+  }
+
+  getErrorText(code) {
+    switch(code) {
+      default:
+        return "";
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlaybox">
+          <div className="white text3 marginleft2 margintop1a">> Add a friend-</div>
+          <form onSubmit={this.handleSubmit}>
+            <input className="inputfield1 marginleft2" name="friendUsername" type="text" placeholder="Username..." required={true} onChange={this.handleChange} /><br />
+          </form>
+          <Button
+              variant="contained" 
+              color="primary" 
+              onClick={this.handleSubmit}
+              className="button1" style={{ marginTop: 15, marginLeft: 10 }}>Send request!</Button>
+              {
+                (this.getErrorText(this.state.friendRequestResult).length > 0 ?
+                <div className="marginleft2 margintop1 errorColor">
+                  {this.getErrorText(this.state.friendRequestResult)}
+                </div>
+                : "")
+              }
+        </div>
+      </div>
+    );
+  }
+}
+
 export class MessageOptionsBox extends React.Component {
   state = {
     messageDeletionResult: 0
@@ -296,14 +404,25 @@ export class MessageOptionsBox extends React.Component {
 }
 
 export class ProfileOptionsBox extends React.Component {
+  sendFriendRequest(id) {
+    this.props.API.API_sendFriendRequest(id);
+  }
+
   render() {
     return (
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0); }} style={{ opacity: 0.3 }}></div>
-        <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY, height: 30 }}>
+        <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY, height: this.props.selectedUser.id === this.props.session.userID ? 30 : 45  }}>
           <div className="button2 alignmiddle chatColor" onClick={() => { this.props.switchDialogState(5); }}>
             <p className="white text1">> Profile</p>
           </div>
+          {
+            this.props.selectedUser.id !== this.props.session.userID ?
+            <div className="button2 alignmiddle chatColor" onClick={() => { this.sendFriendRequest(this.props.selectedUser.id); }}>
+              <p className="white text1">> Add Friend</p>
+            </div> :
+            ""
+          }
           <div className="button2 alignmiddle chatColor" onClick={() => { this.props.copyID(this.props.selectedUser.id); }}>
             <p className="white text1">> Copy ID</p>
           </div>

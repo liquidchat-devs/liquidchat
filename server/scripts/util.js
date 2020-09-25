@@ -95,11 +95,6 @@ class Util {
 
     //Setups routes for the express app
     setupRoutes() {
-        this.app.use(function(req, res, next) {
-            res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-            next();
-        });
-
         this.app.post('/login', async(req, res) => {
             const data = req.body;
             switch(data.authType) {
@@ -305,6 +300,20 @@ class Util {
 
                 res.send(JSON.stringify(user))
             }
+        });
+
+        this.app.get('/fetchFriendRequest', async(req, res) => {
+            if(!this.isSessionValid(req, res)) { return; }
+
+            var friendRequest = await this.app.db.db_fetch.fetchFriendRequest(this.app.db, data.id);
+            res.send(JSON.stringify(friendRequest));
+        });
+
+        this.app.get('/fetchFriendRequests', async(req, res) => {
+            if(!this.isSessionValid(req, res)) { return; }
+
+            var friendRequests = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, data.author.id);
+            res.send(JSON.stringify(friendRequests));
         });
 
         this.app.post('/joinVoiceChannel', async(req, res) => {
