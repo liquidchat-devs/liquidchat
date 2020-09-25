@@ -6,7 +6,7 @@
 -- DMs (Private messages between 2-20 users)  
 -- Emojis 
 
-✔️ Releases: https://github.com/LamkasDev/liquidchat/releases
+✔️ Releases: https://github.com/LamkasDev/liquidchat/releases  
 🔥 API: https://github.com/LamkasDev/liquidchat.js  
 💛 Official website: (soon)™️  
 🔴 Found a bug or want to contribute?: [Open a pull request!](https://github.com/LamkasDev/liquidchat/pulls)
