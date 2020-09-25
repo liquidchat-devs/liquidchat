@@ -55,7 +55,7 @@ class Util {
             extended: true
         }));
 
-        this.app.use(this.express.static(this.app.argv.length > 1 ? this.app.argv[2] : "../client-elm/public"));
+        this.app.use(this.express.static("../client/public"));
         this.app.use(this.express.json());
         this.app.use(this.express.urlencoded());
     }
@@ -63,8 +63,8 @@ class Util {
     //Setups a http server
     setupServer() {
         const options = {
-            key: this.app.fs.readFileSync("keys/key.pem"),
-            cert: this.app.fs.readFileSync("keys/cert.pem")
+            key: this.app.fs.readFileSync("./keys/key.pem"),
+            cert: this.app.fs.readFileSync("./keys/cert.pem")
         };
         
         this.app.server = this.app.https.createServer(options, this.app).listen(8080);
