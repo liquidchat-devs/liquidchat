@@ -46,7 +46,7 @@ class App extends React.Component {
 
     //API
     API: new API(this),
-    APIEndpoint: "https://api.nekonetwork.net:8080",
+    APIEndpoint: "http://api.nekonetwork.net:8080",
     fileEndpoint: "http://api.nekonetwork.net:8081",
     applicationName: "> LiquidChat (dev)"
   };
