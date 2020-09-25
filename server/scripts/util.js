@@ -95,8 +95,8 @@ class Util {
 
     //Setups routes for the express app
     setupRoutes() {
-        this.app.all('*', (req, res, next) => {
-            res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
+        this.app.use(function(req, res, next) {
+            res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
             next();
         });
 
