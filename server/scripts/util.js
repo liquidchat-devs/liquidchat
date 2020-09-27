@@ -1,3 +1,5 @@
+const { readSync } = require("fs");
+
 class Util {
     constructor(app, express) {
         this.app = app;
@@ -191,20 +193,17 @@ class Util {
             console.log("> received file - " + fileName)
 
             form.on('fileBegin', (partName, file) => {
-                if (file.name) {
-                    if (fileName.endsWith(".exe")) {
+                if (file.size) {
+                    if (file.size >= (1024 * 1024 * 100)) {
                         file.open = () => {}
                         file.write = () => {}
                         file.end = () => {}
-                        form.emit('error', new Error(`File extension for [ ${fileName} ] is not supported.`));
+                        form.emit('error', new Error(`File is too big-`));
+                        res.send(JSON.stringify({ status: -1 }));
                         return;
                     }
                 }
             })
-
-            form.on('error', (e) => {
-                console.error(e);
-            });
         
             form.on('progress', function(bytesReceived, bytesExpected) {
                 if(!sentStartPacket) {
@@ -217,6 +216,7 @@ class Util {
             }.bind(this));
         
             form.parse(req, async function(err, fields, files) {
+                if(files.fileUploaded === undefined) { return; }
                 this.app.fs.rename(files.fileUploaded.path, this.app.filesStorage + fileID2, function(err) {
                     if (err) { throw err; }
                 });
