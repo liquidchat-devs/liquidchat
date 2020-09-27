@@ -563,13 +563,15 @@ class Util {
         } else {
             targetUser = await this.app.db.db_fetch.fetchUserByUsername(this.app.db, _friendRequest.target.username);
         }
-        var friendRequest = await this.app.db.db_fetch.fetchFriendRequestByTarget(this.app.db, targetUser.id);
 
+        if(targetUser === undefined) {
+            res.send(JSON.stringify({ status: -2 }))
+            return;
+        }
+
+        var friendRequest = await this.app.db.db_fetch.fetchFriendRequestByTarget(this.app.db, targetUser.id);
         if(friendRequest !== undefined) {
             res.send(JSON.stringify({ status: -1 }))
-            return;
-        } else if(targetUser === undefined) {
-            res.send(JSON.stringify({ status: -2 }))
             return;
         } else if(user.id === targetUser.id) {
             res.send(JSON.stringify({ status: -3 }))
