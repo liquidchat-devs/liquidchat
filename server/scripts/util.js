@@ -464,7 +464,7 @@ class Util {
             id: this.app.crypto.randomBytes(16).toString("hex"),
             createdAt: Date.now(),
             author: {
-                id = user.id
+                id: user.id
             }
         }
 
