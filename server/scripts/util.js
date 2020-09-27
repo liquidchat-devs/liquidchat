@@ -196,11 +196,15 @@ class Util {
                         file.open = () => {}
                         file.write = () => {}
                         file.end = () => {}
-                        this.emit('error', new Error(`File extension for [ ${fileName} ] is not supported.`));
+                        form.emit('error', new Error(`File extension for [ ${fileName} ] is not supported.`));
                         return;
                     }
                 }
             })
+
+            form.on('error', (e) => {
+                console.error(e);
+            });
         
             form.on('progress', function(bytesReceived, bytesExpected) {
                 if(!sentStartPacket) {
