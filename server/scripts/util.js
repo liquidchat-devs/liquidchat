@@ -191,23 +191,22 @@ class Util {
             var fileID = this.app.crypto.randomBytes(16).toString("hex");
             var fileID2 = fileID + (fileName.substring(fileName.lastIndexOf(".")))
             console.log("> received file - " + fileName)
-
-            form.on('fileBegin', (partName, file) => {
-                console.log(JSON.stringify(file));
-                if (file.size >= (1024 * 1024 * 100)) {
-                    file.open = () => {}
-                    file.write = () => {}
-                    file.end = () => {}
-                    form.emit('error', new Error(`File is too big-`));
-                    res.send(JSON.stringify({ status: -1 }));
-                    return;
-                }
-            })
         
             form.on('progress', function(bytesReceived, bytesExpected) {
                 if(!sentStartPacket) {
                     sentStartPacket = true;
                     fileSize = bytesExpected;
+
+                    //File size check
+                    if (fileSize >= (1024 * 1024 * 100)) {
+                        file.open = () => {}
+                        file.write = () => {}
+                        file.end = () => {}
+                        form.emit('error', new Error(`File is too big-`));
+                        res.send(JSON.stringify({ status: -1 }));
+                        return;
+                    }
+
                     socket.emit("uploadStart", fileID, fileName);
                 }
         
