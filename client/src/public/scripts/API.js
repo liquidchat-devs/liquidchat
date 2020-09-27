@@ -140,7 +140,7 @@ class API {
           return this.mainClass.state.users.get(id)
         } else {
           //Fetch user
-          const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchUser?authorID=' + id, { withCredentials: true });
+          const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchUser?id=' + id, { withCredentials: true });
           var user = reply.data
     
           //Cache user
@@ -163,7 +163,7 @@ class API {
     }
 
     async API_fetchFriendRequests() {
-        const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchFriendRequests?id=' + this.mainClass.state.session.userID, { withCredentials: true }));
+        const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchFriendRequests?authorID=' + this.mainClass.state.session.userID, { withCredentials: true }));
         var friendRequests = reply.data
 
         this.API_fetchUsersForMessages(friendRequests)

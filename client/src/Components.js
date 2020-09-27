@@ -205,6 +205,12 @@ export class DialogManager extends React.Component {
       case 7:
         return <AddFriendBox API={this.props.API} switchDialogState={this.props.switchDialogState}/>
 
+      case 8:
+        return <ImageBox fileEndpoint={this.props.fileEndpoint} selectedImage={this.props.selectedImage} switchDialogState={this.props.switchDialogState} setSelectedMessage={this.props.setSelectedMessage}/>
+
+      case 9:
+        return <ImageBoxOptions fileEndpoint={this.props.fileEndpoint} selectedImage={this.props.selectedImage} switchDialogState={this.props.switchDialogState} copyID={this.copyID} boxX={this.props.boxX} boxY={this.props.boxY} setSelectedMessage={this.props.setSelectedMessage}/>
+
       default:
         return null;
     }
@@ -351,7 +357,7 @@ export class MessageOptionsBox extends React.Component {
   handleDelete = async e => {
     e.preventDefault();
     const res = await this.props.API.API_deleteMessage(this.props.selectedMessage);
-    this.state.setState({
+    this.setState({
       messageDeletionResult: res,
     });
     
@@ -458,7 +464,7 @@ export class AccountOptionsBox extends React.Component {
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0); }} style={{ opacity: 0.3 }}></div>
         <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY, height: 80 }}>
-        <div className="button2 alignmiddle chatColor" onClick={(e) => { this.props.setSelectedUser(user, 0, 0); this.props.switchDialogState(5); }}>
+          <div className="button2 alignmiddle chatColor" onClick={(e) => { this.props.setSelectedUser(user, 0, 0); this.props.switchDialogState(5); }}>
             <p className="white text1">> Profile</p>
           </div>
           <label for="avatar-input">
@@ -501,6 +507,36 @@ export class ProfileBox extends React.Component {
               </div>
             </div>
         </div>
+      </div>
+    );
+  }
+}
+
+export class ImageBox extends React.Component {
+  render() {
+    return (
+      <div>
+        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+          <img className="absolutepos overlaybox3" src={this.props.fileEndpoint + "/" + this.props.selectedImage.name} style={{ width: "auto", height: "auto", borderRadius: 0 }} onContextMenu={(e) => { this.props.switchDialogState(9); this.props.setSelectedMessage(undefined, e.pageX, e.pageY); e.preventDefault(); }}/>
+      </div>
+    );
+  }
+}
+
+export class ImageBoxOptions extends React.Component {
+  render() {
+    return (
+      <div>
+        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+          <img className="absolutepos overlaybox3" src={this.props.fileEndpoint + "/" + this.props.selectedImage.name} style={{ width: "auto", height: "auto", borderRadius: 0 }} onClick={() => { this.props.switchDialogState(8) }} onContextMenu={(e) => { this.props.switchDialogState(9); this.props.setSelectedMessage(undefined, e.pageX, e.pageY); e.preventDefault(); }}/>
+          <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY, height: 40 }}>
+            <div className="button2 alignmiddle chatColor" onClick={(e) => { this.props.copyID(this.props.fileEndpoint + "/" + this.props.selectedImage.name); }}>
+              <p className="white text1">> Copy Link</p>
+            </div>
+            <div className="button2 alignmiddle chatColor" onClick={() => { window.open(this.props.fileEndpoint + "/" + this.props.selectedImage.name); }}>
+              <p className="white text1">> Open Link</p>
+            </div>
+          </div>
       </div>
     );
   }

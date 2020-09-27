@@ -90,7 +90,7 @@ function formatFile(chat, file) {
     const imageExtensions = getImageExtensions()
     var isImage = imageExtensions.filter((ext) => { return file.name.endsWith(ext) }).length > 0
     if(isImage) {
-        return <span><img alt="" className="message-image" src={chat.props.fileEndpoint + "/" + file.name}/></span>
+        return <span><img alt="" className="message-image" src={chat.props.fileEndpoint + "/" + file.name} onClick={(e) => { chat.props.setSelectedImage(file); chat.props.switchDialogState(8); }}/></span>
     }
     
     var extension = file.name.substring(file.name.lastIndexOf("."))
@@ -140,7 +140,7 @@ function formatFile(chat, file) {
 
     return <div>
         <div className="file-wrapper chatColor">
-            <a className="link file-link" onClick={() => window.open(chat.props.fileEndpoint + "/" + file.name)}>{file.name}</a>
+            <a className="link file-link" onClick={() => window.open(chat.props.fileEndpoint + "/" + file.name) }>{file.name}</a>
             <br/>
             <a className="tipColor">({formatBytes(file.size, true)})</a>
         </div>
