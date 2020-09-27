@@ -21,6 +21,14 @@ textarea:focus, input:focus{
   outline: none;
 }
 
+code {
+  font-family: Consolas,"courier new";
+  color: #cccccc;
+  background-color: #2d2d2d;
+  padding: 3px;
+  margin-top: 3px;
+}
+
 /* Utils */
 .hide {
   display: none;

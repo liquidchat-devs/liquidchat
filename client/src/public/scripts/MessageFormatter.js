@@ -152,7 +152,8 @@ function formatMessage(chat, message) {
         ["**", "b"],
         ["*", "i"],
         ["__", "u"],
-        ["~~", "s"]
+        ["~~", "s"],
+        ["`", "code"]
     ];
 
     var messageFormatted = message.text
