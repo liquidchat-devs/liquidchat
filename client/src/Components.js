@@ -318,6 +318,15 @@ export class AddFriendBox extends React.Component {
 
   getErrorText(code) {
     switch(code) {
+      case -1:
+        return "You already sent a request to this user-";
+
+      case -2:
+        return "Nobody with this username found-";
+
+      case -3:
+        return "You can't send friend requests to yourself-";
+
       default:
         return "";
     }

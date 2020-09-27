@@ -568,8 +568,11 @@ class Util {
         if(friendRequest !== undefined) {
             res.send(JSON.stringify({ status: -1 }))
             return;
-        } else if(user.id === targetUser.id) {
+        } else if(targetUser === undefined) {
             res.send(JSON.stringify({ status: -2 }))
+            return;
+        } else if(user.id === targetUser.id) {
+            res.send(JSON.stringify({ status: -3 }))
             return;
         } else {
             res.send(JSON.stringify({ status: 1 }))

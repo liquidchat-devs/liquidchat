@@ -222,13 +222,13 @@ class API {
     }
 
     async API_sendFriendRequestByUsername(username) {
-        await axios.post(this.mainClass.state.APIEndpoint + '/sendFriendRequest', {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/sendFriendRequest', {
             target: {
                 username: username
             }
         }, { withCredentials: true });
 
-        return true;
+        return reply.data.status;
     }
 
     async API_acceptFriendRequest(id) {
