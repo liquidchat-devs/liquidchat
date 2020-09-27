@@ -243,7 +243,21 @@ class Util {
                 user.avatar = fileID2
                 await this.updateUser(req, res, user)
             }.bind(this));
-        })
+        });
+
+        this.app.get('/acceptFriendRequest', async(req, res) => {
+            if(!this.isSessionValid(req, res)) { return; }
+
+            await this.processFriendRequest(req, res, req.body, true)
+            console.log("> accepted friend request - " + req.body.id)
+        });
+
+        this.app.get('/declineFriendRequest', async(req, res) => {
+            if(!this.isSessionValid(req, res)) { return; }
+
+            await this.processFriendRequest(req, res, req.body, false)
+            console.log("> declined friend request - " + req.body.id)
+        });
 
         this.app.post('/message', async(req, res) => {
             if(!this.isSessionValid(req, res)) { return; }
@@ -487,6 +501,30 @@ class Util {
             if(socket.connected && voiceGroup.users.includes(this.app.sessions.get(id).userID)) {
                 socket.emit("updateVoiceGroup", JSON.stringify(voiceGroup))
             }
+        }
+    }
+
+    async processFriendRequest(req, res, _friendRequest, _accept) {
+        var session = this.app.sessions.get(req.cookies['sessionID']);
+        var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
+        var friendRequest = await this.app.db.db_fetch.fetchFriendRequest(this.app.db, _friendRequest.id);
+
+        if(friendRequest === undefined) {
+            res.send(JSON.stringify({ status: -1 }))
+            return;
+        } else if(friendRequest.author.id !== user.id) {
+            res.send(JSON.stringify({ status: -2 }))
+            return;
+        } else {
+            res.send(JSON.stringify({ status: 1 }))
+        }
+
+        await this.app.db.db_delete.deleteFriendRequest(this.app.db, friendRequest.id);
+        var targetUser = await this.app.db.db_fetch.fetchUser(this.app.db, friendRequest.target.id);
+
+        if(_accept) {
+            user.friendList.push(targetUser.id);
+            targetUser.friendList.push(user.id);
         }
     }
 
