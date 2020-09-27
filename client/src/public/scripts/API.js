@@ -212,6 +212,16 @@ class API {
         return true;
     }
 
+    async API_sendFriendRequestByUsername(username) {
+        await axios.post(this.mainClass.state.APIEndpoint + '/sendFriendRequest', {
+            target: {
+                username: username
+            }
+        }, { withCredentials: true });
+
+        return true;
+    }
+
     async API_acceptFriendRequest(id) {
         await axios.post(this.mainClass.state.APIEndpoint + '/acceptFriendRequest', {
             id: id

@@ -523,7 +523,13 @@ class Util {
     async sendFriendRequest(req, res, _friendRequest) {
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
-        var targetUser = await this.app.db.db_fetch.fetchFriendRequest(this.app.db, _friendRequest.target.id);
+
+        var targetUser = -1;
+        if(_friendRequest.target.id !== undefined) {
+            targetUser = await this.app.db.db_fetch.fetchUser(this.app.db, _friendRequest.target.id);
+        } else {
+            targetUser = await this.app.db.db_fetch.fetchUserByUsername(this.app.db, _friendRequest.target.username);
+        }
         var friendRequest = await this.app.db.db_fetch.fetchFriendRequestByTarget(this.app.db, targetUser.id);
 
         if(friendRequest !== undefined) {
