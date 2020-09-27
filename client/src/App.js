@@ -7,7 +7,16 @@ import { Account, ChannelHeader, ChannelSelector, DialogManager } from './Compon
 import { API } from './public/scripts/API';
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+  }
+
   state = {
+    //Page size
+    pageWidth: 0,
+    pageHeight: 0,
+
     //Authorization
     waitingForSession: true,
     session: -1,
@@ -156,12 +165,23 @@ class App extends React.Component {
   }
 
   componentDidMount = () => {
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.updateWindowDimensions);
+
     document.onkeydown = function(evt) {
       evt = evt || window.event;
       if (evt.keyCode == 27) {
         this.endEditingMessage();
       }
     }.bind(this);
+  }
+  
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions);
+  }
+  
+  updateWindowDimensions() {
+    this.setState({ pageWidth: window.innerWidth, pageHeight: window.innerHeight });
   }
 
   render() {
@@ -187,7 +207,7 @@ class App extends React.Component {
                 <ChannelHeader
                 API={this.state.API} currentChannel={this.state.currentChannel} channels={this.state.channels} currentVoiceGroup={this.state.currentVoiceGroup}/>
                 <Chat
-                API={this.state.API} setSelectedUser={this.setSelectedUser} currentVoiceGroup={this.state.currentVoiceGroup} setSelectedImage={this.setSelectedImage}
+                pageHeight={this.state.pageHeight} API={this.state.API} setSelectedUser={this.setSelectedUser} currentVoiceGroup={this.state.currentVoiceGroup} setSelectedImage={this.setSelectedImage}
                 channels={this.state.channels} currentChannel={this.state.currentChannel} switchDialogState={this.switchDialogState} setSelectedMessage={this.setSelectedMessage}
                 editingMessage={this.state.editingMessage} editedMessage={this.state.editedMessage} setEditedMessage={this.setEditedMessage} endEditingMessage={this.endEditingMessage} getUser={this.getUser} fileEndpoint={this.state.fileEndpoint}/>
                 <Send

@@ -86,7 +86,7 @@ export default class Chat extends React.Component {
 
         return (
           <div className="Chat">
-            <div>
+            <div style={{ overflowY: "scroll", height: this.props.pageHeight - 165 }}>
               {messageList}
             </div>
           </div>

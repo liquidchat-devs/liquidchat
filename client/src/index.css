@@ -29,6 +29,23 @@ code {
   margin-top: 3px;
 }
 
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #2b2b2b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #232323;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 /* Utils */
 .hide {
   display: none;
@@ -278,7 +295,7 @@ code {
 }
 
 .input-message {
-  width: calc(100% - 15px);
+  width: calc(100% - 25px);
   color: #acacac;
   border: 0;
   padding: 7px;
