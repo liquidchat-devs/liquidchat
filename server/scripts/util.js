@@ -378,14 +378,14 @@ class Util {
         var message = {
             id: this.app.crypto.randomBytes(16).toString("hex"),
             createdAt: Date.now(),
-            author = {
+            author: {
                 id: user.id
             },
-            channel = {
+            channel: {
                 id: channel.id
             },
-            edited = false,
-            text = message.text
+            edited: false,
+            text: message.text
         }
         message.file = _message.file === undefined ? undefined : { name: _message.file.name, size: _message.file.size }
         
@@ -462,8 +462,8 @@ class Util {
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
         var channel = {
             id: this.app.crypto.randomBytes(16).toString("hex"),
-            createdAt = Date.now(),
-            author = {
+            createdAt: Date.now(),
+            author: {
                 id = user.id
             }
         }
