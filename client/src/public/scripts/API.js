@@ -74,6 +74,15 @@ class API {
                 channels: newChannels
             });
         });
+        socket.on('deleteChannel', (channelData) => {
+            var channel = JSON.parse(channelData);
+
+            var newChannels = new Map(this.mainClass.state.channels)
+            newChannels.delete(channel.id);
+            this.mainClass.setState({
+                channels: newChannels
+            });
+        });
 
         socket.on('uploadStart', (fileID, fileName) => {
             console.log("> upload start")
