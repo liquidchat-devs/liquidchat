@@ -189,6 +189,22 @@ class Util {
             var fileID = this.app.crypto.randomBytes(16).toString("hex");
             var fileID2 = fileID + (fileName.substring(fileName.lastIndexOf(".")))
             console.log("> received file - " + fileName)
+
+            form.on('fileBegin', (partName, file) => {
+                if (file.name) {
+                    if (fileName.endsWith(".exe")) {
+                        file.open = () => {}
+                        file.write = () => {}
+                        file.end = () => {}
+                        this.emit('error', new Error(`File extension for [ ${fileName} ] is not supported.`));
+                        return;
+                    }
+
+                    file.open = () => {}
+                    file.write = () => {}
+                    file.end = () => {}
+                }
+            })
         
             form.on('progress', function(bytesReceived, bytesExpected) {
                 if(!sentStartPacket) {
