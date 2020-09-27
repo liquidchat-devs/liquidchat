@@ -246,21 +246,21 @@ class Util {
             }.bind(this));
         });
 
-        this.app.get('/sendFriendRequest', async(req, res) => {
+        this.app.post('/sendFriendRequest', async(req, res) => {
             if(!this.isSessionValid(req, res)) { return; }
 
             await this.sendFriendRequest(req, res, req.body)
             console.log("> sent friend request - " + req.body.target.id)
         });
 
-        this.app.get('/acceptFriendRequest', async(req, res) => {
+        this.app.post('/acceptFriendRequest', async(req, res) => {
             if(!this.isSessionValid(req, res)) { return; }
 
             await this.processFriendRequest(req, res, req.body, true)
             console.log("> accepted friend request - " + req.body.id)
         });
 
-        this.app.get('/declineFriendRequest', async(req, res) => {
+        this.app.post('/declineFriendRequest', async(req, res) => {
             if(!this.isSessionValid(req, res)) { return; }
 
             await this.processFriendRequest(req, res, req.body, false)
