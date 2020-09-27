@@ -65,7 +65,7 @@ export class ChannelSelector extends React.Component {
     let friendRequests = Array.from(this.props.friendRequests.values());
     let voiceGroup = this.props.currentVoiceGroup;
 
-    friendRequests = [{ sourceID: "0fd4395ce1cb6b94a128f9345cf00ee0", targetID: "0fd4395ce1cb6b94a128f9345cf00ee0" }]
+    friendRequests = [{ author: { id: "0fd4395ce1cb6b94a128f9345cf00ee0"}, target: { id: "0fd4395ce1cb6b94a128f9345cf00ee0" }}]
     
     channels = channels.filter(channel => { return ((channel.type === 0 || channel.type === 1) && this.props.channelTypes === 2) || (channel.type === 2 && this.props.channelTypes === 1); })
     const channelList = channels.map((channel, i) => {
@@ -106,7 +106,7 @@ export class ChannelSelector extends React.Component {
     });
 
     const friendRequestsList = friendRequests.map((friendRequest, i) => {
-      const user = this.props.getUser(friendRequest.targetID)
+      const user = this.props.getUser(friendRequest.target.id)
 
       return (
         <div className="friendRequestEntry selectedChannelColor">
@@ -200,7 +200,7 @@ export class DialogManager extends React.Component {
         return <ProfileBox API={this.props.API} fileEndpoint={this.props.fileEndpoint} switchDialogState={this.props.switchDialogState} session={this.props.session} selectedUser={this.props.selectedUser}/>
 
       case 6:
-        return <ProfileOptionsBox copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedUser={this.props.selectedUser} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
+        return <ProfileOptionsBox API={this.props.API} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedUser={this.props.selectedUser} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
 
       case 7:
         return <AddFriendBox switchDialogState={this.props.switchDialogState}/>
