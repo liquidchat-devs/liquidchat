@@ -199,10 +199,6 @@ class Util {
                         this.emit('error', new Error(`File extension for [ ${fileName} ] is not supported.`));
                         return;
                     }
-
-                    file.open = () => {}
-                    file.write = () => {}
-                    file.end = () => {}
                 }
             })
         
