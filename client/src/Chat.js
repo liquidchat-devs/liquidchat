@@ -40,15 +40,15 @@ export default class Chat extends React.Component {
   }
 
   render() {
-    if(this.props.currentChannel === -1) {
+    let channel = this.props.channels.get(this.props.currentChannel)
+    if(channel === undefined) {
       return (
         <div className="Chat">
           <h3 className="white margin1 marginleft2"> No Channel Selected</h3>
         </div>
       );
     }
-
-    let channel = this.props.channels.get(this.props.currentChannel)
+    
     switch(channel.type) {
       case 0:
         let messages = channel.messages === undefined ? [] : channel.messages;
