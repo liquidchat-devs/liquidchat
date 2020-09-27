@@ -545,7 +545,8 @@ class Util {
             },
             target: {
                 id: targetUser.id
-            }
+            },
+            createdAt: Date.now()
         }
         
         await this.app.db.db_add.addFriendRequest(this.app.db, friendRequest);

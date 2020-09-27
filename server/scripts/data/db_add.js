@@ -41,7 +41,7 @@ module.exports = {
 
     addFriendRequest(db, friendRequest) {
         if(db.DEBUG) {
-            console.log(" - [db] Adding FriendRequest(id: " + message.id + ") into the database..."); 
+            console.log(" - [db] Adding FriendRequest(id: " + friendRequest.id + ") into the database..."); 
         }
         
         var query = "INSERT IGNORE INTO friendRequests (id, authorID, targetID, createdAt) VALUES('" + friendRequest.id + "', '" + friendRequest.author.id + "', '" + friendRequest.target.id + "', " + friendRequest.createdAt + ")";
