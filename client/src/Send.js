@@ -46,9 +46,9 @@ export default class Send extends React.Component {
     } else if(bytes1 === bytes2) {
       return "Upload of " + fileName + " finished-"
     } else if(failed) {
-      return "Upload of " + fileName + " failed-"
+      return "Upload of " + fileName + " failed (" + formatBytes(bytes1) + "/100MB)-"
     } else {
-      return "Uploading " + fileName + "... " + formatBytes(this.props.uploadReceived) + "/" + formatBytes(this.props.uploadExpected, true) + " (" + this.formatPercentage(this.props.uploadReceived, this.props.uploadExpected) + ")"
+      return "Uploading " + fileName + "... " + formatBytes(bytes1) + "/" + formatBytes(bytes2, true) + " (" + this.formatPercentage(bytes1, bytes2) + ")"
     }
   }
 

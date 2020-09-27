@@ -102,7 +102,9 @@ class API {
         socket.on('uploadFail', (fileID, fileName, fileSize) => {
             console.log("> upload fail")
             this.mainClass.setState({
-                uploadFailed: true
+                uploadFailed: true,
+                uploadExpected: 0,
+                uploadExpected: fileSize
             });
         });
 
