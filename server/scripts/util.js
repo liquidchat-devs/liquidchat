@@ -362,10 +362,10 @@ class Util {
         return true;
     }
 
-    async sendMessage(req, res, message) {
+    async sendMessage(req, res, _message) {
         var channels = await this.app.db.db_fetch.fetchChannels(this.app.db);
         channels = new Map(channels.map(obj => [obj.id, obj]));
-        if(!channels.has(message.channel.id)) {
+        if(!channels.has(_message.channel.id)) {
             res.send(JSON.stringify({ status: -1 }))
             return;
         } else {
@@ -374,15 +374,20 @@ class Util {
 
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
-        var channel = channels.get(message.channel.id);
-
-        message.id = this.app.crypto.randomBytes(16).toString("hex");
-        message.createdAt = Date.now()
-        message.author = { id: user.id }
-        message.channel = { id: channel.id }
-        message.edited = false;
-        message.text = message.text
-        message.file = message.file === undefined ? undefined : { name: message.file.name, size: message.file.size }
+        var channel = channels.get(_message.channel.id);
+        var message = {
+            id: this.app.crypto.randomBytes(16).toString("hex"),
+            createdAt: Date.now(),
+            author = {
+                id: user.id
+            },
+            channel = {
+                id: channel.id
+            },
+            edited = false,
+            text = message.text
+        }
+        message.file = _message.file === undefined ? undefined : { name: _message.file.name, size: _message.file.size }
         
         this.app.sessionSockets.forEach(socket => {
             if(socket.connected) {
@@ -433,21 +438,20 @@ class Util {
         }
 
         //Make sure client doesn't overwrite something he's not allowed to
-        var newMessage = message
-        newMessage.text = _message.text;
-        newMessage.edited = true;
+        message.text = _message.text;
+        message.edited = true;
 
         this.app.sessionSockets.forEach(socket => {
             if(socket.connected) {
-                socket.emit("editMessage", JSON.stringify(newMessage))
+                socket.emit("editMessage", JSON.stringify(message))
             }
         })
 
         await this.app.db.db_edit.editMessage(this.app.db, message);
     }
 
-    async createChannel(req, res, channel) {
-        if(channel.name.length < 1) {
+    async createChannel(req, res, _channel) {
+        if(_channel.name.length < 1) {
             res.send(JSON.stringify({ status: -1 }))
             return;
         } else {
@@ -456,11 +460,13 @@ class Util {
 
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
-
-        channel.id = this.app.crypto.randomBytes(16).toString("hex");
-        channel.createdAt = Date.now();
-        channel.author = {};
-        channel.author.id = user.id;
+        var channel = {
+            id: this.app.crypto.randomBytes(16).toString("hex"),
+            createdAt = Date.now(),
+            author = {
+                id = user.id
+            }
+        }
 
         this.app.sessionSockets.forEach(socket => {
             if(socket.connected) {
