@@ -541,7 +541,7 @@ class Util {
 
         var friendRequest = {
             id: this.app.crypto.randomBytes(16).toString("hex"),
-            source: {
+            author: {
                 id: user.id
             },
             target: {
