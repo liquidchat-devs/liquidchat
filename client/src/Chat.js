@@ -9,6 +9,7 @@ export default class Chat extends React.Component {
     };
 
     this.props.API.API_fetchChannels();
+    this.props.API.API_fetchFriendRequests();
   }
 
   handleEdit = async e => {

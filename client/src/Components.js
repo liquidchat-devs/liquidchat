@@ -65,7 +65,7 @@ export class ChannelSelector extends React.Component {
     let friendRequests = Array.from(this.props.friendRequests.values());
     let voiceGroup = this.props.currentVoiceGroup;
 
-    friendRequests = [{ author: { id: "0fd4395ce1cb6b94a128f9345cf00ee0"}, target: { id: "0fd4395ce1cb6b94a128f9345cf00ee0" }}]
+    friendRequests = [{ author: { id: "d6a510f3e9638353cad0a403517c7f33"}, target: { id: "d6a510f3e9638353cad0a403517c7f33" }}]
     
     channels = channels.filter(channel => { return ((channel.type === 0 || channel.type === 1) && this.props.channelTypes === 2) || (channel.type === 2 && this.props.channelTypes === 1); })
     const channelList = channels.map((channel, i) => {
@@ -203,7 +203,7 @@ export class DialogManager extends React.Component {
         return <ProfileOptionsBox API={this.props.API} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedUser={this.props.selectedUser} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
 
       case 7:
-        return <AddFriendBox switchDialogState={this.props.switchDialogState}/>
+        return <AddFriendBox API={this.props.API} switchDialogState={this.props.switchDialogState}/>
 
       default:
         return null;
@@ -300,7 +300,7 @@ export class AddFriendBox extends React.Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    const res = await this.props.API.API_sendFriendRequest(this.state.friendUsername);
+    const res = await this.props.API.API_sendFriendRequestByUsername(this.state.friendUsername);
     this.setState({
       friendRequestResult: res,
     });

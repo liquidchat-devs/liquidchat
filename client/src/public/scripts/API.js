@@ -140,7 +140,7 @@ class API {
           return this.mainClass.state.users.get(id)
         } else {
           //Fetch user
-          const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchUser?id=' + id, { withCredentials: true });
+          const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchUser?authorID=' + id, { withCredentials: true });
           var user = reply.data
     
           //Cache user

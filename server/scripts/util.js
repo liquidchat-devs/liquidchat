@@ -250,7 +250,7 @@ class Util {
             if(!this.isSessionValid(req, res)) { return; }
 
             await this.sendFriendRequest(req, res, req.body)
-            console.log("> sent friend request - " + req.body.target.id)
+            console.log("> sent friend request - " + req.body.target.username + " (id: " + req.body.target.id + ")")
         });
 
         this.app.post('/acceptFriendRequest', async(req, res) => {
@@ -326,6 +326,7 @@ class Util {
 
         this.app.get('/fetchFriendRequest', async(req, res) => {
             if(!this.isSessionValid(req, res)) { return; }
+            const data = req.query;
 
             var friendRequest = await this.app.db.db_fetch.fetchFriendRequest(this.app.db, data.id);
             res.send(JSON.stringify(friendRequest));
@@ -333,8 +334,9 @@ class Util {
 
         this.app.get('/fetchFriendRequests', async(req, res) => {
             if(!this.isSessionValid(req, res)) { return; }
+            const data = req.query;
 
-            var friendRequests = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, data.author.id);
+            var friendRequests = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, data.authorID);
             res.send(JSON.stringify(friendRequests));
         });
 
@@ -535,6 +537,9 @@ class Util {
         if(friendRequest !== undefined) {
             res.send(JSON.stringify({ status: -1 }))
             return;
+        } else if(user.id === targetUser.id) {
+            res.send(JSON.stringify({ status: -2 }))
+            return;
         } else {
             res.send(JSON.stringify({ status: 1 }))
         }
@@ -564,7 +569,7 @@ class Util {
         } else if(friendRequest.author.id !== user.id) {
             res.send(JSON.stringify({ status: -2 }))
             return;
-        } else {
+        }  else {
             res.send(JSON.stringify({ status: 1 }))
         }
 
