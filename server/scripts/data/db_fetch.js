@@ -107,6 +107,20 @@ module.exports = {
         return this.formatFriendRequest(result[0][0])
     },
 
+    async fetchFriendRequestByTarget(db, id) {
+        if(db.DEBUG) {
+            console.log(" - [db] Loading FriendRequest(target: " + id + ") from the database..."); 
+        }
+
+        var query0 = "SELECT * FROM friendRequests WHERE targetID='" + id + "'";
+        var result = await db.sqlConn.promise().query(query0);
+        if(result.length < 1 || result[0].length < 1) {
+            return undefined;
+        }
+    
+        return this.formatFriendRequest(result[0][0])
+    },
+
     async fetchFriendRequests(db, id) {
         if(db.DEBUG) {
             console.log(" - [db] Loading FriendRequests from User(id: " + id + ") from the database..."); 

@@ -246,6 +246,13 @@ class Util {
             }.bind(this));
         });
 
+        this.app.get('/sendFriendRequest', async(req, res) => {
+            if(!this.isSessionValid(req, res)) { return; }
+
+            await this.sendFriendRequest(req, res, req.body)
+            console.log("> sent friend request - " + req.body.target.id)
+        });
+
         this.app.get('/acceptFriendRequest', async(req, res) => {
             if(!this.isSessionValid(req, res)) { return; }
 
@@ -503,6 +510,31 @@ class Util {
                 socket.emit("updateVoiceGroup", JSON.stringify(voiceGroup))
             }
         }
+    }
+
+    async sendFriendRequest(req, res, _friendRequest) {
+        var session = this.app.sessions.get(req.cookies['sessionID']);
+        var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
+        var targetUser = await this.app.db.db_fetch.fetchFriendRequest(this.app.db, _friendRequest.target.id);
+        var friendRequest = await this.app.db.db_fetch.fetchFriendRequestByTarget(this.app.db, targetUser.id);
+
+        if(friendRequest !== undefined) {
+            res.send(JSON.stringify({ status: -1 }))
+            return;
+        } else {
+            res.send(JSON.stringify({ status: 1 }))
+        }
+
+        var friendRequest = {
+            source: {
+                id: user.id
+            },
+            target: {
+                id: targetUser.id
+            }
+        }
+        
+        await this.app.db.db_add.addFriendRequest(this.app.db, friendRequest);
     }
 
     async processFriendRequest(req, res, _friendRequest, _accept) {
