@@ -193,15 +193,14 @@ class Util {
             console.log("> received file - " + fileName)
 
             form.on('fileBegin', (partName, file) => {
-                if (file.size) {
-                    if (file.size >= (1024 * 1024 * 100)) {
-                        file.open = () => {}
-                        file.write = () => {}
-                        file.end = () => {}
-                        form.emit('error', new Error(`File is too big-`));
-                        res.send(JSON.stringify({ status: -1 }));
-                        return;
-                    }
+                console.log(JSON.stringify(file));
+                if (file.size >= (1024 * 1024 * 100)) {
+                    file.open = () => {}
+                    file.write = () => {}
+                    file.end = () => {}
+                    form.emit('error', new Error(`File is too big-`));
+                    res.send(JSON.stringify({ status: -1 }));
+                    return;
                 }
             })
         
