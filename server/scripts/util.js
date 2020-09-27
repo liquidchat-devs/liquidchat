@@ -180,7 +180,7 @@ class Util {
             if(!this.isSessionValid(req, res)) { return; }
 
             var socket = this.app.sessionSockets.get(req.cookies['sessionID']);
-            var form = this.app.formidable({ multiples: true, maxFileSize = 1024 * 1024 * 100 });
+            var form = this.app.formidable({ multiples: true, maxFileSize: 1024 * 1024 * 100 });
             form.uploadDir = this.app.filesStorage;
             form.keepExtensions = true;
         
