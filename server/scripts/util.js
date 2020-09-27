@@ -199,9 +199,6 @@ class Util {
 
                     //File size check
                     if (fileSize >= (1024 * 1024 * 100)) {
-                        file.open = () => {}
-                        file.write = () => {}
-                        file.end = () => {}
                         form.emit('error', new Error(`File is too big-`));
                         res.send(JSON.stringify({ status: -1 }));
                         return;
