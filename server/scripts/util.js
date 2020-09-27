@@ -197,14 +197,14 @@ class Util {
                     sentStartPacket = true;
                     fileSize = bytesExpected;
 
+                    socket.emit("uploadStart", fileID, fileName);
+
                     //File size check
                     if (fileSize >= (1024 * 1024 * 100)) {
                         form.emit('error', new Error(`File is too big-`));
-                        res.send(JSON.stringify({ status: -1 }));
+                        socket.emit("uploadFail", fileID, fileName, fileSize);
                         return;
                     }
-
-                    socket.emit("uploadStart", fileID, fileName);
                 }
         
                 socket.emit("uploadProgress", fileID, fileName, bytesReceived, bytesExpected);

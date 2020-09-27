@@ -55,6 +55,7 @@ class App extends React.Component {
     uploadExpected: 0,
     uploadFileID: -1,
     uploadFileName: -1,
+    uploadFailed: false,
 
     //API
     API: new API(this),
@@ -223,7 +224,7 @@ class App extends React.Component {
                 API={this.state.API}
                 currentChannel={this.state.currentChannel} channels={this.state.channels}
                 uploadReceived={this.state.uploadReceived} uploadExpected={this.state.uploadExpected}
-                uploadFileID={this.state.uploadFileID} uploadFileName={this.state.uploadFileName}/>
+                uploadFileID={this.state.uploadFileID} uploadFileName={this.state.uploadFileName} uploadFailed={this.state.uploadFailed}/>
               </div>
             </div>
           </div> :

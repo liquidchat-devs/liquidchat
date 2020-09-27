@@ -40,16 +40,16 @@ export default class Send extends React.Component {
     return Math.round((in1 / in2) * 100) + "%"
   }
 
-  getUploadMessage(fileID, fileName, bytes1, bytes2) {
+  getUploadMessage(fileID, fileName, bytes1, bytes2, failed) {
     if(fileID === -1) {
       return ""
-    }
-
-    if(bytes1 === bytes2) {
+    } else if(bytes1 === bytes2) {
       return "Upload of " + fileName + " finished-"
+    } else if(failed) {
+      return "Upload of " + fileName + " failed-"
+    } else {
+      return "Uploading " + fileName + "... " + formatBytes(this.props.uploadReceived) + "/" + formatBytes(this.props.uploadExpected, true) + " (" + this.formatPercentage(this.props.uploadReceived, this.props.uploadExpected) + ")"
     }
-
-    return "Uploading " + fileName + "... " + formatBytes(this.props.uploadReceived) + "/" + formatBytes(this.props.uploadExpected, true) + " (" + this.formatPercentage(this.props.uploadReceived, this.props.uploadExpected) + ")"
   }
 
   render() {
@@ -59,7 +59,7 @@ export default class Send extends React.Component {
     return (
       <div className="marginleft2 margintop1">
         <div className="white">
-          {this.getUploadMessage(this.props.uploadFileID, this.props.uploadFileName, this.props.uploadReceived, this.props.uploadExpected)}
+          {this.getUploadMessage(this.props.uploadFileID, this.props.uploadFileName, this.props.uploadReceived, this.props.uploadExpected, this.props.uploadFailed)}
         </div>
         <div className="flex">
           <label for="file-input">

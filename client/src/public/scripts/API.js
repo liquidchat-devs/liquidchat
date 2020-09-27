@@ -88,7 +88,8 @@ class API {
             console.log("> upload start")
             this.mainClass.setState({
                 uploadFileID: fileID,
-                uploadFileName: fileName
+                uploadFileName: fileName,
+                uploadFailed: false
             });
         });
         socket.on('uploadProgress', (fileID, fileName, bytesReceived, bytesExpected) => {
@@ -96,6 +97,12 @@ class API {
             this.mainClass.setState({
                 uploadReceived: bytesReceived,
                 uploadExpected: bytesExpected
+            });
+        });
+        socket.on('uploadFail', (fileID, fileName, fileSize) => {
+            console.log("> upload fail")
+            this.mainClass.setState({
+                uploadFailed: true
             });
         });
 
