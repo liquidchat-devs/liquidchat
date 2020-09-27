@@ -385,7 +385,7 @@ class Util {
                 id: channel.id
             },
             edited: false,
-            text: message.text
+            text: _message.text
         }
         message.file = _message.file === undefined ? undefined : { name: _message.file.name, size: _message.file.size }
         
