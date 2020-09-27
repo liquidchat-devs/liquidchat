@@ -462,6 +462,8 @@ class Util {
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
         var channel = {
             id: this.app.crypto.randomBytes(16).toString("hex"),
+            name: _channel.name,
+            type: _channel.type,
             createdAt: Date.now(),
             author: {
                 id: user.id
