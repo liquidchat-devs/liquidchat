@@ -155,7 +155,8 @@ class Util {
                     username: data.username,
                     createdAt: Date.now(),
                     avatar: "defaultAvatar.png",
-                    password: passwordHash
+                    password: passwordHash,
+                    friendList: []
                 }
         
                 await this.app.db.db_add.addUser(this.app.db, user);

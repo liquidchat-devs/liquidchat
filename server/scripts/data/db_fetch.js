@@ -10,7 +10,7 @@ module.exports = {
             return undefined;
         }
     
-        return result[0][0]
+        return this.formatUser(result[0][0]);
     },
 
     async fetchUserByUsername(db, username) {
@@ -24,7 +24,7 @@ module.exports = {
             return undefined;
         }
     
-        return result[0][0]
+        return this.formatUser(result[0][0]);
     },
 
     async fetchChannel(db, id) {
@@ -124,6 +124,12 @@ module.exports = {
         });
     
         return res
+    },
+
+    formatUser(user) {
+        user.friendList = user.friendList.split(",")
+
+        return user;
     },
 
     formatMessage(message) {
