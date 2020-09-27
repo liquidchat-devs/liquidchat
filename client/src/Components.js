@@ -64,8 +64,6 @@ export class ChannelSelector extends React.Component {
     let channels = Array.from(this.props.channels.values());
     let friendRequests = Array.from(this.props.friendRequests.values());
     let voiceGroup = this.props.currentVoiceGroup;
-
-    friendRequests = [{ author: { id: "d6a510f3e9638353cad0a403517c7f33"}, target: { id: "d6a510f3e9638353cad0a403517c7f33" }}]
     
     channels = channels.filter(channel => { return ((channel.type === 0 || channel.type === 1) && this.props.channelTypes === 2) || (channel.type === 2 && this.props.channelTypes === 1); })
     const channelList = channels.map((channel, i) => {
@@ -89,7 +87,7 @@ export class ChannelSelector extends React.Component {
 
             return (
               <div>
-                <div className="white headerColor channel" onClick={(e) => { this.props.switchChannel(e.currentTarget, channel.id) }} key={i} ref={i === 0 ? "firstChannelElement" : undefined}>
+                <div className="white headerColor channel" onClick={(e) => { this.props.switchChannel(e.currentTarget, channel.id) }} onContextMenu={(e) => { this.props.setSelectedChannel(channel, e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } } key={i} ref={i === 0 ? "firstChannelElement" : undefined}>
                   {channel.type === 0 ? "#" : "."}{channel.name}
                 </div>
                 {userList}
@@ -99,7 +97,7 @@ export class ChannelSelector extends React.Component {
       }
 
       return (
-        <div className="white headerColor channel" onClick={(e) => { this.props.switchChannel(e.currentTarget, channel.id) }} key={i} ref={i === 0 ? "firstChannelElement" : undefined}>
+        <div className="white headerColor channel" onClick={(e) => { this.props.switchChannel(e.currentTarget, channel.id) }} onContextMenu={(e) => { this.props.setSelectedChannel(channel, e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } } key={i} ref={i === 0 ? "firstChannelElement" : undefined}>
           {channel.type === 0 ? "#" : "."}{channel.name}
         </div>
       )
@@ -210,6 +208,9 @@ export class DialogManager extends React.Component {
 
       case 9:
         return <ImageBoxOptions fileEndpoint={this.props.fileEndpoint} selectedImage={this.props.selectedImage} switchDialogState={this.props.switchDialogState} copyID={this.copyID} boxX={this.props.boxX} boxY={this.props.boxY} setSelectedMessage={this.props.setSelectedMessage}/>
+
+      case 10:
+        return <ChannelOptionsBox API={this.props.API} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedChannel={this.props.selectedChannel} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
 
       default:
         return null;
@@ -430,6 +431,48 @@ export class ProfileOptionsBox extends React.Component {
             ""
           }
           <div className="button2 alignmiddle chatColor" onClick={() => { this.props.copyID(this.props.selectedUser.id); }}>
+            <p className="white text1">> Copy ID</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+export class ChannelOptionsBox extends React.Component {
+  state = {
+    channelDeletionResult: 0
+  };
+
+  handleDelete = async e => {
+    e.preventDefault();
+    const res = await this.props.API.API_deleteChannel(this.props.selectedChannel);
+    this.setState({
+      channelDeletionResult: res,
+    });
+    
+    if(res === 1) { this.props.switchDialogState(-1); }
+    return true;
+  }
+
+  render() {
+    return (
+      <div>
+        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0); }} style={{ opacity: 0.3 }}></div>
+        <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY, height: this.props.selectedChannel.author.id === this.props.session.userID ? 45 : 30  }}>
+          {
+            this.props.selectedChannel.author.id === this.props.session.userID ?
+            <div>
+              <div className="button2 alignmiddle chatColor" onClick={() => {  }}>
+                <p className="white text1">> Edit Channel</p>
+              </div>
+              <div className="button2 alignmiddle chatColor" onClick={(e) => { this.handleDelete(e); }}>
+                <p className="white text1">> Delete Channel</p>
+              </div>
+            </div> :
+            ""
+          }
+          <div className="button2 alignmiddle chatColor" onClick={() => { this.props.copyID(this.props.selectedChannel.id); }}>
             <p className="white text1">> Copy ID</p>
           </div>
         </div>

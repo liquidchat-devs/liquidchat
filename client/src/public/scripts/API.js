@@ -390,6 +390,14 @@ class API {
         }
     }
 
+    async API_deleteChannel(channel) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/deleteChannel', {
+            id: channel.id
+        }, { withCredentials: true });
+
+        return reply.data.status;
+    }
+
     async API_fetchChannels() {
         const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannels', { withCredentials: true }));
         var channels = reply.data

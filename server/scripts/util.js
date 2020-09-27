@@ -295,6 +295,13 @@ class Util {
             console.log("> created channel - " + req.body.name)
         });
 
+        this.app.post('/deleteChannel', async(req, res) => {
+            if(!this.isSessionValid(req, res)) { return; }
+
+            await this.deleteChannel(req, res, req.body)
+            console.log("> deleted channel - " + req.body.id)
+        });
+
         this.app.get('/fetchChannels', async(req, res) => {
             if(!this.isSessionValid(req, res)) { return; }
 
@@ -479,6 +486,30 @@ class Util {
         })
     
         await this.app.db.db_add.addChannel(this.app.db, channel);
+    }
+
+    async deleteChannel(req, res, _channel) {
+        var session = this.app.sessions.get(req.cookies['sessionID']);
+        var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
+        var channel = await this.app.db.db_fetch.fetchMessage(this.app.db, _channel.id);
+
+        if(channel === undefined) {
+            res.send(JSON.stringify({ status: -1 }))
+            return;
+        } else if(channel.author.id !== user.id) {
+            res.send(JSON.stringify({ status: -2 }))
+            return;
+        } else {
+            res.send(JSON.stringify({ status: 1 }))
+        }
+
+        this.app.sessionSockets.forEach(socket => {
+            if(socket.connected) {
+                socket.emit("deleteChannel", JSON.stringify(channel))
+            }
+        })
+
+        await this.app.db.db_delete.deleteChannel(this.app.db, channel.id);
     }
 
     async joinVoiceChannel(req, res, connection) {

@@ -34,6 +34,7 @@ class App extends React.Component {
     editedMessage: "",
     selectedUser: -1,
     selectedImage: -1,
+    selectedChannel: -1,
 
     //Data
     users: new Map(),
@@ -148,6 +149,14 @@ class App extends React.Component {
     });
   }
 
+  setSelectedChannel =  (channel, x, y) => {
+    this.setState({
+      selectedChannel: channel,
+      boxX: x,
+      boxY: y
+    });
+  }
+
   setSelectedUser = (user, x, y) => {
     this.setState({
       selectedUser: user,
@@ -193,14 +202,14 @@ class App extends React.Component {
         {this.state.waitingForSession === false ?
           <div>
             <DialogManager
-            selectedImage={this.state.selectedImage} API={this.state.API} dialogState={this.state.dialogState} switchDialogState={this.switchDialogState} startEditingMessage={this.startEditingMessage} setSelectedUser={this.setSelectedUser} getUser={this.getUser} selectedUser={this.state.selectedUser}
+            setSelectedChannel={this.setSelectedChannel} selectedChannel={this.state.selectedChannel} selectedImage={this.state.selectedImage} API={this.state.API} dialogState={this.state.dialogState} switchDialogState={this.switchDialogState} startEditingMessage={this.startEditingMessage} setSelectedUser={this.setSelectedUser} getUser={this.getUser} selectedUser={this.state.selectedUser}
             boxX={this.state.boxX} boxY={this.state.boxY} selectedMessage={this.state.selectedMessage} session={this.state.session} fileEndpoint={this.state.fileEndpoint} setEditedMessage={this.setEditedMessage} setSelectedMessage={this.setSelectedMessage}/>
             <Account
             API={this.state.API} fileEndpoint={this.state.fileEndpoint} switchDialogState={this.switchDialogState} setSelectedMessage={this.setSelectedMessage}
             session={this.state.session} getUser={this.getUser}/>
             <div className="flex">
               <ChannelSelector
-              API={this.state.API} switchDialogState={this.switchDialogState} channelTypes={this.state.channelTypes} switchChannelTypes={this.switchChannelTypes}
+              setSelectedChannel={this.setSelectedChannel} API={this.state.API} switchDialogState={this.switchDialogState} channelTypes={this.state.channelTypes} switchChannelTypes={this.switchChannelTypes}
               session={this.state.session} fileEndpoint={this.state.fileEndpoint} friendRequests={this.state.friendRequests}
               channels={this.state.channels} setFirstChannel={this.setFirstChannel} switchChannel={this.switchChannel} currentVoiceGroup={this.state.currentVoiceGroup} getUser={this.getUser}/>
               <div className="chat-wrapper">
