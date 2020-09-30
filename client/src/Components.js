@@ -107,20 +107,27 @@ export class ChannelSelector extends React.Component {
     const friendRequestsList = friendRequests.map((friendRequest, i) => {
       const author = this.props.getUser(friendRequest.author.id)
       const target = this.props.getUser(friendRequest.target.id)
-      var user = author.id === this.props.session.userID ? target : author;
+      var user = author.id === loggedUser.id ? target : author;
 
       return (
-        <div className="friendRequestEntry selectedChannelColor">
+        <div className="friendRequestEntry selectedChannelColor" style={{ height: author.id === this.props.session.userID ? 110 : 75}}>
           <div className="flex">
             <img className="avatar3 marginleft1 margintop1" src={this.props.fileEndpoint + "/" + user.avatar} key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
-            <div className="white marginleft2 margintop1">
+            <div className="white marginleft2 margintop1b">
               {user.username}
             </div>
           </div>
           {author.id === this.props.session.userID ? 
-          <div className="flex">
-            <div className="white channel pendingColor">
-              Pending
+          <div>
+            <div className="flex">
+              <div className="white channel pendingColor">
+                Pending
+              </div>
+            </div>
+            <div className="flex">
+            <div className="white channel declineColor" onClick={() => { this.declineFriendRequest(friendRequest.id); }}>
+                Cancel
+              </div>
             </div>
           </div>
           :
@@ -136,7 +143,6 @@ export class ChannelSelector extends React.Component {
       )
     });
 
-    console.log(loggedUser)
     const friendList = loggedUser.friendList.map((friendID, i) => {
       const friend = this.props.getUser(friendID)
       if(friend === -1) {
