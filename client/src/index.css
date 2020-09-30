@@ -131,6 +131,10 @@ code {
   margin-top: 10px;
 }
 
+.margintop1b {
+  margin-top: 15px;
+}
+
 .margintop2 {
   margin-top: 30px;
 }
@@ -465,6 +469,11 @@ code {
 .friendRequestEntry {
   width: 100%;
   height: 75px;
+}
+
+.friendEntry {
+  width: 100%;
+  height: 50px;
 }
 
 .vcInfo {

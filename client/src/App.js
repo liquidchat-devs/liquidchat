@@ -211,7 +211,7 @@ class App extends React.Component {
             <div className="flex">
               <ChannelSelector
               setSelectedChannel={this.setSelectedChannel} API={this.state.API} switchDialogState={this.switchDialogState} channelTypes={this.state.channelTypes} switchChannelTypes={this.switchChannelTypes}
-              session={this.state.session} fileEndpoint={this.state.fileEndpoint} friendRequests={this.state.friendRequests}
+              session={this.state.session} fileEndpoint={this.state.fileEndpoint} friendRequests={this.state.friendRequests} setSelectedUser={this.setSelectedUser}
               channels={this.state.channels} setFirstChannel={this.setFirstChannel} switchChannel={this.switchChannel} currentVoiceGroup={this.state.currentVoiceGroup} getUser={this.getUser}/>
               <div className="chat-wrapper">
                 <ChannelHeader

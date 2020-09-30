@@ -64,6 +64,7 @@ export class ChannelSelector extends React.Component {
     let channels = Array.from(this.props.channels.values());
     let friendRequests = Array.from(this.props.friendRequests.values());
     let voiceGroup = this.props.currentVoiceGroup;
+    let loggedUser = this.props.getUser(this.props.session.userID);
     
     channels = channels.filter(channel => { return ((channel.type === 0 || channel.type === 1) && this.props.channelTypes === 2) || (channel.type === 2 && this.props.channelTypes === 1); })
     const channelList = channels.map((channel, i) => {
@@ -135,6 +136,25 @@ export class ChannelSelector extends React.Component {
       )
     });
 
+    console.log(loggedUser)
+    const friendList = loggedUser.friendList.map((friendID, i) => {
+      const friend = this.props.getUser(friendID)
+      if(friend === -1) {
+        return null;
+      }
+
+      return (
+        <div className="friendEntry selectedChannelColor">
+          <div className="flex">
+            <img className="avatar3 marginleft1 margintop1" src={this.props.fileEndpoint + "/" + friend.avatar} key={i} onContextMenu={(e) => { this.props.setSelectedUser(friend, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
+            <div className="white marginleft2 margintop1b">
+              {friend.username}
+            </div>
+          </div>
+        </div>
+      )
+    });
+
     return (
       <div className="flex">
         <div className="channels headerColor">
@@ -166,6 +186,7 @@ export class ChannelSelector extends React.Component {
           </div>
         :
         <div className="channels headerColor">
+          {friendList}
           {friendRequestsList}
           <div className="white headerColor channel" onClick={() => { this.props.switchDialogState(7) }}>
             Add Friend

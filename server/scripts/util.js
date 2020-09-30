@@ -627,14 +627,15 @@ class Util {
         }
 
         await this.app.db.db_delete.deleteFriendRequest(this.app.db, friendRequest.id);
+        var authorUser = await this.app.db.db_fetch.fetchUser(this.app.db, friendRequest.author.id);
         var targetUser = await this.app.db.db_fetch.fetchUser(this.app.db, friendRequest.target.id);
 
         if(_accept) {
-            user.friendList.push(targetUser.id);
-            targetUser.friendList.push(user.id);
+            authorUser.friendList.push(targetUser.id);
+            targetUser.friendList.push(authorUser.id);
         }
 
-        await this.app.db.db_edit.editUser(this.app.db, user);
+        await this.app.db.db_edit.editUser(this.app.db, authorUser);
         await this.app.db.db_edit.editUser(this.app.db, targetUser);
     }
 
