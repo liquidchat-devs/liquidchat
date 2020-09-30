@@ -184,7 +184,7 @@ class API {
         const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchFriendRequests', { withCredentials: true }));
         var friendRequests = reply.data
 
-        this.API_fetchUsersForMessages(friendRequests)
+        this.API_fetchUsersForFriendRequests(friendRequests)
         this.mainClass.setState({
             friendRequests: friendRequests
         });
@@ -193,10 +193,12 @@ class API {
     async API_fetchUsersForFriendRequests(friendRequests) {
         const queue = new Map();
         friendRequests.forEach(friendRequest => {
-          if(!queue.has(friendRequest.target.id)) {
-            this.API_fetchUser(friendRequest.author.id)
-            queue.set(friendRequest.target.id, 1)
-          }
+            var id = friendRequest.author.id === this.mainClass.state.session.userID ? friendRequest.target.id : friendRequest.author.id;
+
+            if(!queue.has(id)) {
+                this.API_fetchUser(id)
+                queue.set(id, 1)
+            }
         })
     }
     //#endregion
