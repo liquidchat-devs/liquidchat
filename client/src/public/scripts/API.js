@@ -181,7 +181,7 @@ class API {
     }
 
     async API_fetchFriendRequests() {
-        const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchFriendRequests?authorID=' + this.mainClass.state.session.userID, { withCredentials: true }));
+        const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchFriendRequests', { withCredentials: true }));
         var friendRequests = reply.data
 
         this.API_fetchUsersForMessages(friendRequests)

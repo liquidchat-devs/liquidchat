@@ -356,9 +356,12 @@ class Util {
 
         this.app.get('/fetchFriendRequests', async(req, res) => {
             if(!this.isSessionValid(req, res)) { return; }
-            const data = req.query;
+            var session = this.app.sessions.get(req.cookies['sessionID']);
+            var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
 
-            var friendRequests = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, data.authorID);
+            var friendRequestsOut = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, user.id, 0);
+            var friendRequestsIn = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, user.id, 1);
+            var friendRequests = friendRequestsOut.concat(friendRequestsIn);
             res.send(JSON.stringify(friendRequests));
         });
 

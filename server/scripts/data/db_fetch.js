@@ -121,12 +121,12 @@ module.exports = {
         return this.formatFriendRequest(result[0][0])
     },
 
-    async fetchFriendRequests(db, id) {
+    async fetchFriendRequests(db, id, type) {
         if(db.DEBUG) {
             console.log(" - [db] Loading FriendRequests from User(id: " + id + ") from the database..."); 
         }
 
-        var query0 = "SELECT * FROM friendRequests WHERE authorID='" + id + "'";
+        var query0 = type === 0 ? "SELECT * FROM friendRequests WHERE authorID='" + id + "'" : "SELECT * FROM friendRequests WHERE targetID='" + id + "'";
         var result = await db.sqlConn.promise().query(query0);
         if(result.length < 1 || result[0].length < 1) {
             return [];
