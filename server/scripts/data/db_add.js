@@ -4,7 +4,7 @@ module.exports = {
             console.log(" - [db] Adding User(id: " + user.id + ") into the database..."); 
         }
 
-        var query = "INSERT IGNORE INTO users (id, username, createdAt, avatar, password, friendList) VALUES('" + user.id + "', '" + user.username + "', " + user.createdAt + ", '" + user.avatar + "', '" + user.password + "', '" + user.friendList.join(",") + "')";
+        var query = "INSERT IGNORE INTO users (id, username, createdAt, avatar, password, friendList, dmChannelList) VALUES('" + user.id + "', '" + user.username + "', " + user.createdAt + ", '" + user.avatar + "', '" + user.password + "', '" + user.friendList.join(",") + ", '" + user.dmChannelList.join(",") + "')";
         db.sqlConn.promise().query(query)
         .then((result, err) => {
             if(err) { throw err; }
