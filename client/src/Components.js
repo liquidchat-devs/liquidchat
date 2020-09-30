@@ -491,7 +491,7 @@ export class ProfileOptionsBox extends React.Component {
               <div className="button2 alignmiddle chatColor" onClick={() => { this.removeFriend(this.props.selectedUser.id); }}>
                 <p className="white text1">> Remove Friend</p>
               </div>
-              <div className="button2 alignmiddle chatColor" onClick={() => { this.messageUser(this.props.selectedUser.id); }}>
+              <div className="button2 alignmiddle chatColor" onClick={() => { this.createChannelDM(this.props.selectedUser.id); }}>
                 <p className="white text1">> Message</p>
               </div>
             </div> :
