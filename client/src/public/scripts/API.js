@@ -128,6 +128,7 @@ class API {
         });
         socket.on('updateFriendRequests', (friendRequestsData) => {
             var friendRequests = JSON.parse(friendRequestsData);
+            this.API_fetchUsersForFriendRequests(friendRequests);
             this.mainClass.setState({
                 friendRequests: friendRequests
             });
