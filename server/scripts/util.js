@@ -619,7 +619,7 @@ class Util {
         if(friendRequest === undefined) {
             res.send(JSON.stringify({ status: -1 }))
             return;
-        } else if(friendRequest.author.id !== user.id) {
+        } else if(friendRequest.target.id !== user.id && friendRequest.author.id !== user.id) {
             res.send(JSON.stringify({ status: -2 }))
             return;
         }  else {
@@ -633,6 +633,9 @@ class Util {
             user.friendList.push(targetUser.id);
             targetUser.friendList.push(user.id);
         }
+
+        await this.app.db.db_edit.editUser(this.app.db, user);
+        await this.app.db.db_edit.editUser(this.app.db, targetUser);
     }
 
     async updateUser(req, res, user) {

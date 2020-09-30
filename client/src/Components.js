@@ -104,7 +104,9 @@ export class ChannelSelector extends React.Component {
     });
 
     const friendRequestsList = friendRequests.map((friendRequest, i) => {
-      const user = this.props.getUser(friendRequest.target.id)
+      const author = this.props.getUser(friendRequest.author.id)
+      const target = this.props.getUser(friendRequest.target.id)
+      var user = author.id === this.props.session.userID ? target : author;
 
       return (
         <div className="friendRequestEntry selectedChannelColor">
@@ -114,6 +116,13 @@ export class ChannelSelector extends React.Component {
               {user.username}
             </div>
           </div>
+          {author.id === this.props.session.userID ? 
+          <div className="flex">
+            <div className="white channel pendingColor">
+              Pending
+            </div>
+          </div>
+          :
           <div className="flex">
             <div className="white channel acceptColor" onClick={() => { this.acceptFriendRequest(friendRequest.id); }}>
               Accept
@@ -121,7 +130,7 @@ export class ChannelSelector extends React.Component {
             <div className="white channel declineColor" onClick={() => { this.declineFriendRequest(friendRequest.id); }}>
               Decline
             </div>
-          </div>
+          </div>}
         </div>
       )
     });
