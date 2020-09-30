@@ -141,6 +141,7 @@ module.exports = {
     },
 
     formatUser(user) {
+        console.log(user);
         user.friendList = user.friendList.split(",")
 
         return user;
