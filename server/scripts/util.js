@@ -615,8 +615,8 @@ class Util {
             var friendRequestsOut = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, user.id, 0);
             var friendRequestsIn = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, user.id, 1);
             var friendRequests = friendRequestsOut.concat(friendRequestsIn);
-            
-            socket.emit("updateFriendRequests", friendRequests)
+
+            socket.emit("updateFriendRequests", JSON.stringify(friendRequests))
         }
     }
 
@@ -655,7 +655,7 @@ class Util {
             var friendRequests = friendRequestsOut.concat(friendRequestsIn);
 
             socket.emit("updateUser", JSON.stringify(user))
-            socket.emit("updateFriendRequests", friendRequests)
+            socket.emit("updateFriendRequests", JSON.stringify(friendRequests))
         }
     }
 
