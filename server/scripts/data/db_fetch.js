@@ -142,7 +142,7 @@ module.exports = {
 
     formatUser(user) {
         user.friendList = user.friendList.split(",")
-        user.dmChannelList = user.dmList.split(",")
+        user.dmChannelList = user.dmChannelList.split(",")
 
         return user;
     },
