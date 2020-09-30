@@ -571,6 +571,7 @@ class Util {
     }
 
     async sendFriendRequest(req, res, _friendRequest) {
+        var socket = this.app.sessionSockets.get(req.cookies['sessionID']);
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
 
@@ -609,6 +610,14 @@ class Util {
         }
         
         await this.app.db.db_add.addFriendRequest(this.app.db, friendRequest);
+
+        if(socket.connected) {
+            var friendRequestsOut = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, user.id, 0);
+            var friendRequestsIn = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, user.id, 1);
+            var friendRequests = friendRequestsOut.concat(friendRequestsIn);
+            
+            socket.emit("updateFriendRequests", friendRequests)
+        }
     }
 
     async processFriendRequest(req, res, _friendRequest, _accept) {
