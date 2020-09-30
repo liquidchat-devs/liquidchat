@@ -107,6 +107,9 @@ class API {
                 uploadExpected: fileSize
             });
         });
+        socket.on('uploadFinish', (fileID, fileName) => {
+            console.log("> upload finish")
+        });
 
         socket.on('updateUser', (userData) => {
             var user = JSON.parse(userData);
@@ -117,16 +120,17 @@ class API {
                 });
             }
         });
-
         socket.on('updateVoiceGroup', (voiceGroupData) => {
             var voiceGroup = JSON.parse(voiceGroupData);
             this.mainClass.setState({
                 currentVoiceGroup: voiceGroup
             });
         });
-
-        socket.on('uploadFinish', (fileID, fileName) => {
-            console.log("> upload finish")
+        socket.on('updateFriendRequests', (friendRequestsData) => {
+            var friendRequests = JSON.parse(friendRequestsData);
+            this.mainClass.setState({
+                friendRequests: friendRequests
+            });
         });
         
         //Setups the WebRTC Client

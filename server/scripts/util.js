@@ -612,6 +612,7 @@ class Util {
     }
 
     async processFriendRequest(req, res, _friendRequest, _accept) {
+        var socket = this.app.sessionSockets.get(req.cookies['sessionID']);
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
         var friendRequest = await this.app.db.db_fetch.fetchFriendRequest(this.app.db, _friendRequest.id);
@@ -629,6 +630,7 @@ class Util {
         await this.app.db.db_delete.deleteFriendRequest(this.app.db, friendRequest.id);
         var authorUser = await this.app.db.db_fetch.fetchUser(this.app.db, friendRequest.author.id);
         var targetUser = await this.app.db.db_fetch.fetchUser(this.app.db, friendRequest.target.id);
+        user = friendRequest.target.id === user.id ? targetUser : sourceUser;
 
         if(_accept) {
             authorUser.friendList.push(targetUser.id);
@@ -637,9 +639,18 @@ class Util {
 
         await this.app.db.db_edit.editUser(this.app.db, authorUser);
         await this.app.db.db_edit.editUser(this.app.db, targetUser);
+
+        if(socket.connected) {
+            var friendRequestsOut = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, user.id, 0);
+            var friendRequestsIn = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, user.id, 1);
+            var friendRequests = friendRequestsOut.concat(friendRequestsIn);
+
+            socket.emit("updateUser", JSON.stringify(user))
+            socket.emit("updateFriendRequests", friendRequests)
+        }
     }
 
-    async updateUser(req, res, user) {
+    async updateUser(req, res, user, broadcast) {
         res.send(JSON.stringify({ status: 1 }))
         
         this.app.sessionSockets.forEach(socket => {
