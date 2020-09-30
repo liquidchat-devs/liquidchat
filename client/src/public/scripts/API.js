@@ -14,9 +14,10 @@ class API {
             transports: ['websocket']
         });
 
-        socket.on('connect', () => {
+        socket.on('connect', async() => {
             console.log("> socket.io connected!");
-            this.API_fetchUser(userID)
+            await this.API_fetchUser(userID);
+            this.API_fetchUsersForFriends(userID);
         });
         
         socket.on('message', (messageData) => {
@@ -171,8 +172,16 @@ class API {
           this.mainClass.setState({
             users: newUsers
           });
+
           return user;
         }
+    }
+
+    async API_fetchUsersForFriends(userID) {
+        var user = this.mainClass.getUser(userID);
+        user.friendList.forEach(friendID => {
+            this.API_fetchUser(friendID);
+        });
     }
 
     async API_fetchUsersForMessages(messages) {
@@ -229,6 +238,16 @@ class API {
 
     async API_sendFriendRequest(userID) {
         await axios.post(this.mainClass.state.APIEndpoint + '/sendFriendRequest', {
+            target: {
+                id: userID
+            }
+        }, { withCredentials: true });
+
+        return true;
+    }
+
+    async API_removeFriend(userID) {
+        await axios.post(this.mainClass.state.APIEndpoint + '/removeFriend', {
             target: {
                 id: userID
             }

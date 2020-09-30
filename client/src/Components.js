@@ -144,15 +144,15 @@ export class ChannelSelector extends React.Component {
     });
 
     const friendList = loggedUser.friendList.map((friendID, i) => {
-      const friend = this.props.getUser(friendID)
+      const friend = this.props.getUser(friendID);
       if(friend === -1) {
         return null;
       }
 
       return (
-        <div className="friendEntry selectedChannelColor">
+        <div className="friendEntry selectedChannelColor" onContextMenu={(e) => { this.props.setSelectedUser(friend, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="flex">
-            <img className="avatar3 marginleft1 margintop1" src={this.props.fileEndpoint + "/" + friend.avatar} key={i} onContextMenu={(e) => { this.props.setSelectedUser(friend, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
+            <img className="avatar3 marginleft1 margintop1" src={this.props.fileEndpoint + "/" + friend.avatar} key={i}/>
             <div className="white marginleft2 margintop1b">
               {friend.username}
             </div>
@@ -234,7 +234,7 @@ export class DialogManager extends React.Component {
         return <ProfileBox API={this.props.API} fileEndpoint={this.props.fileEndpoint} switchDialogState={this.props.switchDialogState} session={this.props.session} selectedUser={this.props.selectedUser}/>
 
       case 6:
-        return <ProfileOptionsBox API={this.props.API} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedUser={this.props.selectedUser} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
+        return <ProfileOptionsBox API={this.props.API} getUser={this.props.getUser} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedUser={this.props.selectedUser} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
 
       case 7:
         return <AddFriendBox API={this.props.API} switchDialogState={this.props.switchDialogState}/>
@@ -460,7 +460,13 @@ export class ProfileOptionsBox extends React.Component {
     this.props.API.API_sendFriendRequest(id);
   }
 
+  removeFriend(id) {
+    this.props.API.API_removeFriend(id);
+  }
+
   render() {
+    let loggedUser = this.props.getUser(this.props.session.userID);
+
     return (
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0); }} style={{ opacity: 0.3 }}></div>
@@ -469,9 +475,21 @@ export class ProfileOptionsBox extends React.Component {
             <p className="white text1">> Profile</p>
           </div>
           {
-            this.props.selectedUser.id !== this.props.session.userID ?
+            this.props.selectedUser.id !== loggedUser.id && loggedUser.friendList.includes(this.props.selectedUser.id) === false ?
             <div className="button2 alignmiddle chatColor" onClick={() => { this.sendFriendRequest(this.props.selectedUser.id); }}>
               <p className="white text1">> Add Friend</p>
+            </div> :
+            ""
+          }
+          {
+            loggedUser.friendList.includes(this.props.selectedUser.id) === true ?
+            <div>
+              <div className="button2 alignmiddle chatColor" onClick={() => { this.removeFriend(this.props.selectedUser.id); }}>
+                <p className="white text1">> Remove Friend</p>
+              </div>
+              <div className="button2 alignmiddle chatColor" onClick={() => { this.messageUser(this.props.selectedUser.id); }}>
+                <p className="white text1">> Message</p>
+              </div>
             </div> :
             ""
           }
