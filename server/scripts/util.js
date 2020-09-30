@@ -679,7 +679,7 @@ class Util {
         }
 
         var targetUser = await this.app.db.db_fetch.fetchUser(this.app.db, _removalRequest.target.id);
-        user.friendList.splice(authorUser.friendList.indexOf(targetUser.id), 1);
+        user.friendList.splice(user.friendList.indexOf(targetUser.id), 1);
         targetUser.friendList.splice(targetUser.friendList.indexOf(user.id), 1);
 
         await this.app.db.db_edit.editUser(this.app.db, user);
