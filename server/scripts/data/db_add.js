@@ -19,8 +19,8 @@ module.exports = {
         var query0 = "(id, name, type, createdAt, authorID" + (channel.members == null ? ")" : ", members)")
         var query1 = "('" + channel.id + "', '" + channel.name + "', "+ channel.type + ", " + channel.createdAt + ", '" + channel.author.id + "'" + (channel.members == null ? ")" : ", '" + channel.members.split(",") + "')")
         var query = "INSERT IGNORE INTO channels " + query0 + " VALUES" + query1;
+        console.log(query0);
         console.log(query1);
-        console.log(query2);
         db.sqlConn.promise().query(query)
         .then((result, err) => {
             if(err) { throw err; }
