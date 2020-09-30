@@ -158,7 +158,8 @@ class Util {
                     createdAt: Date.now(),
                     avatar: "defaultAvatar.png",
                     password: passwordHash,
-                    friendList: []
+                    friendList: [],
+                    dmChannelList: []
                 }
         
                 await this.app.db.db_add.addUser(this.app.db, user);
