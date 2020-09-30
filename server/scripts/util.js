@@ -508,9 +508,9 @@ class Util {
             case 2:
                 channel.members = _channel.members;
                 channel.members.forEach(id => {
-                    var user = await this.app.db.db_fetch.fetchUser(this.app.db, id);
+                    var user = this.app.db.db_fetch.fetchUser(this.app.db, id);
                     user.dmChannelList.push(channel.id);
-                    await this.app.db.db_edit.editUser(this.app.db, user);
+                    this.app.db.db_edit.editUser(this.app.db, user);
                 });
                 break;
         }
