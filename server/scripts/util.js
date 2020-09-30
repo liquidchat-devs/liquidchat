@@ -491,7 +491,6 @@ class Util {
         } else {
             res.send(JSON.stringify({ status: 1 }))
         }
-
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
         var channel = {
@@ -504,11 +503,16 @@ class Util {
             }
         }
 
-        this.app.sessionSockets.forEach(socket => {
-            if(socket.connected) {
-                socket.emit("createChannel", JSON.stringify(channel))
-            }
-        })
+        switch(_channel.type) {
+            case 2:
+                channel.members = _channel.members;
+                channel.members.forEach(id => {
+                    var user = await this.app.db.db_fetch.fetchUser(this.app.db, id);
+                    user.dmChannelList.push(channel.id);
+                    await this.app.db.db_edit.editUser(this.app.db, user);
+                });
+                break;
+        }
     
         await this.app.db.db_add.addChannel(this.app.db, channel);
     }

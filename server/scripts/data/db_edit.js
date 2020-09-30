@@ -4,7 +4,7 @@ module.exports = {
             console.log(" - [db] Editing User(id: " + user.id + ") in the database..."); 
         }
 
-        var query = "UPDATE users SET username='" + user.username + "', avatar='" + user.avatar + "', password='" + user.password + "', friendList='" + user.friendList.join(",") + "' WHERE id='" + user.id + "'";
+        var query = "UPDATE users SET username='" + user.username + "', avatar='" + user.avatar + "', password='" + user.password + "', friendList='" + user.friendList.join(",") + "', dmChannelList='" + user.dmChannelList.join(",") + "' WHERE id='" + user.id + "'";
         db.sqlConn.promise().query(query)
         .then((result, err) => {
             if(err) { throw err; }

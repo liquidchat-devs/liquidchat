@@ -67,5 +67,10 @@ module.exports = {
         .then((result, err) => {
             if(err) { throw err; }
         });
+        query = "DELETE FROM friendRequests";
+        db.sqlConn.promise().query(query)
+        .then((result, err) => {
+            if(err) { throw err; }
+        });
     }
 }

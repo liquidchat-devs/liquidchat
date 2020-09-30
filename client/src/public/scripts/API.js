@@ -177,6 +177,30 @@ class API {
         }
     }
 
+    async API_fetchFriendRequests() {
+        const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchFriendRequests', { withCredentials: true }));
+        var friendRequests = reply.data
+
+        this.API_fetchUsersForFriendRequests(friendRequests)
+        this.mainClass.setState({
+            friendRequests: friendRequests
+        });
+    }
+    //#endregion
+
+    //#region Fetching Utils
+    async API_fetchUsersForFriendRequests(friendRequests) {
+        const queue = new Map();
+        friendRequests.forEach(friendRequest => {
+            var id = friendRequest.author.id === this.mainClass.state.session.userID ? friendRequest.target.id : friendRequest.author.id;
+
+            if(!queue.has(id)) {
+                this.API_fetchUser(id)
+                queue.set(id, 1)
+            }
+        })
+    }
+
     async API_fetchUsersForFriends(userID) {
         var user = this.mainClass.getUser(userID);
         user.friendList.forEach(friendID => {
@@ -191,28 +215,6 @@ class API {
             this.API_fetchUser(message.author.id)
             queue.set(message.author.id, 1)
           }
-        })
-    }
-
-    async API_fetchFriendRequests() {
-        const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchFriendRequests', { withCredentials: true }));
-        var friendRequests = reply.data
-
-        this.API_fetchUsersForFriendRequests(friendRequests)
-        this.mainClass.setState({
-            friendRequests: friendRequests
-        });
-    }
-
-    async API_fetchUsersForFriendRequests(friendRequests) {
-        const queue = new Map();
-        friendRequests.forEach(friendRequest => {
-            var id = friendRequest.author.id === this.mainClass.state.session.userID ? friendRequest.target.id : friendRequest.author.id;
-
-            if(!queue.has(id)) {
-                this.API_fetchUser(id)
-                queue.set(id, 1)
-            }
         })
     }
     //#endregion
@@ -425,6 +427,18 @@ class API {
     async API_createChannel(channelName, channelType) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createChannel', {
             name: channelName, type: channelType
+        }, { withCredentials: true });
+
+        if(reply.data.status !== 1) {
+            return reply.data.status;
+        } else {
+            return reply.data;
+        }
+    }
+
+    async API_createChannelDM(channelName, channelMembers) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createChannel', {
+            name: channelName, type: 2, members: channelMembers
         }, { withCredentials: true });
 
         if(reply.data.status !== 1) {

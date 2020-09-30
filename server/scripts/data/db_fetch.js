@@ -46,7 +46,7 @@ module.exports = {
             console.log(" - [db] Loading Channels from the database..."); 
         }
 
-        var query0 = "SELECT * FROM channels";
+        var query0 = "SELECT * FROM channels WHERE type=0 OR type=1";
         var result = await db.sqlConn.promise().query(query0);
         if(result.length < 1 || result[0].length < 1) {
             return [];
@@ -141,8 +141,8 @@ module.exports = {
     },
 
     formatUser(user) {
-        console.log(user);
         user.friendList = user.friendList.split(",")
+        user.dmChannelList = user.dmList.split(",")
 
         return user;
     },
@@ -162,6 +162,7 @@ module.exports = {
     formatChannel(channel) {
         channel.author = { id: channel.authorID }
         delete channel.authorID
+        channel.members = channel.members == null ? undefined : channel.members.split(",")
 
         return channel;
     },

@@ -464,6 +464,10 @@ export class ProfileOptionsBox extends React.Component {
     this.props.API.API_removeFriend(id);
   }
 
+  createChannelDM(id) {
+    this.props.API.API_createChannelDM("Channel#" + Math.floor(Math.random() * 1000), [ id ]);
+  }
+
   render() {
     let loggedUser = this.props.getUser(this.props.session.userID);
 
