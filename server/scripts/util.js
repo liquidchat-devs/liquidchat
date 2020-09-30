@@ -535,8 +535,6 @@ class Util {
         if(channel === undefined) {
             res.send(JSON.stringify({ status: -1 }))
             return;
-        } else {
-            res.send(JSON.stringify({ status: 1 }))
         }
 
         var voiceGroup = -1;
@@ -560,7 +558,8 @@ class Util {
 
             voiceGroup.users.push(user.id);
         }
-        
+
+        res.send(JSON.stringify({ status: 1 }))
         for(const [id, socket] of this.app.sessionSockets.entries()) {
             if(socket.connected && voiceGroup.users.includes(this.app.sessions.get(id).userID)) {
                 socket.emit("updateVoiceGroup", JSON.stringify(voiceGroup))
