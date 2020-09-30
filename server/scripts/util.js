@@ -630,7 +630,7 @@ class Util {
         await this.app.db.db_delete.deleteFriendRequest(this.app.db, friendRequest.id);
         var authorUser = await this.app.db.db_fetch.fetchUser(this.app.db, friendRequest.author.id);
         var targetUser = await this.app.db.db_fetch.fetchUser(this.app.db, friendRequest.target.id);
-        user = friendRequest.target.id === user.id ? targetUser : sourceUser;
+        user = friendRequest.target.id === user.id ? targetUser : authorUser;
 
         if(_accept) {
             authorUser.friendList.push(targetUser.id);
