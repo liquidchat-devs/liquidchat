@@ -44,62 +44,94 @@ export default class Chat extends React.Component {
     let channel = this.props.channels.get(this.props.currentChannel)
     if(channel === undefined) {
       return (
-        <div className="Chat">
+        <div className="flex">
           <h3 className="white margin1 marginleft2"> No Channel Selected</h3>
         </div>
       );
     }
     
-    let messages = -1;
+    let messages = channel.messages === undefined ? [] : channel.messages;
+    let members = channel.members;
     let messageList = -1;
+    let membersList = -1;
+
+    messageList = messages.map((message, i) => {
+      const user = this.props.getUser(message.author.id)
+
+      return (
+        <div className="paddingtop2 paddingbot2 flex" key={i} onContextMenu={(e) => { this.props.switchDialogState(2); this.props.setSelectedMessage(message, e.pageX, e.pageY); e.preventDefault(); } } onMouseOver={(e) => e.currentTarget.classList.add("hoveredMessageColor")} onMouseLeave={(e) => e.currentTarget.classList.remove("hoveredMessageColor") }>
+          <div className="flex marginleft2">
+            <img className="avatar" src={this.props.fileEndpoint + "/" + user.avatar} key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
+            <div className="marginleft2">
+              <div className="flex">
+                <div className="allignMiddle" style={{margin: 0, color: message.color, fontSize: 16}}>
+                  {user !== -1 ? user.username : "Loading"}
+                </div>
+                <div className="allignMiddle margintop1a" style={{marginLeft: 5, fontSize: 10, color: "#acacac"}}>
+                  {formatDate(message.createdAt)}
+                </div>
+              </div>
+              <div className="flex">
+                {message.id === this.props.editingMessage.id ?
+                <div>
+                    <form onSubmit={this.handleEdit} className="full">
+                      <input className="input-message chatColor" type="text" value={this.props.editedMessage} required={true} onChange={(e) => { this.props.setEditedMessage(e.target.value) }}/>
+                    </form>
+                  </div>
+                : formatMessage(this, message)
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    });
+
+    membersList = membersList === undefined ? -1 : members.map((memberID, i) => {
+      const user = this.props.getUser(memberID)
+
+      return (
+        <div className="paddingtop2 paddingbot2 flex" key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
+          <div className="flex marginleft2">
+            <img className="avatar3" src={this.props.fileEndpoint + "/" + user.avatar} key={i}/>
+            <div className="marginleft2">
+              <div className="flex">
+                <div className="allignMiddle" style={{margin: 0, color: "red", fontSize: 16}}>
+                  {user !== -1 ? user.username : "Loading"}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    });
 
     switch(channel.type) {
       case 0:
       case 2:
-        messages = channel.messages === undefined ? [] : channel.messages;
-        messageList = messages.map((message, i) => {
-          const user = this.props.getUser(message.author.id)
-
-          return (
-            <div className="paddingtop2 paddingbot2 flex" key={i} onContextMenu={(e) => { this.props.switchDialogState(2); this.props.setSelectedMessage(message, e.pageX, e.pageY); e.preventDefault(); } } onMouseOver={(e) => e.currentTarget.classList.add("hoveredMessageColor")} onMouseLeave={(e) => e.currentTarget.classList.remove("hoveredMessageColor") }>
-              <div className="flex marginleft2">
-                <img className="avatar" src={this.props.fileEndpoint + "/" + user.avatar} key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
-                <div className="marginleft2">
-                  <div className="flex">
-                    <div className="allignMiddle" style={{margin: 0, color: message.color, fontSize: 16}}>
-                      {user !== -1 ? user.username : "Loading"}
-                    </div>
-                    <div className="allignMiddle margintop1a" style={{marginLeft: 5, fontSize: 10, color: "#acacac"}}>
-                      {formatDate(message.createdAt)}
-                    </div>
-                  </div>
-                  <div className="flex">
-                    {message.id === this.props.editingMessage.id ?
-                    <div>
-                        <form onSubmit={this.handleEdit} className="full">
-                          <input className="input-message chatColor" type="text" value={this.props.editedMessage} required={true} onChange={(e) => { this.props.setEditedMessage(e.target.value) }}/>
-                        </form>
-                      </div>
-                    : formatMessage(this, message)
-                    }
+        return (
+          <div className="flex">
+            <div style={{ overflowY: "scroll", height: this.props.pageHeight - 165, width: "calc(100% - 200px)" }}>
+              {messageList}
+            </div>
+            {membersList === -1 ? null :
+            <div className="membersList paddingtop2b">
+              <div className="marginleft2">
+                <div className="flex">
+                  <div className="allignMiddle" style={{margin: 0, color: "white", fontSize: 16}}>
+                    Members ({channel.members.length})
                   </div>
                 </div>
               </div>
+              {membersList}
             </div>
-          )
-        });
-
-        return (
-          <div className="Chat">
-            <div style={{ overflowY: "scroll", height: this.props.pageHeight - 165 }}>
-              {messageList}
-            </div>
+            }
           </div>
         );
 
       case 1:
         return (
-          <div className="Chat">
+          <div className="flex">
             <div>
               <div className="button2 alignmiddle chatColor" onClick={(e) => { this.setupScreenshare(); }}>
                 <p className="white text1">Screenshare</p>

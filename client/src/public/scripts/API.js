@@ -190,14 +190,9 @@ class API {
 
     //#region Fetching Utils
     async API_fetchUsersForFriendRequests(friendRequests) {
-        const queue = new Map();
         friendRequests.forEach(friendRequest => {
             var id = friendRequest.author.id === this.mainClass.state.session.userID ? friendRequest.target.id : friendRequest.author.id;
-
-            if(!queue.has(id)) {
-                this.API_fetchUser(id)
-                queue.set(id, 1)
-            }
+            this.API_fetchUser(id)
         })
     }
 
@@ -216,6 +211,12 @@ class API {
             queue.set(message.author.id, 1)
           }
         })
+    }
+
+    async API_fetchUsersForChannelMembers(channel) {
+        channel.members.forEach(userID => {
+            this.API_fetchUser(userID);
+        });
     }
     //#endregion
 
@@ -466,6 +467,7 @@ class API {
             channel.messages = messages
             channels.set(channel.id, channel);
 
+            if(channel.members !== undefined) { this.API_fetchUsersForChannelMembers(channel); }
             this.API_fetchUsersForMessages(messages)
             this.mainClass.setState({
                 channels: channels

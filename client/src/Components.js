@@ -26,13 +26,9 @@ export class ChannelHeader extends React.Component {
     let messages = -1;
     switch(channel.type) {
       case 0:
-        messages = channel.messages === undefined ? [] : channel.messages;
-        tip = "#" + channel.name + " (" + messages.length + ")";
-        break;
-
       case 2:
         messages = channel.messages === undefined ? [] : channel.messages;
-        tip = "#" + channel.name + " (" + messages.length + ") - " + channel.members.length + " users";
+        tip = "#" + channel.name + " (" + messages.length + ")";
         break;
 
       case 1:
@@ -109,7 +105,7 @@ export class ChannelSelector extends React.Component {
 
       return (
         <div className="white headerColor channel" onClick={(e) => { this.props.switchChannel(e.currentTarget, channel.id) }} onContextMenu={(e) => { this.props.setSelectedChannel(channel, e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } } key={i} ref={i === 0 ? "firstChannelElement" : undefined}>
-          {channel.type === 0 ? "#" : "."}{channel.name}
+          {channel.type === 1 ? "." : "#"}{channel.name}
         </div>
       )
     });
