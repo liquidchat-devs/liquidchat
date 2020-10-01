@@ -98,7 +98,7 @@ class Util {
                     var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
                     user.status = 0;
                     await this.updateUser(user, true);
-                });
+                }.bind(this));
             } catch(e) {
                 console.error(e)
             }
