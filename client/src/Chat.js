@@ -111,7 +111,7 @@ export default class Chat extends React.Component {
       case 2:
         return (
           <div className="flex">
-            <div style={{ overflowY: "scroll", height: this.props.pageHeight - 165, width: "calc(100% - 200px)" }}>
+            <div style={{ overflowY: "scroll", height: this.props.pageHeight - 165, width: membersList === -1 ? "100%" : "calc(100% - 200px)" }}>
               {messageList}
             </div>
             {membersList === -1 ? null :

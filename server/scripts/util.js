@@ -187,7 +187,7 @@ class Util {
                 if(this.app.userSessions.has(user.id)) {
                     this.app.userSessions.get(user.id).push(sessionID);
                 } else {
-                    this.app.userSessions.set(user.id, sessionID);
+                    this.app.userSessions.set(user.id, [ sessionID ]);
                 }
 
                 res.cookie("sessionID", session.id, {
