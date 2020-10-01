@@ -1,4 +1,5 @@
 const electron = require('electron');
+const { webFrame } = require('electron')
 const isDev = require('electron-is-dev');
 const path = require('path');
 const url = require('url');
@@ -6,6 +7,7 @@ const url = require('url');
 let app = electron.app;
 let mainWindow;
 let tray;
+webFrame.setZoomFactor(0.8)
 
 function createWindow() {
   mainWindow = new electron.BrowserWindow({width: 900, height: 680});
