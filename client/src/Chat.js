@@ -87,7 +87,7 @@ export default class Chat extends React.Component {
       )
     });
 
-    membersList = membersList === undefined ? -1 : members.map((memberID, i) => {
+    membersList = members === undefined ? -1 : members.map((memberID, i) => {
       const user = this.props.getUser(memberID)
 
       return (
