@@ -339,9 +339,10 @@ class Util {
 
             var channels = [];
             user.dmChannelList.forEach(id => {
-                var channel = await this.app.db.db_fetch.fetchChannel(this.app.db, id);
-                if(channel !== undefined) { channels.push(channel); }
+                channels.push(this.app.db.db_fetch.fetchChannel(this.app.db, id));
             })
+            channels = await Promise.all(channels);
+            channels = channels.filter(channel => { return channel !== undefined });
             res.send(JSON.stringify(channels));
         });
 
