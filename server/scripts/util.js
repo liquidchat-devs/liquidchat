@@ -77,7 +77,12 @@ class Util {
     //Setups a websocket server
     setupSocketServer() {
         this.app.io = require('socket.io')(this.app.server);
-        this.app.io.origins(["http://localhost:3000","file://"])
+        this.app.io.origins((origin, callback) => {  
+            if (origin !== 'http://localhost:3000' && origin !== 'file://') {    
+                return callback('origin not allowed', false);  
+            }  
+           callback(null, true);
+       });
         this.app.io.on('connect', async(socket) => {
             try {
                 var cookies = this.app.cookie.parse(socket.handshake.headers.cookie);
