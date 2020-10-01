@@ -88,6 +88,17 @@ class Util {
 
                 this.app.sessionSockets.set(cookies['sessionID'], socket);
                 console.log("> new socket.io session");
+
+                var session = sessions.get(cookies['sessionID']);
+                var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
+                user.status = 1;
+                await this.updateUser(user, true);
+
+                socket.on('disconnect', async function() {
+                    var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
+                    user.status = 0;
+                    await this.updateUser(user, true);
+                });
             } catch(e) {
                 console.error(e)
             }
@@ -166,7 +177,8 @@ class Util {
                     avatar: "defaultAvatar.png",
                     password: passwordHash,
                     friendList: [],
-                    dmChannelList: []
+                    dmChannelList: [],
+                    status: 0
                 }
         
                 await this.app.db.db_add.addUser(this.app.db, user);
@@ -679,9 +691,7 @@ class Util {
         }
     }
 
-    async updateUser(req, res, user, broadcast) {
-        res.send(JSON.stringify({ status: 1 }))
-        
+    async updateUser(user, broadcast) {
         this.app.sessionSockets.forEach(socket => {
             if(socket.connected) {
                 socket.emit("updateUser", JSON.stringify(user))
@@ -709,7 +719,8 @@ class Util {
             });
 
             user.avatar = fileID2
-            await this.updateUser(req, res, user)
+            await this.updateUser(user, true)
+            res.send(JSON.stringify({ status: 1 }))
         }.bind(this));
     }
 
