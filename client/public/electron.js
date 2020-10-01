@@ -1,5 +1,4 @@
-const electron = require('electron');
-const { webFrame } = require('electron')
+const { electron, webFrame } = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
 const url = require('url');
