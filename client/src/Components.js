@@ -234,7 +234,7 @@ export class DialogManager extends React.Component {
         return <ProfileBox API={this.props.API} fileEndpoint={this.props.fileEndpoint} switchDialogState={this.props.switchDialogState} session={this.props.session} selectedUser={this.props.selectedUser}/>
 
       case 6:
-        return <ProfileOptionsBox API={this.props.API} getUser={this.props.getUser} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedUser={this.props.selectedUser} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
+        return <ProfileOptionsBox API={this.props.API} session={this.props.session} getUser={this.props.getUser} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedUser={this.props.selectedUser} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
 
       case 7:
         return <AddFriendBox API={this.props.API} switchDialogState={this.props.switchDialogState}/>
@@ -465,7 +465,7 @@ export class ProfileOptionsBox extends React.Component {
   }
 
   createChannelDM(id) {
-    this.props.API.API_createChannelDM("Channel#" + Math.floor(Math.random() * 1000), [ id ]);
+    this.props.API.API_createChannelDM("Channel#" + Math.floor(Math.random() * 1000), [ this.props.session.userID, id ]);
   }
 
   render() {
