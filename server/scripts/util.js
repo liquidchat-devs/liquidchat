@@ -78,7 +78,7 @@ class Util {
     setupSocketServer() {
         this.app.io = require('socket.io')(this.app.server);
         this.app.io.set('origins', "http://localhost:3000")
-        this.app.io.on('connect', socket => {
+        this.app.io.on('connect', async(socket) => {
             try {
                 var cookies = this.app.cookie.parse(socket.handshake.headers.cookie);
                 if(cookies['sessionID'] === undefined || !this.app.sessions.has(cookies['sessionID'])) {
