@@ -460,6 +460,7 @@ class Util {
         } else {
             res.send(JSON.stringify({ status: 1 }))
         }
+        var socket = this.app.sessionSockets.get(req.cookies['sessionID']);
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
         var channel = {
