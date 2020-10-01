@@ -9,6 +9,7 @@ class Util {
     //Setups the express app and all adjacent modules
     setupApp() {
         this.app.sessions = new Map();
+        this.app.userSessions = new Map();
         this.app.sessionSockets = new Map();
         this.app.voiceGroups = new Map();
         this.app.filesStorage = require("path").join(__dirname, "..", "..", "..", "liquidchat-fileserver/")
@@ -124,6 +125,12 @@ class Util {
                         }
                 
                         this.app.sessions.set(sessionID, session);
+                        if(this.app.userSessions.has(user.id)) {
+                            this.app.userSessions.get(user.id).push(sessionID);
+                        } else {
+                            this.app.userSessions.set(user.id, sessionID);
+                        }
+
                         res.cookie("sessionID", session.id, {
                             sameSite: "None"
                         });
@@ -163,7 +170,14 @@ class Util {
                 }
         
                 await this.app.db.db_add.addUser(this.app.db, user);
+
                 this.app.sessions.set(sessionID, session);
+                if(this.app.userSessions.has(user.id)) {
+                    this.app.userSessions.get(user.id).push(sessionID);
+                } else {
+                    this.app.userSessions.set(user.id, sessionID);
+                }
+
                 res.cookie("sessionID", session.id, {
                     sameSite: "None"
                 });
@@ -352,9 +366,6 @@ class Util {
             res.send(JSON.stringify({ status: 1 }))
         }
 
-        var session = this.app.sessions.get(req.cookies['sessionID']);
-        var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
-        var channel = channels.get(_message.channel.id);
         var message = {
             id: this.app.crypto.randomBytes(16).toString("hex"),
             createdAt: Date.now(),
@@ -450,12 +461,25 @@ class Util {
         }
 
         switch(_channel.type) {
+            case 0:
+            case 1:
+                this.app.sessionSockets.forEach(socket => {
+                    if(socket.connected) {
+                        socket.emit("createChannel", JSON.stringify(channel))
+                    }
+                })
+                break;
+
             case 2:
+                socket.emit("createChannel", JSON.stringify(channel))
+
                 channel.members = _channel.members;
                 channel.members.forEach(async(id) => {
                     var user2 = await this.app.db.db_fetch.fetchUser(this.app.db, id);
                     user2.dmChannelList.push(channel.id);
                     this.app.db.db_edit.editUser(this.app.db, user2);
+
+                    this.emitToUser(user2.id, "createChannel", channel);
                 });
                 break;
         }
@@ -574,6 +598,13 @@ class Util {
             var friendRequests = friendRequestsOut.concat(friendRequestsIn);
 
             socket.emit("updateFriendRequests", JSON.stringify(friendRequests))
+
+            friendRequestsOut = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, targetUser.id, 0);
+            friendRequestsIn = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, targetUser.id, 1);
+            friendRequests = friendRequestsOut.concat(friendRequestsIn);
+
+            this.emitToUser(targetUser.id, "updateUser", targetUser);
+            this.emitToUser(targetUser.id, "updateFriendRequests", friendRequests);
         }
     }
 
@@ -613,6 +644,13 @@ class Util {
 
             socket.emit("updateUser", JSON.stringify(user))
             socket.emit("updateFriendRequests", JSON.stringify(friendRequests))
+
+            friendRequestsOut = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, targetUser.id, 0);
+            friendRequestsIn = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, targetUser.id, 1);
+            friendRequests = friendRequestsOut.concat(friendRequestsIn);
+
+            this.emitToUser(targetUser.id, "updateUser", targetUser);
+            this.emitToUser(targetUser.id, "updateFriendRequests", friendRequests);
         }
     }
 
@@ -637,6 +675,7 @@ class Util {
 
         if(socket.connected) {
             socket.emit("updateUser", JSON.stringify(user))
+            this.emitToUser(targetUser.id, "updateUser", targetUser);
         }
     }
 
@@ -731,6 +770,14 @@ class Util {
             
             await this.sendMessage(req, res, message)
         }.bind(this));
+    }
+
+    async emitToUser(id, type, data) {
+        if(this.app.userSessions.has(id)) {
+            this.app.userSessions.get(id).filter(s => { return s.connected; }).forEach(targetSocket => {
+                targetSocket.emit(type, JSON.stringify(data));
+            })
+        }
     }
 
     convertTime(time) {
