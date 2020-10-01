@@ -1,4 +1,4 @@
-const { electron, webFrame } = require('electron');
+const electron = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
 const url = require('url');
@@ -6,10 +6,9 @@ const url = require('url');
 let app = electron.app;
 let mainWindow;
 let tray;
-webFrame.setZoomFactor(0.8)
 
 function createWindow() {
-  mainWindow = new electron.BrowserWindow({width: 900, height: 680});
+  mainWindow = new electron.BrowserWindow({width: 900, height: 680, webPreferences: { zoomFactor: 0.8 }});
   mainWindow.setMenu(null);
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../index.html')}`);
   mainWindow.on('closed', () => mainWindow = null);
