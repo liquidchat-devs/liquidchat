@@ -41,8 +41,8 @@ export default class RegisterForm extends React.Component {
       const form = (
         <form onSubmit={this.handleSubmit}  >
           <input className="inputfield1" name="username" type="text" placeholder="Username..." required={true} onChange={this.handleChange}  /><br />
-          <input className="inputfield1 margin1" name="password" type="password" placeholder="Password..." required={true} onChange={this.handleChange}  /><br />
-          <input className="inputfield1 margin1" name="password2" type="password" placeholder="Repeat password..." required={true} onChange={this.handleChange}  />
+          <input className="inputfield1 margintop1" name="password" type="password" placeholder="Password..." required={true} onChange={this.handleChange}  /><br />
+          <input className="inputfield1 margintop1" name="password2" type="password" placeholder="Repeat password..." required={true} onChange={this.handleChange}  />
         </form>
         );
       return (
