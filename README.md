@@ -2,7 +2,7 @@
 ⭐ Open-source chat application similar to Discord-  
 
 🚩 **Planned features:**  
-> Group Chats
+> Group Chats  
 > Personal Emotes  
 > Profile Status
 
