@@ -89,7 +89,7 @@ class Util {
                 this.app.sessionSockets.set(cookies['sessionID'], socket);
                 console.log("> new socket.io session");
 
-                var session = sessions.get(cookies['sessionID']);
+                var session = this.app.sessions.get(cookies['sessionID']);
                 var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
                 user.status = 1;
                 await this.updateUser(user, true);
