@@ -412,9 +412,11 @@ class Util {
     }
 
     async sendMessage(req, res, _message) {
-        var channels = await this.app.db.db_fetch.fetchChannels(this.app.db);
-        channels = new Map(channels.map(obj => [obj.id, obj]));
-        if(!channels.has(_message.channel.id)) {
+        var session = this.app.sessions.get(req.cookies['sessionID']);
+        var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
+        var channel = await this.app.db.db_fetch.fetchChannel(this.app.db, _message.channel.id);
+
+        if(channel === undefined) {
             res.send(JSON.stringify({ status: -1 }))
             return;
         } else {
