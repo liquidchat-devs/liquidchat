@@ -4,13 +4,14 @@
 🚩 **Planned features:**  
 > Group Chats  
 > Personal Emotes  
-> Profile Status
+> Idle/DND/Invisible Status  
+> Custom Statuses
 
 🏁 **Features:**  
 > Global Message Channels  
 > File Support  
 > Friend Features (Adding/Removing friends)  
-> DM Channels
+> DM Channels  
 
 ✔️ Releases: https://github.com/LamkasDev/liquidchat/releases  
 🔥 API: https://github.com/LamkasDev/liquidchat.js  
