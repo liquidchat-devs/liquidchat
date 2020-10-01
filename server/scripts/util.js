@@ -332,6 +332,19 @@ class Util {
             res.send(JSON.stringify(channels));
         });
 
+        this.app.get('/fetchDMChannels', async(req, res) => {
+            if(!this.isSessionValid(req, res)) { return; }
+            var session = this.app.sessions.get(req.cookies['sessionID']);
+            var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
+
+            var channels = [];
+            user.dmChannelList.forEach(id => {
+                var channel = await this.app.db.db_fetch.fetchChannel(this.app.db, id);
+                if(channel !== undefined) { channels.push(channel); }
+            })
+            res.send(JSON.stringify(channels));
+        });
+
         this.app.get('/fetchChannelMessages', async(req, res) => {
             if(!this.isSessionValid(req, res)) { return; }
             const data = req.query;

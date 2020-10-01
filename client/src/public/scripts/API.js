@@ -456,8 +456,8 @@ class API {
         return reply.data.status;
     }
 
-    async API_fetchChannels() {
-        const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannels', { withCredentials: true }));
+    async API_fetchChannels(type) {
+        const reply = (await axios.get(this.mainClass.state.APIEndpoint + (type === 0 ? '/fetchChannels' : '/fetchDMChannels'), { withCredentials: true }));
         var channels = reply.data
         channels = new Map(channels.map(obj => [obj.id, obj]));
         channels.forEach(async(channel) => {

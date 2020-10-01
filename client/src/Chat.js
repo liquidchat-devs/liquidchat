@@ -8,7 +8,8 @@ export default class Chat extends React.Component {
       this["video" + type] = element;
     };
 
-    this.props.API.API_fetchChannels();
+    this.props.API.API_fetchChannels(0);
+    this.props.API.API_fetchChannels(1);
     this.props.API.API_fetchFriendRequests();
   }
 
