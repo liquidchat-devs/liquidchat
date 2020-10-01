@@ -559,7 +559,7 @@ export class AccountOptionsBox extends React.Component {
     var file = e.target.files[0];
     e.target.value = ""
     const res = await this.props.API.API_updateAvatar(file)
-    this.state.setState({
+    this.setState({
       avatarChangeResult: res,
     });
 
