@@ -2,9 +2,14 @@
 ⭐ Open-source chat application similar to Discord-  
 
 🚩 **Planned features:**  
--- Friend Features (Adding/Removing friends)  
--- DMs (Private messages between 2-20 users)  
--- Emojis 
+> DMs (Private messages between 2-20 users)  
+> Personal emotes  
+> Profile Status
+
+🏁 **Features:**  
+> Global message channels  
+> File support  
+> Friend Features (Adding/Removing friends)
 
 ✔️ Releases: https://github.com/LamkasDev/liquidchat/releases  
 🔥 API: https://github.com/LamkasDev/liquidchat.js  
@@ -12,15 +17,18 @@
 🔴 Found a bug or want to contribute?: [Open a pull request!](https://github.com/LamkasDev/liquidchat/pulls)
 
 ### Build instructions:
-##### How to build client (Windows)
+##### a) How to build client (Windows)
 > run `npm run buildproduction`  
 > the installer will be built into `client/dist`
 
-##### How to host API yourself
-> run `node server.js`
-##### How to host files yourself
-> run `http-server -p 8081`
+##### b) How to test client (Windows)
+> run `yarn start`  
 
-##### How to point your client into own server
+##### c) How to host server yourself
+> run `node server.js`
+> run `http-server -p 8081` in a separate directory outside `/server`
+
+##### e) Additional setup
 > change `APIEndpoint` in `App.js` to your server's adress:8080  
-> change `fileEnpoint` in `App.js` to your server's adress:8081
+> change `fileEnpoint` in `App.js` to your server's adress:8081  
+> change `filesStorage` in `server.js` to directory where you run your file server
