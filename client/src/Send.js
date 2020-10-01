@@ -54,7 +54,7 @@ export default class Send extends React.Component {
 
   render() {
     let channel = this.props.channels.get(this.props.currentChannel)
-    if(channel === undefined || channel.type !== 0) { return null; }
+    if(channel === undefined || channel.type === 1) { return null; }
 
     return (
       <div className="marginleft2 margintop1">

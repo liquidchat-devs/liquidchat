@@ -23,25 +23,35 @@ export class ChannelHeader extends React.Component {
     if(channel === undefined) { return null; }
 
     let tip = -1;
+    let messages = -1;
     switch(channel.type) {
       case 0:
+        messages = channel.messages === undefined ? [] : channel.messages;
+        tip = "#" + channel.name + " (" + messages.length + ")";
+        break;
+
       case 2:
-        const messages = channel.messages === undefined ? [] : channel.messages;
-        tip = messages.length;
+        messages = channel.messages === undefined ? [] : channel.messages;
+        tip = "#" + channel.name + " (" + messages.length + ") - " + channel.members.length + " users";
         break;
 
       case 1:
-        tip = this.props.currentVoiceGroup !== -1 ? this.props.currentVoiceGroup.users.length : "Connecting...";
+        tip = "." + channel.name + " " + this.props.currentVoiceGroup !== -1 ? this.props.currentVoiceGroup.users.length : "Connecting...";
         break;
     }
 
-    return (
-      <div className="chatColor fullwidth channelHeader">
-        <div className="flex marginleft3">
-          <div className="text2" style={{color: "white"}}>#{channel.name} ({tip})</div>
-        </div>
-      </div>
-    );
+    switch(channel.type) {
+      case 0:
+      case 1:
+      case 2:
+        return (
+          <div className="chatColor fullwidth channelHeader">
+            <div className="flex marginleft3">
+              <div className="text2" style={{color: "white"}}>{tip}</div>
+            </div>
+          </div>
+        );
+    }
   }
 }
 

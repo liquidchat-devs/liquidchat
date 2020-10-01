@@ -50,10 +50,14 @@ export default class Chat extends React.Component {
       );
     }
     
+    let messages = -1;
+    let messageList = -1;
+
     switch(channel.type) {
       case 0:
-        let messages = channel.messages === undefined ? [] : channel.messages;
-        const messageList = messages.map((message, i) => {
+      case 2:
+        messages = channel.messages === undefined ? [] : channel.messages;
+        messageList = messages.map((message, i) => {
           const user = this.props.getUser(message.author.id)
 
           return (
