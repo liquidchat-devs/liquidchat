@@ -94,6 +94,7 @@ export default class Chat extends React.Component {
         <div className="paddingtop2 paddingbot2 flex" key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="flex marginleft2">
             <img className="avatar3" src={this.props.fileEndpoint + "/" + user.avatar} key={i}/>
+            <div style={{ marginLeft: -12, marginTop: 18, backgroundColor: (user.status === 1 ? "#3baf3b" : "#f15252"), borderRadius: "50%", width: 12, height: 12 }}/>
             <div className="marginleft2">
               <div className="flex">
                 <div className="allignMiddle" style={{margin: 0, color: "red", fontSize: 16}}>
