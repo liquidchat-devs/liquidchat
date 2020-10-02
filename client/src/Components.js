@@ -75,6 +75,7 @@ export class ChannelSelector extends React.Component {
     channels = channels.filter(channel => { return ((channel.type === 0 || channel.type === 1) && this.props.channelTypes === 2) || (channel.type === 2 && this.props.channelTypes === 1); })
     const channelList = channels.map((channel, i) => {
       if(i === 0) { this.previousFirstChannel = this.firstChannel; this.firstChannel = channel.id; }
+      let channelName = channel.name.length < 12 ? channel.name : channel.name.substring(0, 9) + "..."
 
       switch(channel.type) {
         case 1:
@@ -95,7 +96,7 @@ export class ChannelSelector extends React.Component {
             return (
               <div>
                 <div className="white headerColor channel" onClick={(e) => { this.props.switchChannel(e.currentTarget, channel.id) }} onContextMenu={(e) => { this.props.setSelectedChannel(channel, e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } } key={i} ref={i === 0 ? "firstChannelElement" : undefined}>
-                  {channel.type === 0 ? "#" : "."}{channel.name}
+                  {channel.type === 0 ? "#" : "."}{channelName}
                 </div>
                 {userList}
               </div>
@@ -105,7 +106,7 @@ export class ChannelSelector extends React.Component {
 
       return (
         <div className={ this.props.currentChannel === channel.id ? "white headerColor channel selectedChannelColor" : "white headerColor channel" } onClick={(e) => { this.props.switchChannel(e.currentTarget, channel.id) }} onContextMenu={(e) => { this.props.setSelectedChannel(channel, e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } } key={i} ref={i === 0 ? "firstChannelElement" : undefined}>
-          {channel.type === 1 ? "." : "#"}{channel.name}
+          {channel.type === 1 ? "." : "#"}{channelName}
         </div>
       )
     });
