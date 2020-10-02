@@ -515,7 +515,7 @@ class Util {
     async editChannel(req, res, _channel) {
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
-        var channel = await this.app.db.db_fetch.fetchMessage(this.app.db, _channel.id);
+        var channel = await this.app.db.db_fetch.fetchChannel(this.app.db, _channel.id);
 
         if(channel === undefined) {
             res.send(JSON.stringify({ status: -1 }))

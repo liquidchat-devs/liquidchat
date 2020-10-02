@@ -352,7 +352,7 @@ export class EditChannelDialog extends React.Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    const res = await this.props.API.API_editChannel(this.props.selectedChannel, this.state.channelName);
+    const res = await this.props.API.API_editChannel(this.props.selectedChannel.id, this.state.channelName);
     this.setState({
       channelEditResult: res,
     });
