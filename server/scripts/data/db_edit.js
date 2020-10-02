@@ -22,5 +22,18 @@ module.exports = {
         .then((result, err) => {
             if(err) { throw err; }
         });
+    },
+    
+    editChannel(db, channel) {
+        if(db.DEBUG) {
+            console.log(" - [db] Editing Channel(id: " + channel.id + ") in the database..."); 
+        }
+
+        var query0 = "name='" + channel.text + "'"
+        var query = "UPDATE channels SET " + query0 + " WHERE id='" + channel.id + "'";
+        db.sqlConn.promise().query(query)
+        .then((result, err) => {
+            if(err) { throw err; }
+        });
     }
 }

@@ -64,7 +64,7 @@ export default class Chat extends React.Component {
             <img className="avatar" src={this.props.fileEndpoint + "/" + user.avatar} key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
             <div className="marginleft2">
               <div className="flex">
-                <div className="allignMiddle" style={{margin: 0, color: message.color, fontSize: 16}}>
+                <div className="allignMiddle" style={{margin: 0, color: "red", fontSize: 16}}>
                   {user !== -1 ? user.username : "Loading"}
                 </div>
                 <div className="allignMiddle margintop1a" style={{marginLeft: 5, fontSize: 10, color: "#acacac"}}>
@@ -91,7 +91,7 @@ export default class Chat extends React.Component {
       const user = this.props.getUser(memberID)
 
       return (
-        <div className="paddingtop2 paddingbot2 flex" key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
+        <div className="paddingtop2 paddingbot2 flex" key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } } onMouseOver={(e) => e.currentTarget.classList.add("hoveredMessageColor")} onMouseLeave={(e) => e.currentTarget.classList.remove("hoveredMessageColor") }>
           <div className="flex marginleft2">
             <img className="avatar3" src={this.props.fileEndpoint + "/" + user.avatar} key={i}/>
             <div style={{ marginLeft: -12, marginTop: 18, backgroundColor: (user.status === 1 ? "#3baf3b" : "#f15252"), borderRadius: "50%", width: 12, height: 12 }}/>

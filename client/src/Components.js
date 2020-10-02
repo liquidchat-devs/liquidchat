@@ -71,7 +71,7 @@ export class ChannelSelector extends React.Component {
     let friendRequests = Array.from(this.props.friendRequests.values());
     let voiceGroup = this.props.currentVoiceGroup;
     let loggedUser = this.props.getUser(this.props.session.userID);
-    
+
     channels = channels.filter(channel => { return ((channel.type === 0 || channel.type === 1) && this.props.channelTypes === 2) || (channel.type === 2 && this.props.channelTypes === 1); })
     const channelList = channels.map((channel, i) => {
       if(i === 0) { this.previousFirstChannel = this.firstChannel; this.firstChannel = channel.id; }
@@ -104,7 +104,7 @@ export class ChannelSelector extends React.Component {
       }
 
       return (
-        <div className="white headerColor channel" onClick={(e) => { this.props.switchChannel(e.currentTarget, channel.id) }} onContextMenu={(e) => { this.props.setSelectedChannel(channel, e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } } key={i} ref={i === 0 ? "firstChannelElement" : undefined}>
+        <div className={ this.props.currentChannel === channel.id ? "white headerColor channel selectedChannelColor" : "white headerColor channel" } onClick={(e) => { this.props.switchChannel(e.currentTarget, channel.id) }} onContextMenu={(e) => { this.props.setSelectedChannel(channel, e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } } key={i} ref={i === 0 ? "firstChannelElement" : undefined}>
           {channel.type === 1 ? "." : "#"}{channel.name}
         </div>
       )
@@ -254,6 +254,9 @@ export class DialogManager extends React.Component {
       case 10:
         return <ChannelOptionsBox API={this.props.API} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedChannel={this.props.selectedChannel} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
 
+      case 11:
+        return <EditChannelDialog selectedChannel={this.props.selectedChannel} API={this.props.API} switchDialogState={this.props.switchDialogState} />
+
       default:
         return null;
     }
@@ -326,6 +329,66 @@ export class CreateChannelDialog extends React.Component {
                 (this.getErrorText(this.state.channelCreationResult).length > 0 ?
                 <div className="marginleft2 margintop1 errorColor">
                   {this.getErrorText(this.state.channelCreationResult)}
+                </div>
+                : "")
+              }
+        </div>
+      </div>
+    );
+  }
+}
+
+export class EditChannelDialog extends React.Component {
+  state = {
+    channelName: "",
+    channelEditResult: 0
+  };
+
+  handleChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  handleSubmit = async e => {
+    e.preventDefault();
+    const res = await this.props.API.API_editChannel(this.props.selectedChannel, this.state.channelName);
+    this.setState({
+      channelEditResult: res,
+    });
+    
+    if(res === 1) { this.props.switchDialogState(-1); }
+    return true;
+  }
+
+  getErrorText(code) {
+    switch(code) {
+      case -1:
+        return "Channel name is too short-";
+
+      default:
+        return "";
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlaybox">
+          <div className="white text3 marginleft2 margintop1a">> Edit channel-</div>
+          <form onSubmit={this.handleSubmit}>
+            <input className="inputfield1 marginleft2" name="channelName" type="text" placeholder="Name..." required={true} onChange={this.handleChange} /><br />
+          </form>
+          <Button
+              variant="contained" 
+              color="primary" 
+              onClick={this.handleSubmit}
+              className="button1" style={{ marginTop: 15, marginLeft: 10 }}>Edit!</Button>
+              {
+                (this.getErrorText(this.state.channelEditResult).length > 0 ?
+                <div className="marginleft2 margintop1 errorColor">
+                  {this.getErrorText(this.state.channelEditResult)}
                 </div>
                 : "")
               }
@@ -536,7 +599,7 @@ export class ChannelOptionsBox extends React.Component {
           {
             this.props.selectedChannel.author.id === this.props.session.userID ?
             <div>
-              <div className="button2 alignmiddle chatColor" onClick={() => {  }}>
+              <div className="button2 alignmiddle chatColor" onClick={() => { this.props.switchDialogState(11); }}>
                 <p className="white text1">> Edit Channel</p>
               </div>
               <div className="button2 alignmiddle chatColor" onClick={(e) => { this.handleDelete(e); }}>

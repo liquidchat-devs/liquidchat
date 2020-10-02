@@ -43,8 +43,6 @@ class App extends React.Component {
 
     //Channel selector
     firstChannelElement: -1,
-    previousChannelElement: -1,
-    currentChannelElement: -1,
     firstChannel: -1,
     previousChannel: -1,
     currentChannel: -1,
@@ -74,20 +72,9 @@ class App extends React.Component {
   }
 
   switchChannel = (_e, _channelID) => {
-    if(this.state.currentChannelElement !== -1) {
-      this.state.currentChannelElement.classList.remove("selectedChannelColor")
-    }
-
     this.setState({
       previousChannel: this.state.currentChannel,
-      previousChannelElement: this.state.currentChannelElement
-    });
-
-    _e.classList.add("selectedChannelColor")
-
-    this.setState({
-      currentChannel: _channelID,
-      currentChannelElement: _e,
+      currentChannel: _channelID
     });
 
     let channel = this.state.channels.get(_channelID)
@@ -209,7 +196,7 @@ class App extends React.Component {
             API={this.state.API} fileEndpoint={this.state.fileEndpoint} switchDialogState={this.switchDialogState} setSelectedMessage={this.setSelectedMessage}
             session={this.state.session} getUser={this.getUser}/>
             <div className="flex">
-              <ChannelSelector
+              <ChannelSelector currentChannel={this.state.currentChannel}
               setSelectedChannel={this.setSelectedChannel} API={this.state.API} switchDialogState={this.switchDialogState} channelTypes={this.state.channelTypes} switchChannelTypes={this.switchChannelTypes}
               session={this.state.session} fileEndpoint={this.state.fileEndpoint} friendRequests={this.state.friendRequests} setSelectedUser={this.setSelectedUser}
               channels={this.state.channels} setFirstChannel={this.setFirstChannel} switchChannel={this.switchChannel} currentVoiceGroup={this.state.currentVoiceGroup} getUser={this.getUser}/>

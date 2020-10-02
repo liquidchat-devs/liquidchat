@@ -75,6 +75,15 @@ class API {
                 channels: newChannels
             });
         });
+        socket.on('updateChannel', (channelData) => {
+            var channel = JSON.parse(channelData);
+
+            var newChannels = new Map(this.mainClass.state.channels)
+            newChannels.set(channel.id, channel);
+            this.mainClass.setState({
+                channels: newChannels
+            });
+        });
         socket.on('deleteChannel', (channelData) => {
             var channel = JSON.parse(channelData);
 
@@ -440,6 +449,18 @@ class API {
     async API_createChannelDM(channelName, channelMembers) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createChannel', {
             name: channelName, type: 2, members: channelMembers
+        }, { withCredentials: true });
+
+        if(reply.data.status !== 1) {
+            return reply.data.status;
+        } else {
+            return reply.data;
+        }
+    }
+
+    async API_editChannel(channelID, channelName) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/editChannel', {
+            id: channelID, name: channelName
         }, { withCredentials: true });
 
         if(reply.data.status !== 1) {
