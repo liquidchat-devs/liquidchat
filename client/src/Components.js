@@ -363,7 +363,10 @@ export class EditChannelDialog extends React.Component {
 
   getErrorText(code) {
     switch(code) {
-      case -1:
+      case -2:
+        return "You're not this channel's author-";
+
+      case -3:
         return "Channel name is too short-";
 
       default:
