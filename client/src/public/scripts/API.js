@@ -76,9 +76,11 @@ class API {
             });
         });
         socket.on('updateChannel', (channelData) => {
-            var channel = JSON.parse(channelData);
+            var _channel = JSON.parse(channelData);
 
             var newChannels = new Map(this.mainClass.state.channels)
+            var channel = newChannels.get(_channel.id);
+            channel.name = _channel.name;
             newChannels.set(channel.id, channel);
             this.mainClass.setState({
                 channels: newChannels
