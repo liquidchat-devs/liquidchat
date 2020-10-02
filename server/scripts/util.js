@@ -590,20 +590,15 @@ class Util {
             this.app.voiceGroups.set(channel.id, voiceGroup);
         } else {
             voiceGroup = this.app.voiceGroups.get(channel.id)
-            if(voiceGroup.users.includes(user.id)) {
-                res.send(JSON.stringify({ status: -2 }))
-                return;
+            if(voiceGroup.users.includes(user.id) === false) {
+                voiceGroup.users.push(user.id);
             }
-
-            voiceGroup.users.push(user.id);
         }
 
         res.send(JSON.stringify({ status: 1 }))
-        for(const [id, socket] of this.app.sessionSockets.entries()) {
-            if(socket.connected && voiceGroup.users.includes(this.app.sessions.get(id).userID)) {
-                socket.emit("updateVoiceGroup", JSON.stringify(voiceGroup))
-            }
-        }
+        voiceGroup.users.forEach(id => {
+            this.emitToUser(id, "updateVoiceGroup", JSON.stringify(voiceGroup))
+        });
     }
 
     async sendFriendRequest(req, res, _friendRequest) {

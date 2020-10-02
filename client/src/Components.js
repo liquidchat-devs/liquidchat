@@ -31,7 +31,7 @@ export class ChannelHeader extends React.Component {
         break;
 
       case 1:
-        tip = "." + channel.name + " " + this.props.currentVoiceGroup !== -1 ? this.props.currentVoiceGroup.users.length : "Connecting...";
+        tip = "." + channel.name + " " + (this.props.currentVoiceGroup !== -1 ? this.props.currentVoiceGroup.users.length : "Connecting...");
         break;
     }
 
