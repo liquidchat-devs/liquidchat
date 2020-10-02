@@ -119,7 +119,7 @@ export default class Chat extends React.Component {
             <div className="membersList paddingtop2b">
               <div className="marginleft2">
                 <div className="flex">
-                  <div className="allignMiddle" style={{margin: 0, color: "white", fontSize: 16}}>
+                  <div className="allignMiddle" style={{ margin: 0, color: "white", fontSize: 16, marginBottom: 5 }}>
                     Members ({channel.members.length})
                   </div>
                 </div>

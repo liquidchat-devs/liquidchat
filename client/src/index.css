@@ -82,7 +82,7 @@ code {
 }
 
 .inputfield1 {
-  width: 160px;
+  width: 175px;
   height: 36px;
   padding: 0;
   padding-left: 10px;
@@ -162,6 +162,10 @@ code {
 
 .marginleft2 {
   margin-left: 10px;
+}
+
+.marginleft2b {
+  margin-left: 15px;
 }
 
 .marginleft3 {
@@ -495,14 +499,18 @@ code {
   height: 100%;
 }
 
-.inviteButton {
+.button {
   position: absolute;
-  right: 0px;
-  margin-right: 40px;
-  height: 30px;
-  border: 1px solid;
-  width: 70px;
+  border: 1px solid #6767ff;
   justify-content: center;
   display: flex;
   align-items: center;
+  cursor: pointer;
+  color: #6767ff;
+}
+
+.inviteButton {
+  margin-right: 40px;
+  height: 30px;
+  width: 70px;
 }

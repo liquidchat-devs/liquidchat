@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 
 export default class LoginForm extends React.Component {
     state = {
@@ -68,33 +67,27 @@ export default class LoginForm extends React.Component {
         );
       return (
         <div className="margin1 alignmiddle">
-          <div style={{width: 170 }}>
+          <div style={{ width: 185 }}>
             {form}
-              <Button
-              variant="contained" 
-              color="primary" 
-              onClick={this.handleSubmit}
-              className="button1" style={{ marginTop: 10 }}>Login</Button>
-              <br />
-              <Button
-              variant="contained" 
-              color="primary" 
-              onClick={this.props.switchFormState}
-              className="button1" style={{ marginTop: 5 }}>Register</Button>
-              <br />
-              {
-                (this.getErrorText(this.state.loginResult).length > 0 ?
-                <div className="margintop1 errorColor textcenter">
-                  {this.getErrorText(this.state.loginResult)}
-                </div>
-                : (this.getSuccessText(this.state.loginResult).length > 0 ?
-                <div className="margintop1 successColor textcenter">
-                  {this.getSuccessText(this.state.loginResult)}
-                </div>
-                :
-                ""))
-              }
+            <div className="alignmiddle margintop1" style={{ height: 40 }}>
+              <div onClick={this.handleSubmit} className="button button1">Login!</div>
             </div>
+            <div className="alignmiddle margintop1" style={{ height: 40 }}>
+              <div onClick={this.props.switchFormState} className="button button1">Register!</div>
+            </div>
+            {
+              (this.getErrorText(this.state.loginResult).length > 0 ?
+              <div className="margintop1 errorColor textcenter">
+                {this.getErrorText(this.state.loginResult)}
+              </div>
+              : (this.getSuccessText(this.state.loginResult).length > 0 ?
+              <div className="margintop1 successColor textcenter">
+                {this.getSuccessText(this.state.loginResult)}
+              </div>
+              :
+              ""))
+            }
+          </div>
         </div>
       );
     }

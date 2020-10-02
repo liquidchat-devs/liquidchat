@@ -42,34 +42,28 @@ export default class RegisterForm extends React.Component {
         <form onSubmit={this.handleSubmit}  >
           <input className="inputfield1" name="username" type="text" placeholder="Username..." required={true} onChange={this.handleChange}  /><br />
           <input className="inputfield1 margintop1" name="password" type="password" placeholder="Password..." required={true} onChange={this.handleChange}  /><br />
-          <input className="inputfield1 margintop1" name="password2" type="password" placeholder="Repeat password..." required={true} onChange={this.handleChange}  />
+          <input className="inputfield1 margin1" name="password2" type="password" placeholder="Repeat password..." required={true} onChange={this.handleChange}  />
         </form>
         );
       return (
         <div className="margin1 alignmiddle">
-          <div style={{width: 170 }}>
+          <div style={{ width: 185 }}>
             {form}
-              <Button
-              variant="contained" 
-              color="primary" 
-              onClick={this.handleSubmit}
-              className="button1" style={{ marginTop: 10 }}>Register</Button>
-              <br />
-              <Button
-              variant="contained" 
-              color="primary" 
-              onClick={this.props.switchFormState}
-              className="button1" style={{ marginTop: 5 }}>Login</Button>
-              <br />
-              <div className="panel1 margintop1 errorColor textcenter">
-              {
-                (this.getErrorText(this.state.registerResult).length > 0 ?
-                <div className="margintop1 errorColor textcenter">
-                  {this.getErrorText(this.state.registerResult)}
-                </div>
-                : "")
-              }
+            <div className="alignmiddle margintop1" style={{ height: 40 }}>
+              <div onClick={this.handleSubmit} className="button button1">Register!</div>
+            </div>
+            <div className="alignmiddle margintop1" style={{ height: 40 }}>
+              <div onClick={this.props.switchFormState} className="button button1">Login!</div>
+            </div>
+            <div className="panel1 margintop1 errorColor textcenter">
+            {
+              (this.getErrorText(this.state.registerResult).length > 0 ?
+              <div className="margintop1 errorColor textcenter">
+                {this.getErrorText(this.state.registerResult)}
               </div>
+              : "")
+            }
+            </div>
           </div>
         </div>
       );

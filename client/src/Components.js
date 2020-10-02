@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import { formatDuration } from './public/scripts/DateFormatter';
 
 export class Account extends React.Component {
@@ -313,29 +312,27 @@ export class CreateChannelDialog extends React.Component {
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox">
           <div className="white text3 marginleft2 margintop1a">> Create new channel-</div>
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={this.handleSubmit} className="flex margintop1">
             <input className="inputfield1 marginleft2" name="channelName" type="text" placeholder="Name..." required={true} onChange={this.handleChange} /><br />
+            <div className="aligny marginleft2b" style={{ width: "50%" }}>
+              <div className={this.state.channelType === 0 ? "button2 alignmiddle chatColor" : "button2 alignmiddle"} onClick={(e) => { this.handleChangeType(0); }}>
+                <p className="white text1">Text</p>
+              </div>
+              <div className={this.state.channelType === 1 ? "button2 alignmiddle chatColor" : "button2 alignmiddle"} onClick={(e) => { this.handleChangeType(1); }}>
+                <p className="white text1">Voice</p>
+              </div>
+            </div>
           </form>
-          <div className="flex">
-            <div className={this.state.channelType === 0 ? "button2 alignmiddle chatColor" : "button2 alignmiddle"} onClick={(e) => { this.handleChangeType(0); }}>
-              <p className="white text1">Text</p>
-            </div>
-            <div className={this.state.channelType === 1 ? "button2 alignmiddle chatColor" : "button2 alignmiddle"} onClick={(e) => { this.handleChangeType(1); }}>
-              <p className="white text1">Voice</p>
-            </div>
+          <div className="alignmiddle margintop1" style={{ height: 40 }}>
+            <div onClick={this.handleSubmit} className="button button1" style={{ marginTop: 15, marginLeft: 10 }}>Create!</div>
           </div>
-          <Button
-              variant="contained" 
-              color="primary" 
-              onClick={this.handleSubmit}
-              className="button1" style={{ marginTop: 15, marginLeft: 10 }}>Create!</Button>
-              {
-                (this.getErrorText(this.state.channelCreationResult).length > 0 ?
-                <div className="marginleft2 margintop1 errorColor">
-                  {this.getErrorText(this.state.channelCreationResult)}
-                </div>
-                : "")
-              }
+          {
+            (this.getErrorText(this.state.channelCreationResult).length > 0 ?
+            <div className="marginleft2 margintop1 errorColor">
+              {this.getErrorText(this.state.channelCreationResult)}
+            </div>
+            : "")
+          }
         </div>
       </div>
     );
@@ -384,21 +381,19 @@ export class EditChannelDialog extends React.Component {
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox">
           <div className="white text3 marginleft2 margintop1a">> Edit channel-</div>
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={this.handleSubmit} className="flex margintop1">
             <input className="inputfield1 marginleft2" name="channelName" type="text" placeholder="Name..." required={true} onChange={this.handleChange} /><br />
           </form>
-          <Button
-              variant="contained" 
-              color="primary" 
-              onClick={this.handleSubmit}
-              className="button1" style={{ marginTop: 15, marginLeft: 10 }}>Edit!</Button>
-              {
-                (this.getErrorText(this.state.channelEditResult).length > 0 ?
-                <div className="marginleft2 margintop1 errorColor">
-                  {this.getErrorText(this.state.channelEditResult)}
-                </div>
-                : "")
-              }
+          <div className="alignmiddle margintop1" style={{ height: 40 }}>
+            <div onClick={this.handleSubmit} className="button button1" style={{ marginTop: 15, marginLeft: 10 }} value="vsvsd">Edit!</div>
+          </div>
+          {
+            (this.getErrorText(this.state.channelEditResult).length > 0 ?
+            <div className="marginleft2 margintop1 errorColor">
+              {this.getErrorText(this.state.channelEditResult)}
+            </div>
+            : "")
+          }
         </div>
       </div>
     );
@@ -431,7 +426,7 @@ export class InviteFriendsBox extends React.Component {
               <div className="white marginleft2">
                 {friend.username}
               </div>
-              <a className="link inviteButton" style={{ textDecoration: "none" }} onClick={() => this.inviteUser(friend.id) }>Invite</a>
+              <a className="button inviteButton" style={{ textDecoration: "none" }} onClick={() => this.inviteUser(friend.id) }>Invite</a>
             </div>
           </div>
         </div>
@@ -495,21 +490,19 @@ export class AddFriendBox extends React.Component {
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox">
           <div className="white text3 marginleft2 margintop1a">> Add a friend-</div>
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={this.handleSubmit} className="flex margintop1">
             <input className="inputfield1 marginleft2" name="friendUsername" type="text" placeholder="Username..." required={true} onChange={this.handleChange} /><br />
           </form>
-          <Button
-              variant="contained" 
-              color="primary" 
-              onClick={this.handleSubmit}
-              className="button1" style={{ marginTop: 15, marginLeft: 10 }}>Send request!</Button>
-              {
-                (this.getErrorText(this.state.friendRequestResult).length > 0 ?
-                <div className="marginleft2 margintop1 errorColor">
-                  {this.getErrorText(this.state.friendRequestResult)}
-                </div>
-                : "")
-              }
+          <div className="alignmiddle margintop1" style={{ height: 40 }}>
+            <div onClick={this.handleSubmit} className="button button1" style={{ marginTop: 15, marginLeft: 10 }}>Send request!</div>
+          </div>
+          {
+            (this.getErrorText(this.state.friendRequestResult).length > 0 ?
+            <div className="marginleft2 margintop1 errorColor">
+              {this.getErrorText(this.state.friendRequestResult)}
+            </div>
+            : "")
+          }
         </div>
       </div>
     );
