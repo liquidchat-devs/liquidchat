@@ -61,6 +61,11 @@ code {
   justify-content: center;
 }
 
+.aligny {
+  display: flex;
+  align-items: center;
+}
+
 .panel1 {
   display: flex;
   height: 36px;
@@ -488,4 +493,16 @@ code {
 .membersList {
   width: 200px;
   height: 100%;
+}
+
+.inviteButton {
+  position: absolute;
+  right: 0px;
+  margin-right: 40px;
+  height: 30px;
+  border: 1px solid;
+  width: 70px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
 }

@@ -117,7 +117,7 @@ export class ChannelSelector extends React.Component {
       var user = author.id === loggedUser.id ? target : author;
 
       return (
-        <div className="friendRequestEntry selectedChannelColor" style={{ height: author.id === this.props.session.userID ? 117 : 75}}>
+        <div className="friendRequestEntry selectedChannelColor" style={{ height: author.id === this.props.session.userID ? 117 : 81}}>
           <div className="flex">
             <img alt="" className="avatar3 marginleft1 margintop1" src={this.props.fileEndpoint + "/" + user.avatar} key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
             <div className="white marginleft2 margintop1b">
@@ -258,6 +258,9 @@ export class DialogManager extends React.Component {
       case 11:
         return <EditChannelDialog selectedChannel={this.props.selectedChannel} API={this.props.API} switchDialogState={this.props.switchDialogState} />
 
+      case 12:
+        return <InviteFriendsBox fileEndpoint={this.props.fileEndpoint} getUser={this.props.getUser} session={this.props.session} selectedChannel={this.props.selectedChannel} API={this.props.API} switchDialogState={this.props.switchDialogState} />
+
       default:
         return null;
     }
@@ -396,6 +399,51 @@ export class EditChannelDialog extends React.Component {
                 </div>
                 : "")
               }
+        </div>
+      </div>
+    );
+  }
+}
+
+export class InviteFriendsBox extends React.Component {
+  inviteUser = async e => {
+    e.preventDefault();
+    /*const res = await this.props.API.API_editChannel(this.props.selectedChannel.id, this.state.channelName);
+    
+    if(res === 1) { this.props.switchDialogState(-1); }*/
+    return true;
+  }
+
+  render() {
+    let loggedUser = this.props.getUser(this.props.session.userID);
+
+    const friendList = loggedUser.friendList.map((friendID, i) => {
+    const friend = this.props.getUser(friendID);
+      if(friend === -1) {
+        return null;
+      }
+
+      return (
+        <div className="friendEntry selectedChannelColor" onContextMenu={(e) => { this.props.setSelectedUser(friend, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
+          <div className="flex">
+            <div className="aligny" style={{ height: 50 }}>
+              <img alt="" className="avatar3 marginleft1" src={this.props.fileEndpoint + "/" + friend.avatar} key={i}/>
+              <div className="white marginleft2">
+                {friend.username}
+              </div>
+              <a className="link inviteButton" style={{ textDecoration: "none" }} onClick={() => this.inviteUser(friend.id) }>Invite</a>
+            </div>
+          </div>
+        </div>
+      )
+    });
+
+    return (
+      <div>
+        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlaybox">
+          <div className="white text3 marginleft2 margintop1a">> Invite Friends-</div>
+          {friendList}
         </div>
       </div>
     );
@@ -608,6 +656,9 @@ export class ChannelOptionsBox extends React.Component {
               </div>
               <div className="button2 alignmiddle chatColor" onClick={(e) => { this.handleDelete(e); }}>
                 <p className="white text1">> Delete Channel</p>
+              </div>
+              <div className="button2 alignmiddle chatColor" onClick={() => { this.props.switchDialogState(12); }}>
+                <p className="white text1">> Invite Friends</p>
               </div>
             </div> :
             ""
