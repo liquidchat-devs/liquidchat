@@ -8,7 +8,7 @@ export class Account extends React.Component {
 
     return (
       <div className="panel2 headerColor">
-        <img className=" marginleft2 avatar" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.switchDialogState(4); this.props.setSelectedMessage(undefined, e.pageX, e.pageY); e.preventDefault(); }}/>
+        <img alt="" className=" marginleft2 avatar" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.switchDialogState(4); this.props.setSelectedMessage(undefined, e.pageX, e.pageY); e.preventDefault(); }}/>
         <div className="flex marginleft3">
           <div className="text2" style={{color: "white"}}>Username: {user !== -1 ? user.username : "Loading"}</div>
         </div>
@@ -85,7 +85,7 @@ export class ChannelSelector extends React.Component {
   
               return (
                 <div className="voiceUserEntry flex">
-                  <img className="avatar" src={this.props.fileEndpoint + "/" + user.avatar} key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
+                  <img alt="" className="avatar" src={this.props.fileEndpoint + "/" + user.avatar} key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
                   <div className="white headerColor">
                     {user.username}
                   </div>
@@ -117,9 +117,9 @@ export class ChannelSelector extends React.Component {
       var user = author.id === loggedUser.id ? target : author;
 
       return (
-        <div className="friendRequestEntry selectedChannelColor" style={{ height: author.id === this.props.session.userID ? 110 : 75}}>
+        <div className="friendRequestEntry selectedChannelColor" style={{ height: author.id === this.props.session.userID ? 117 : 75}}>
           <div className="flex">
-            <img className="avatar3 marginleft1 margintop1" src={this.props.fileEndpoint + "/" + user.avatar} key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
+            <img alt="" className="avatar3 marginleft1 margintop1" src={this.props.fileEndpoint + "/" + user.avatar} key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
             <div className="white marginleft2 margintop1b">
               {user.username}
             </div>
@@ -159,7 +159,7 @@ export class ChannelSelector extends React.Component {
       return (
         <div className="friendEntry selectedChannelColor" onContextMenu={(e) => { this.props.setSelectedUser(friend, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="flex">
-            <img className="avatar3 marginleft1 margintop1" src={this.props.fileEndpoint + "/" + friend.avatar} key={i}/>
+            <img alt="" className="avatar3 marginleft1 margintop1" src={this.props.fileEndpoint + "/" + friend.avatar} key={i}/>
             <div className="white marginleft2 margintop1b">
               {friend.username}
             </div>
@@ -241,7 +241,7 @@ export class DialogManager extends React.Component {
         return <ProfileBox API={this.props.API} fileEndpoint={this.props.fileEndpoint} switchDialogState={this.props.switchDialogState} session={this.props.session} selectedUser={this.props.selectedUser}/>
 
       case 6:
-        return <ProfileOptionsBox API={this.props.API} session={this.props.session} getUser={this.props.getUser} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedUser={this.props.selectedUser} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
+        return <ProfileOptionsBox API={this.props.API} getUser={this.props.getUser} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedUser={this.props.selectedUser} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
 
       case 7:
         return <AddFriendBox API={this.props.API} switchDialogState={this.props.switchDialogState}/>
@@ -676,13 +676,14 @@ export class ProfileBox extends React.Component {
         <div className="absolutepos overlaybox3">
             <div className="section chatColor">
               <div className="flex marginleft3 paddingtop3">
-                <img className="avatar2" src={this.props.fileEndpoint + "/" + this.props.selectedUser.avatar}/>
-                <div>
+                <img alt="" className="avatar2" src={this.props.fileEndpoint + "/" + this.props.selectedUser.avatar}/>
+                <div style={{ marginLeft: -28, marginTop: 75, backgroundColor: (this.props.selectedUser.status === 1 ? "#3baf3b" : "#f15252"), borderRadius: "50%", width: 24, height: 24 }}/>
+                <div className="marginleft4">
                   <div className="flex margintop1">
                     <p className="profileTooltipColor text5 marginleft2 margintop0 marginbot0">> Username: </p>
                     <p className="white text5 marginleft1 margintop0 marginbot0">{this.props.selectedUser.username}</p>
                   </div>
-                  <div className="flex margintop1">
+                  <div className="flex margintop1a">
                     <p className="profileTooltipColor text5 marginleft2 margintop0 marginbot0">> Created: </p>
                     <p className="white text5 marginleft1 margintop0 marginbot0">{formatDuration(this.props.selectedUser.createdAt, Date.now())} ago</p>
                   </div>
@@ -700,7 +701,7 @@ export class ImageBox extends React.Component {
     return (
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
-          <img className="absolutepos overlaybox3" src={this.props.fileEndpoint + "/" + this.props.selectedImage.name} style={{ width: "auto", height: "auto", maxWidth: "90%", maxHeight: "90%", borderRadius: 0 }} onContextMenu={(e) => { this.props.switchDialogState(9); this.props.setSelectedMessage(undefined, e.pageX, e.pageY); e.preventDefault(); }}/>
+          <img alt="" className="absolutepos overlaybox3" src={this.props.fileEndpoint + "/" + this.props.selectedImage.name} style={{ width: "auto", height: "auto", maxWidth: "90%", maxHeight: "90%", borderRadius: 0 }} onContextMenu={(e) => { this.props.switchDialogState(9); this.props.setSelectedMessage(undefined, e.pageX, e.pageY); e.preventDefault(); }}/>
       </div>
     );
   }
@@ -711,7 +712,7 @@ export class ImageBoxOptions extends React.Component {
     return (
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
-          <img className="absolutepos overlaybox3" src={this.props.fileEndpoint + "/" + this.props.selectedImage.name} style={{ width: "auto", height: "auto", maxWidth: "90%", maxHeight: "90%", borderRadius: 0 }} onClick={() => { this.props.switchDialogState(8) }} onContextMenu={(e) => { this.props.switchDialogState(9); this.props.setSelectedMessage(undefined, e.pageX, e.pageY); e.preventDefault(); }}/>
+          <img alt="" className="absolutepos overlaybox3" src={this.props.fileEndpoint + "/" + this.props.selectedImage.name} style={{ width: "auto", height: "auto", maxWidth: "90%", maxHeight: "90%", borderRadius: 0 }} onClick={() => { this.props.switchDialogState(8) }} onContextMenu={(e) => { this.props.switchDialogState(9); this.props.setSelectedMessage(undefined, e.pageX, e.pageY); e.preventDefault(); }}/>
           <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY, height: 40 }}>
             <div className="button2 alignmiddle chatColor" onClick={(e) => { this.props.copyID(this.props.fileEndpoint + "/" + this.props.selectedImage.name); }}>
               <p className="white text1">> Copy Link</p>

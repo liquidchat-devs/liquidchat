@@ -61,7 +61,7 @@ export default class Chat extends React.Component {
       return (
         <div className="paddingtop2 paddingbot2 flex" key={i} onContextMenu={(e) => { this.props.switchDialogState(2); this.props.setSelectedMessage(message, e.pageX, e.pageY); e.preventDefault(); } } onMouseOver={(e) => e.currentTarget.classList.add("hoveredMessageColor")} onMouseLeave={(e) => e.currentTarget.classList.remove("hoveredMessageColor") }>
           <div className="flex marginleft2">
-            <img className="avatar" src={this.props.fileEndpoint + "/" + user.avatar} key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
+            <img alt="" className="avatar" src={this.props.fileEndpoint + "/" + user.avatar} key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
             <div className="marginleft2">
               <div className="flex">
                 <div className="allignMiddle" style={{margin: 0, color: "red", fontSize: 16}}>
@@ -93,7 +93,7 @@ export default class Chat extends React.Component {
       return (
         <div className="paddingtop2 paddingbot2 flex" key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } } onMouseOver={(e) => e.currentTarget.classList.add("hoveredMessageColor")} onMouseLeave={(e) => e.currentTarget.classList.remove("hoveredMessageColor") }>
           <div className="flex marginleft2">
-            <img className="avatar3" src={this.props.fileEndpoint + "/" + user.avatar} key={i}/>
+            <img alt="" className="avatar3" src={this.props.fileEndpoint + "/" + user.avatar} key={i}/>
             <div style={{ marginLeft: -12, marginTop: 18, backgroundColor: (user.status === 1 ? "#3baf3b" : "#f15252"), borderRadius: "50%", width: 12, height: 12 }}/>
             <div className="marginleft2">
               <div className="flex">

@@ -115,7 +115,7 @@ class API {
             console.log("> upload fail")
             this.mainClass.setState({
                 uploadFailed: true,
-                uploadExpected: 0,
+                uploadReceived: 0,
                 uploadExpected: fileSize
             });
         });
