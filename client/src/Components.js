@@ -185,7 +185,7 @@ export class ChannelSelector extends React.Component {
             {channelList}
             {voiceGroup !== -1 ? 
               <div className="white headerColor vcInfo selectedChannelColor">
-                <div className="button2 alignmiddle chatColor" onClick={(e) => { this.handleEdit(e); }}>
+                <div className="button2 alignmiddle chatColor" onClick={(e) => {  }}>
                   <p className="white text1">> Disconnect</p>
                 </div>
               </div>
@@ -401,11 +401,11 @@ export class EditChannelDialog extends React.Component {
 }
 
 export class InviteFriendsBox extends React.Component {
-  inviteUser = async e => {
+  inviteUser = async (id) => {
     e.preventDefault();
-    /*const res = await this.props.API.API_editChannel(this.props.selectedChannel.id, this.state.channelName);
+    const res = await this.props.API.API_sendDM(id, "invite dm");
     
-    if(res === 1) { this.props.switchDialogState(-1); }*/
+    if(res === 1) { this.props.switchDialogState(-1); }
     return true;
   }
 
@@ -426,7 +426,7 @@ export class InviteFriendsBox extends React.Component {
               <div className="white marginleft2">
                 {friend.username}
               </div>
-              <a className="button inviteButton" style={{ textDecoration: "none" }} onClick={() => this.inviteUser(friend.id) }>Invite</a>
+              <a className="button inviteButton" style={{ textDecoration: "none", right: 0 }} onClick={() => this.inviteUser(friend.id) }>Invite</a>
             </div>
           </div>
         </div>
