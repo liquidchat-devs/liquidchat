@@ -482,18 +482,20 @@ class API {
 
     async API_fetchChannels(type) {
         const reply = (await axios.get(this.mainClass.state.APIEndpoint + (type === 0 ? '/fetchChannels' : '/fetchDMChannels'), { withCredentials: true }));
-        var channels = reply.data
-        channels = new Map(channels.map(obj => [obj.id, obj]));
-        channels.forEach(async(channel) => {
+        var currentChannels = this.mainClass.state.channels;
+        var newChannels = reply.data;
+        newChannels = new Map(newChannels.map(obj => [obj.id, obj]));
+
+        newChannels.forEach(async(channel) => {
             const reply2 = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannelMessages?id=' + channel.id, { withCredentials: true }));
-            var messages = reply2.data
-            channel.messages = messages
-            channels.set(channel.id, channel);
+            var messages = reply2.data;
+            channel.messages = messages;
+            currentChannels.set(channel.id, channel);
 
             if(channel.members !== undefined) { this.API_fetchUsersForChannelMembers(channel); }
             this.API_fetchUsersForMessages(messages)
             this.mainClass.setState({
-                channels: channels
+                channels: currentChannels
             });
         });
     }
