@@ -38,7 +38,7 @@ function getImageExtensions() {
     return [".apng", ".bmp", ".gif", ".ico", ".cur", ".jpg", ".jpeg", ".jfif", ".pjpeg", ".png", ".svg", ".tif", ".tiff", ".webp"]
 }
 
-function toFormatLink(message) {
+function toFormatLink(chat, message) {
     let imageResults = [];
     let videoResults = [];
     let results = [];
@@ -76,7 +76,7 @@ function toFormatLink(message) {
     }
 
     imageResults.forEach(link => {
-        results.push(`<span><img alt="" class="message-image" src=${link}/></span>`)
+        results.push(`<span><img alt="" class="message-image" src=${link}></span>`)
     })
 
     videoResults.forEach(link => {
@@ -161,7 +161,7 @@ function formatMessage(chat, message) {
         messageFormatted = toFormat(messageFormatted == null ? "" : messageFormatted, val);
     });
 
-    messageFormatted = toFormatLink(messageFormatted == null ? "" : messageFormatted);
+    messageFormatted = toFormatLink(chat, messageFormatted == null ? "" : messageFormatted);
 
     return (
     <div>

@@ -514,3 +514,16 @@ code {
   height: 30px;
   width: 70px;
 }
+
+.accountSettings {
+  bottom: 0px;
+  left: 0px;
+  position: absolute;
+  width: 240px;
+  height: 50px;
+}
+
+.settingsButton {
+  border: 1px solid #ff6161;
+  color: #ff6161;
+}

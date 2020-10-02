@@ -204,6 +204,9 @@ export class ChannelSelector extends React.Component {
             Add Friend
           </div>
         </div>}
+        <div className="accountSettings chatColor aligny">
+            <div className="button settingsButton marginleft2" style={{ width: 28, height: 28, position: "relative" }}>⚙️</div>
+        </div>
       </div>
     );
   }
@@ -402,7 +405,6 @@ export class EditChannelDialog extends React.Component {
 
 export class InviteFriendsBox extends React.Component {
   inviteUser = async (id) => {
-    e.preventDefault();
     const res = await this.props.API.API_sendDM(id, "invite dm");
     
     if(res === 1) { this.props.switchDialogState(-1); }
@@ -422,11 +424,11 @@ export class InviteFriendsBox extends React.Component {
         <div className="friendEntry selectedChannelColor" onContextMenu={(e) => { this.props.setSelectedUser(friend, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="flex">
             <div className="aligny" style={{ height: 50 }}>
-              <img alt="" className="avatar3 marginleft1" src={this.props.fileEndpoint + "/" + friend.avatar} key={i}/>
+              <img alt="" className="avatar3 marginleft2" src={this.props.fileEndpoint + "/" + friend.avatar} key={i}/>
               <div className="white marginleft2">
                 {friend.username}
               </div>
-              <a className="button inviteButton" style={{ textDecoration: "none", right: 0 }} onClick={() => this.inviteUser(friend.id) }>Invite</a>
+              <a className="button inviteButton" style={{ textDecoration: "none", right: 0 }} onClick={(e) => { this.inviteUser(friend.id); e.preventDefault(); } }>Invite</a>
             </div>
           </div>
         </div>
@@ -745,7 +747,7 @@ export class ImageBox extends React.Component {
     return (
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
-          <img alt="" className="absolutepos overlaybox3" src={this.props.fileEndpoint + "/" + this.props.selectedImage.name} style={{ width: "auto", height: "auto", maxWidth: "90%", maxHeight: "90%", borderRadius: 0 }} onContextMenu={(e) => { this.props.switchDialogState(9); this.props.setSelectedMessage(undefined, e.pageX, e.pageY); e.preventDefault(); }}/>
+          <img alt="" className="absolutepos overlaybox3" src={this.props.selectedImage.link === undefined ? this.props.fileEndpoint + "/" + this.props.selectedImage.name : this.props.selectedImage.link} style={{ width: "auto", height: "auto", maxWidth: "90%", maxHeight: "90%", borderRadius: 0 }} onContextMenu={(e) => { this.props.switchDialogState(9); this.props.setSelectedMessage(undefined, e.pageX, e.pageY); e.preventDefault(); }}/>
       </div>
     );
   }
@@ -756,7 +758,7 @@ export class ImageBoxOptions extends React.Component {
     return (
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
-          <img alt="" className="absolutepos overlaybox3" src={this.props.fileEndpoint + "/" + this.props.selectedImage.name} style={{ width: "auto", height: "auto", maxWidth: "90%", maxHeight: "90%", borderRadius: 0 }} onClick={() => { this.props.switchDialogState(8) }} onContextMenu={(e) => { this.props.switchDialogState(9); this.props.setSelectedMessage(undefined, e.pageX, e.pageY); e.preventDefault(); }}/>
+          <img alt="" className="absolutepos overlaybox3" src={this.props.selectedImage.link === undefined ? this.props.fileEndpoint + "/" + this.props.selectedImage.name : this.props.selectedImage.link} style={{ width: "auto", height: "auto", maxWidth: "90%", maxHeight: "90%", borderRadius: 0 }} onClick={() => { this.props.switchDialogState(8) }} onContextMenu={(e) => { this.props.switchDialogState(9); this.props.setSelectedMessage(undefined, e.pageX, e.pageY); e.preventDefault(); }}/>
           <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY, height: 40 }}>
             <div className="button2 alignmiddle chatColor" onClick={(e) => { this.props.copyID(this.props.fileEndpoint + "/" + this.props.selectedImage.name); }}>
               <p className="white text1">> Copy Link</p>
