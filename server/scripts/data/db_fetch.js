@@ -144,10 +144,10 @@ module.exports = {
         user.friendList = user.friendList.split(",")
         user.dmChannelList = user.dmChannelList.split(",")
 
-        if(containPassword !== true) {
+        if(containPassword == false) {
             delete user.password
         }
-        if(containSensitive !== true) {
+        if(containSensitive == false) {
             delete user.email
         }
 
