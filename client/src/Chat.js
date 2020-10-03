@@ -40,6 +40,18 @@ export default class Chat extends React.Component {
     this.video1.srcObject = remoteStream;
   }
 
+  videoAction(element, action) {
+    switch(action) {
+      case "playpause":
+        if (element.paused || element.ended) {
+          element.play();
+        } else {
+          element.pause();
+        }
+        break;
+    }
+  }
+
   render() {
     let channel = this.props.channels.get(this.props.currentChannel)
     if(channel === undefined) {

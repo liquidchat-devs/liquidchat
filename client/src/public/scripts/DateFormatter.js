@@ -50,4 +50,27 @@ function formatDuration(timestamp, timestamp2) {
     return timeString;
 }
 
-export { formatDate, formatDuration }
+function formatDuration2(time) {
+    var timeString = "";
+    var timeLeft = time;
+
+    var ms = timeLeft % 1000;
+    timeLeft = (timeLeft - ms) / 1000;
+    var secs = timeLeft % 60;
+    timeLeft = (timeLeft - secs) / 60;
+    var mins = timeLeft % 60;
+    timeLeft = (timeLeft - mins) / 60;
+    var hrs = timeLeft % 24;
+    timeLeft = (timeLeft - hrs) / 24;
+    var days = timeLeft;
+
+    timeString = (secs < 10 ? "0" + secs : secs) + ":" + timeString;
+    if(mins > 0) { timeString = (mins < 10 ? "0" + mins : mins) + ":" + timeString; } else { timeString = "0:" + timeString }
+    if(hrs > 0) { timeString = (hrs < 10 ? "0" + hrs : hrs) + ":" + timeString; }
+    if(days > 0) { timeString = (days < 10 ? "0" + days : days) + ":" + timeString; }
+
+    timeString = timeString.substring(0, timeString.length - 1);
+    return timeString;
+}
+
+export { formatDate, formatDuration, formatDuration2 }

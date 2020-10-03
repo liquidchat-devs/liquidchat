@@ -1,5 +1,6 @@
 import React from 'react';
 import { formatBytes } from './SizeFormatter';
+import { formatDuration2 } from './DateFormatter';
 
 function toFormat(message, [diss, repl]) {
     const skip = diss.length;
@@ -121,15 +122,32 @@ function formatFile(chat, file) {
 
     if(mimeType !== -1) {
         if(mimeType.startsWith("video/")) {
-            return <div className="flex">
-            <video width="420" height="240" controls>
-                <source src={chat.props.fileEndpoint + "/" + file.name} type={mimeType}/>
-            </video>
-            <div className="video-overlay white marginleft2 margintop1">
-                {file.name}
-                <br/>
-                <a className="tipColor">({formatBytes(file.size, true)})</a>
-            </div>
+            return <div className="flex" onMouseEnter={() => { chat.refs["videoOverlay-" + file.name].style.display = "flex"; }} onMouseLeave={() => { chat.refs["videoOverlay-" + file.name].style.display = "flex"; }}>
+                <video width="420" height="240" ref={"video-" + file.name} onTimeUpdate={() => {
+                        chat.refs["progress-" + file.name].style.width = Math.floor((chat.refs["video-" + file.name].currentTime / chat.refs["video-" + file.name].duration) * 100) + "%"; 
+                        chat.refs["progressText-" + file.name].text = formatDuration2(Math.floor(chat.refs["video-" + file.name].currentTime) * 1000) + "/" + formatDuration2(Math.floor(chat.refs["video-" + file.name].duration) * 1000);
+                    }} onClick={() => { chat.videoAction(chat.refs["video-" + file.name], "playpause"); }}>
+                    <source src={chat.props.fileEndpoint + "/" + file.name} type={mimeType}/>
+                </video>
+                <div ref={"videoOverlay-" + file.name} style={{ display: "none", width: 0 }}>
+                    <div className="video-overlay white marginleft2 margintop1" style={{ width: 420 }}>
+                        {file.name}
+                        <br/>
+                        <a className="tipColor">({formatBytes(file.size, true)})</a>
+                    </div>
+                    <div class="videoControls aligny" data-state="hidden">
+                        <div className="button button1 marginleft2 videoButton" onClick={() => { chat.videoAction(chat.refs["video-" + file.name], "playpause"); }}>
+                            <svg aria-hidden="false" width="22" height="22" viewBox="0 0 22 22"><polygon fill="currentColor" points="0 0 0 14 11 7" transform="translate(7 5)"></polygon></svg>
+                        </div>
+                        <a className="tipColor marginleft1" ref={"progressText-" + file.name} style={{ fontSize: 13 }}>0:00</a>
+                        <div class="progressWrapper marginleft2b" onClick={(e) => {
+                                var pos = (e.pageX  - (e.currentTarget.offsetLeft + e.currentTarget.offsetParent.offsetLeft)) / e.currentTarget.offsetWidth;
+                                chat.refs["video-" + file.name].currentTime = pos * chat.refs["video-" + file.name].duration;
+                            }}>
+                            <div className="progress" ref={"progress-" + file.name} />
+                        </div>
+                    </div>
+                </div>
             </div>
         }
 

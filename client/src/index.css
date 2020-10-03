@@ -562,3 +562,33 @@ code {
   border-radius: 10px;
   border: 1px solid #1b1b1b;
 }
+
+.videoControls {
+  margin-left: -430px;
+  width: 420px;
+  z-index: 1;
+  margin-top: 207px;
+  height: 33px;
+  background-color: #1f1f1f;
+}
+
+.videoButton {
+  position: relative;
+  height: 22px;
+  width: 22px;
+  border: none;
+}
+
+.progressWrapper {
+  width: 230px;
+  height: 8px;
+  background-color: white;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.progress {
+  height: 100%;
+  background-color: #6767ff;
+  border-radius: 10px;
+}
