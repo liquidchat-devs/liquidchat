@@ -128,6 +128,10 @@ code {
   margin-top: 0px;
 }
 
+.margintop0b {
+  margin-top: 2px;
+}
+
 .margintop1a {
   margin-top: 5px;
 }
@@ -140,12 +144,20 @@ code {
   margin-top: 12px;
 }
 
+.margintop1c {
+  margin-top: 15px;
+}
+
 .margintop2 {
   margin-top: 30px;
 }
 
 .margintop3 {
   margin-top: 20px;
+}
+
+.margintop4 {
+  margin-top: 25px;
 }
 
 .marginbot0 {
@@ -250,7 +262,13 @@ code {
 }
 
 .text5 {
-  font-size: 19px;
+  font-size: 16px;
+}
+
+.text6 {
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 600;
 }
 
 /* Colors */
@@ -447,6 +465,13 @@ code {
   z-index: 3;
 }
 
+.overlaybox4 {
+  width: 80vw;
+  height: 80vh;
+  background-color: #353535;
+  z-index: 3;
+}
+
 .avatar {
   width: 40px;
   height: 40px;
@@ -526,4 +551,14 @@ code {
 .settingsButton {
   border: 1px solid #ff6161;
   color: #ff6161;
+}
+
+.accountBox {
+  height: 155px;
+  width: 70%;
+  margin: 20px 20px 20px 20px;
+  margin-top: 20px;
+  background-color: #232323;
+  border-radius: 10px;
+  border: 1px solid #1b1b1b;
 }

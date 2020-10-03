@@ -205,7 +205,7 @@ export class ChannelSelector extends React.Component {
           </div>
         </div>}
         <div className="accountSettings chatColor aligny">
-            <div className="button settingsButton marginleft2" style={{ width: 28, height: 28, position: "relative" }}>⚙️</div>
+            <div className="button settingsButton marginleft2" style={{ width: 28, height: 28, position: "relative" }} onClick={() => { this.props.switchDialogState(13) }}>⚙️</div>
         </div>
       </div>
     );
@@ -262,6 +262,12 @@ export class DialogManager extends React.Component {
 
       case 12:
         return <InviteFriendsBox fileEndpoint={this.props.fileEndpoint} getUser={this.props.getUser} session={this.props.session} selectedChannel={this.props.selectedChannel} API={this.props.API} switchDialogState={this.props.switchDialogState} />
+
+      case 13:
+        return <SettingsBox fileEndpoint={this.props.fileEndpoint} API={this.props.API} switchDialogState={this.props.switchDialogState} session={this.props.session} getUser={this.props.getUser}/>
+
+      case 14:
+        return <AccountEditBox API={this.props.API} switchDialogState={this.props.switchDialogState}/>
 
       default:
         return null;
@@ -495,9 +501,7 @@ export class AddFriendBox extends React.Component {
           <form onSubmit={this.handleSubmit} className="flex margintop1">
             <input className="inputfield1 marginleft2" name="friendUsername" type="text" placeholder="Username..." required={true} onChange={this.handleChange} /><br />
           </form>
-          <div className="alignmiddle margintop1" style={{ height: 40 }}>
-            <div onClick={this.handleSubmit} className="button button1" style={{ marginTop: 15, marginLeft: 10 }}>Send request!</div>
-          </div>
+          <div onClick={this.handleSubmit} className="button button1" style={{ marginTop: 15, marginLeft: 10 }}>Send request!</div>
           {
             (this.getErrorText(this.state.friendRequestResult).length > 0 ?
             <div className="marginleft2 margintop1 errorColor">
@@ -505,6 +509,91 @@ export class AddFriendBox extends React.Component {
             </div>
             : "")
           }
+        </div>
+      </div>
+    );
+  }
+}
+
+export class AccountEditBox extends React.Component {
+  state = {
+    email: "",
+    accountEditResult: 0
+  };
+
+  handleChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  handleSubmit = async e => {
+    e.preventDefault();
+    const res = await this.props.API.API_editUser(this.state.email);
+    this.setState({
+      accountEditResult: res,
+    });
+    
+    if(res === 1) { this.props.switchDialogState(-1); }
+    return true;
+  }
+
+  getErrorText(code) {
+    switch(code) {
+      default:
+        return "";
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlaybox">
+          <div className="white text3 marginleft2 margintop1a">> Manage Account-</div>
+          <form onSubmit={this.handleSubmit} className="flex margintop1">
+            <input className="inputfield1 marginleft2" name="email" type="text" placeholder="Email..." required={true} onChange={this.handleChange} /><br />
+          </form>
+          <div onClick={this.handleSubmit} className="button button1" style={{ marginTop: 15, marginLeft: 10 }}>Edit!</div>
+          {
+            (this.getErrorText(this.state.accountEditResult).length > 0 ?
+            <div className="marginleft2 margintop1 errorColor">
+              {this.getErrorText(this.state.accountEditResult)}
+            </div>
+            : "")
+          }
+        </div>
+      </div>
+    );
+  }
+}
+
+export class SettingsBox extends React.Component {
+  render() {
+    let loggedUser = this.props.getUser(this.props.session.userID);
+
+    return (
+      <div>
+        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlaybox4">
+          <div className="white text3 marginleft2b margintop1a">My Account</div>
+          <div className="accountBox">
+            <div className="flex">
+              <img alt="" className="avatar2 margintop3 marginleft4" src={this.props.fileEndpoint + "/" + loggedUser.avatar}/>
+              <div>
+                <div className="margintop4 marginleft2b" style={{ height: 40 }}>
+                  <p className="profileTooltipColor text6 margintop0 marginbot0">Username</p>
+                  <p className="white text5 margintop0 margintop0b">{loggedUser.username}</p>
+                </div>
+                <div className="margintop1c marginleft2b" style={{ height: 40 }}>
+                  <p className="profileTooltipColor text6 margintop0 marginbot0">Email</p>
+                  {loggedUser.email === undefined ? 
+                  <p className="text5 margintop0 margintop0b link" onClick={() => { this.props.switchDialogState(14); }}>Set an email-</p>
+                  : <p className="white text5 margintop0 margintop0b">{loggedUser.email}</p>}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

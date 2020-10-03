@@ -222,6 +222,13 @@ class Util {
             console.log("> received avatar update - " + req.query.fileName);
         });
 
+        this.app.post('/editUser', async(req, res) => {
+            if(!this.isSessionValid(req, res)) { return; }
+
+            await this.editUser(req, res, req.body);
+            console.log("> received user update - " + req.body.email);
+        });
+
         this.app.post('/sendFriendRequest', async(req, res) => {
             if(!this.isSessionValid(req, res)) { return; }
 
@@ -324,13 +331,12 @@ class Util {
         this.app.get('/fetchUser', async(req, res) => {
             if(!this.isSessionValid(req, res)) { return; }
             const data = req.query;
+            var session = this.app.sessions.get(req.cookies['sessionID']);
+            var user = await this.app.db.db_fetch.fetchUser(this.app.db, data.id, data.containSensitive && session.userID === data.id);
 
-            var user = await this.app.db.db_fetch.fetchUser(this.app.db, data.id);
             if(user === undefined) {
                 res.send(JSON.stringify({ status: -1 }))
             } else {
-                delete user.password
-
                 res.send(JSON.stringify(user))
             }
         });
@@ -736,6 +742,20 @@ class Util {
         if(socket.connected) {
             socket.emit("updateUser", JSON.stringify(user))
             this.emitToUser(targetUser.id, "updateUser", targetUser);
+        }
+    }
+
+    async editUser(req, res, _user) {
+        var socket = this.app.sessionSockets.get(req.cookies['sessionID']);
+        var session = this.app.sessions.get(req.cookies['sessionID']);
+        var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
+        res.send(JSON.stringify({ status: 1 }))
+
+        user.email = _user.email;
+        await this.app.db.db_edit.editUser(this.app.db, user);
+
+        if(socket.connected) {
+            socket.emit("updateUser", JSON.stringify(user))
         }
     }
 

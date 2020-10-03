@@ -1,5 +1,5 @@
 module.exports = {
-    async fetchUser(db, id) {
+    async fetchUser(db, id, containSensitive) {
         if(db.DEBUG) {
             console.log(" - [db] Loading User(id: " + id + ") from the database..."); 
         }
@@ -10,7 +10,7 @@ module.exports = {
             return undefined;
         }
     
-        return this.formatUser(result[0][0]);
+        return this.formatUser(result[0][0], containSensitive);
     },
 
     async fetchUserByUsername(db, username) {
@@ -140,9 +140,14 @@ module.exports = {
         return res
     },
 
-    formatUser(user) {
+    formatUser(user, containSensitive) {
         user.friendList = user.friendList.split(",")
         user.dmChannelList = user.dmChannelList.split(",")
+
+        delete user.password
+        if(containSensitive === false) {
+            delete user.email
+        }
 
         return user;
     },

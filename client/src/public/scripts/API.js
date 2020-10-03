@@ -16,7 +16,7 @@ class API {
 
         socket.on('connect', async() => {
             console.log("> socket.io connected!");
-            await this.API_fetchUser(userID);
+            await this.API_fetchUser(userID, true);
             this.API_fetchUsersForFriends(userID);
         });
         
@@ -170,12 +170,12 @@ class API {
     }
     
     //#region Fetching
-    async API_fetchUser(id) {
+    async API_fetchUser(id, containSensitive) {
         if(this.mainClass.state.users.has(id)) {
           return this.mainClass.state.users.get(id)
         } else {
           //Fetch user
-          const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchUser?id=' + id, { withCredentials: true });
+          const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchUser?id=' + id + (containSensitive === true ? "&containSensitive=true" : ""), { withCredentials: true });
           var user = reply.data
     
           //Cache user
@@ -248,6 +248,18 @@ class API {
         });
 
         return true;
+    }
+
+    async API_editUser(email) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/editUser', {
+            email: email
+        }, { withCredentials: true });
+
+        if(reply.data.status !== 1) {
+            return reply.data.status;
+        } else {
+            return reply.data;
+        }
     }
 
     async API_sendFriendRequest(userID) {
