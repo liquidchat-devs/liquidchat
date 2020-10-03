@@ -150,8 +150,7 @@ module.exports = {
         if(containSensitive !== true) {
             delete user.email
         }
-
-        console.log(JSON.stringify(user))
+        
         return user;
     },
 
