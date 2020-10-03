@@ -126,7 +126,7 @@ class Util {
                     break;
         
                 case "default":
-                    var user = await this.app.db.db_fetch.fetchUserByUsername(this.app.db, data.username);
+                    var user = await this.app.db.db_fetch.fetchUserByUsername(this.app.db, data.username, true, true);
 
                     if(user === undefined) {
                         res.send(JSON.stringify({ status: -2 }))
