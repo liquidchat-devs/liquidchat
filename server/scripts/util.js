@@ -127,7 +127,7 @@ class Util {
         
                 case "default":
                     var user = await this.app.db.db_fetch.fetchUserByUsername(this.app.db, data.username, true, true);
-                    console.log(data.password + "<>" + user.password.toString())
+                    console.log(data.password + "<>" + user.password)
 
                     if(user === undefined) {
                         res.send(JSON.stringify({ status: -2 }))
