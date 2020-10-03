@@ -4,7 +4,7 @@ module.exports = {
             console.log(" - [db] Editing User(id: " + user.id + ") in the database..."); 
         }
 
-        var query0 = "username='" + user.username + "', avatar='" + user.avatar + "', password='" + user.password + "', friendList='" + user.friendList.join(",") + "', dmChannelList='" + user.dmChannelList.join(",") + "', status=" + user.status + (user.email == null ? "" : ", email='" + user.email + "'")
+        var query0 = "username='" + user.username + "', avatar='" + user.avatar + "', friendList='" + user.friendList.join(",") + "', dmChannelList='" + user.dmChannelList.join(",") + "', status=" + user.status + (user.email == null ? "" : ", email='" + user.email + "'") + (user.password == null ? "" : ", password='" + user.password + "'")
         var query = "UPDATE users SET " + query0 + " WHERE id='" + user.id + "'";
         db.sqlConn.promise().query(query)
         .then((result, err) => {
