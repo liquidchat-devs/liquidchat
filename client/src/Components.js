@@ -587,7 +587,7 @@ export class SettingsBox extends React.Component {
                 </div>
                 <div className="margintop1c marginleft2b" style={{ height: 40 }}>
                   <p className="profileTooltipColor text6 margintop0 marginbot0">Email</p>
-                  {loggedUser.email === undefined ? 
+                  {loggedUser.email === null ? 
                   <p className="text5 margintop0 margintop0b link" onClick={() => { this.props.switchDialogState(14); }}>Set an email-</p>
                   : <p className="white text5 margintop0 margintop0b">{loggedUser.email}</p>}
                 </div>

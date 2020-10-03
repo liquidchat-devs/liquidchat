@@ -13,7 +13,7 @@ module.exports = {
         return this.formatUser(result[0][0], containSensitive);
     },
 
-    async fetchUserByUsername(db, username) {
+    async fetchUserByUsername(db, username, containSensitive) {
         if(db.DEBUG) {
             console.log(" - [db] Loading User(username: " + username + ") from the database..."); 
         }
@@ -24,7 +24,7 @@ module.exports = {
             return undefined;
         }
     
-        return this.formatUser(result[0][0]);
+        return this.formatUser(result[0][0], containSensitive);
     },
 
     async fetchChannel(db, id) {
