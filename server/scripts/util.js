@@ -127,11 +127,10 @@ class Util {
         
                 case "default":
                     var user = await this.app.db.db_fetch.fetchUserByUsername(this.app.db, data.username, true, true);
-                    console.log(user.password.toString())
 
                     if(user === undefined) {
                         res.send(JSON.stringify({ status: -2 }))
-                    } else if(this.app.bcrypt.compareSync(data.password, user.password.toString()) == false) {
+                    } else if(this.app.bcrypt.compareSync(data.password, user.password) == false) {
                         res.send(JSON.stringify({ status: -1 }))
                     } else {
                         const sessionID = this.app.crypto.randomBytes(16).toString("hex");

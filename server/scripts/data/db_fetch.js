@@ -146,7 +146,10 @@ module.exports = {
 
         if(containPassword !== true) {
             delete user.password
+        } else {
+            user.password = user.password.toString('utf8')
         }
+        
         if(containSensitive !== true) {
             delete user.email
         }
