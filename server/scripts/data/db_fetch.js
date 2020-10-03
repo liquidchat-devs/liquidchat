@@ -146,15 +146,11 @@ module.exports = {
 
         if(containPassword !== true) {
             delete user.password
-        } else {
-            user.password = user.password.toString()
         }
-
         if(containSensitive !== true) {
             delete user.email
         }
         
-        console.log(JSON.stringify(user))
         return user;
     },
 
