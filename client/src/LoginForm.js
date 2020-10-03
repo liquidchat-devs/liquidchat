@@ -75,6 +75,9 @@ export default class LoginForm extends React.Component {
             <div className="alignmiddle margintop1" style={{ height: 40 }}>
               <div onClick={this.props.switchFormState} className="button button1">Register!</div>
             </div>
+            <div className="alignmiddle margintop1" style={{ height: 25 }}>
+             <p className="text5 marginbot0 margintop0 link" onClick={() => { this.props.switchDialogState(15); }}>Forgotten password?</p>
+            </div>
             {
               (this.getErrorText(this.state.loginResult).length > 0 ?
               <div className="margintop1 errorColor textcenter">
