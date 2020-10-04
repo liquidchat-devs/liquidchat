@@ -611,7 +611,7 @@ class Util {
             res.send(JSON.stringify({ status: 1 }))
         }
 
-        hannel.members.splice(channel.members.indexOf(targetUser.id), 1);
+        channel.members.splice(channel.members.indexOf(targetUser.id), 1);
         targetUser.dmChannelList.splice(targetUser.dmChannelList.indexOf(channel.id), 1);
         
         channel.members.forEach(id => {
