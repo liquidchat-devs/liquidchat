@@ -204,14 +204,14 @@ class App extends React.Component {
                 <ChannelHeader
                 API={this.state.API} currentChannel={this.state.currentChannel} channels={this.state.channels} currentVoiceGroup={this.state.currentVoiceGroup}/>
                 <Chat
+                uploadReceived={this.state.uploadReceived} uploadExpected={this.state.uploadExpected}
+                uploadFileID={this.state.uploadFileID} uploadFileName={this.state.uploadFileName} uploadFailed={this.state.uploadFailed}
                 pageHeight={this.state.pageHeight} API={this.state.API} setSelectedUser={this.setSelectedUser} currentVoiceGroup={this.state.currentVoiceGroup} setSelectedImage={this.setSelectedImage}
                 channels={this.state.channels} currentChannel={this.state.currentChannel} switchDialogState={this.switchDialogState} setSelectedMessage={this.setSelectedMessage}
                 editingMessage={this.state.editingMessage} editedMessage={this.state.editedMessage} setEditedMessage={this.setEditedMessage} endEditingMessage={this.endEditingMessage} getUser={this.getUser} fileEndpoint={this.state.fileEndpoint}/>
                 <Send
                 API={this.state.API}
-                currentChannel={this.state.currentChannel} channels={this.state.channels}
-                uploadReceived={this.state.uploadReceived} uploadExpected={this.state.uploadExpected}
-                uploadFileID={this.state.uploadFileID} uploadFileName={this.state.uploadFileName} uploadFailed={this.state.uploadFailed}/>
+                currentChannel={this.state.currentChannel} channels={this.state.channels}/>
               </div>
             </div>
           </div> :

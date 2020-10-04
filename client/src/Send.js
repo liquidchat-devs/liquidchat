@@ -40,27 +40,12 @@ export default class Send extends React.Component {
     return Math.round((in1 / in2) * 100) + "%"
   }
 
-  getUploadMessage(fileID, fileName, bytes1, bytes2, failed) {
-    if(fileID === -1) {
-      return ""
-    } else if(bytes1 === bytes2) {
-      return "Upload of " + fileName + " finished-"
-    } else if(failed) {
-      return "Upload of " + fileName + " failed (" + formatBytes(bytes1) + "/100MB)-"
-    } else {
-      return "Uploading " + fileName + "... " + formatBytes(bytes1) + "/" + formatBytes(bytes2, true) + " (" + this.formatPercentage(bytes1, bytes2) + ")"
-    }
-  }
-
   render() {
     let channel = this.props.channels.get(this.props.currentChannel)
     if(channel === undefined || channel.type === 1) { return null; }
 
     return (
       <div className="marginleft2 margintop1">
-        <div className="white">
-          {this.getUploadMessage(this.props.uploadFileID, this.props.uploadFileName, this.props.uploadReceived, this.props.uploadExpected, this.props.uploadFailed)}
-        </div>
         <div className="flex">
           <label for="file-input">
             <div className="full alignmiddle chatColor">

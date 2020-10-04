@@ -1,6 +1,7 @@
 import React from 'react';
 import { formatMessage } from './public/scripts/MessageFormatter';
 import { formatDate } from './public/scripts/DateFormatter';
+import { formatBytes } from './public/scripts/SizeFormatter';
 
 export default class Chat extends React.Component {
   componentDidMount = () => {
@@ -56,6 +57,30 @@ export default class Chat extends React.Component {
         }
         break;
     }
+  }
+
+  getUploadMessage(fileID, fileName, bytes1, bytes2, failed) {
+    var text = ""
+    if(fileName === -1 || bytes1 === bytes2) {
+      text = ""
+    } else if(failed) {
+      text = "Upload of " + fileName + " failed (" + formatBytes(bytes1) + "/100MB)-"
+    } else {
+      text = "Uploading " + fileName + "... " + formatBytes(bytes1) + "/" + formatBytes(bytes2, true) + " (" + this.formatPercentage(bytes1, bytes2) + ")"
+    }
+
+    return text.length < 1 ? null : <div className="paddingtop2 paddingbot2 flex message">
+      <div className="flex marginleft2">
+        <div className="marginleft2 file-wrapper chatColor">
+            <a className="white">{text}</a>
+        </div>
+      </div>
+    </div>
+  }
+
+  formatPercentage(in1, in2) {
+    if(in1 === 0 || in2 === 0) { return "0%" }
+    return Math.round((in1 / in2) * 100) + "%"
   }
 
   render() {
@@ -132,6 +157,9 @@ export default class Chat extends React.Component {
           <div className="flex">
             <div style={{ overflowY: "scroll", height: this.props.pageHeight - 165, width: membersList === -1 ? "100%" : "calc(100% - 200px)" }}>
               {messageList}
+              <div className="white">
+                {this.getUploadMessage(this.props.uploadFileID, this.props.uploadFileName, this.props.uploadReceived, this.props.uploadExpected, this.props.uploadFailed)}
+              </div>
             </div>
             {membersList === -1 ? null :
             <div className="membersList paddingtop2b">
