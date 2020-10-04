@@ -514,6 +514,18 @@ class API {
         }
     }
 
+    async API_addToDMChannel(channelID, userID) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/addToDMChannel', {
+            channel: { id: channelID }, user: { id: userID }
+        }, { withCredentials: true });
+
+        if(reply.data.status !== 1) {
+            return reply.data.status;
+        } else {
+            return reply.data;
+        }
+    }
+
     async API_editChannel(channelID, channelName) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/editChannel', {
             id: channelID, name: channelName

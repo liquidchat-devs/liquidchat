@@ -413,8 +413,8 @@ export class EditChannelDialog extends React.Component {
 }
 
 export class InviteFriendsBox extends React.Component {
-  inviteUser = async (id) => {
-    const res = await this.props.API.API_sendDM(id, "invite dm");
+  inviteUser = async (channelID, userID) => {
+    const res = await this.props.API.API_addToDMChannel(channelID, userID);
     
     if(res === 1) { this.props.switchDialogState(-1); }
     return true;
@@ -432,12 +432,16 @@ export class InviteFriendsBox extends React.Component {
       return (
         <div className="friendEntry selectedChannelColor" onContextMenu={(e) => { this.props.setSelectedUser(friend, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="flex">
-            <div className="aligny" style={{ height: 50 }}>
+            <div className="aligny" style={{ height: 55 }}>
               <img alt="" className="avatar3 marginleft2" src={this.props.fileEndpoint + "/" + friend.avatar} key={i}/>
               <div className="white marginleft2">
                 {friend.username}
               </div>
-              <a className="button inviteButton" style={{ textDecoration: "none", right: 0 }} onClick={(e) => { this.inviteUser(friend.id); e.preventDefault(); } }>Invite</a>
+              {
+                this.props.selectedChannel.members.includes(friend.id) ?
+                  <a className="button inviteButton" style={{ textDecoration: "none", right: 0, color: "#b3b3b3", border: "1px solid #b3b3b3", cursor: "default" }}>Joined!</a>
+                : <a className="button inviteButton" style={{ textDecoration: "none", right: 0 }} onClick={(e) => { this.inviteUser(this.props.selectedChannel.id, friend.id); e.preventDefault(); } }>Invite</a>
+              }
             </div>
           </div>
         </div>
