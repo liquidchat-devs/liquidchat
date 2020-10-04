@@ -94,7 +94,7 @@ export class ChannelSelector extends React.Component {
 
             return (
               <div>
-                <div className="white headerColor channel" onClick={(e) => { this.props.switchChannel(e.currentTarget, channel.id) }} onContextMenu={(e) => { this.props.setSelectedChannel(channel, e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } } key={i} ref={i === 0 ? "firstChannelElement" : undefined}>
+                <div className="white headerColor channel" onClick={(e) => { this.props.switchChannel(channel.id) }} onContextMenu={(e) => { this.props.setSelectedChannel(channel, e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } } key={i} ref={i === 0 ? "firstChannelElement" : undefined}>
                   {channel.type === 0 ? "#" : "."}{channelName}
                 </div>
                 {userList}
@@ -104,7 +104,7 @@ export class ChannelSelector extends React.Component {
       }
 
       return (
-        <div className={ this.props.currentChannel === channel.id ? "white headerColor channel selectedChannelColor" : "white headerColor channel" } onClick={(e) => { this.props.switchChannel(e.currentTarget, channel.id) }} onContextMenu={(e) => { this.props.setSelectedChannel(channel, e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } } key={i} ref={i === 0 ? "firstChannelElement" : undefined}>
+        <div className={ this.props.currentChannel === channel.id ? "white headerColor channel selectedChannelColor" : "white headerColor channel" } onClick={(e) => { this.props.switchChannel(channel.id) }} onContextMenu={(e) => { this.props.setSelectedChannel(channel, e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } } key={i} ref={i === 0 ? "firstChannelElement" : undefined}>
           {channel.type === 1 ? "." : "#"}{channelName}
         </div>
       )
@@ -243,7 +243,7 @@ export class DialogManager extends React.Component {
         return <ProfileBox API={this.props.API} fileEndpoint={this.props.fileEndpoint} switchDialogState={this.props.switchDialogState} session={this.props.session} selectedUser={this.props.selectedUser}/>
 
       case 6:
-        return <ProfileOptionsBox API={this.props.API} getUser={this.props.getUser} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedUser={this.props.selectedUser} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
+        return <ProfileOptionsBox switchChannelTypes={this.props.switchChannelTypes} switchChannel={this.props.switchChannel} API={this.props.API} getUser={this.props.getUser} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedUser={this.props.selectedUser} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
 
       case 7:
         return <AddFriendBox API={this.props.API} switchDialogState={this.props.switchDialogState}/>
@@ -672,8 +672,13 @@ export class ProfileOptionsBox extends React.Component {
     this.props.API.API_removeFriend(id);
   }
 
-  createChannelDM(id) {
-    this.props.API.API_createChannelDM("Channel#" + Math.floor(Math.random() * 1000), [ this.props.session.userID, id ]);
+  async dmUser(id) {
+    var channel = await this.props.API.API_getSuitableDMChannel(id);
+    if(channel !== undefined) {
+      this.props.switchChannelTypes(1);
+      this.props.switchChannel(channel.id);
+      this.props.switchDialogState(0);
+    }
   }
 
   render() {
@@ -699,7 +704,7 @@ export class ProfileOptionsBox extends React.Component {
               <div className="button2 alignmiddle chatColor" onClick={() => { this.removeFriend(this.props.selectedUser.id); }}>
                 <p className="white text1">> Remove Friend</p>
               </div>
-              <div className="button2 alignmiddle chatColor" onClick={() => { this.createChannelDM(this.props.selectedUser.id); }}>
+              <div className="button2 alignmiddle chatColor" onClick={() => { this.dmUser(this.props.selectedUser.id); }}>
                 <p className="white text1">> Message</p>
               </div>
             </div> :
