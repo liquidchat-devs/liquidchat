@@ -893,8 +893,8 @@ class Util {
     async emitToUser(id, type, data) {
         if(this.app.userSessions.has(id)) {
             this.app.userSessions.get(id).forEach(sessionID => {
-                if(sessionSockets.has(sessionID)) {
-                    sessionSockets.get(sessionID).emit(type, JSON.stringify(data));
+                if(this.app.sessionSockets.has(sessionID)) {
+                    this.app.sessionSockets.get(sessionID).emit(type, JSON.stringify(data));
                 }
             })
         }
