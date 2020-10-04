@@ -47,6 +47,10 @@ code {
 }
 
 /* Utils */
+.opacity0 {
+  opacity: 0
+}
+
 .hide {
   display: none;
 }
@@ -564,7 +568,7 @@ code {
 }
 
 .videoControls {
-  margin-left: -430px;
+  margin-left: -420px;
   width: 420px;
   z-index: 1;
   margin-top: 207px;
@@ -591,4 +595,46 @@ code {
   height: 100%;
   background-color: #6767ff;
   border-radius: 10px;
+}
+
+.fadeIn {
+	opacity: 1;
+	animation-name: fadeInOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 0.2s;
+}
+
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.fadeOut {
+	opacity: 0;
+	animation-name: fadeOutOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 0.2s;
+}
+
+@keyframes fadeOutOpacity {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+.stopped {
+  opacity: 1;
+}
+
+.playing {
+  opacity: 1;
 }

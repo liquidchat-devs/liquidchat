@@ -40,13 +40,17 @@ export default class Chat extends React.Component {
     this.video1.srcObject = remoteStream;
   }
 
-  videoAction(element, action) {
+  videoAction(element, file, action) {
     switch(action) {
       case "playpause":
         if (element.paused || element.ended) {
           element.play();
+          this.refs["videoOverlay-" + file.name].classList.remove("stopped");
+          this.refs["videoOverlay-" + file.name].classList.add("playing");
         } else {
           element.pause();
+          this.refs["videoOverlay-" + file.name].classList.add("stopped");
+          this.refs["videoOverlay-" + file.name].classList.remove("playing");
         }
         break;
     }
@@ -71,7 +75,7 @@ export default class Chat extends React.Component {
       const user = this.props.getUser(message.author.id)
 
       return (
-        <div className="paddingtop2 paddingbot2 flex" key={i} onContextMenu={(e) => { this.props.switchDialogState(2); this.props.setSelectedMessage(message, e.pageX, e.pageY); e.preventDefault(); } } onMouseOver={(e) => e.currentTarget.classList.add("hoveredMessageColor")} onMouseLeave={(e) => e.currentTarget.classList.remove("hoveredMessageColor") }>
+        <div className="paddingtop2 paddingbot2 flex message" key={i} onContextMenu={(e) => { this.props.switchDialogState(2); this.props.setSelectedMessage(message, e.pageX, e.pageY); e.preventDefault(); } } onMouseOver={(e) => e.currentTarget.classList.add("hoveredMessageColor")} onMouseLeave={(e) => e.currentTarget.classList.remove("hoveredMessageColor") }>
           <div className="flex marginleft2">
             <img alt="" className="avatar" src={this.props.fileEndpoint + "/" + user.avatar} key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
             <div className="marginleft2">
