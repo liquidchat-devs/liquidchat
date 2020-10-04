@@ -47,10 +47,12 @@ export default class Chat extends React.Component {
           element.play();
           this.refs["videoOverlay-" + file.name].classList.remove("stopped");
           this.refs["videoOverlay-" + file.name].classList.add("playing");
+          this.refs["playButtonWrapper-" + file.name].innerHTML  = `<svg aria-hidden="false" width="22" height="22" viewBox="0 0 22 22"><path fill="currentColor" d="M0,14 L4,14 L4,0 L0,0 L0,14 L0,14 Z M8,0 L8,14 L12,14 L12,0 L8,0 L8,0 Z" transform="translate(6 5)"></path></svg>`;
         } else {
           element.pause();
           this.refs["videoOverlay-" + file.name].classList.add("stopped");
           this.refs["videoOverlay-" + file.name].classList.remove("playing");
+          this.refs["playButtonWrapper-" + file.name].innerHTML  = `<svg aria-hidden="false" width="22" height="22" viewBox="0 0 22 22"><polygon fill="currentColor" points="0 0 0 14 11 7" transform="translate(7 5)"></polygon></svg>`;
         }
         break;
     }
