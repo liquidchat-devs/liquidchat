@@ -612,14 +612,15 @@ class Util {
         }
 
         channel.members.splice(channel.members.indexOf(targetUser.id), 1);
-        targetUser.dmChannelList.splice(targetUser.dmChannelList.indexOf(channel.id), 1);
         
+        targetUser.dmChannelList.splice(targetUser.dmChannelList.indexOf(channel.id), 1);
         channel.members.forEach(id => {
             this.emitToUser(id, "updateChannel", JSON.stringify(channel))
         });
         this.emitToUser(targetUser.id, "deleteChannel", JSON.stringify(channel))
 
         await this.app.db.db_edit.editChannel(this.app.db, channel);
+        await this.app.db.db_edit.editUser(this.app.db, targetUser);
     }
 
     async joinVoiceChannel(req, res, connection) {
