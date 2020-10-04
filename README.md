@@ -2,7 +2,6 @@
 ⭐ Open-source chat application similar to Discord-  
 
 🚩 **Planned features:**  
-> Group Chats  
 > Personal Emotes  
 > Idle/DND/Invisible Status  
 > Custom Statuses
@@ -12,6 +11,7 @@
 > File Support  
 > Friend Features (Adding/Removing friends)  
 > DM Channels  
+> Group Chats
 
 ✔️ Releases: https://github.com/LamkasDev/liquidchat/releases  
 🔥 API: https://github.com/LamkasDev/liquidchat.js  
