@@ -243,7 +243,7 @@ export class DialogManager extends React.Component {
         return <ProfileBox API={this.props.API} fileEndpoint={this.props.fileEndpoint} switchDialogState={this.props.switchDialogState} session={this.props.session} selectedUser={this.props.selectedUser}/>
 
       case 6:
-        return <ProfileOptionsBox switchChannelTypes={this.props.switchChannelTypes} switchChannel={this.props.switchChannel} API={this.props.API} getUser={this.props.getUser} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedUser={this.props.selectedUser} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
+        return <ProfileOptionsBox channels={this.props.channels} currentChannel={this.props.currentChannel} switchChannelTypes={this.props.switchChannelTypes} switchChannel={this.props.switchChannel} API={this.props.API} getUser={this.props.getUser} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedUser={this.props.selectedUser} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
 
       case 7:
         return <AddFriendBox API={this.props.API} switchDialogState={this.props.switchDialogState}/>
@@ -672,6 +672,10 @@ export class ProfileOptionsBox extends React.Component {
     this.props.API.API_removeFriend(id);
   }
 
+  removeFromDMChannel(channelID, id) {
+    this.props.API.API_removeFromDMChannel(channelID, id);
+  }
+
   async dmUser(id) {
     var channel = await this.props.API.API_getSuitableDMChannel(id);
     if(channel !== undefined) {
@@ -683,6 +687,7 @@ export class ProfileOptionsBox extends React.Component {
 
   render() {
     let loggedUser = this.props.getUser(this.props.session.userID);
+    let currentChannel = this.props.channels.get(this.props.currentChannel)
 
     return (
       <div>
@@ -706,6 +711,15 @@ export class ProfileOptionsBox extends React.Component {
               </div>
               <div className="button2 alignmiddle chatColor" onClick={() => { this.dmUser(this.props.selectedUser.id); }}>
                 <p className="white text1">> Message</p>
+              </div>
+            </div> :
+            ""
+          }
+          {
+            currentChannel.author.id === loggedUser.id && this.props.selectedUser.id !== loggedUser.id ?
+            <div>
+              <div className="button2 alignmiddle chatColor" onClick={() => { this.removeFromDMChannel(currentChannel.id ,this.props.selectedUser.id); }}>
+                <p className="white text1">> Remove from group</p>
               </div>
             </div> :
             ""

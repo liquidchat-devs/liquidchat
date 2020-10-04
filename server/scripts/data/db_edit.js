@@ -30,7 +30,7 @@ module.exports = {
             console.log(" - [db] Editing Channel(id: " + channel.id + ") in the database..."); 
         }
 
-        var query0 = "name='" + channel.name + "'"
+        var query0 = "name='" + channel.name + "'" + (channel.members == null ? "" : ", '" + channel.members.join(",") + "')")
         var query = "UPDATE channels SET " + query0 + " WHERE id='" + channel.id + "'";
         db.sqlConn.promise().query(query)
         .then((result, err) => {

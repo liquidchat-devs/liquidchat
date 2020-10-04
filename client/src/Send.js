@@ -35,11 +35,6 @@ export default class Send extends React.Component {
     }
   }
 
-  formatPercentage(in1, in2) {
-    if(in1 === 0 || in2 === 0) { return "0%" }
-    return Math.round((in1 / in2) * 100) + "%"
-  }
-
   render() {
     let channel = this.props.channels.get(this.props.currentChannel)
     if(channel === undefined || channel.type === 1) { return null; }
