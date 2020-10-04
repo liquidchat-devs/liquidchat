@@ -81,6 +81,7 @@ class API {
             var newChannels = new Map(this.mainClass.state.channels)
             var channel = newChannels.get(_channel.id);
             channel.name = _channel.name;
+            channel.members = _channel.members;
             newChannels.set(channel.id, channel);
             this.mainClass.setState({
                 channels: newChannels

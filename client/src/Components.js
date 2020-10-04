@@ -679,9 +679,9 @@ export class ProfileOptionsBox extends React.Component {
   async dmUser(id) {
     var channel = await this.props.API.API_getSuitableDMChannel(id);
     if(channel !== undefined) {
+      this.props.switchDialogState(0);
       this.props.switchChannelTypes(1);
       this.props.switchChannel(channel.id);
-      this.props.switchDialogState(0);
     }
   }
 
@@ -716,7 +716,7 @@ export class ProfileOptionsBox extends React.Component {
             ""
           }
           {
-            currentChannel.author.id === loggedUser.id && this.props.selectedUser.id !== loggedUser.id ?
+            currentChannel !== undefined && currentChannel.author.id === loggedUser.id && this.props.selectedUser.id !== loggedUser.id ?
             <div>
               <div className="button2 alignmiddle chatColor" onClick={() => { this.removeFromDMChannel(currentChannel.id ,this.props.selectedUser.id); }}>
                 <p className="white text1">> Remove from group</p>

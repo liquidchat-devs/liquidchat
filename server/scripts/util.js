@@ -509,8 +509,6 @@ class Util {
                 break;
 
             case 2:
-                socket.emit("createChannel", JSON.stringify(channel))
-
                 channel.members = _channel.members;
                 channel.members.forEach(async(id) => {
                     var user2 = await this.app.db.db_fetch.fetchUser(this.app.db, id);
@@ -612,12 +610,12 @@ class Util {
         }
 
         channel.members.splice(channel.members.indexOf(targetUser.id), 1);
-        
-        targetUser.dmChannelList.splice(targetUser.dmChannelList.indexOf(channel.id), 1);
         channel.members.forEach(id => {
             this.emitToUser(id, "updateChannel", JSON.stringify(channel))
         });
-        this.emitToUser(targetUser.id, "deleteChannel", JSON.stringify(channel))
+
+        targetUser.dmChannelList.splice(targetUser.dmChannelList.indexOf(channel.id), 1);
+        this.emitToUser(targetUser.id, "deleteChannel", JSON.stringify(channel));
 
         await this.app.db.db_edit.editChannel(this.app.db, channel);
         await this.app.db.db_edit.editUser(this.app.db, targetUser);
@@ -894,7 +892,7 @@ class Util {
 
     async emitToUser(id, type, data) {
         if(this.app.userSessions.has(id)) {
-            this.app.userSessions.get(id).filter(s => { return s.connected; }).forEach(targetSocket => {
+            this.app.userSessions.get(id).forEach(targetSocket => {
                 targetSocket.emit(type, JSON.stringify(data));
             })
         }
