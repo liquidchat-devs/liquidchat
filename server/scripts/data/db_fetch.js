@@ -1,4 +1,18 @@
 module.exports = {
+    async fetchServer(db, id) {
+        if(db.DEBUG) {
+            console.log(" - [db] Loading Server(id: " + id + ") from the database..."); 
+        }
+
+        var query0 = "SELECT * FROM servers WHERE id='" + id + "'";
+        var result = await db.sqlConn.promise().query(query0);
+        if(result.length < 1 || result[0].length < 1) {
+            return undefined;
+        }
+    
+        return this.formatServer(result[0][0]);
+    },
+
     async fetchUser(db, id, containSensitive) {
         if(db.DEBUG) {
             console.log(" - [db] Loading User(id: " + id + ") from the database..."); 
@@ -138,6 +152,10 @@ module.exports = {
         });
     
         return res
+    },
+
+    formatServer(server) {
+        return server;
     },
 
     formatUser(user, containSensitive, containPassword) {

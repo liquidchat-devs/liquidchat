@@ -1,4 +1,17 @@
 module.exports = {
+    editServer(db, server) {
+        if(db.DEBUG) {
+            console.log(" - [db] Editing Server(id: " + server.id + ") in the database..."); 
+        }
+
+        var query0 = "name='" + server.username + "', avatar='" + server.avatar + "', channelList='" + server.dmChannelList.join(",") + "'"
+        var query = "UPDATE servers SET " + query0 + " WHERE id='" + server.id + "'";
+        db.sqlConn.promise().query(query)
+        .then((result, err) => {
+            if(err) { throw err; }
+        });
+    },
+
     editUser(db, user) {
         if(db.DEBUG) {
             console.log(" - [db] Editing User(id: " + user.id + ") in the database..."); 

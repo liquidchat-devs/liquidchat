@@ -176,8 +176,8 @@ export class ChannelSelector extends React.Component {
           <div className={this.props.channelTypes === 1 ? "white headerColor channel selectedChannelColor" : "white headerColor channel"} onClick={() => { this.props.switchChannelTypes(1) }}>
             DMs
           </div>
-          <div className={this.props.channelTypes === 2 ? "white headerColor channel selectedChannelColor" : "white headerColor channel"} onClick={() => { this.props.switchChannelTypes(2) }}>
-            Global
+          <div className={this.props.channelTypes === 2 ? "white headerColor channel selectedChannelColor" : "white headerColor channel"} onClick={() => { this.props.switchDialogState(16) }}>
+            +
           </div>
         </div>
         {this.props.channelTypes === 1 || this.props.channelTypes === 2 ?
@@ -272,6 +272,9 @@ export class DialogManager extends React.Component {
       case 15:
         return <ForgottenPasswordBox API={this.props.API} switchDialogState={this.props.switchDialogState}/>
 
+      case 16:
+        return <CreateServerBox API={this.props.API} switchDialogState={this.props.switchDialogState}/>
+
       default:
         return null;
     }
@@ -342,6 +345,64 @@ export class CreateChannelDialog extends React.Component {
             (this.getErrorText(this.state.channelCreationResult).length > 0 ?
             <div className="marginleft2 margintop1 errorColor">
               {this.getErrorText(this.state.channelCreationResult)}
+            </div>
+            : "")
+          }
+        </div>
+      </div>
+    );
+  }
+}
+
+export class CreateServerBox extends React.Component {
+  state = {
+    serverName: "",
+    serverCreationResult: 0
+  };
+
+  handleChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  handleSubmit = async e => {
+    e.preventDefault();
+    const res = await this.props.API.API_createServer(this.state.serverName);
+    this.setState({
+      serverCreationResult: res,
+    });
+    
+    if(res === 1) { this.props.switchDialogState(-1); }
+    return true;
+  }
+
+  getErrorText(code) {
+    switch(code) {
+      case -1:
+        return "Server name is too short-";
+
+      default:
+        return "";
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlaybox">
+          <div className="white text3 marginleft2 margintop1a">> Create new server-</div>
+          <form onSubmit={this.handleSubmit} className="flex margintop1">
+            <input className="inputfield1 marginleft2" name="serverName" type="text" placeholder="Name..." required={true} onChange={this.handleChange} /><br />
+          </form>
+          <div className="alignmiddle margintop1" style={{ height: 40 }}>
+            <div onClick={this.handleSubmit} className="button button1" style={{ marginTop: 15, marginLeft: 10 }}>Create!</div>
+          </div>
+          {
+            (this.getErrorText(this.state.serverCreationResult).length > 0 ?
+            <div className="marginleft2 margintop1 errorColor">
+              {this.getErrorText(this.state.serverCreationResult)}
             </div>
             : "")
           }

@@ -183,6 +183,7 @@ class Util {
                     password: passwordHash,
                     friendList: [],
                     dmChannelList: [],
+                    serverList: [],
                     status: 0
                 }
         
@@ -276,6 +277,13 @@ class Util {
 
             await this.deleteMessage(req, res, req.body)
             console.log("> deleted message - " + req.body.id)
+        });
+
+        this.app.post('/createServer', async(req, res) => {
+            if(!this.isSessionValid(req, res)) { return; }
+            
+            await this.createServer(req, res, req.body)
+            console.log("> created server - " + req.body.name)
         });
 
         this.app.post('/createChannel', async(req, res) => {
@@ -528,6 +536,39 @@ class Util {
         }
     
         await this.app.db.db_add.addChannel(this.app.db, channel);
+    }
+
+    async createServer(req, res, _server) {
+        if(_server.name.length < 1) {
+            res.send(JSON.stringify({ status: -1 }))
+            return;
+        } else {
+            res.send(JSON.stringify({ status: 1 }))
+        }
+        var socket = this.app.sessionSockets.get(req.cookies['sessionID']);
+        var session = this.app.sessions.get(req.cookies['sessionID']);
+        var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
+        var server = {
+            id: this.app.crypto.randomBytes(16).toString("hex"),
+            name: _server.name,
+            avatar: "defaultAvatar.png",
+            createdAt: Date.now(),
+            author: {
+                id: user.id
+            },
+            channels: []
+        }
+
+        channel.members.push(targetUser.id);
+        channel.members.forEach(id => {
+            this.emitToUser(id, "updateChannel", channel)
+        });
+        socket.emit("createServer", JSON.stringify(server))
+        await this.app.db.db_add.addServer(this.app.db, server);
+
+        user.serverList.push(server.id);
+        this.emitToUser(user.id, "updateUser", user);
+        await this.app.db.db_edit.editUser(this.app.db, user);
     }
 
     async editChannel(req, res, _channel) {

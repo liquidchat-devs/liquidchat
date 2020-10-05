@@ -477,6 +477,20 @@ class API {
     }
     //#endregion
 
+    //#region Servers
+    async API_createServer(serverName) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createServer', {
+            name: serverName
+        }, { withCredentials: true });
+
+        if(reply.data.status !== 1) {
+            return reply.data.status;
+        } else {
+            return reply.data;
+        }
+    }
+    //#endregion
+
     //#region Channels
     async API_createChannel(channelName, channelType) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createChannel', {

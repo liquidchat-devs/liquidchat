@@ -24,7 +24,7 @@ class App extends React.Component {
     //UI utilities
     formState: 0,
     dialogState: -1,
-    channelTypes: 2,
+    channelTypes: 1,
     boxX: 0,
     boxY: 0,
 

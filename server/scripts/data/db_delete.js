@@ -1,4 +1,16 @@
 module.exports = {
+    deleteServer(db, id) {
+        if(db.DEBUG) {
+            console.log(" - [db] Deleting Server(id: " + id + ") from the database..."); 
+        }
+
+        var query = "DELETE FROM servers WHERE id='" + id + "'";
+        db.sqlConn.promise().query(query)
+        .then((result, err) => {
+            if(err) { throw err; }
+        });
+    },
+
     deleteUser(db, id) {
         if(db.DEBUG) {
             console.log(" - [db] Deleting User(id: " + id + ") from the database..."); 

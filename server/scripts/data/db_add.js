@@ -1,10 +1,22 @@
 module.exports = {
+    addServer(db, server) {
+        if(db.DEBUG) {
+            console.log(" - [db] Adding Server(id: " + server.id + ") into the database..."); 
+        }
+
+        var query = "INSERT IGNORE INTO servers (id, name, createdAt, avatar, channelList) VALUES('" + server.id + "', '" + server.name + "', " + server.createdAt + ", '" + server.avatar + "', '" + server.channelList.join(",") + "')";
+        db.sqlConn.promise().query(query)
+        .then((result, err) => {
+            if(err) { throw err; }
+        });
+    },
+    
     addUser(db, user) {
         if(db.DEBUG) {
             console.log(" - [db] Adding User(id: " + user.id + ") into the database..."); 
         }
 
-        var query = "INSERT IGNORE INTO users (id, username, createdAt, avatar, password, friendList, dmChannelList, status) VALUES('" + user.id + "', '" + user.username + "', " + user.createdAt + ", '" + user.avatar + "', '" + user.password + "', '" + user.friendList.join(",") + "', '" + user.dmChannelList.join(",") + "', " + user.status + ")";
+        var query = "INSERT IGNORE INTO users (id, username, createdAt, avatar, password, friendList, dmChannelList, serverList, status) VALUES('" + user.id + "', '" + user.username + "', " + user.createdAt + ", '" + user.avatar + "', '" + user.password + "', '" + user.friendList.join(",") + "', '" + user.dmChannelList.join(",") + "', '" + user.serverList.join(",") + "', " + user.status + ")";
         db.sqlConn.promise().query(query)
         .then((result, err) => {
             if(err) { throw err; }
@@ -16,8 +28,8 @@ module.exports = {
             console.log(" - [db] Adding Channel(id: " + channel.id + ") into the database..."); 
         }
 
-        var query0 = "(id, name, type, createdAt, authorID" + (channel.members == null ? ")" : ", members)")
-        var query1 = "('" + channel.id + "', '" + channel.name + "', "+ channel.type + ", " + channel.createdAt + ", '" + channel.author.id + "'" + (channel.members == null ? ")" : ", '" + channel.members.join(",") + "')")
+        var query0 = "(id, name, type, createdAt, authorID" + (channel.members == null ? ")" : ", members)") + (channel.server == null ? ")" : ", serverID)")
+        var query1 = "('" + channel.id + "', '" + channel.name + "', "+ channel.type + ", " + channel.createdAt + ", '" + channel.author.id + "'" + (channel.members == null ? ")" : ", '" + channel.members.join(",") + "')") + (channel.server == null ? ")" : ", '" + channel.server.id + "')")
         var query = "INSERT IGNORE INTO channels " + query0 + " VALUES" + query1;
         db.sqlConn.promise().query(query)
         .then((result, err) => {
