@@ -190,6 +190,8 @@ module.exports = {
     formatChannel(channel) {
         channel.author = { id: channel.authorID }
         delete channel.authorID
+        channel.server = { id: channel.serverID }
+        delete channel.serverID
         channel.members = channel.members == null ? undefined : channel.members.split(",").filter(a => a.length > 0)
 
         return channel;

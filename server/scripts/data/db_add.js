@@ -28,8 +28,8 @@ module.exports = {
             console.log(" - [db] Adding Channel(id: " + channel.id + ") into the database..."); 
         }
 
-        var query0 = "(id, name, type, createdAt, authorID" + (channel.members == null ? ")" : ", members)") + (channel.server == null ? ")" : ", serverID)")
-        var query1 = "('" + channel.id + "', '" + channel.name + "', "+ channel.type + ", " + channel.createdAt + ", '" + channel.author.id + "'" + (channel.members == null ? ")" : ", '" + channel.members.join(",") + "')") + (channel.server == null ? ")" : ", '" + channel.server.id + "')")
+        var query0 = "(id, name, type, createdAt, authorID" + (channel.members == null ? ")" : ", members") + (channel.server == null ? ")" : ", serverID)")
+        var query1 = "('" + channel.id + "', '" + channel.name + "', "+ channel.type + ", " + channel.createdAt + ", '" + channel.author.id + "'" + (channel.members == null ? "" : ", '" + channel.members.join(",") + "'") + (channel.server == null ? ")" : ", '" + channel.server.id + "')")
         var query = "INSERT IGNORE INTO channels " + query0 + " VALUES" + query1;
         db.sqlConn.promise().query(query)
         .then((result, err) => {
