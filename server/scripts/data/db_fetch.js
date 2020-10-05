@@ -55,12 +55,12 @@ module.exports = {
         return this.formatChannel(result[0][0])
     },
 
-    async fetchChannels(db) {
+    async fetchChannels(db, serverID) {
         if(db.DEBUG) {
             console.log(" - [db] Loading Channels from the database..."); 
         }
 
-        var query0 = "SELECT * FROM channels WHERE type=0 OR type=1";
+        var query0 = "SELECT * FROM channels WHERE serverID='" + serverID + "'";
         var result = await db.sqlConn.promise().query(query0);
         if(result.length < 1 || result[0].length < 1) {
             return [];
