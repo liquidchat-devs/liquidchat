@@ -59,7 +59,6 @@ class App extends React.Component {
     API: new API(this),
     APIEndpoint: "https://nekonetwork.net:8080",
     fileEndpoint: "http://nekonetwork.net:8081",
-    applicationName: "> LiquidChat (dev)"
   };
 
   setFirstChannel = (_e, _channelID) => {
@@ -185,7 +184,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <div className="header0 headerColor">
-          <div className="white text1 marginleft2">{this.state.applicationName}</div>
+          <div className="white text1 marginleft2">LiquidChat (dev) <a class="link marginleft1" href="https://github.com/LamkasDev/liquidchat" target="_blank">(Github)</a></div>
         </div>
         {this.state.waitingForSession === false ?
           <div>
