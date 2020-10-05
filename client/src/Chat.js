@@ -8,10 +8,9 @@ export default class Chat extends React.Component {
     this.setVideoRef = (element, type) => {
       this["video" + type] = element;
     };
-
-    this.props.API.API_fetchChannels(0);
-    this.props.API.API_fetchChannels(1);
+    
     this.props.API.API_fetchFriendRequests();
+    this.props.API.API_fetchServers();
   }
 
   handleEdit = async e => {

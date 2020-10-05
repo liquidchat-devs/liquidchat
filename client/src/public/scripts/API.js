@@ -579,6 +579,33 @@ class API {
             });
         });
     }
+
+    async API_fetchServers() {
+        const reply0 = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchServers', { withCredentials: true }));
+        var currentServers = this.mainClass.state.servers;
+        var newServers = reply0.data;
+        newServers = new Map(newServers.map(obj => [obj.id, obj]));
+
+        newServers.forEach(async(server) => {
+            const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannels?id=' + server.id, { withCredentials: true }));
+            var currentChannels = this.mainClass.state.channels;
+            var newChannels = reply.data;
+            newChannels = new Map(newChannels.map(obj => [obj.id, obj]));
+
+            newChannels.forEach(async(channel) => {
+                const reply2 = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannelMessages?id=' + channel.id, { withCredentials: true }));
+                var messages = reply2.data;
+                channel.messages = messages;
+                currentChannels.set(channel.id, channel);
+
+                if(channel.members !== undefined) { this.API_fetchUsersForChannelMembers(channel); }
+                this.API_fetchUsersForMessages(messages)
+                this.mainClass.setState({
+                    channels: currentChannels
+                });
+            });
+        });
+    }
     //#endregion
 }
 
