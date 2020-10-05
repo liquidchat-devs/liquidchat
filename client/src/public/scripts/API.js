@@ -492,9 +492,9 @@ class API {
     //#endregion
 
     //#region Channels
-    async API_createChannel(channelName, channelType) {
+    async API_createChannel(serverID, channelName, channelType) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createChannel', {
-            name: channelName, type: channelType
+            server: { id: serverID }, name: channelName, type: channelType
         }, { withCredentials: true });
 
         if(reply.data.status !== 1) {
@@ -504,7 +504,7 @@ class API {
         }
     }
 
-    async API_createChannelDM(channelName, channelMembers) {
+    async API_createChannelDM(serverID, channelName, channelMembers) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createChannel', {
             name: channelName, type: 2, members: channelMembers
         }, { withCredentials: true });
@@ -582,27 +582,31 @@ class API {
 
     async API_fetchServers() {
         const reply0 = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchServers', { withCredentials: true }));
-        var currentServers = this.mainClass.state.servers;
         var newServers = reply0.data;
         newServers = new Map(newServers.map(obj => [obj.id, obj]));
 
         newServers.forEach(async(server) => {
             const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannels?id=' + server.id, { withCredentials: true }));
-            var currentChannels = this.mainClass.state.channels;
             var newChannels = reply.data;
             newChannels = new Map(newChannels.map(obj => [obj.id, obj]));
 
             newChannels.forEach(async(channel) => {
                 const reply2 = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannelMessages?id=' + channel.id, { withCredentials: true }));
                 var messages = reply2.data;
-                channel.messages = messages;
-                currentChannels.set(channel.id, channel);
+
+                var newChannel = newChannels.get(channel.id)
+                newChannel.messages = messages;
+                newChannels.set(channel.id, newChannel)
 
                 if(channel.members !== undefined) { this.API_fetchUsersForChannelMembers(channel); }
                 this.API_fetchUsersForMessages(messages)
                 this.mainClass.setState({
-                    channels: currentChannels
+                    channels: newChannels
                 });
+            });
+
+            this.mainClass.setState({
+                servers: newServers
             });
         });
     }

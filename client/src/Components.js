@@ -71,7 +71,7 @@ export class ChannelSelector extends React.Component {
     let voiceGroup = this.props.currentVoiceGroup;
     let loggedUser = this.props.getUser(this.props.session.userID);
 
-    channels = channels.filter(channel => { return ((channel.type === 0 || channel.type === 1) && this.props.channelTypes === 2) || (channel.type === 2 && this.props.channelTypes === 1); })
+    channels = channels.filter(channel => { return ((channel.type === 0 || channel.type === 1) && this.props.channelTypes === 2 && channel.server.id === this.props.selectedServer) || (channel.type === 2 && this.props.channelTypes === 1); })
     const channelList = channels.map((channel, i) => {
       if(i === 0) { this.previousFirstChannel = this.firstChannel; this.firstChannel = channel.id; }
       let channelName = channel.name.length < 12 ? channel.name : channel.name.substring(0, 9) + "..."
@@ -167,6 +167,19 @@ export class ChannelSelector extends React.Component {
       )
     });
 
+    const serverList = loggedUser.serverList.map((serverID, i) => {
+      const server = this.props.getServer(serverID);
+      if(server === -1) {
+        return null;
+      }
+      
+      return (
+        <div className={this.props.selectedServer === server.id ? "white headerColor channel selectedChannelColor" : "white headerColor channel"} onClick={() => { this.props.setSelectedServer(server.id); this.props.switchChannelTypes(2) }}>
+          {server.name}
+        </div>
+      )
+    });
+
     return (
       <div className="flex">
         <div className="channels headerColor">
@@ -176,7 +189,8 @@ export class ChannelSelector extends React.Component {
           <div className={this.props.channelTypes === 1 ? "white headerColor channel selectedChannelColor" : "white headerColor channel"} onClick={() => { this.props.switchChannelTypes(1) }}>
             DMs
           </div>
-          <div className={this.props.channelTypes === 2 ? "white headerColor channel selectedChannelColor" : "white headerColor channel"} onClick={() => { this.props.switchDialogState(16) }}>
+          {serverList}
+          <div className="white headerColor channel" onClick={() => { this.props.switchDialogState(16) }}>
             +
           </div>
         </div>
@@ -227,7 +241,7 @@ export class DialogManager extends React.Component {
   render() {
     switch(this.props.dialogState) {
       case 1:
-        return <CreateChannelDialog API={this.props.API} switchDialogState={this.props.switchDialogState} />
+        return <CreateChannelDialog selectedServer={this.props.selectedServer} API={this.props.API} switchDialogState={this.props.switchDialogState} />
 
       case 2:
         return <MessageOptionsBox API={this.props.API} switchDialogState={this.props.switchDialogState} startEditingMessage={this.props.startEditingMessage}
@@ -302,7 +316,7 @@ export class CreateChannelDialog extends React.Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    const res = await this.props.API.API_createChannel(this.state.channelName, this.state.channelType);
+    const res = await this.props.API.API_createChannel(this.props.selectedServer, this.state.channelName, this.state.channelType);
     this.setState({
       channelCreationResult: res,
     });
@@ -1038,4 +1052,4 @@ export class ForgottenPasswordBox extends React.Component {
   }
 }
 
-export default { ChannelHeader, Account, ChannelSelector, CreateChannelDialog };
+export default { ChannelHeader, Account, ChannelSelector };

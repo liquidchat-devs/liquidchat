@@ -35,9 +35,11 @@ class App extends React.Component {
     selectedUser: -1,
     selectedImage: -1,
     selectedChannel: -1,
+    selectedServer: -1,
 
     //Data
     users: new Map(),
+    servers: new Map(),
     channels: new Map(),
     friendRequests: new Map(),
 
@@ -136,6 +138,12 @@ class App extends React.Component {
     });
   }
 
+  setSelectedServer = val => {
+    this.setState({
+      selectedServer: val
+    });
+  }
+
   setSelectedChannel =  (channel, x, y) => {
     this.setState({
       selectedChannel: channel,
@@ -155,6 +163,14 @@ class App extends React.Component {
   getUser = (id) => {
     if(this.state.users.has(id)) {
       return this.state.users.get(id)
+    } else {
+      return -1;
+    }
+  }
+
+  getServer = (id) => {
+    if(this.state.servers.has(id)) {
+      return this.state.servers.get(id)
     } else {
       return -1;
     }
@@ -189,14 +205,14 @@ class App extends React.Component {
         {this.state.waitingForSession === false ?
           <div>
             <DialogManager
-            channels={this.state.channels} currentChannel={this.state.currentChannel} switchChannelTypes={this.switchChannelTypes} switchChannel={this.switchChannel} setSelectedChannel={this.setSelectedChannel} selectedChannel={this.state.selectedChannel} selectedImage={this.state.selectedImage} API={this.state.API}
+            selectedServer={this.props.selectedServer} channels={this.state.channels} currentChannel={this.state.currentChannel} switchChannelTypes={this.switchChannelTypes} switchChannel={this.switchChannel} setSelectedChannel={this.setSelectedChannel} selectedChannel={this.state.selectedChannel} selectedImage={this.state.selectedImage} API={this.state.API}
             dialogState={this.state.dialogState} switchDialogState={this.switchDialogState} startEditingMessage={this.startEditingMessage} setSelectedUser={this.setSelectedUser} getUser={this.getUser} selectedUser={this.state.selectedUser}
             boxX={this.state.boxX} boxY={this.state.boxY} selectedMessage={this.state.selectedMessage} session={this.state.session} fileEndpoint={this.state.fileEndpoint} setEditedMessage={this.setEditedMessage} setSelectedMessage={this.setSelectedMessage}/>
             <Account
             API={this.state.API} fileEndpoint={this.state.fileEndpoint} switchDialogState={this.switchDialogState} setSelectedMessage={this.setSelectedMessage}
             session={this.state.session} getUser={this.getUser}/>
             <div className="flex">
-              <ChannelSelector currentChannel={this.state.currentChannel}
+              <ChannelSelector getServer={this.getServer} selectedServer={this.state.selectedServer} selectedChannel={this.state.selectedChannel} setSelectedServer={this.setSelectedServer} currentChannel={this.state.currentChannel}
               setSelectedChannel={this.setSelectedChannel} API={this.state.API} switchDialogState={this.switchDialogState} channelTypes={this.state.channelTypes} switchChannelTypes={this.switchChannelTypes}
               session={this.state.session} fileEndpoint={this.state.fileEndpoint} friendRequests={this.state.friendRequests} setSelectedUser={this.setSelectedUser}
               channels={this.state.channels} setFirstChannel={this.setFirstChannel} switchChannel={this.switchChannel} currentVoiceGroup={this.state.currentVoiceGroup} getUser={this.getUser}/>
