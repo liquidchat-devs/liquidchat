@@ -155,15 +155,15 @@ module.exports = {
     },
 
     formatServer(server) {
-        server.channelList = server.channelList.split(",")
+        server.channelList = server.channelList.split(",").filter(a => a.length > 0)
         
         return server;
     },
 
     formatUser(user, containSensitive, containPassword) {
-        user.friendList = user.friendList.split(",")
-        user.dmChannelList = user.dmChannelList.split(",")
-        user.serverList = user.serverList.split(",")
+        user.friendList = user.friendList.split(",").filter(a => a.length > 0)
+        user.dmChannelList = user.dmChannelList.split(",").filter(a => a.length > 0)
+        user.serverList = user.serverList.split(",").filter(a => a.length > 0)
 
         if(containPassword !== true) {
             delete user.password
@@ -190,7 +190,7 @@ module.exports = {
     formatChannel(channel) {
         channel.author = { id: channel.authorID }
         delete channel.authorID
-        channel.members = channel.members == null ? undefined : channel.members.split(",")
+        channel.members = channel.members == null ? undefined : channel.members.split(",").filter(a => a.length > 0)
 
         return channel;
     },
