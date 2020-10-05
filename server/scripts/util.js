@@ -571,9 +571,9 @@ class Util {
             author: {
                 id: user.id
             },
-            channels: []
+            channelList: []
         }
-        
+
         socket.emit("createServer", JSON.stringify(server))
         await this.app.db.db_add.addServer(this.app.db, server);
 
