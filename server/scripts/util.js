@@ -531,6 +531,7 @@ class Util {
         switch(_channel.type) {
             case 0:
             case 1:
+                channel.server = { id: _channel.server.id };
                 this.app.sessionSockets.forEach(socket => {
                     if(socket.connected) {
                         socket.emit("createChannel", JSON.stringify(channel))
