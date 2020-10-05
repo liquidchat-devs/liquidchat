@@ -155,12 +155,15 @@ module.exports = {
     },
 
     formatServer(server) {
+        server.channelList = server.channelList.split(",")
+        
         return server;
     },
 
     formatUser(user, containSensitive, containPassword) {
         user.friendList = user.friendList.split(",")
         user.dmChannelList = user.dmChannelList.split(",")
+        user.serverList = user.serverList.split(",")
 
         if(containPassword !== true) {
             delete user.password
