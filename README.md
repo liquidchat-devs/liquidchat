@@ -3,15 +3,17 @@
 
 🚩 **Planned features:**  
 > Personal Emotes  
+> Server Emotes  
 > Idle/DND/Invisible Status  
-> Custom Statuses
+> Custom Statuses  
+> Server Settings  
 
 🏁 **Features:**  
-> Global Message Channels  
+> Servers with text channels  
+> DM Channels  
+> Group Chats  
 > File Support  
 > Friend Features (Adding/Removing friends)  
-> DM Channels  
-> Group Chats
 
 ✔️ Releases: https://github.com/LamkasDev/liquidchat/releases  
 🔥 API: https://github.com/LamkasDev/liquidchat.js  
@@ -21,13 +23,17 @@
 ### Build instructions:
 ##### a) How to build client (Windows)
 > run `npm run buildproduction`  
-> the installer will be built into `client/dist`
+> the installer will be built into `client/dist`  
 
-##### b) How to test client (Windows)
+##### b) How to build web version (Windows)
+> run `npm run build`  
+> all website's assets will be packed into `client/build`
+
+##### c) How to test client (Windows)
 > run `yarn start`  
 
-##### c) How to host server yourself
-> run `node server.js`
+##### d) How to host server yourself
+> run `node server.js`  
 > run `http-server -p 8081` in a separate directory outside `/server`
 
 ##### e) Additional setup
