@@ -156,6 +156,8 @@ module.exports = {
 
     formatServer(server) {
         server.channelList = server.channelList.split(",").filter(a => a.length > 0)
+        server.author = { id: server.authorID }
+        delete server.authorID
         
         return server;
     },

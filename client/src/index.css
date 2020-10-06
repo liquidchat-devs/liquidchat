@@ -192,6 +192,10 @@ code {
   margin-left: 20px;
 }
 
+.marginright2 {
+  margin-right: 10px;
+}
+
 /* Buttons */
 .button1 {
   width: 170px;
@@ -420,6 +424,14 @@ code {
   justify-content: center;
 }
 
+.server {
+  height: 52px;
+  width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .channels {
   height: calc(100vh - 78px);
   width: 120px;
@@ -492,6 +504,12 @@ code {
   width: 35px;
   height: 35px;
   border-radius: 50%;
+}
+
+.avatar4 {
+  width: 35px;
+  height: 35px;
+  border-radius: 30%;
 }
 
 .section {

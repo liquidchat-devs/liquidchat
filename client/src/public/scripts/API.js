@@ -67,6 +67,34 @@ class API {
             });
         });
 
+        socket.on('createServer', (serverData) => {
+            var server = JSON.parse(serverData);
+            var newServers = this.mainClass.state.servers.set(server.id, server);
+            this.mainClass.setState({
+                channels: newServers
+            });
+        });
+        socket.on('editServer', (serverData) => {
+            var _server = JSON.parse(serverData);
+
+            var newServers = new Map(this.mainClass.state.servers)
+            var server = newServers.get(_server.id);
+            server.avatar = _server.avatar;
+            newServers.set(server.id, server);
+            this.mainClass.setState({
+                servers: newServers
+            });
+        });
+        socket.on('deleteServer', (serverData) => {
+            var server = JSON.parse(serverData);
+
+            var newServers = new Map(this.mainClass.state.servers)
+            newServers.delete(server.id);
+            this.mainClass.setState({
+                servers: newServers
+            });
+        });
+
         socket.on('createChannel', (channelData) => {
             var channel = JSON.parse(channelData);
             channel.messages = [];
@@ -488,6 +516,24 @@ class API {
         } else {
             return reply.data;
         }
+    }
+
+    async API_updateServerAvatar(file, serverID) {
+        var data = new FormData();
+        data.append("fileUploaded", file)
+
+        await axios({
+            method: 'post',
+            url: this.mainClass.state.APIEndpoint + '/updateServerAvatar?serverID=' + serverID,
+            processData: false,
+            contentType: false,
+            cache: false,
+            enctype: 'multipart/form-data',
+            data: data,
+            withCredentials: true
+        });
+
+        return true;
     }
     //#endregion
 
