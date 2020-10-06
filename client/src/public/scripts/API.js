@@ -535,6 +535,14 @@ class API {
 
         return true;
     }
+
+    async API_deleteServer(serverID) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/deleteServer', {
+            id: serverID
+        }, { withCredentials: true });
+
+        return reply.data.status;
+    }
     //#endregion
 
     //#region Channels
@@ -550,7 +558,7 @@ class API {
         }
     }
 
-    async API_createChannelDM(serverID, channelName, channelMembers) {
+    async API_createChannelDM(channelName, channelMembers) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createChannel', {
             name: channelName, type: 2, members: channelMembers
         }, { withCredentials: true });
@@ -633,8 +641,12 @@ class API {
 
         newServers.forEach(async(server) => {
             const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannels?id=' + server.id, { withCredentials: true }));
+            const reply2 = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchDMChannels', { withCredentials: true }));
             var newChannels = reply.data;
+            var newChannels2 = reply2.data;
             newChannels = new Map(newChannels.map(obj => [obj.id, obj]));
+            newChannels2 = new Map(newChannels2.map(obj => [obj.id, obj]));
+            newChannels = new Map([...newChannels, ...newChannels2]);
 
             newChannels.forEach(async(channel) => {
                 const reply2 = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannelMessages?id=' + channel.id, { withCredentials: true }));
