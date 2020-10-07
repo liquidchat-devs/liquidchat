@@ -519,7 +519,7 @@ class API {
         }
     }
 
-    async API_updateServerAvatar(file, serverID) {
+    async API_updateServerAvatar(serverID, file) {
         var data = new FormData();
         data.append("fileUploaded", file)
 

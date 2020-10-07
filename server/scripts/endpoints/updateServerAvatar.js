@@ -16,7 +16,7 @@ class Endpoint {
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
         var form = this.app.formidable({ multiples: true });
-        var server = await this.app.db.db_fetch.fetchUser(this.app.db, serverID);
+        var server = await this.app.db.db_fetch.fetchServer(this.app.db, serverID);
 
         if(server === undefined) {
             res.send(JSON.stringify({ status: -1 }))

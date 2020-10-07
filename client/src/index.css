@@ -47,6 +47,10 @@ code {
 }
 
 /* Utils */
+.nopointer {
+  cursor: default;
+}
+
 .opacity0 {
   opacity: 0
 }
@@ -189,7 +193,7 @@ code {
 }
 
 .marginleft4 {
-  margin-left: 20px;
+  margin-left: 25px;
 }
 
 .marginright2 {
@@ -655,4 +659,12 @@ code {
 
 .playing {
   opacity: 1;
+}
+
+.avatarOverlay {
+  margin-left: -110px;
+  opacity: 0.55;
+  background-color: rgb(0, 0, 0);
+  z-index: 2;
+  display: none;
 }
