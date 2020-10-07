@@ -43,7 +43,7 @@ class Endpoint {
 
         res.send(JSON.stringify({ status: 1 }))
         voiceGroup.users.forEach(id => {
-            this.app.epFunc.emitToUser(this.app, id, "updateVoiceGroup", voiceGroup)
+            this.app.epFunc.emitToUser(id, "updateVoiceGroup", voiceGroup)
         });
     }
 }

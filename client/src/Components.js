@@ -156,7 +156,7 @@ export class ChannelSelector extends React.Component {
       }
 
       return (
-        <div className="friendEntry selectedChannelColor" onContextMenu={(e) => { this.props.setSelectedUser(friend, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
+        <div key={i} className="friendEntry selectedChannelColor" onContextMenu={(e) => { this.props.setSelectedUser(friend, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="flex">
             <img alt="" className="avatar3 marginleft1 margintop1" src={this.props.fileEndpoint + "/" + friend.avatar}/>
             <div className="white marginleft2 margintop1b">
@@ -273,7 +273,7 @@ export class DialogManager extends React.Component {
         return <ImageBoxOptions fileEndpoint={this.props.fileEndpoint} selectedImage={this.props.selectedImage} switchDialogState={this.props.switchDialogState} copyID={this.copyID} boxX={this.props.boxX} boxY={this.props.boxY} setSelectedMessage={this.props.setSelectedMessage}/>
 
       case 10:
-        return <ChannelOptionsBox API={this.props.API} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedChannel={this.props.selectedChannel} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
+        return <ChannelOptionsBox getChannel={this.props.getChannel} API={this.props.API} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedChannel={this.props.selectedChannel} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
 
       case 11:
         return <EditChannelDialog selectedChannel={this.props.selectedChannel} API={this.props.API} switchDialogState={this.props.switchDialogState} />
@@ -295,6 +295,9 @@ export class DialogManager extends React.Component {
 
       case 17:
         return <ServerOptionsBox getServer={this.props.getServer} API={this.props.API} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedServer={this.props.selectedServer} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
+
+      case 18:
+        return <EditServerDialog selectedServer={this.props.selectedServer} API={this.props.API} switchDialogState={this.props.switchDialogState} />
 
       default:
         return null;
@@ -595,7 +598,7 @@ export class InviteFriendsBox extends React.Component {
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox">
-          <div className="white text3 marginleft2 margintop1a">> Invite Friends-</div>
+          <div className="white text3 marginleft2 margintop1a">> Add Friends-</div>
           {friendList}
         </div>
       </div>
@@ -897,12 +900,15 @@ export class ChannelOptionsBox extends React.Component {
   }
 
   render() {
+    const channel = this.props.getChannel(this.props.selectedChannel)
+    if(channel === -1) {  return null; }
+
     return (
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0); }} style={{ opacity: 0.3 }}></div>
-        <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY, height: this.props.selectedChannel.author.id === this.props.session.userID ? 45 : 30  }}>
+        <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY, height: channel.author.id === this.props.session.userID ? 45 : 30  }}>
           {
-            this.props.selectedChannel.author.id === this.props.session.userID ?
+            channel.author.id === this.props.session.userID ?
             <div>
               <div className="button2 alignmiddle chatColor" onClick={() => { this.props.switchDialogState(11); }}>
                 <p className="white text1">> Edit Channel</p>
@@ -911,12 +917,12 @@ export class ChannelOptionsBox extends React.Component {
                 <p className="white text1">> Delete Channel</p>
               </div>
               <div className="button2 alignmiddle chatColor" onClick={() => { this.props.switchDialogState(12); }}>
-                <p className="white text1">> Invite Friends</p>
+                <p className="white text1">> Add Friends</p>
               </div>
             </div> :
             ""
           }
-          <div className="button2 alignmiddle chatColor" onClick={() => { this.props.copyID(this.props.selectedChannel.id); }}>
+          <div className="button2 alignmiddle chatColor" onClick={() => { this.props.copyID(this.props.selectedChannel); }}>
             <p className="white text1">> Copy ID</p>
           </div>
         </div>
@@ -952,7 +958,7 @@ export class ServerOptionsBox extends React.Component {
           {
             server.author.id === this.props.session.userID ?
             <div>
-              <div className="button2 alignmiddle chatColor" onClick={() => { this.props.switchDialogState(11); }}>
+              <div className="button2 alignmiddle chatColor" onClick={() => { this.props.switchDialogState(17); }}>
                 <p className="white text1">> Edit Server</p>
               </div>
               <div className="button2 alignmiddle chatColor" onClick={(e) => { this.handleDelete(e); }}>

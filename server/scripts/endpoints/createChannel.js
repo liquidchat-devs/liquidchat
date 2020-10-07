@@ -50,7 +50,7 @@ class Endpoint {
                     user2.dmChannelList.push(channel.id);
                     this.app.db.db_edit.editUser(this.app.db, user2);
 
-                    this.app.epFunc.emitToUser(this.app, user2.id, "createChannel", channel);
+                    this.app.epFunc.emitToUser(user2.id, "createChannel", channel);
                 });
                 break;
         }

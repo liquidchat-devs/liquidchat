@@ -35,11 +35,11 @@ class Endpoint {
         }
 
         targetUser.dmChannelList.push(channel.id);
-        this.app.epFunc.emitToUser(this.app, targetUser.id, "createChannel", channel);
+        this.app.epFunc.emitToUser(targetUser.id, "createChannel", channel);
 
         channel.members.push(targetUser.id);
         channel.members.forEach(id => {
-            this.app.epFunc.emitToUser(this.app, id, "updateChannel", channel)
+            this.app.epFunc.emitToUser(id, "updateChannel", channel)
         });
 
         await this.app.db.db_edit.editChannel(this.app.db, channel);

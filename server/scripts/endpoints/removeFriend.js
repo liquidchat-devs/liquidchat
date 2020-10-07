@@ -33,7 +33,7 @@ class Endpoint {
 
         if(socket.connected) {
             socket.emit("updateUser", JSON.stringify(user))
-            this.app.epFunc.emitToUser(this.app, targetUser.id, "updateUser", targetUser);
+            this.app.epFunc.emitToUser(targetUser.id, "updateUser", targetUser);
         }
     }
 }

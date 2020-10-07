@@ -37,7 +37,7 @@ class Endpoint {
         await this.app.db.db_add.addServer(this.app.db, server);
 
         user.serverList.push(server.id);
-        this.app.epFunc.emitToUser(this.app, user.id, "updateUser", user);
+        this.app.epFunc.emitToUser(user.id, "updateUser", user);
         await this.app.db.db_edit.editUser(this.app.db, user);
     }
 }

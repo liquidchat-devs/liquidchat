@@ -79,6 +79,7 @@ class API {
 
             var newServers = new Map(this.mainClass.state.servers)
             var server = newServers.get(_server.id);
+            server.name = _server.name;
             server.avatar = _server.avatar;
             newServers.set(server.id, server);
             this.mainClass.setState({

@@ -36,11 +36,11 @@ class Endpoint {
 
         channel.members.splice(channel.members.indexOf(targetUser.id), 1);
         channel.members.forEach(id => {
-            this.app.epFunc.emitToUser(this.app, id, "updateChannel", channel)
+            this.app.epFunc.emitToUser(id, "updateChannel", channel)
         });
 
         targetUser.dmChannelList.splice(targetUser.dmChannelList.indexOf(channel.id), 1);
-        this.app.epFunc.emitToUser(this.app, targetUser.id, "deleteChannel", channel);
+        this.app.epFunc.emitToUser(targetUser.id, "deleteChannel", channel);
 
         await this.app.db.db_edit.editChannel(this.app.db, channel);
         await this.app.db.db_edit.editUser(this.app.db, targetUser);

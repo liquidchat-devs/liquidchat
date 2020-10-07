@@ -44,8 +44,8 @@ class Endpoint {
             friendRequestsIn = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, targetUser.id, 1);
             friendRequests = friendRequestsOut.concat(friendRequestsIn);
 
-            this.app.epFunc.emitToUser(this.app, targetUser.id, "updateUser", targetUser);
-            this.app.epFunc.emitToUser(this.app, targetUser.id, "updateFriendRequests", friendRequests);
+            this.app.epFunc.emitToUser(targetUser.id, "updateUser", targetUser);
+            this.app.epFunc.emitToUser(targetUser.id, "updateFriendRequests", friendRequests);
         }
     }
 
