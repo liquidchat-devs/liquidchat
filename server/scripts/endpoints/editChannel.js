@@ -5,7 +5,7 @@ class Endpoint {
 
     handle() {
         this.app.post('/editChannel', (async(req, res) => {
-            if(!this.app.isSessionValid(req, res)) { return; }
+            if(!this.app.isSessionValid(app, req, res)) { return; }
             
             await this.editChannel(req, res, req.body)
             console.log("> edited channel - " + req.body.id)

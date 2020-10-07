@@ -5,7 +5,7 @@ class Endpoint {
 
     handle() {
         this.app.post('/message', (async(req, res) => {
-            if(!this.app.isSessionValid(req, res)) { return; }
+            if(!this.app.isSessionValid(app, req, res)) { return; }
 
             await this.sendMessage(req, res, req.body)
             console.log("> received message - " + req.body.text)

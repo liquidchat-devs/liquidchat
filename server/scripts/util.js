@@ -126,8 +126,8 @@ class Util {
     }
 
     //Checks if incoming request is associated with a valid session
-    isSessionValid(req, res) {
-        if(req.cookies['sessionID'] === undefined || !this.app.sessions.has(req.cookies['sessionID']) || !this.app.sessionSockets.has(req.cookies['sessionID']) ) {
+    isSessionValid(app, req, res) {
+        if(req.cookies['sessionID'] === undefined || !app.sessions.has(req.cookies['sessionID']) || !app.sessionSockets.has(req.cookies['sessionID']) ) {
             console.log("> invalid session");
             res.sendStatus(401);
             return false;

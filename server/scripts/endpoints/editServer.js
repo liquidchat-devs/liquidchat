@@ -5,7 +5,7 @@ class Endpoint {
 
     handle() {
         this.app.post('/editServer', (async(req, res) => {
-            if(!this.app.isSessionValid(req, res)) { return; }
+            if(!this.app.isSessionValid(app, req, res)) { return; }
 
             await this.editServer(req, res, req.body);
             console.log("> received server update - " + req.body.id);

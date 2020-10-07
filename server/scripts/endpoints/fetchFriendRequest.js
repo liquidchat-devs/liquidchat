@@ -5,7 +5,7 @@ class Endpoint {
 
     handle() {
         this.app.get('/fetchFriendRequest', (async(req, res) => {
-            if(!this.app.isSessionValid(req, res)) { return; }
+            if(!this.app.isSessionValid(app, req, res)) { return; }
             const data = req.query;
 
             var friendRequest = await this.app.db.db_fetch.fetchFriendRequest(this.app.db, data.id);

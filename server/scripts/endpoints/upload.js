@@ -5,7 +5,7 @@ class Endpoint {
 
     handle() {
         this.app.post('/upload', (async(req, res) => {
-            if(!this.app.isSessionValid(req, res)) { return; }
+            if(!this.app.isSessionValid(app, req, res)) { return; }
 
             await this.uploadFile(req, res)
             console.log("> received file - " + req.query.fileName)

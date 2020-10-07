@@ -5,7 +5,7 @@ class Endpoint {
 
     handle() {
         this.app.get('/fetchChannelMessages', (async(req, res) => {
-            if(!this.app.isSessionValid(req, res)) { return; }
+            if(!this.app.isSessionValid(app, req, res)) { return; }
             const data = req.query;
 
             var messages = await this.app.db.db_fetch.fetchMessages(this.app.db, data.id);

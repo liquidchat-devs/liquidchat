@@ -5,7 +5,7 @@ class Endpoint {
 
     handle() {
         this.app.post('/acceptFriendRequest', (async(req, res) => {
-            if(!this.app.isSessionValid(req, res)) { return; }
+            if(!this.app.isSessionValid(app, req, res)) { return; }
 
             await this.app.epFunc.processFriendRequest(req, res, req.body, true)
             console.log("> accepted friend request - " + req.body.id)

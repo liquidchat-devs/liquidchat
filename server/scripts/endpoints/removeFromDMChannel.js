@@ -5,7 +5,7 @@ class Endpoint {
 
     handle() {
         this.app.post('/removeFromDMChannel', (async(req, res) => {
-            if(!this.app.isSessionValid(req, res)) { return; }
+            if(!this.app.isSessionValid(app, req, res)) { return; }
 
             await this.removeFromDMChannel(req, res, req.body)
             console.log("> removed from dm channel - " + req.body.channel.id + "/" + req.body.user.id)

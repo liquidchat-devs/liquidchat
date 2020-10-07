@@ -5,7 +5,7 @@ class Endpoint {
 
     handle() {
         this.app.post('/deleteServer', (async(req, res) => {
-            if(!this.app.isSessionValid(req, res)) { return; }
+            if(!this.app.isSessionValid(app, req, res)) { return; }
 
             await this.deleteServer(req, res, req.body)
             console.log("> deleted server - " + req.body.id)
