@@ -4,12 +4,12 @@ class Endpoint {
     }
 
     handle() {
-        this.app.post('/deleteServer', async(req, res) => {
+        this.app.post('/deleteServer', (async(req, res) => {
             if(!this.app.isSessionValid(req, res)) { return; }
 
             await this.deleteServer(req, res, req.body)
             console.log("> deleted server - " + req.body.id)
-        });
+        }).bind(this));
     }
 
     async deleteServer(req, res, _server) {

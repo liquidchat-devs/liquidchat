@@ -4,12 +4,12 @@ class Endpoint {
     }
 
     handle() {
-        this.app.post('/updateAvatar', async(req, res) => {
+        this.app.post('/updateAvatar', (async(req, res) => {
             if(!this.app.isSessionValid(req, res)) { return; }
 
             await this.updateAvatar(req, res);
             console.log("> received avatar update - " + req.query.fileName);
-        });
+        }).bind(this));
     }
 
     async updateAvatar(req, res) {

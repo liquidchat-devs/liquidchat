@@ -4,12 +4,12 @@ class Endpoint {
     }
 
     handle() {
-        this.app.post('/createChannel', async(req, res) => {
+        this.app.post('/createChannel', (async(req, res) => {
             if(!this.app.isSessionValid(req, res)) { return; }
             
             await this.createChannel(req, res, req.body)
             console.log("> created channel - " + req.body.name)
-        });
+        }).bind(this));
     }
 
     async createChannel(req, res, _channel) {

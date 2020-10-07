@@ -4,7 +4,7 @@ class Endpoint {
     }
 
     handle() {
-        this.app.get('/fetchServers', async(req, res) => {
+        this.app.get('/fetchServers', (async(req, res) => {
             if(!this.app.isSessionValid(req, res)) { return; }
             var session = this.app.sessions.get(req.cookies['sessionID']);
             var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
@@ -16,7 +16,7 @@ class Endpoint {
             }
 
             res.send(JSON.stringify(servers));
-        });
+        }).bind(this));
     }
 }
 

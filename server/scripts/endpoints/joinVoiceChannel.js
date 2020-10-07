@@ -4,12 +4,12 @@ class Endpoint {
     }
 
     handle() {
-        this.app.post('/joinVoiceChannel', async(req, res) => {
+        this.app.post('/joinVoiceChannel', (async(req, res) => {
             if(!this.app.isSessionValid(req, res)) { return; }
 
             await this.joinVoiceChannel(req, res, req.body)
             console.log("> received voice connection - " + req.body.channel.id)
-        });
+        }).bind(this));
     }
 
     async joinVoiceChannel(req, res, connection) {

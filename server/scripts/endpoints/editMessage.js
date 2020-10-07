@@ -4,12 +4,12 @@ class Endpoint {
     }
 
     handle() {
-        this.app.post('/editMessage', async(req, res) => {
+        this.app.post('/editMessage', (async(req, res) => {
             if(!this.app.isSessionValid(req, res)) { return; }
 
             await this.editMessage(req, res, req.body)
             console.log("> received message edit - " + req.body.text)
-        });
+        }).bind(this));
     }
 
     async editMessage(req, res, _message) {

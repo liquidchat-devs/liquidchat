@@ -4,10 +4,10 @@ class Endpoint {
     }
 
     handle() {
-        this.app.post('/logout', async(req, res) => {
+        this.app.post('/logout', (async(req, res) => {
             res.clearCookie("sessionID");
             res.send(JSON.stringify({ status: 1 }))
-        })
+        }).bind(this))
     }
 }
 

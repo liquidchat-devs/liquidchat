@@ -4,7 +4,7 @@ class Endpoint {
     }
 
     handle() {
-        this.app.post('/register', async(req, res) => {
+        this.app.post('/register', (async(req, res) => {
             const data = req.body;
             var user = await this.app.db.db_fetch.fetchUserByUsername(this.app.db, data.username);
 
@@ -49,7 +49,7 @@ class Endpoint {
                 });
                 res.send(JSON.stringify(session));
             }
-        })
+        }).bind(this))
     }
 }
 

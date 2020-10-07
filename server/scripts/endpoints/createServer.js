@@ -4,12 +4,12 @@ class Endpoint {
     }
 
     handle() {
-        this.app.post('/createServer', async(req, res) => {
+        this.app.post('/createServer', (async(req, res) => {
             if(!this.app.isSessionValid(req, res)) { return; }
             
             await this.createServer(req, res, req.body)
             console.log("> created server - " + req.body.name)
-        });
+        }).bind(this));
     }
 
     async createServer(req, res, _server) {

@@ -4,12 +4,12 @@ class Endpoint {
     }
 
     handle() {
-        this.app.post('/editChannel', async(req, res) => {
+        this.app.post('/editChannel', (async(req, res) => {
             if(!this.app.isSessionValid(req, res)) { return; }
             
             await this.editChannel(req, res, req.body)
             console.log("> edited channel - " + req.body.id)
-        });
+        }).bind(this));
     }
 
     async editChannel(req, res, _channel) {

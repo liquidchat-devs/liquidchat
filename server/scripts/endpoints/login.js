@@ -4,7 +4,7 @@ class Endpoint {
     }
 
     handle() {
-        this.app.post('/login', async(req, res) => {
+        this.app.post('/login', (async(req, res) => {
             const data = req.body;
             switch(data.authType) {
                 case "autologin":
@@ -44,7 +44,7 @@ class Endpoint {
                     }
                     break;
             }
-        })
+        }).bind(this))
     }
 }
 

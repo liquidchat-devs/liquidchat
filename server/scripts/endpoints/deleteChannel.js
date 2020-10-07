@@ -4,12 +4,12 @@ class Endpoint {
     }
 
     handle() {
-        this.app.post('/deleteChannel', async(req, res) => {
+        this.app.post('/deleteChannel', (async(req, res) => {
             if(!this.app.isSessionValid(req, res)) { return; }
 
             await this.deleteChannel(req, res, req.body)
             console.log("> deleted channel - " + req.body.id)
-        });
+        }).bind(this));
     }
 
     async deleteChannel(req, res, _channel) {
