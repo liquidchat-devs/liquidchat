@@ -4,9 +4,9 @@ module.exports = {
             console.log(" - [db] Editing Server(id: " + server.id + ") in the database..."); 
         }
 
-        var query0 = "name='" + server.name + "', avatar='" + server.avatar + "', channels='" + server.channels.join(",") + "', members='" + server.members.join(",") + "'"
+        var query0 = "name=?, avatar=?, channels=?, members=?"
         var query = "UPDATE servers SET " + query0 + " WHERE id='" + server.id + "'";
-        db.sqlConn.promise().query(query)
+        db.sqlConn.promise().execute(query, [ server.name, server.avatar, server.channels.join(","), server.members.join(",") ])
         .then((result, err) => {
             if(err) { throw err; }
         });
@@ -17,9 +17,13 @@ module.exports = {
             console.log(" - [db] Editing User(id: " + user.id + ") in the database..."); 
         }
 
-        var query0 = "username='" + user.username + "', avatar='" + user.avatar + "', friends='" + user.friends.join(",") + "', dmChannels='" + user.dmChannels.join(",") + "', servers='" + user.servers.join(",") + "', status=" + user.status + (user.email == null ? "" : ", email='" + user.email + "'") + (user.password == null ? "" : ", password='" + user.password + "'")
+        var query0 = "username=?, avatar=?, friends=?, dmChannels=?, servers=?, status=?" + (user.email == null ? "" : ", email=?") + (user.password == null ? "" : ", password=?")
+        var query1 = [ user.username, user.avatar, user.friends.join(","), user.dmChannels.join(","), user.servers.join(","), user.status ]
+        if(user.email != null) { query1.push(user.email); }
+        if(user.password != null) { query1.push(user.password); }
+
         var query = "UPDATE users SET " + query0 + " WHERE id='" + user.id + "'";
-        db.sqlConn.promise().query(query)
+        db.sqlConn.promise().execute(query, query1)
         .then((result, err) => {
             if(err) { throw err; }
         });
@@ -30,9 +34,13 @@ module.exports = {
             console.log(" - [db] Editing Message(id: " + message.id + ") in the database..."); 
         }
 
-        var query0 = "text='" + message.text + "', edited=" + message.edited + (message.file == null ? "" : ", fileName='" + message.file.name + "', fileSize=" + message.file.size)
+        var query0 = "edited=?" + (message.text == null ? "" : ", text=?") + (message.file == null ? "" : ", fileName=?, fileSize=?")
+        var query1 = [ message.edited ]
+        if(message.text != null) { query1.push(message.text); }
+        if(message.file != null) { query1.push(message.file.name, message.file.size); }
+
         var query = "UPDATE messages SET " + query0 + " WHERE id='" + message.id + "'";
-        db.sqlConn.promise().query(query)
+        db.sqlConn.promise().execute(query, query1)
         .then((result, err) => {
             if(err) { throw err; }
         });
@@ -43,9 +51,12 @@ module.exports = {
             console.log(" - [db] Editing Channel(id: " + channel.id + ") in the database..."); 
         }
 
-        var query0 = "name='" + channel.name + "'" + (channel.members == null ? "" : ", members='" + channel.members.join(",") + "'")
+        var query0 = "name=?" + (channel.members == null ? "" : ", members=?")
+        var query1 = [ channel.name ]
+        if(channel.members != null) { query1.push(channel.members.join(",")); }
+
         var query = "UPDATE channels SET " + query0 + " WHERE id='" + channel.id + "'";
-        db.sqlConn.promise().query(query)
+        db.sqlConn.promise().execute(query, query1)
         .then((result, err) => {
             if(err) { throw err; }
         });
