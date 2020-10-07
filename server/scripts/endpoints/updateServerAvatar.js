@@ -39,7 +39,7 @@ class Endpoint {
             });
 
             server.avatar = fileID2
-            await this.app.epFunc.updateServer(this.app, server, true)
+            await this.app.epFunc.updateServer(server, true)
             res.send(JSON.stringify({ status: 1 }))
         }.bind(this));
     }
