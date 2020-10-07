@@ -4,7 +4,7 @@ module.exports = {
             console.log(" - [db] Editing Server(id: " + server.id + ") in the database..."); 
         }
 
-        var query0 = "name='" + server.username + "', avatar='" + server.avatar + "', channelList='" + server.channelList.join(",") + "'"
+        var query0 = "name='" + server.name + "', avatar='" + server.avatar + "', channelList='" + server.channelList.join(",") + "'"
         var query = "UPDATE servers SET " + query0 + " WHERE id='" + server.id + "'";
         db.sqlConn.promise().query(query)
         .then((result, err) => {

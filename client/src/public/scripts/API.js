@@ -74,7 +74,7 @@ class API {
                 channels: newServers
             });
         });
-        socket.on('editServer', (serverData) => {
+        socket.on('updateServer', (serverData) => {
             var _server = JSON.parse(serverData);
 
             var newServers = new Map(this.mainClass.state.servers)
