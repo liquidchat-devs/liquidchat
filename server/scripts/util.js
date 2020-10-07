@@ -28,7 +28,9 @@ class Util {
         this.app.https = require("https");
         this.app.path = require("path");
         this.app.isSessionValid = this.isSessionValid;
-        this.app.epFunc = require('./utils/epFunc')
+
+        var Endpoint = require('./utils/epFunc');
+        this.app.epFunc = new Endpoint(this.app);
 
         this.app.readJSON = path =>
             JSON.parse(this.app.fs.readFileSync(process.cwd() + path))
