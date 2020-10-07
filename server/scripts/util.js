@@ -121,7 +121,7 @@ class Util {
         this.app.fs.readdirSync(normalizedPath).forEach(function(file) {
             var ep = require("./endpoints/" + file);
             ep.handle(this.app);
-        });
+        }.bind(this));
     }
 
     //Checks if incoming request is associated with a valid session
