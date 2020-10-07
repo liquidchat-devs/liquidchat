@@ -4,7 +4,7 @@ module.exports = {
             console.log(" - [db] Adding Server(id: " + server.id + ") into the database..."); 
         }
 
-        var query = "INSERT IGNORE INTO servers (id, name, createdAt, authorID, avatar, channelList) VALUES('" + server.id + "', '" + server.name + "', " + server.createdAt + ", '" + server.author.id + "', '" + server.avatar + "', '" + server.channelList.join(",") + "')";
+        var query = "INSERT IGNORE INTO servers (id, name, createdAt, authorID, avatar, channelList, members) VALUES('" + server.id + "', '" + server.name + "', " + server.createdAt + ", '" + server.author.id + "', '" + server.avatar + "', '" + server.channelList.join(",") + "', '" + server.members.join(",") + "')";
         db.sqlConn.promise().query(query)
         .then((result, err) => {
             if(err) { throw err; }

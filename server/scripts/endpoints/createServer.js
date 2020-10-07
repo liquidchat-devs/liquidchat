@@ -30,7 +30,8 @@ class Endpoint {
             author: {
                 id: user.id
             },
-            channelList: []
+            channelList: [],
+            members: [ user.id ]
         }
 
         socket.emit("createServer", JSON.stringify(server))
