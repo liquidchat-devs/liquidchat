@@ -47,8 +47,8 @@ module.exports = {
 
         var query0 = "(id, createdAt, authorID, channelID, edited" + (message.text == null ? "" : ", text") + (message.file == null ? ")" : ", fileName, fileSize)")
         var query1 = [ message.id, message.createdAt, message.author.id, message.channel.id, message.edited ]
-        if(message.text != null) { query1.push(db.escapeString(message.text))
-        if(message.file != null) { query1.push(db.escapeString(message.file.name), message.file.size)
+        if(message.text != null) { query1.push(db.escapeString(message.text)) }
+        if(message.file != null) { query1.push(db.escapeString(message.file.name), message.file.size) }
         
         var query = "INSERT IGNORE INTO messages " + query0 + " VALUES" + db.contructQuestionMarks(query1.length);
         db.sqlConn.promise().execute(query)
