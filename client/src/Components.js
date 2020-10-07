@@ -511,7 +511,7 @@ export class EditServerDialog extends React.Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    const res = await this.props.API.API_editServer(this.props.selectedChannel.id, this.state.serverName);
+    const res = await this.props.API.API_editServer(this.props.selectedServer, this.state.serverName);
     this.setState({
       serverEditResult: res,
     });
@@ -540,7 +540,7 @@ export class EditServerDialog extends React.Component {
         <div className="absolutepos overlaybox">
           <div className="white text3 marginleft2 margintop1a">> Edit server-</div>
           <form onSubmit={this.handleSubmit} className="flex margintop1">
-            <input className="inputfield1 marginleft2" name="channelName" type="text" placeholder="Name..." required={true} onChange={this.handleChange} /><br />
+            <input className="inputfield1 marginleft2" name="serverName" type="text" placeholder="Name..." required={true} onChange={this.handleChange} /><br />
           </form>
           <div className="alignmiddle margintop1" style={{ height: 40 }}>
             <div onClick={this.handleSubmit} className="button button1" style={{ marginTop: 15, marginLeft: 10 }} value="vsvsd">Edit!</div>
@@ -958,7 +958,7 @@ export class ServerOptionsBox extends React.Component {
           {
             server.author.id === this.props.session.userID ?
             <div>
-              <div className="button2 alignmiddle chatColor" onClick={() => { this.props.switchDialogState(17); }}>
+              <div className="button2 alignmiddle chatColor" onClick={() => { this.props.switchDialogState(18); }}>
                 <p className="white text1">> Edit Server</p>
               </div>
               <div className="button2 alignmiddle chatColor" onClick={(e) => { this.handleDelete(e); }}>
