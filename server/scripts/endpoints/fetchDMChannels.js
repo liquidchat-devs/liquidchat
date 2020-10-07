@@ -10,7 +10,7 @@ class Endpoint {
             var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
 
             var channels = [];
-            user.dmChannelList.forEach(id => {
+            user.dmChannels.forEach(id => {
                 channels.push(this.app.db.db_fetch.fetchChannel(this.app.db, id));
             })
             channels = await Promise.all(channels);

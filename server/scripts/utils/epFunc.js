@@ -25,8 +25,8 @@ class Endpoint {
         user = friendRequest.target.id === user.id ? targetUser : authorUser;
 
         if(_accept) {
-            authorUser.friendList.push(targetUser.id);
-            targetUser.friendList.push(authorUser.id);
+            authorUser.friends.push(targetUser.id);
+            targetUser.friends.push(authorUser.id);
         }
 
         await this.app.db.db_edit.editUser(this.app.db, authorUser);

@@ -239,7 +239,7 @@ class API {
 
     async API_fetchUsersForFriends(userID) {
         var user = this.mainClass.getUser(userID);
-        user.friendList.forEach(friendID => {
+        user.friends.forEach(friendID => {
             this.API_fetchUser(friendID);
         });
     }

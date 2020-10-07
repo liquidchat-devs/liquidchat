@@ -10,8 +10,8 @@ class Endpoint {
             var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
             var servers = [];
 
-            for(var i = 0; i < user.serverList.length; i++) {
-                var server = await this.app.db.db_fetch.fetchServer(this.app.db, user.serverList[i]);
+            for(var i = 0; i < user.servers.length; i++) {
+                var server = await this.app.db.db_fetch.fetchServer(this.app.db, user.servers[i]);
                 servers.push(server);
             }
 

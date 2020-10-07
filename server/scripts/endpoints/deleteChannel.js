@@ -37,7 +37,7 @@ class Endpoint {
             case 2:
                 channel.members.forEach(async(id) => {
                     var user2 = await this.app.db.db_fetch.fetchUser(this.app.db, id);
-                    user2.dmChannelList.splice(user2.dmChannelList.indexOf(channel.id), 1);
+                    user2.dmChannels.splice(user2.dmChannels.indexOf(channel.id), 1);
                     this.app.db.db_edit.editUser(this.app.db, user2);
                 });
                 break;

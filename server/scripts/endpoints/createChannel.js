@@ -47,7 +47,7 @@ class Endpoint {
                 channel.members = _channel.members;
                 channel.members.forEach(async(id) => {
                     var user2 = await this.app.db.db_fetch.fetchUser(this.app.db, id);
-                    user2.dmChannelList.push(channel.id);
+                    user2.dmChannels.push(channel.id);
                     this.app.db.db_edit.editUser(this.app.db, user2);
 
                     this.app.epFunc.emitToUser(user2.id, "createChannel", channel);

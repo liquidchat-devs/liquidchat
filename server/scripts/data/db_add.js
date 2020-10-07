@@ -4,7 +4,7 @@ module.exports = {
             console.log(" - [db] Adding Server(id: " + server.id + ") into the database..."); 
         }
 
-        var query = "INSERT IGNORE INTO servers (id, name, createdAt, authorID, avatar, channelList, members) VALUES('" + server.id + "', '" + server.name + "', " + server.createdAt + ", '" + server.author.id + "', '" + server.avatar + "', '" + server.channelList.join(",") + "', '" + server.members.join(",") + "')";
+        var query = "INSERT IGNORE INTO servers (id, name, createdAt, authorID, avatar, channels, members) VALUES('" + server.id + "', '" + server.name + "', " + server.createdAt + ", '" + server.author.id + "', '" + server.avatar + "', '" + server.channels.join(",") + "', '" + server.members.join(",") + "')";
         db.sqlConn.promise().query(query)
         .then((result, err) => {
             if(err) { throw err; }
@@ -16,7 +16,7 @@ module.exports = {
             console.log(" - [db] Adding User(id: " + user.id + ") into the database..."); 
         }
 
-        var query = "INSERT IGNORE INTO users (id, username, createdAt, avatar, password, friendList, dmChannelList, serverList, status) VALUES('" + user.id + "', '" + user.username + "', " + user.createdAt + ", '" + user.avatar + "', '" + user.password + "', '" + user.friendList.join(",") + "', '" + user.dmChannelList.join(",") + "', '" + user.serverList.join(",") + "', " + user.status + ")";
+        var query = "INSERT IGNORE INTO users (id, username, createdAt, avatar, password, friends, dmChannels, servers, status) VALUES('" + user.id + "', '" + user.username + "', " + user.createdAt + ", '" + user.avatar + "', '" + user.password + "', '" + user.friends.join(",") + "', '" + user.dmChannels.join(",") + "', '" + user.servers.join(",") + "', " + user.status + ")";
         db.sqlConn.promise().query(query)
         .then((result, err) => {
             if(err) { throw err; }

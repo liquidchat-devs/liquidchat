@@ -29,9 +29,9 @@ class Endpoint {
                     createdAt: Date.now(),
                     avatar: "defaultAvatar.png",
                     password: passwordHash,
-                    friendList: [],
-                    dmChannelList: [],
-                    serverList: [],
+                    friends: [],
+                    dmChannels: [],
+                    servers: [],
                     status: 0
                 }
         

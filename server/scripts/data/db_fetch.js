@@ -155,7 +155,7 @@ module.exports = {
     },
 
     formatServer(server) {
-        server.channelList = server.channelList.split(",").filter(a => a.length > 0)
+        server.channels = server.channels.split(",").filter(a => a.length > 0)
         server.members = server.members.split(",").filter(a => a.length > 0)
         server.author = { id: server.authorID }
         delete server.authorID
@@ -164,9 +164,9 @@ module.exports = {
     },
 
     formatUser(user, containSensitive, containPassword) {
-        user.friendList = user.friendList.split(",").filter(a => a.length > 0)
-        user.dmChannelList = user.dmChannelList.split(",").filter(a => a.length > 0)
-        user.serverList = user.serverList.split(",").filter(a => a.length > 0)
+        user.friends = user.friends.split(",").filter(a => a.length > 0)
+        user.dmChannels = user.dmChannels.split(",").filter(a => a.length > 0)
+        user.servers = user.servers.split(",").filter(a => a.length > 0)
 
         if(containPassword !== true) {
             delete user.password

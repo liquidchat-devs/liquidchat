@@ -17,7 +17,7 @@ class Endpoint {
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
 
-        if(user.friendList.includes(_removalRequest.target.id) === false) {
+        if(user.friends.includes(_removalRequest.target.id) === false) {
             res.send(JSON.stringify({ status: -1 }))
             return;
         } else {
@@ -25,8 +25,8 @@ class Endpoint {
         }
 
         var targetUser = await this.app.db.db_fetch.fetchUser(this.app.db, _removalRequest.target.id);
-        user.friendList.splice(user.friendList.indexOf(targetUser.id), 1);
-        targetUser.friendList.splice(targetUser.friendList.indexOf(user.id), 1);
+        user.friends.splice(user.friends.indexOf(targetUser.id), 1);
+        targetUser.friends.splice(targetUser.friends.indexOf(user.id), 1);
 
         await this.app.db.db_edit.editUser(this.app.db, user);
         await this.app.db.db_edit.editUser(this.app.db, targetUser);

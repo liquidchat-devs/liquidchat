@@ -874,14 +874,14 @@ export class ProfileOptionsBox extends React.Component {
             <p className="white text1">> Profile</p>
           </div>
           {
-            this.props.selectedUser.id !== loggedUser.id && loggedUser.friendList.includes(this.props.selectedUser.id) === false ?
+            this.props.selectedUser.id !== loggedUser.id && loggedUser.friends.includes(this.props.selectedUser.id) === false ?
             <div className="button2 alignmiddle chatColor" onClick={() => { this.sendFriendRequest(this.props.selectedUser.id); }}>
               <p className="white text1">> Add Friend</p>
             </div> :
             ""
           }
           {
-            loggedUser.friendList.includes(this.props.selectedUser.id) === true ?
+            loggedUser.friends.includes(this.props.selectedUser.id) === true ?
             <div>
               <div className="button2 alignmiddle chatColor" onClick={() => { this.removeFriend(this.props.selectedUser.id); }}>
                 <p className="white text1">> Remove Friend</p>

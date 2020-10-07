@@ -34,7 +34,7 @@ class Endpoint {
             res.send(JSON.stringify({ status: 1 }))
         }
 
-        targetUser.dmChannelList.push(channel.id);
+        targetUser.dmChannels.push(channel.id);
         this.app.epFunc.emitToUser(targetUser.id, "createChannel", channel);
 
         channel.members.push(targetUser.id);
