@@ -27,7 +27,7 @@ class Util {
         this.app.sql = require('mysql2');
         this.app.https = require("https");
         this.app.path = require("path");
-        this.app.isSessionValid = isSessionValid;
+        this.app.isSessionValid = this.isSessionValid;
         this.app.epFunc = require('./utils/epFunc')
 
         this.app.readJSON = path =>
