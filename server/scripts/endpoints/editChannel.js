@@ -1,17 +1,21 @@
-module.exports = {
-    handle(app) {
-        app.post('/editChannel', async(req, res) => {
-            if(!app.isSessionValid(req, res)) { return; }
+class Endpoint {
+    constructor(app) {
+        this.app = this.app;
+    }
+
+    handle() {
+        this.app.post('/editChannel', async(req, res) => {
+            if(!this.app.isSessionValid(req, res)) { return; }
             
-            await this.editChannel(app, req, res, req.body)
+            await this.editChannel(req, res, req.body)
             console.log("> edited channel - " + req.body.id)
         });
-    },
+    }
 
-    async editChannel(app, req, res, _channel) {
-        var session = app.sessions.get(req.cookies['sessionID']);
-        var user = await app.db.db_fetch.fetchUser(app.db, session.userID);
-        var channel = await app.db.db_fetch.fetchChannel(app.db, _channel.id);
+    async editChannel(req, res, _channel) {
+        var session = this.app.sessions.get(req.cookies['sessionID']);
+        var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
+        var channel = await this.app.db.db_fetch.fetchChannel(this.app.db, _channel.id);
 
         if(channel === undefined) {
             res.send(JSON.stringify({ status: -1 }))
@@ -29,12 +33,12 @@ module.exports = {
         //Make sure client doesn't overwrite something he's not allowed to
         channel.name = _channel.name !== undefined ? _channel.name : channel.name;
 
-        app.sessionSockets.forEach(socket => {
+        this.app.sessionSockets.forEach(socket => {
             if(socket.connected) {
                 socket.emit("updateChannel", JSON.stringify(channel))
             }
         })
 
-        await app.db.db_edit.editChannel(app.db, channel);
+        await this.app.db.db_edit.editChannel(this.app.db, channel);
     }
 }

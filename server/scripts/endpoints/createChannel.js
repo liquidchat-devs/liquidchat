@@ -1,25 +1,29 @@
-module.exports = {
-    handle(app) {
-        app.post('/createChannel', async(req, res) => {
-            if(!app.isSessionValid(req, res)) { return; }
+class Endpoint {
+    constructor(app) {
+        this.app = this.app;
+    }
+
+    handle() {
+        this.app.post('/createChannel', async(req, res) => {
+            if(!this.app.isSessionValid(req, res)) { return; }
             
-            await this.createChannel(app, req, res, req.body)
+            await this.createChannel(req, res, req.body)
             console.log("> created channel - " + req.body.name)
         });
-    },
+    }
 
-    async createChannel(app, req, res, _channel) {
+    async createChannel(req, res, _channel) {
         if(_channel.name.length < 1) {
             res.send(JSON.stringify({ status: -1 }))
             return;
         } else {
             res.send(JSON.stringify({ status: 1 }))
         }
-        var socket = app.sessionSockets.get(req.cookies['sessionID']);
-        var session = app.sessions.get(req.cookies['sessionID']);
-        var user = await app.db.db_fetch.fetchUser(app.db, session.userID);
+        var socket = this.app.sessionSockets.get(req.cookies['sessionID']);
+        var session = this.app.sessions.get(req.cookies['sessionID']);
+        var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
         var channel = {
-            id: app.crypto.randomBytes(16).toString("hex"),
+            id: this.app.crypto.randomBytes(16).toString("hex"),
             name: _channel.name,
             type: _channel.type,
             createdAt: Date.now(),
@@ -32,7 +36,7 @@ module.exports = {
             case 0:
             case 1:
                 channel.server = { id: _channel.server.id };
-                app.sessionSockets.forEach(socket => {
+                this.app.sessionSockets.forEach(socket => {
                     if(socket.connected) {
                         socket.emit("createChannel", JSON.stringify(channel))
                     }
@@ -42,15 +46,15 @@ module.exports = {
             case 2:
                 channel.members = _channel.members;
                 channel.members.forEach(async(id) => {
-                    var user2 = await app.db.db_fetch.fetchUser(app.db, id);
+                    var user2 = await this.app.db.db_fetch.fetchUser(this.app.db, id);
                     user2.dmChannelList.push(channel.id);
-                    app.db.db_edit.editUser(app.db, user2);
+                    this.app.db.db_edit.editUser(this.app.db, user2);
 
-                    app.epFunc.emitToUser(app, user2.id, "createChannel", channel);
+                    this.app.epFunc.emitToUser(this.app, user2.id, "createChannel", channel);
                 });
                 break;
         }
     
-        await app.db.db_add.addChannel(app.db, channel);
+        await this.app.db.db_add.addChannel(this.app.db, channel);
     }
 }

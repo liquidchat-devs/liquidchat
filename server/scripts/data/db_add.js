@@ -1,4 +1,8 @@
-module.exports = {
+class Endpoint {
+    constructor(app) {
+        this.app = app;
+    }
+
     addServer(db, server) {
         if(db.DEBUG) {
             console.log(" - [db] Adding Server(id: " + server.id + ") into the database..."); 

@@ -1,25 +1,29 @@
-module.exports = {
-    handle(app) {
-        app.post('/createServer', async(req, res) => {
-            if(!app.isSessionValid(req, res)) { return; }
+class Endpoint {
+    constructor(app) {
+        this.app = this.app;
+    }
+
+    handle() {
+        this.app.post('/createServer', async(req, res) => {
+            if(!this.app.isSessionValid(req, res)) { return; }
             
-            await this.createServer(app, req, res, req.body)
+            await this.createServer(req, res, req.body)
             console.log("> created server - " + req.body.name)
         });
-    },
+    }
 
-    async createServer(app, req, res, _server) {
+    async createServer(req, res, _server) {
         if(_server.name.length < 1) {
             res.send(JSON.stringify({ status: -1 }))
             return;
         } else {
             res.send(JSON.stringify({ status: 1 }))
         }
-        var socket = app.sessionSockets.get(req.cookies['sessionID']);
-        var session = app.sessions.get(req.cookies['sessionID']);
-        var user = await app.db.db_fetch.fetchUser(app.db, session.userID);
+        var socket = this.app.sessionSockets.get(req.cookies['sessionID']);
+        var session = this.app.sessions.get(req.cookies['sessionID']);
+        var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
         var server = {
-            id: app.crypto.randomBytes(16).toString("hex"),
+            id: this.app.crypto.randomBytes(16).toString("hex"),
             name: _server.name,
             avatar: "defaultAvatar.png",
             createdAt: Date.now(),
@@ -30,10 +34,10 @@ module.exports = {
         }
 
         socket.emit("createServer", JSON.stringify(server))
-        await app.db.db_add.addServer(app.db, server);
+        await this.app.db.db_add.addServer(this.app.db, server);
 
         user.serverList.push(server.id);
-        app.epFunc.emitToUser(app, user.id, "updateUser", user);
-        await app.db.db_edit.editUser(app.db, user);
+        this.app.epFunc.emitToUser(this.app, user.id, "updateUser", user);
+        await this.app.db.db_edit.editUser(this.app.db, user);
     }
 }

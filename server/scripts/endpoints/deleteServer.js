@@ -1,17 +1,21 @@
-module.exports = {
-    handle(app) {
-        app.post('/deleteServer', async(req, res) => {
-            if(!app.isSessionValid(req, res)) { return; }
+class Endpoint {
+    constructor(app) {
+        this.app = this.app;
+    }
 
-            await this.deleteServer(app, req, res, req.body)
+    handle() {
+        this.app.post('/deleteServer', async(req, res) => {
+            if(!this.app.isSessionValid(req, res)) { return; }
+
+            await this.deleteServer(req, res, req.body)
             console.log("> deleted server - " + req.body.id)
         });
-    },
+    }
 
-    async deleteServer(app, req, res, _server) {
-        var session = app.sessions.get(req.cookies['sessionID']);
-        var user = await app.db.db_fetch.fetchUser(app.db, session.userID);
-        var server = await app.db.db_fetch.fetchServer(app.db, _server.id);
+    async deleteServer(req, res, _server) {
+        var session = this.app.sessions.get(req.cookies['sessionID']);
+        var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
+        var server = await this.app.db.db_fetch.fetchServer(this.app.db, _server.id);
 
         if(server === undefined) {
             res.send(JSON.stringify({ status: -1 }))
@@ -23,12 +27,12 @@ module.exports = {
             res.send(JSON.stringify({ status: 1 }))
         }
 
-        app.sessionSockets.forEach(socket => {
+        this.app.sessionSockets.forEach(socket => {
             if(socket.connected) {
                 socket.emit("deleteServer", JSON.stringify(server))
             }
         })
 
-        await app.db.db_delete.deleteServer(app.db, server.id);
+        await this.app.db.db_delete.deleteServer(this.app.db, server.id);
     }
 }

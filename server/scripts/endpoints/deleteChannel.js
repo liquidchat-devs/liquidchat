@@ -1,17 +1,21 @@
-module.exports = {
-    handle(app) {
-        app.post('/deleteChannel', async(req, res) => {
-            if(!app.isSessionValid(req, res)) { return; }
+class Endpoint {
+    constructor(app) {
+        this.app = this.app;
+    }
 
-            await this.deleteChannel(app, req, res, req.body)
+    handle() {
+        this.app.post('/deleteChannel', async(req, res) => {
+            if(!this.app.isSessionValid(req, res)) { return; }
+
+            await this.deleteChannel(req, res, req.body)
             console.log("> deleted channel - " + req.body.id)
         });
-    },
+    }
 
-    async deleteChannel(app, req, res, _channel) {
-        var session = app.sessions.get(req.cookies['sessionID']);
-        var user = await app.db.db_fetch.fetchUser(app.db, session.userID);
-        var channel = await app.db.db_fetch.fetchChannel(app.db, _channel.id);
+    async deleteChannel(req, res, _channel) {
+        var session = this.app.sessions.get(req.cookies['sessionID']);
+        var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
+        var channel = await this.app.db.db_fetch.fetchChannel(this.app.db, _channel.id);
 
         if(channel === undefined) {
             res.send(JSON.stringify({ status: -1 }))
@@ -23,7 +27,7 @@ module.exports = {
             res.send(JSON.stringify({ status: 1 }))
         }
 
-        app.sessionSockets.forEach(socket => {
+        this.app.sessionSockets.forEach(socket => {
             if(socket.connected) {
                 socket.emit("deleteChannel", JSON.stringify(channel))
             }
@@ -32,13 +36,13 @@ module.exports = {
         switch(_channel.type) {
             case 2:
                 channel.members.forEach(async(id) => {
-                    var user2 = await app.db.db_fetch.fetchUser(app.db, id);
+                    var user2 = await this.app.db.db_fetch.fetchUser(this.app.db, id);
                     user2.dmChannelList.splice(user2.dmChannelList.indexOf(channel.id), 1);
-                    app.db.db_edit.editUser(app.db, user2);
+                    this.app.db.db_edit.editUser(this.app.db, user2);
                 });
                 break;
         }
 
-        await app.db.db_delete.deleteChannel(app.db, channel.id);
+        await this.app.db.db_delete.deleteChannel(this.app.db, channel.id);
     }
 }

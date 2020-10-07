@@ -1,18 +1,22 @@
-module.exports = {
-    handle(app) {
-        app.post('/removeFromDMChannel', async(req, res) => {
-            if(!app.isSessionValid(req, res)) { return; }
+class Endpoint {
+    constructor(app) {
+        this.app = this.app;
+    }
 
-            await this.removeFromDMChannel(app, req, res, req.body)
+    handle() {
+        this.app.post('/removeFromDMChannel', async(req, res) => {
+            if(!this.app.isSessionValid(req, res)) { return; }
+
+            await this.removeFromDMChannel(req, res, req.body)
             console.log("> removed from dm channel - " + req.body.channel.id + "/" + req.body.user.id)
         });
-    },
+    }
 
-    async removeFromDMChannel(app, req, res, _data) {
-        var session = app.sessions.get(req.cookies['sessionID']);
-        var user = await app.db.db_fetch.fetchUser(app.db, session.userID);
-        var channel = await app.db.db_fetch.fetchChannel(app.db, _data.channel.id);
-        var targetUser = await app.db.db_fetch.fetchUser(app.db, _data.user.id);
+    async removeFromDMChannel(req, res, _data) {
+        var session = this.app.sessions.get(req.cookies['sessionID']);
+        var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
+        var channel = await this.app.db.db_fetch.fetchChannel(this.app.db, _data.channel.id);
+        var targetUser = await this.app.db.db_fetch.fetchUser(this.app.db, _data.user.id);
 
         if(channel === undefined) {
             res.send(JSON.stringify({ status: -1 }))
@@ -32,13 +36,13 @@ module.exports = {
 
         channel.members.splice(channel.members.indexOf(targetUser.id), 1);
         channel.members.forEach(id => {
-            app.epFunc.emitToUser(app, id, "updateChannel", channel)
+            this.app.epFunc.emitToUser(this.app, id, "updateChannel", channel)
         });
 
         targetUser.dmChannelList.splice(targetUser.dmChannelList.indexOf(channel.id), 1);
-        app.epFunc.emitToUser(app, targetUser.id, "deleteChannel", channel);
+        this.app.epFunc.emitToUser(this.app, targetUser.id, "deleteChannel", channel);
 
-        await app.db.db_edit.editChannel(app.db, channel);
-        await app.db.db_edit.editUser(app.db, targetUser);
+        await this.app.db.db_edit.editChannel(this.app.db, channel);
+        await this.app.db.db_edit.editUser(this.app.db, targetUser);
     }
 }

@@ -1,24 +1,28 @@
-module.exports = {
-    handle(app) {
-        app.post('/upload', async(req, res) => {
-            if(!app.isSessionValid(req, res)) { return; }
+class Endpoint {
+    constructor(app) {
+        this.app = this.app;
+    }
+
+    handle() {
+        this.app.post('/upload', async(req, res) => {
+            if(!this.app.isSessionValid(req, res)) { return; }
 
             await this.uploadFile(req, res)
             console.log("> received file - " + req.query.fileName)
         })
-    },
+    }
 
-    async uploadFile(app, req, res) {
-        var socket = app.sessionSockets.get(req.cookies['sessionID']);
-        var form = app.formidable({ multiples: true, maxFileSize: 1024 * 1024 * 100 });
-        form.uploadDir = app.filesStorage;
+    async uploadFile(req, res) {
+        var socket = this.app.sessionSockets.get(req.cookies['sessionID']);
+        var form = this.app.formidable({ multiples: true, maxFileSize: 1024 * 1024 * 100 });
+        form.uploadDir = this.app.filesStorage;
         form.keepExtensions = true;
     
         var fileName = req.query.fileName;
         var fileSize = -1;
         var sentStartPacket = false;
 
-        var fileID = app.crypto.randomBytes(16).toString("hex");
+        var fileID = this.app.crypto.randomBytes(16).toString("hex");
         var fileID2 = fileID + (fileName.substring(fileName.lastIndexOf(".")))
         console.log("> received file - " + fileName)
     
@@ -46,7 +50,7 @@ module.exports = {
     
         form.parse(req, async function(err, fields, files) {
             if(files.fileUploaded === undefined) { return; }
-            app.fs.rename(files.fileUploaded.path, app.filesStorage + fileID2, function(err) {
+            this.app.fs.rename(files.fileUploaded.path, this.app.filesStorage + fileID2, function(err) {
                 if (err) { throw err; }
             });
 

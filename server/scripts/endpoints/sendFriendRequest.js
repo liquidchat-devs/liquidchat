@@ -1,23 +1,27 @@
-module.exports = {
-    handle(app) {
-        app.post('/sendFriendRequest', async(req, res) => {
-            if(!app.isSessionValid(req, res)) { return; }
+class Endpoint {
+    constructor(app) {
+        this.app = this.app;
+    }
 
-            await this.sendFriendRequest(app, req, res, req.body)
+    handle() {
+        this.app.post('/sendFriendRequest', async(req, res) => {
+            if(!this.app.isSessionValid(req, res)) { return; }
+
+            await this.sendFriendRequest(req, res, req.body)
             console.log("> sent friend request - " + req.body.target.username + " (id: " + req.body.target.id + ")")
         });
-    },
+    }
 
-    async sendFriendRequest(app, req, res, _friendRequest) {
-        var socket = app.sessionSockets.get(req.cookies['sessionID']);
-        var session = app.sessions.get(req.cookies['sessionID']);
-        var user = await app.db.db_fetch.fetchUser(app.db, session.userID);
+    async sendFriendRequest(req, res, _friendRequest) {
+        var socket = this.app.sessionSockets.get(req.cookies['sessionID']);
+        var session = this.app.sessions.get(req.cookies['sessionID']);
+        var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
 
         var targetUser = -1;
         if(_friendRequest.target.id !== undefined) {
-            targetUser = await app.db.db_fetch.fetchUser(app.db, _friendRequest.target.id);
+            targetUser = await this.app.db.db_fetch.fetchUser(this.app.db, _friendRequest.target.id);
         } else {
-            targetUser = await app.db.db_fetch.fetchUserByUsername(app.db, _friendRequest.target.username);
+            targetUser = await this.app.db.db_fetch.fetchUserByUsername(this.app.db, _friendRequest.target.username);
         }
 
         if(targetUser === undefined) {
@@ -25,7 +29,7 @@ module.exports = {
             return;
         }
 
-        var friendRequest = await app.db.db_fetch.fetchFriendRequestByTarget(app.db, targetUser.id);
+        var friendRequest = await this.app.db.db_fetch.fetchFriendRequestByTarget(this.app.db, targetUser.id);
         if(friendRequest !== undefined) {
             res.send(JSON.stringify({ status: -1 }))
             return;
@@ -37,7 +41,7 @@ module.exports = {
         }
 
         var friendRequest = {
-            id: app.crypto.randomBytes(16).toString("hex"),
+            id: this.app.crypto.randomBytes(16).toString("hex"),
             author: {
                 id: user.id
             },
@@ -47,21 +51,21 @@ module.exports = {
             createdAt: Date.now()
         }
         
-        await app.db.db_add.addFriendRequest(app.db, friendRequest);
+        await this.app.db.db_add.addFriendRequest(this.app.db, friendRequest);
 
         if(socket.connected) {
-            var friendRequestsOut = await app.db.db_fetch.fetchFriendRequests(app.db, user.id, 0);
-            var friendRequestsIn = await app.db.db_fetch.fetchFriendRequests(app.db, user.id, 1);
+            var friendRequestsOut = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, user.id, 0);
+            var friendRequestsIn = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, user.id, 1);
             var friendRequests = friendRequestsOut.concat(friendRequestsIn);
 
             socket.emit("updateFriendRequests", JSON.stringify(friendRequests))
 
-            friendRequestsOut = await app.db.db_fetch.fetchFriendRequests(app.db, targetUser.id, 0);
-            friendRequestsIn = await app.db.db_fetch.fetchFriendRequests(app.db, targetUser.id, 1);
+            friendRequestsOut = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, targetUser.id, 0);
+            friendRequestsIn = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, targetUser.id, 1);
             friendRequests = friendRequestsOut.concat(friendRequestsIn);
 
-            app.epFunc.emitToUser(app, targetUser.id, "updateUser", targetUser);
-            app.epFunc.emitToUser(app, targetUser.id, "updateFriendRequests", friendRequests);
+            this.app.epFunc.emitToUser(this.app, targetUser.id, "updateUser", targetUser);
+            this.app.epFunc.emitToUser(this.app, targetUser.id, "updateFriendRequests", friendRequests);
         }
     }
 }

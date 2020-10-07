@@ -1,4 +1,8 @@
-module.exports = {
+class Endpoint {
+    constructor(app) {
+        this.app = app;
+    }
+
     deleteServer(db, id) {
         if(db.DEBUG) {
             console.log(" - [db] Deleting Server(id: " + id + ") from the database..."); 

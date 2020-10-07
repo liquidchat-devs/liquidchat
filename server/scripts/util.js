@@ -119,8 +119,9 @@ class Util {
     setupRoutes() {
         var normalizedPath = this.app.path.join(__dirname, "endpoints");
         this.app.fs.readdirSync(normalizedPath).forEach(function(file) {
-            var ep = require("./endpoints/" + file);
-            ep.handle(this.app);
+            var Endpoint = require("./endpoints/" + file);
+            var ep = new Endpoint(this.app);
+            ep.handle();
         }.bind(this));
     }
 

@@ -1,9 +1,13 @@
-module.exports = {
-    handle(app) {
-        app.post('/acceptFriendRequest', async(req, res) => {
-            if(!app.isSessionValid(req, res)) { return; }
+class Endpoint {
+    constructor(app) {
+        this.app = this.app;
+    }
 
-            await app.epFunc.processFriendRequest(req, res, req.body, true)
+    handle() {
+        this.app.post('/acceptFriendRequest', async(req, res) => {
+            if(!this.app.isSessionValid(req, res)) { return; }
+
+            await this.app.epFunc.processFriendRequest(req, res, req.body, true)
             console.log("> accepted friend request - " + req.body.id)
         });
     }

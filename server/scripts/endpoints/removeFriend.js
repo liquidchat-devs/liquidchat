@@ -1,17 +1,21 @@
-module.exports = {
-    handle(app) {
-        app.post('/removeFriend', async(req, res) => {
-            if(!app.isSessionValid(req, res)) { return; }
+class Endpoint {
+    constructor(app) {
+        this.app = this.app;
+    }
 
-            await this.removeFriend(app, req, res, req.body)
+    handle() {
+        this.app.post('/removeFriend', async(req, res) => {
+            if(!this.app.isSessionValid(req, res)) { return; }
+
+            await this.removeFriend(req, res, req.body)
             console.log("> removed friend - " + req.body.target.id)
         });
-    },
+    }
 
-    async removeFriend(app, req, res, _removalRequest) {
-        var socket = app.sessionSockets.get(req.cookies['sessionID']);
-        var session = app.sessions.get(req.cookies['sessionID']);
-        var user = await app.db.db_fetch.fetchUser(app.db, session.userID);
+    async removeFriend(req, res, _removalRequest) {
+        var socket = this.app.sessionSockets.get(req.cookies['sessionID']);
+        var session = this.app.sessions.get(req.cookies['sessionID']);
+        var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
 
         if(user.friendList.includes(_removalRequest.target.id) === false) {
             res.send(JSON.stringify({ status: -1 }))
@@ -20,16 +24,16 @@ module.exports = {
             res.send(JSON.stringify({ status: 1 }))
         }
 
-        var targetUser = await app.db.db_fetch.fetchUser(app.db, _removalRequest.target.id);
+        var targetUser = await this.app.db.db_fetch.fetchUser(this.app.db, _removalRequest.target.id);
         user.friendList.splice(user.friendList.indexOf(targetUser.id), 1);
         targetUser.friendList.splice(targetUser.friendList.indexOf(user.id), 1);
 
-        await app.db.db_edit.editUser(app.db, user);
-        await app.db.db_edit.editUser(app.db, targetUser);
+        await this.app.db.db_edit.editUser(this.app.db, user);
+        await this.app.db.db_edit.editUser(this.app.db, targetUser);
 
         if(socket.connected) {
             socket.emit("updateUser", JSON.stringify(user))
-            app.epFunc.emitToUser(app, targetUser.id, "updateUser", targetUser);
+            this.app.epFunc.emitToUser(this.app, targetUser.id, "updateUser", targetUser);
         }
     }
 }

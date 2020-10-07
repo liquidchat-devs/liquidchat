@@ -1,17 +1,21 @@
-module.exports = {
-    handle(app) {
-        app.post('/editMessage', async(req, res) => {
-            if(!app.isSessionValid(req, res)) { return; }
+class Endpoint {
+    constructor(app) {
+        this.app = this.app;
+    }
 
-            await this.editMessage(app, req, res, req.body)
+    handle() {
+        this.app.post('/editMessage', async(req, res) => {
+            if(!this.app.isSessionValid(req, res)) { return; }
+
+            await this.editMessage(req, res, req.body)
             console.log("> received message edit - " + req.body.text)
         });
-    },
+    }
 
-    async editMessage(app, req, res, _message) {
-        var session = app.sessions.get(req.cookies['sessionID']);
-        var user = await app.db.db_fetch.fetchUser(app.db, session.userID);
-        var message = await app.db.db_fetch.fetchMessage(app.db, _message.id);
+    async editMessage(req, res, _message) {
+        var session = this.app.sessions.get(req.cookies['sessionID']);
+        var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
+        var message = await this.app.db.db_fetch.fetchMessage(this.app.db, _message.id);
 
         if(message === undefined) {
             res.send(JSON.stringify({ status: -1 }))
@@ -27,12 +31,12 @@ module.exports = {
         message.text = _message.text;
         message.edited = true;
 
-        app.sessionSockets.forEach(socket => {
+        this.app.sessionSockets.forEach(socket => {
             if(socket.connected) {
                 socket.emit("editMessage", JSON.stringify(message))
             }
         })
 
-        await app.db.db_edit.editMessage(app.db, message);
+        await this.app.db.db_edit.editMessage(this.app.db, message);
     }
 }

@@ -1,4 +1,8 @@
-module.exports = {
+class Endpoint {
+    constructor(app) {
+        this.app = app;
+    }
+
     editServer(db, server) {
         if(db.DEBUG) {
             console.log(" - [db] Editing Server(id: " + server.id + ") in the database..."); 

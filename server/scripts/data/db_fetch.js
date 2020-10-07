@@ -1,4 +1,8 @@
-module.exports = {
+class Endpoint {
+    constructor(app) {
+        this.app = app;
+    }
+
     async fetchServer(db, id) {
         if(db.DEBUG) {
             console.log(" - [db] Loading Server(id: " + id + ") from the database..."); 

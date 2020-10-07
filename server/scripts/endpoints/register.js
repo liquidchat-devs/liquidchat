@@ -1,17 +1,21 @@
-module.exports = {
-    handle(app) {
-        app.post('/register', async(req, res) => {
+class Endpoint {
+    constructor(app) {
+        this.app = this.app;
+    }
+
+    handle() {
+        this.app.post('/register', async(req, res) => {
             const data = req.body;
-            var user = await app.db.db_fetch.fetchUserByUsername(app.db, data.username);
+            var user = await this.app.db.db_fetch.fetchUserByUsername(this.app.db, data.username);
 
             if(user !== undefined) {
                 res.send(JSON.stringify({ status: -1 }))
             } else if(data.password !== data.password2) {
                 res.send(JSON.stringify({ status: -2 }))
             } else {
-                const userID = app.crypto.randomBytes(16).toString("hex");
-                const sessionID = app.crypto.randomBytes(16).toString("hex");
-                const passwordHash = app.bcrypt.hashSync(data.password, app.config.salt)
+                const userID = this.app.crypto.randomBytes(16).toString("hex");
+                const sessionID = this.app.crypto.randomBytes(16).toString("hex");
+                const passwordHash = this.app.bcrypt.hashSync(data.password, this.app.config.salt)
 
                 const session = {
                     id: sessionID,
@@ -31,13 +35,13 @@ module.exports = {
                     status: 0
                 }
         
-                await app.db.db_add.addUser(app.db, user);
+                await this.app.db.db_add.addUser(this.app.db, user);
 
-                app.sessions.set(sessionID, session);
-                if(app.userSessions.has(user.id)) {
-                    app.userSessions.get(user.id).push(sessionID);
+                this.app.sessions.set(sessionID, session);
+                if(this.app.userSessions.has(user.id)) {
+                    this.app.userSessions.get(user.id).push(sessionID);
                 } else {
-                    app.userSessions.set(user.id, [ sessionID ]);
+                    this.app.userSessions.set(user.id, [ sessionID ]);
                 }
 
                 res.cookie("sessionID", session.id, {
