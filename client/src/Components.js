@@ -149,7 +149,7 @@ export class ChannelSelector extends React.Component {
       )
     });
 
-    const friendList = loggedUser.friendList.map((friendID, i) => {
+    const friendList = loggedUser.friends.map((friendID, i) => {
       const friend = this.props.getUser(friendID);
       if(friend === -1) {
         return null;
@@ -167,7 +167,7 @@ export class ChannelSelector extends React.Component {
       )
     });
 
-    const serverList = loggedUser.serverList.map((serverID, i) => {
+    const serverList = loggedUser.servers.map((serverID, i) => {
       const server = this.props.getServer(serverID);
       if(server === -1) {
         return null;
@@ -291,7 +291,7 @@ export class DialogManager extends React.Component {
         return <ForgottenPasswordBox API={this.props.API} switchDialogState={this.props.switchDialogState}/>
 
       case 16:
-        return <CreateServerBox API={this.props.API} switchDialogState={this.props.switchDialogState}/>
+        return <CreateServerBox fileEndpoint={this.props.fileEndpoint} API={this.props.API} switchDialogState={this.props.switchDialogState}/>
 
       case 17:
         return <ServerOptionsBox getServer={this.props.getServer} API={this.props.API} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedServer={this.props.selectedServer} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
@@ -381,8 +381,25 @@ export class CreateChannelDialog extends React.Component {
 export class CreateServerBox extends React.Component {
   state = {
     serverName: "",
+    serverAvatar: -1,
     serverCreationResult: 0
   };
+
+  handleAvatar = async (box, e) => {
+    if(e.target.files.length < 1) { return; }
+    
+    var file = e.target.files[0];
+    e.target.value = ""
+    this.setState({
+      serverAvatar: file,
+    });
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      box.refs["serverImage"].src = e.target.result;
+    }
+    reader.readAsDataURL(file);
+  }
 
   handleChange = e => {
     this.setState({
@@ -392,13 +409,28 @@ export class CreateServerBox extends React.Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    const res = await this.props.API.API_createServer(this.state.serverName);
+    let res = await this.props.API.API_createServer(this.state.serverName);
     this.setState({
       serverCreationResult: res,
     });
     
-    if(res === 1) { this.props.switchDialogState(-1); }
-    return true;
+    if(isNaN(res)) {
+      if(this.state.serverAvatar !== -1) {
+        res = await this.props.API.API_updateServerAvatar(res.id, this.state.serverAvatar)
+        this.setState({
+          serverCreationResult: res,
+        });
+      }
+    }
+    
+    if(isNaN(res)) {
+      this.props.switchDialogState(-1);
+      return true;
+    } else {
+      this.setState({
+        serverCreationResult: res,
+      });
+    }
   }
 
   getErrorText(code) {
@@ -418,7 +450,14 @@ export class CreateServerBox extends React.Component {
         <div className="absolutepos overlaybox">
           <div className="white text3 marginleft2 margintop1a">> Create new server-</div>
           <form onSubmit={this.handleSubmit} className="flex margintop1">
-            <input className="inputfield1 marginleft2" name="serverName" type="text" placeholder="Name..." required={true} onChange={this.handleChange} /><br />
+            <img alt="" className="avatar2 marginleft4 marginright2" ref="serverImage" src={this.props.fileEndpoint + "/defaultAvatar.png"} onMouseEnter={() => this.refs["serverEditOverlay"].style = "display: flex;" }/>
+            <label for="avatar-input">
+              <div className="avatar2 avatarOverlay marginleft4 marginright2 alignmiddle" ref="serverEditOverlay" onMouseLeave={() => this.refs["serverEditOverlay"].style = "display: none;" }>
+                <div className="white text4 nopointer">Change Icon</div>
+              </div>
+            </label>
+            <input id="avatar-input" className="hide" onChange={(e) => this.handleAvatar(this, e) } type='file' name="fileUploaded"/>
+            <input className="inputfield1 marginleft2 margintop1" name="serverName" type="text" placeholder="Name..." required={true} onChange={this.handleChange} /><br />
           </form>
           <div className="alignmiddle margintop1" style={{ height: 40 }}>
             <div onClick={this.handleSubmit} className="button button1" style={{ marginTop: 15, marginLeft: 10 }}>Create!</div>
@@ -596,7 +635,7 @@ export class InviteFriendsBox extends React.Component {
   render() {
     let loggedUser = this.props.getUser(this.props.session.userID);
 
-    const friendList = loggedUser.friendList.map((friendID, i) => {
+    const friendList = loggedUser.friends.map((friendID, i) => {
     const friend = this.props.getUser(friendID);
       if(friend === -1) {
         return null;
