@@ -17,7 +17,7 @@ class DatabaseManager {
         for(let i2 = 0; i2 < i; i2++) {
             str += "?,"
         }
-        str += str.substring(0, str.length - 1) + ")"
+        str = str.substring(0, str.length - 1) + ")"
 
         return str;
     }
