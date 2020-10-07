@@ -1,7 +1,7 @@
 module.exports = {
     handle(app) {
         app.post('/joinVoiceChannel', async(req, res) => {
-            if(!this.isSessionValid(req, res)) { return; }
+            if(!app.isSessionValid(req, res)) { return; }
 
             await this.joinVoiceChannel(app, req, res, req.body)
             console.log("> received voice connection - " + req.body.channel.id)

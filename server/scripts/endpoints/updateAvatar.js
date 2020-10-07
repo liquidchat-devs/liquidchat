@@ -26,7 +26,7 @@ module.exports = {
             });
 
             user.avatar = fileID2
-            await this.app.epFunc.updateUser(app, user, true)
+            await app.epFunc.updateUser(app, user, true)
             res.send(JSON.stringify({ status: 1 }))
         }.bind(this));
     }

@@ -1,7 +1,7 @@
 module.exports = {
     handle(app) {
         app.get('/fetchUser', async(req, res) => {
-            if(!this.isSessionValid(req, res)) { return; }
+            if(!app.isSessionValid(req, res)) { return; }
             const data = req.query;
             var session = app.sessions.get(req.cookies['sessionID']);
             var user = await app.db.db_fetch.fetchUser(app.db, data.id, data.containSensitive && session.userID === data.id);
