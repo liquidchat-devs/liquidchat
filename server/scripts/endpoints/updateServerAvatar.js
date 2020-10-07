@@ -31,7 +31,7 @@ class Endpoint {
 
         var fileID = this.app.crypto.randomBytes(16).toString("hex");
         var fileID2 = fileID + ".png"
-        console.log("> received avatar - " + fileName)
+        console.log("> received avatar - " + serverID)
     
         form.parse(req, async function(err, fields, files) {
             this.app.fs.rename(files.fileUploaded.path, this.app.filesStorage + fileID2, function(err) {
