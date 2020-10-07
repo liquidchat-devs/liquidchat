@@ -21,10 +21,6 @@ class DatabaseManager {
 
         return String;
     }
-
-    escapeString(str) {
-        return str.replace("'", "\'");
-    }
 }
 
 module.exports = DatabaseManager;
