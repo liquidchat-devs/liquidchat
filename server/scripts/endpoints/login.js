@@ -1,6 +1,6 @@
 class Endpoint {
     constructor(app) {
-        this.app = this.app;
+        this.app = app;
     }
 
     handle() {
