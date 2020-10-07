@@ -18,3 +18,5 @@ class Endpoint {
         });
     }
 }
+
+module.exports = Endpoint;

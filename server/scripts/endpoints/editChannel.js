@@ -42,3 +42,5 @@ class Endpoint {
         await this.app.db.db_edit.editChannel(this.app.db, channel);
     }
 }
+
+module.exports = Endpoint;

@@ -40,3 +40,5 @@ class Endpoint {
         await this.app.db.db_edit.editMessage(this.app.db, message);
     }
 }
+
+module.exports = Endpoint;

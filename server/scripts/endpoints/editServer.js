@@ -42,3 +42,5 @@ class Endpoint {
         await this.app.db.db_edit.editServer(this.app.db, server);
     }
 }
+
+module.exports = Endpoint;

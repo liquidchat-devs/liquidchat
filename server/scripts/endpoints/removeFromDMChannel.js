@@ -46,3 +46,5 @@ class Endpoint {
         await this.app.db.db_edit.editUser(this.app.db, targetUser);
     }
 }
+
+module.exports = Endpoint;

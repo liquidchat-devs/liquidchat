@@ -58,3 +58,5 @@ class Endpoint {
         await this.app.db.db_add.addChannel(this.app.db, channel);
     }
 }
+
+module.exports = Endpoint;

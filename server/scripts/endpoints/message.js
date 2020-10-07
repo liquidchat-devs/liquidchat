@@ -47,3 +47,5 @@ class Endpoint {
         await this.app.db.db_add.addMessage(this.app.db, message);
     }
 }
+
+module.exports = Endpoint;

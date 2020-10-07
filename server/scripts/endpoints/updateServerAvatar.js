@@ -44,3 +44,5 @@ class Endpoint {
         }.bind(this));
     }
 }
+
+module.exports = Endpoint;

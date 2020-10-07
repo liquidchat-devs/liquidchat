@@ -36,3 +36,5 @@ class Endpoint {
         await this.app.db.db_delete.deleteMessage(this.app.db, message.id);
     }
 }
+
+module.exports = Endpoint;

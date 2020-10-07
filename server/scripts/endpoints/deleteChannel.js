@@ -46,3 +46,5 @@ class Endpoint {
         await this.app.db.db_delete.deleteChannel(this.app.db, channel.id);
     }
 }
+
+module.exports = Endpoint;
