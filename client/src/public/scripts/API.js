@@ -536,6 +536,18 @@ class API {
         return true;
     }
 
+    async API_editServer(serverID, serverName) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/editServer', {
+            id: serverID, name: serverName
+        }, { withCredentials: true });
+
+        if(reply.data.status !== 1) {
+            return reply.data.status;
+        } else {
+            return reply.data;
+        }
+    }
+
     async API_deleteServer(serverID) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/deleteServer', {
             id: serverID

@@ -84,7 +84,7 @@ export class ChannelSelector extends React.Component {
   
               return (
                 <div className="voiceUserEntry flex">
-                  <img alt="" className="avatar" src={this.props.fileEndpoint + "/" + user.avatar} key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
+                  <img alt="" className="avatar" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
                   <div className="white headerColor">
                     {user.username}
                   </div>
@@ -94,7 +94,7 @@ export class ChannelSelector extends React.Component {
 
             return (
               <div>
-                <div className="white headerColor channel" onClick={(e) => { this.props.switchChannel(channel.id) }} onContextMenu={(e) => { this.props.setSelectedChannel(channel.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } } key={i} ref={i === 0 ? "firstChannelElement" : undefined}>
+                <div className="white headerColor channel" onClick={(e) => { this.props.switchChannel(channel.id) }} onContextMenu={(e) => { this.props.setSelectedChannel(channel.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } } ref={i === 0 ? "firstChannelElement" : undefined}>
                   {channel.type === 0 ? "#" : "."}{channelName}
                 </div>
                 {userList}
@@ -104,7 +104,7 @@ export class ChannelSelector extends React.Component {
       }
 
       return (
-        <div className={ this.props.currentChannel === channel.id ? "white headerColor channel selectedChannelColor" : "white headerColor channel" } onClick={(e) => { this.props.switchChannel(channel.id) }} onContextMenu={(e) => { this.props.setSelectedChannel(channel.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } } key={i} ref={i === 0 ? "firstChannelElement" : undefined}>
+        <div key={i} className={ this.props.currentChannel === channel.id ? "white headerColor channel selectedChannelColor" : "white headerColor channel" } onClick={(e) => { this.props.switchChannel(channel.id) }} onContextMenu={(e) => { this.props.setSelectedChannel(channel.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } } ref={i === 0 ? "firstChannelElement" : undefined}>
           {channel.type === 1 ? "." : "#"}{channelName}
         </div>
       )
@@ -118,7 +118,7 @@ export class ChannelSelector extends React.Component {
       return (
         <div className="friendRequestEntry selectedChannelColor" style={{ height: author.id === this.props.session.userID ? 117 : 81}}>
           <div className="flex">
-            <img alt="" className="avatar3 marginleft1 margintop1" src={this.props.fileEndpoint + "/" + user.avatar} key={i} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
+            <img alt="" className="avatar3 marginleft1 margintop1" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
             <div className="white marginleft2 margintop1b">
               {user.username}
             </div>
@@ -158,7 +158,7 @@ export class ChannelSelector extends React.Component {
       return (
         <div className="friendEntry selectedChannelColor" onContextMenu={(e) => { this.props.setSelectedUser(friend, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="flex">
-            <img alt="" className="avatar3 marginleft1 margintop1" src={this.props.fileEndpoint + "/" + friend.avatar} key={i}/>
+            <img alt="" className="avatar3 marginleft1 margintop1" src={this.props.fileEndpoint + "/" + friend.avatar}/>
             <div className="white marginleft2 margintop1b">
               {friend.username}
             </div>
@@ -175,9 +175,9 @@ export class ChannelSelector extends React.Component {
       
       let serverName = server.name.length < 12 ? server.name : server.name.substring(0, 9) + "..."
       return (
-        <div>
+        <div key={i}>
           <div className={this.props.selectedServer === server.id ? "white headerColor server selectedChannelColor" : "white headerColor server"} onClick={() => { this.props.setSelectedServer(server.id); }} onContextMenu={(e) => { this.props.setSelectedServer(server.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(17); e.preventDefault(); e.stopPropagation(); } }>
-            <img alt="" className="avatar4 marginright2" src={this.props.fileEndpoint + "/" + server.avatar} key={i}/>
+            <img alt="" className="avatar4 marginright2" src={this.props.fileEndpoint + "/" + server.avatar}/>
             {serverName}
           </div>
         </div>
@@ -494,6 +494,67 @@ export class EditChannelDialog extends React.Component {
   }
 }
 
+export class EditServerDialog extends React.Component {
+  state = {
+    serverName: "",
+    serverEditResult: 0
+  };
+
+  handleChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  handleSubmit = async e => {
+    e.preventDefault();
+    const res = await this.props.API.API_editServer(this.props.selectedChannel.id, this.state.serverName);
+    this.setState({
+      serverEditResult: res,
+    });
+    
+    if(res === 1) { this.props.switchDialogState(-1); }
+    return true;
+  }
+
+  getErrorText(code) {
+    switch(code) {
+      case -2:
+        return "You're not this server's author-";
+
+      case -3:
+        return "Server name is too short-";
+
+      default:
+        return "";
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlaybox">
+          <div className="white text3 marginleft2 margintop1a">> Edit server-</div>
+          <form onSubmit={this.handleSubmit} className="flex margintop1">
+            <input className="inputfield1 marginleft2" name="channelName" type="text" placeholder="Name..." required={true} onChange={this.handleChange} /><br />
+          </form>
+          <div className="alignmiddle margintop1" style={{ height: 40 }}>
+            <div onClick={this.handleSubmit} className="button button1" style={{ marginTop: 15, marginLeft: 10 }} value="vsvsd">Edit!</div>
+          </div>
+          {
+            (this.getErrorText(this.state.serverEditResult).length > 0 ?
+            <div className="marginleft2 margintop1 errorColor">
+              {this.getErrorText(this.state.serverEditResult)}
+            </div>
+            : "")
+          }
+        </div>
+      </div>
+    );
+  }
+}
+
 export class InviteFriendsBox extends React.Component {
   inviteUser = async (channelID, userID) => {
     const res = await this.props.API.API_addToDMChannel(channelID, userID);
@@ -515,7 +576,7 @@ export class InviteFriendsBox extends React.Component {
         <div className="friendEntry selectedChannelColor" onContextMenu={(e) => { this.props.setSelectedUser(friend, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="flex">
             <div className="aligny" style={{ height: 55 }}>
-              <img alt="" className="avatar3 marginleft2" src={this.props.fileEndpoint + "/" + friend.avatar} key={i}/>
+              <img alt="" className="avatar3 marginleft2" src={this.props.fileEndpoint + "/" + friend.avatar}/>
               <div className="white marginleft2">
                 {friend.username}
               </div>

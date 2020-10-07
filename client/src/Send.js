@@ -1,5 +1,4 @@
 import React from 'react';
-import { formatBytes } from './public/scripts/SizeFormatter';
 
 export default class Send extends React.Component {
   state = {

@@ -105,6 +105,8 @@ class App extends React.Component {
       channelTypes: id,
       selectedServer: -1,
     });
+
+    this.switchChannel(-1);
   }
 
   setSelectedMessage = (message, x, y) => {
@@ -144,6 +146,8 @@ class App extends React.Component {
       channelTypes: 2,
       selectedServer: val
     });
+
+    this.switchChannel(-1);
   }
 
   setSelectedChannel =  (channel) => {
@@ -207,7 +211,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <div className="header0 headerColor">
-          <div className="white text1 marginleft2">LiquidChat (dev) <a class="link marginleft1" href="https://github.com/LamkasDev/liquidchat" target="_blank">(Github)</a></div>
+          <div className="white text1 marginleft2">LiquidChat (dev) <a className="link marginleft1" href="https://github.com/LamkasDev/liquidchat" target="_blank">(Github)</a></div>
         </div>
         {this.state.waitingForSession === false ?
           <div>

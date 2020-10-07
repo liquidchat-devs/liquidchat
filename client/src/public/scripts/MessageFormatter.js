@@ -152,12 +152,12 @@ function formatFile(chat, file) {
                         <br/>
                         <a className="tipColor">({formatBytes(file.size, true)})</a>
                     </div>
-                    <div class="videoControls aligny">
+                    <div className="videoControls aligny">
                         <div className="button button1 marginleft2 videoButton" ref={"playButtonWrapper-" + file.name} onClick={() => { chat.videoAction(chat.refs["video-" + file.name], file, "playpause"); }}>
                             <svg aria-hidden="false" width="22" height="22" viewBox="0 0 22 22"><polygon fill="currentColor" points="0 0 0 14 11 7" transform="translate(7 5)"></polygon></svg>
                         </div>
                         <a className="tipColor marginleft1" ref={"progressText-" + file.name} style={{ fontSize: 13 }}>0:00</a>
-                        <div class="progressWrapper marginleft2b" onClick={(e) => {
+                        <div className="progressWrapper marginleft2b" onClick={(e) => {
                                 var pos = (e.pageX  - (e.currentTarget.offsetLeft + e.currentTarget.offsetParent.offsetLeft)) / e.currentTarget.offsetWidth;
                                 chat.refs["video-" + file.name].currentTime = pos * chat.refs["video-" + file.name].duration;
                             }}>
