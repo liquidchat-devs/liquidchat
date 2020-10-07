@@ -5,7 +5,7 @@ class Endpoint {
 
     handle() {
         this.app.get('/fetchUser', (async(req, res) => {
-            if(!this.app.isSessionValid(app, req, res)) { return; }
+            if(!this.app.isSessionValid(this.app, req, res)) { return; }
             const data = req.query;
             var session = this.app.sessions.get(req.cookies['sessionID']);
             var user = await this.app.db.db_fetch.fetchUser(this.app.db, data.id, data.containSensitive && session.userID === data.id);

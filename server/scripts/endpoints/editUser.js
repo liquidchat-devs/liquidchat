@@ -5,7 +5,7 @@ class Endpoint {
 
     handle() {
         this.app.post('/editUser', (async(req, res) => {
-            if(!this.app.isSessionValid(app, req, res)) { return; }
+            if(!this.app.isSessionValid(this.app, req, res)) { return; }
 
             await this.app.epFunc.editUser(req, res, req.body);
             console.log("> received user update - " + req.body.email);

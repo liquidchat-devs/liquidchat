@@ -5,7 +5,7 @@ class Endpoint {
 
     handle() {
         this.app.post('/addToDMChannel', (async(req, res) => {
-            if(!this.app.isSessionValid(app, req, res)) { return; }
+            if(!this.app.isSessionValid(this.app, req, res)) { return; }
 
             await this.addToDMChannel(req, res, req.body)
             console.log("> added to dm channel - " + req.body.channel.id + "/" + req.body.user.id)

@@ -5,7 +5,7 @@ class Endpoint {
 
     handle() {
         this.app.post('/removeFriend', (async(req, res) => {
-            if(!this.app.isSessionValid(app, req, res)) { return; }
+            if(!this.app.isSessionValid(this.app, req, res)) { return; }
 
             await this.removeFriend(req, res, req.body)
             console.log("> removed friend - " + req.body.target.id)

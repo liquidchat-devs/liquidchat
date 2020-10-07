@@ -100,12 +100,12 @@ class Util {
                 var session = this.app.sessions.get(cookies['sessionID']);
                 var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
                 user.status = 1;
-                await this.app.epFunc.updateUser(this.app, user, true);
+                await this.app.epFunc.updateUser(user, true);
 
                 socket.on('disconnect', async function() {
                     var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
                     user.status = 0;
-                    await this.app.epFunc.updateUser(this.app, user, true);
+                    await this.app.epFunc.updateUser(user, true);
                 }.bind(this));
             } catch(e) {
                 console.error(e)

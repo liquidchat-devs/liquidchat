@@ -5,7 +5,7 @@ class Endpoint {
 
     handle() {
         this.app.post('/deleteMessage', (async(req, res) => {
-            if(!this.app.isSessionValid(app, req, res)) { return; }
+            if(!this.app.isSessionValid(this.app, req, res)) { return; }
 
             await this.deleteMessage(req, res, req.body)
             console.log("> deleted message - " + req.body.id)

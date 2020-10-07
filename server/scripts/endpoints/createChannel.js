@@ -5,7 +5,7 @@ class Endpoint {
 
     handle() {
         this.app.post('/createChannel', (async(req, res) => {
-            if(!this.app.isSessionValid(app, req, res)) { return; }
+            if(!this.app.isSessionValid(this.app, req, res)) { return; }
             
             await this.createChannel(req, res, req.body)
             console.log("> created channel - " + req.body.name)
