@@ -5,7 +5,7 @@ module.exports = {
         }
 
         var query = "INSERT IGNORE INTO servers (id, name, createdAt, authorID, avatar, channels, members) VALUES" + db.contructQuestionMarks(7);
-        db.sqlConn.promise().execute(query, [ server.id, db.escapeString(server.name), server.createdAt,  server.author.id, server.avatar, server.channels.join(","), server.members.join(",") ])
+        db.sqlConn.promise().execute(query, [ server.id, db.sqlConn.escape(server.name), server.createdAt,  server.author.id, server.avatar, server.channels.join(","), server.members.join(",") ])
         .then((result, err) => {
             if(err) { throw err; }
         });
@@ -17,7 +17,7 @@ module.exports = {
         }
 
         var query = "INSERT IGNORE INTO users (id, username, createdAt, avatar, password, friends, dmChannels, servers, status) VALUES" + db.contructQuestionMarks(9);
-        db.sqlConn.promise().execute(query, [ user.id, db.escapeString(user.username), user.createdAt, user.avatar, user.password, user.friends.join(","), user.dmChannels.join(","), user.servers.join(","), user.status ])
+        db.sqlConn.promise().execute(query, [ user.id, db.sqlConn.escape(user.username), user.createdAt, user.avatar, user.password, user.friends.join(","), user.dmChannels.join(","), user.servers.join(","), user.status ])
         .then((result, err) => {
             if(err) { throw err; }
         });
@@ -29,7 +29,7 @@ module.exports = {
         }
 
         var query0 = "(id, name, type, createdAt, authorID" + (channel.members == null ? "" : ", members") + (channel.server == null ? ")" : ", serverID)")
-        var query1 = [ channel.id, db.escapeString(channel.name), channel.type, channel.createdAt, channel.author.id ]
+        var query1 = [ channel.id, db.sqlConn.escape(channel.name), channel.type, channel.createdAt, channel.author.id ]
         if(channel.members != null) { query1.push(channel.members.join(",")) }
         if(channel.server != null) { query1.push(channel.server.id) }
 
@@ -47,8 +47,8 @@ module.exports = {
 
         var query0 = "(id, createdAt, authorID, channelID, edited" + (message.text == null ? "" : ", text") + (message.file == null ? ")" : ", fileName, fileSize)")
         var query1 = [ message.id, message.createdAt, message.author.id, message.channel.id, message.edited ]
-        if(message.text != null) { query1.push(db.escapeString(message.text)) }
-        if(message.file != null) { query1.push(db.escapeString(message.file.name), message.file.size) }
+        if(message.text != null) { query1.push(db.sqlConn.escape(message.text)) }
+        if(message.file != null) { query1.push(db.sqlConn.escape(message.file.name), message.file.size) }
         
         var query = "INSERT IGNORE INTO messages " + query0 + " VALUES" + db.contructQuestionMarks(query1.length);
         db.sqlConn.promise().execute(query)

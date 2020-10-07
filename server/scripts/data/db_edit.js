@@ -6,7 +6,7 @@ module.exports = {
 
         var query0 = "name=?, avatar=?, channels=?, members=?"
         var query = "UPDATE servers SET " + query0 + " WHERE id='" + server.id + "'";
-        db.sqlConn.promise().execute(query, [ db.escapeString(server.name), server.avatar, server.channels.join(","), server.members.join(",") ])
+        db.sqlConn.promise().execute(query, [ db.sqlConn.escape(server.name), server.avatar, server.channels.join(","), server.members.join(",") ])
         .then((result, err) => {
             if(err) { throw err; }
         });
@@ -18,8 +18,8 @@ module.exports = {
         }
 
         var query0 = "username=?, avatar=?, friends=?, dmChannels=?, servers=?, status=?" + (user.email == null ? "" : ", email=?") + (user.password == null ? "" : ", password=?")
-        var query1 = [ db.escapeString(user.username), user.avatar, user.friends.join(","), user.dmChannels.join(","), user.servers.join(","), user.status ]
-        if(user.email != null) { query1.push(db.escapeString(user.email)); }
+        var query1 = [ db.sqlConn.escape(user.username), user.avatar, user.friends.join(","), user.dmChannels.join(","), user.servers.join(","), user.status ]
+        if(user.email != null) { query1.push(db.sqlConn.escape(user.email)); }
         if(user.password != null) { query1.push(user.password); }
 
         var query = "UPDATE users SET " + query0 + " WHERE id='" + user.id + "'";
@@ -36,8 +36,8 @@ module.exports = {
 
         var query0 = "edited=?" + (message.text == null ? "" : ", text=?") + (message.file == null ? "" : ", fileName=?, fileSize=?")
         var query1 = [ message.edited ]
-        if(message.text != null) { query1.push(db.escapeString(message.text)); }
-        if(message.file != null) { query1.push(db.escapeString(message.file.name), message.file.size); }
+        if(message.text != null) { query1.push(db.sqlConn.escape(message.text)); }
+        if(message.file != null) { query1.push(db.sqlConn.escape(message.file.name), message.file.size); }
 
         var query = "UPDATE messages SET " + query0 + " WHERE id='" + message.id + "'";
         db.sqlConn.promise().execute(query, query1)
@@ -52,7 +52,7 @@ module.exports = {
         }
 
         var query0 = "name=?" + (channel.members == null ? "" : ", members=?")
-        var query1 = [ db.escapeString(channel.name) ]
+        var query1 = [ db.sqlConn.escape(channel.name) ]
         if(channel.members != null) { query1.push(channel.members.join(",")); }
 
         var query = "UPDATE channels SET " + query0 + " WHERE id='" + channel.id + "'";
