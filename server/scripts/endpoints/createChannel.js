@@ -16,9 +16,8 @@ class Endpoint {
         if(_channel.name.length < 1) {
             res.send(JSON.stringify({ status: -1 }))
             return;
-        } else {
-            res.send(JSON.stringify({ status: 1 }))
         }
+
         var socket = this.app.sessionSockets.get(req.cookies['sessionID']);
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
@@ -56,6 +55,7 @@ class Endpoint {
         }
     
         await this.app.db.db_add.addChannel(this.app.db, channel);
+        res.send(JSON.stringify(channel))
     }
 }
 

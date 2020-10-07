@@ -20,8 +20,6 @@ class Endpoint {
         if(channel === undefined) {
             res.send(JSON.stringify({ status: -1 }))
             return;
-        } else {
-            res.send(JSON.stringify({ status: 1 }))
         }
 
         var message = {
@@ -45,6 +43,7 @@ class Endpoint {
         })
 
         await this.app.db.db_add.addMessage(this.app.db, message);
+        res.send(JSON.stringify(message))
     }
 }
 

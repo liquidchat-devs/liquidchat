@@ -16,9 +16,8 @@ class Endpoint {
         if(_server.name.length < 1) {
             res.send(JSON.stringify({ status: -1 }))
             return;
-        } else {
-            res.send(JSON.stringify({ status: 1 }))
         }
+        
         var socket = this.app.sessionSockets.get(req.cookies['sessionID']);
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
@@ -40,6 +39,8 @@ class Endpoint {
         user.servers.push(server.id);
         this.app.epFunc.emitToUser(user.id, "updateUser", user);
         await this.app.db.db_edit.editUser(this.app.db, user);
+
+        res.send(JSON.stringify(server))
     }
 }
 
