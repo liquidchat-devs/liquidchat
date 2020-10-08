@@ -67,7 +67,7 @@ class Endpoint {
                 }
             }
             
-            await this.sendMessage(req, res, message)
+            await this.app.epFunc.sendMessage(req, res, message)
         }.bind(this));
     }
 }
