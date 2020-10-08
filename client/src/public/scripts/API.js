@@ -525,7 +525,7 @@ class API {
 
         await axios({
             method: 'post',
-            url: this.mainClass.state.APIEndpoint + '/updateServerAvatar?serverID=' + serverID,
+            url: this.mainClass.state.APIEndpoint + '/updateServerAvatar?serverID=' + serverID + '?fileName=' + file.name,
             processData: false,
             contentType: false,
             cache: false,

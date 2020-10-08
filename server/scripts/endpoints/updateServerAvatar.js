@@ -29,9 +29,10 @@ class Endpoint {
         form.uploadDir = this.app.filesStorage;
         form.keepExtensions = true;
 
+        var fileName = req.query.fileName;
         var fileID = this.app.crypto.randomBytes(16).toString("hex");
-        var fileID2 = fileID + ".png"
-        console.log("> received avatar - " + serverID)
+        var fileID2 = fileID + (fileName.substring(fileName.lastIndexOf(".")))
+        console.log("> received avatar - " + fileName)
     
         form.parse(req, async function(err, fields, files) {
             this.app.fs.rename(files.fileUploaded.path, this.app.filesStorage + fileID2, function(err) {
