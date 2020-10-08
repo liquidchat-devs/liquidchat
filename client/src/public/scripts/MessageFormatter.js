@@ -213,23 +213,24 @@ function formatMessage(chat, message) {
 
     var messageFormatted = message.text
     var customMessage = false;
+    
     if(messageFormatted.startsWith("http://nekonetwork.net/invite/")) {
         let serverID = messageFormatted.substring("http://nekonetwork.net/invite/".length)
-        let server = chat.props.getServer(serverID);
+        let server = chat.props.API.API_fetchServerSync(serverID);
 
         if(server !== -1) {
             messageFormatted = (
             <div>
-                <div class="invite-wrapper chatColor">
-                    <div class="flex">
-                        <img alt="" class="avatar4 marginleft2 margintop1a" src={chat.props.fileEndpoint + "/" + server.avatar}/>
+                <div className="invite-wrapper chatColor">
+                    <div className="flex">
+                        <img alt="" className="avatar4 marginleft2 margintop1a" src={chat.props.fileEndpoint + "/" + server.avatar}/>
                         <div>
-                            <div class="white marginleft2 margintop1a">{server.name}</div>
-                            <a class="tipColor marginleft2">{server.members.length} members</a>
+                            <div className="white marginleft2 margintop1a">{server.name}</div>
+                            <a className="tipColor marginleft2">{server.members.length} members</a>
                         </div>
                     </div>
-                    <a class="button inviteButton marginleft2 margintop1b" style={server.members.includes(chat.props.session.userID) === false ? {} : {color: "#b3b3b3", border: "1px solid #b3b3b3", cursor: "default"}}
-                    onClick={() => { if(server.members.includes(chat.props.session.userID) === false) { chat.props.API_joinServer(server.id); } }}>Join</a>
+                    <a className="button inviteButton marginleft2 margintop1b" style={server.members.includes(chat.props.session.userID) === false ? {} : {color: "#b3b3b3", border: "1px solid #b3b3b3", cursor: "default"}}
+                    onClick={() => { if(server.members.includes(chat.props.session.userID) === false) { chat.props.API.API_joinServer(server.id); } }}>Join</a>
                 </div>
             </div>)
             customMessage = true;
@@ -246,9 +247,9 @@ function formatMessage(chat, message) {
     <div>
         <div className="flex">
             {customMessage ?
-                <p className="white margin0">
+                <div className="white margin0">
                     {messageFormatted}
-                </p>
+                </div>
             :
                 <p className="white margin0" dangerouslySetInnerHTML={{__html: messageFormatted}}></p>
             }

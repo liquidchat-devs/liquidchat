@@ -6,6 +6,8 @@ class API {
         this.mainClass = _main;
         this.socket = -1;
         this.wrtc = -1;
+
+        this.queuedServers = [];
     }
 
     async API_initWebsockets(userID) {
@@ -71,7 +73,7 @@ class API {
             var server = JSON.parse(serverData);
             var newServers = this.mainClass.state.servers.set(server.id, server);
             this.mainClass.setState({
-                channels: newServers
+                servers: newServers
             });
         });
         socket.on('updateServer', (serverData) => {
@@ -81,6 +83,7 @@ class API {
             var server = newServers.get(_server.id);
             server.name = _server.name;
             server.avatar = _server.avatar;
+            server.members = _server.members;
             newServers.set(server.id, server);
             this.mainClass.setState({
                 servers: newServers
@@ -215,6 +218,37 @@ class API {
           });
 
           return user;
+        }
+    }
+
+    async API_fetchServer(id) {
+        if(this.mainClass.state.servers.has(id)) {
+            return this.mainClass.state.servers.get(id)
+        } else {
+            //Fetch user
+            const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchServer?id=' + id, { withCredentials: true });
+            var server = reply.data
+      
+            //Cache user
+            var newServers = this.mainClass.state.servers.set(server.id, server);
+            this.mainClass.setState({
+                servers: newServers
+            });
+  
+            return server;
+        }
+    }
+
+    API_fetchServerSync(id) {
+        if(this.mainClass.state.servers.has(id)) {
+            return this.mainClass.state.servers.get(id)
+        } else {
+            if(this.queuedServers.includes(id)) {
+                return -1;
+            } else {
+                this.API_fetchServer(id);
+                return -1
+            }
         }
     }
 
@@ -651,9 +685,8 @@ class API {
         return reply.data.status;
     }
 
-    async API_fetchChannels(type) {
-        const reply = (await axios.get(this.mainClass.state.APIEndpoint + (type === 0 ? '/fetchChannels' : '/fetchDMChannels'), { withCredentials: true }));
-        var currentChannels = this.mainClass.state.channels;
+    async API_fetchDMChannels() {
+        const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchDMChannels', { withCredentials: true }));
         var newChannels = reply.data;
         newChannels = new Map(newChannels.map(obj => [obj.id, obj]));
 
@@ -661,13 +694,14 @@ class API {
             const reply2 = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannelMessages?id=' + channel.id, { withCredentials: true }));
             var messages = reply2.data;
             channel.messages = messages;
+            var currentChannels = this.mainClass.state.channels;
             currentChannels.set(channel.id, channel);
 
             if(channel.members !== undefined) { this.API_fetchUsersForChannelMembers(channel); }
             this.API_fetchUsersForMessages(messages)
             this.mainClass.setState({
                 channels: currentChannels
-            });
+            }, () => { console.log("set dm channels"); });
         });
     }
 
@@ -678,12 +712,8 @@ class API {
 
         newServers.forEach(async(server) => {
             const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannels?id=' + server.id, { withCredentials: true }));
-            const reply2 = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchDMChannels', { withCredentials: true }));
             var newChannels = reply.data;
-            var newChannels2 = reply2.data;
             newChannels = new Map(newChannels.map(obj => [obj.id, obj]));
-            newChannels2 = new Map(newChannels2.map(obj => [obj.id, obj]));
-            newChannels = new Map([...newChannels, ...newChannels2]);
 
             newChannels.forEach(async(channel) => {
                 const reply2 = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannelMessages?id=' + channel.id, { withCredentials: true }));
@@ -697,7 +727,7 @@ class API {
                 this.API_fetchUsersForMessages(messages)
                 this.mainClass.setState({
                     channels: newChannels
-                });
+                }, () => { console.log("set server channels"); });
             });
 
             this.mainClass.setState({

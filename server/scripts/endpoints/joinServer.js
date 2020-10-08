@@ -29,6 +29,7 @@ class Endpoint {
 
         user.servers.push(server.id);
         this.app.epFunc.emitToUser(user.id, "createServer", server);
+        this.app.epFunc.emitToUser(user.id, "updateUser", user);
 
         server.members.push(user.id);
         server.members.forEach(id => {

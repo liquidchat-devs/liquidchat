@@ -1049,6 +1049,9 @@ export class ServerOptionsBox extends React.Component {
             </div> :
             ""
           }
+          <div className="button2 alignmiddle chatColor" onClick={() => { this.props.API.API_leaveServer(server.id); }}>
+            <p className="white text1">> Leave Server</p>
+          </div>
           <div className="button2 alignmiddle chatColor" onClick={() => { this.props.copyID(server.id); }}>
             <p className="white text1">> Copy ID</p>
           </div>

@@ -4,13 +4,14 @@ import { formatDate } from './public/scripts/DateFormatter';
 import { formatBytes } from './public/scripts/SizeFormatter';
 
 export default class Chat extends React.Component {
-  componentDidMount = () => {
+  componentDidMount = async() => {
     this.setVideoRef = (element, type) => {
       this["video" + type] = element;
     };
     
-    this.props.API.API_fetchFriendRequests();
-    this.props.API.API_fetchServers();
+    await this.props.API.API_fetchFriendRequests();
+    await this.props.API.API_fetchServers();
+    this.props.API.API_fetchDMChannels();
   }
 
   handleEdit = async e => {
