@@ -300,7 +300,7 @@ class API {
         var data = new FormData();
         data.append("fileUploaded", file)
 
-        await axios({
+        const reply = await axios({
             method: 'post',
             url: this.mainClass.state.APIEndpoint + '/updateAvatar?fileName=' + file.name,
             processData: false,
@@ -311,7 +311,11 @@ class API {
             withCredentials: true
         });
 
-        return true;
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return 1;
+        }
     }
 
     async API_editUser(email) {
@@ -327,23 +331,31 @@ class API {
     }
 
     async API_sendFriendRequest(userID) {
-        await axios.post(this.mainClass.state.APIEndpoint + '/sendFriendRequest', {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/sendFriendRequest', {
             target: {
                 id: userID
             }
         }, { withCredentials: true });
 
-        return true;
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return reply.data;
+        }
     }
 
     async API_removeFriend(userID) {
-        await axios.post(this.mainClass.state.APIEndpoint + '/removeFriend', {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/removeFriend', {
             target: {
                 id: userID
             }
         }, { withCredentials: true });
 
-        return true;
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return 1;
+        }
     }
 
     async API_sendFriendRequestByUsername(username) {
@@ -353,23 +365,35 @@ class API {
             }
         }, { withCredentials: true });
 
-        return reply.data.status;
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return reply.data;
+        }
     }
 
     async API_acceptFriendRequest(id) {
-        await axios.post(this.mainClass.state.APIEndpoint + '/acceptFriendRequest', {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/acceptFriendRequest', {
             id: id
         }, { withCredentials: true });
 
-        return true;
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return 1;
+        }
     }
 
     async API_declineFriendRequest(id) {
-        await axios.post(this.mainClass.state.APIEndpoint + '/declineFriendRequest', {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/declineFriendRequest', {
             id: id
         }, { withCredentials: true });
 
-        return true;
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return 1;
+        }
     }
     //#endregion
 
@@ -452,28 +476,36 @@ class API {
     }
 
     async API_sendMessage(message) {
-        await axios.post(this.mainClass.state.APIEndpoint + '/message', {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/message', {
             text: message,
             channel: {
                 id: this.mainClass.state.currentChannel
             }
         }, { withCredentials: true });
 
-        return true;
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return reply.data;
+        }
     }
 
     async API_sendDM(userID, message) {
         var channel = await this.API_getSuitableDMChannel(userID)
         if(channel === undefined) { return false; }
 
-        await axios.post(this.mainClass.state.APIEndpoint + '/message', {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/message', {
             text: message,
             channel: {
                 id: channel.id
             }
         }, { withCredentials: true });
 
-        return true;
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return reply.data;
+        }
     }
 
     async API_sendFile(file, message) {
@@ -482,7 +514,7 @@ class API {
         data.append("text", message)
         data.append("channel.id", this.mainClass.state.currentChannel)
 
-        await axios({
+        const reply = await axios({
             method: 'post',
             url: this.mainClass.state.APIEndpoint + '/upload?fileName=' + file.name,
             processData: false,
@@ -493,11 +525,15 @@ class API {
             withCredentials: true
         });
 
-        return true;
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return 1;
+        }
     }
 
     async API_editMessage(originalMessage, newText) {
-        await axios.post(this.mainClass.state.APIEndpoint + '/editMessage', {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/editMessage', {
             id: originalMessage.id,
             text: newText,
             channel: {
@@ -505,7 +541,11 @@ class API {
             }
         }, { withCredentials: true });
 
-        return true;
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return reply.data;
+        }
     }
 
     async API_deleteMessage(message) {
@@ -516,7 +556,11 @@ class API {
             }
         }, { withCredentials: true });
 
-        return reply.data.status;
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return 1;
+        }
     }
 
     async API_joinVoiceChannel(channel) {
@@ -526,7 +570,11 @@ class API {
             }
         }, { withCredentials: true });
 
-        return reply.data.status;
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return 1;
+        }
     }
 
     async API_leaveVoiceChannel(channel) {
@@ -536,7 +584,11 @@ class API {
             }
         }, { withCredentials: true });
 
-        return reply.data.status;
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return 1;
+        }
     }
     //#endregion
 
@@ -557,9 +609,9 @@ class API {
         var data = new FormData();
         data.append("fileUploaded", file)
 
-        await axios({
+        const reply = await axios({
             method: 'post',
-            url: this.mainClass.state.APIEndpoint + '/updateServerAvatar?serverID=' + serverID + '?fileName=' + file.name,
+            url: this.mainClass.state.APIEndpoint + '/updateServerAvatar?serverID=' + serverID + '&fileName=' + file.name,
             processData: false,
             contentType: false,
             cache: false,
@@ -568,7 +620,11 @@ class API {
             withCredentials: true
         });
 
-        return true;
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return 1;
+        }
     }
 
     async API_editServer(serverID, serverName) {
@@ -588,7 +644,11 @@ class API {
             id: serverID
         }, { withCredentials: true });
 
-        return reply.data.status;
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return 1;
+        }
     }
 
     async API_leaveServer(serverID) {
@@ -682,7 +742,11 @@ class API {
             id: channel.id
         }, { withCredentials: true });
 
-        return reply.data.status;
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return 1;
+        }
     }
 
     async API_fetchDMChannels() {
