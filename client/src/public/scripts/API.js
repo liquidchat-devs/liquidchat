@@ -556,6 +556,30 @@ class API {
 
         return reply.data.status;
     }
+
+    async API_leaveServer(serverID) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/leaveServer', {
+            id: serverID
+        }, { withCredentials: true });
+
+        if(reply.data.status !== 1) {
+            return reply.data.status;
+        } else {
+            return reply.data;
+        }
+    }
+
+    async API_joinServer(serverID) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/joinServer', {
+            id: serverID
+        }, { withCredentials: true });
+
+        if(reply.data.status !== 1) {
+            return reply.data.status;
+        } else {
+            return reply.data;
+        }
+    }
     //#endregion
 
     //#region Channels

@@ -104,17 +104,6 @@ function toFormatLink(chat, message) {
         </div>`)
     })
 
-    inviteResults.forEach(link => {
-        results.push(`<br/>
-        <div>
-            <div className="file-wrapper chatColor">
-                <a className="link file-link">${link}</a>
-                    <br/>
-                <a className="tipColor"></a>
-            </div>
-        </div>`)
-    })
-
     return results.join("");
 }
 
@@ -223,17 +212,45 @@ function formatMessage(chat, message) {
     ];
 
     var messageFormatted = message.text
-    styles.forEach((val, i) => {
-        messageFormatted = toFormat(messageFormatted == null ? "" : messageFormatted, val);
-    });
+    var customMessage = false;
+    if(messageFormatted.startsWith("http://nekonetwork.net/invite/")) {
+        let serverID = messageFormatted.substring("http://nekonetwork.net/invite/".length)
+        let server = chat.props.getServer(serverID);
 
-    messageFormatted = toFormatLink(chat, messageFormatted == null ? "" : messageFormatted);
+        if(server !== -1) {
+            messageFormatted = (
+            <div>
+                <div class="invite-wrapper chatColor">
+                    <div class="flex">
+                        <img alt="" class="avatar4 marginleft2 margintop1a" src={chat.props.fileEndpoint + "/" + server.avatar}/>
+                        <div>
+                            <div class="white marginleft2 margintop1a">{server.name}</div>
+                            <a class="tipColor marginleft2">{server.members.length} members</a>
+                        </div>
+                    </div>
+                    <a class="button inviteButton marginleft2 margintop1b" style={server.members.includes(chat.props.session.userID) === false ? {} : {color: "#b3b3b3", border: "1px solid #b3b3b3", cursor: "default"}}
+                    onClick={() => { if(server.members.includes(chat.props.session.userID) === false) { chat.props.API_joinServer(server.id); } }}>Join</a>
+                </div>
+            </div>)
+            customMessage = true;
+        }
+    } else {
+        styles.forEach((val, i) => {
+            messageFormatted = toFormat(messageFormatted == null ? "" : messageFormatted, val);
+        });
+
+        messageFormatted = toFormatLink(chat, messageFormatted == null ? "" : messageFormatted);
+    }
 
     return (
     <div>
         <div className="flex">
-            {
-            <p className="white margin0" dangerouslySetInnerHTML={{__html: messageFormatted}}></p>
+            {customMessage ?
+                <p className="white margin0">
+                    {messageFormatted}
+                </p>
+            :
+                <p className="white margin0" dangerouslySetInnerHTML={{__html: messageFormatted}}></p>
             }
             {
             message.edited ? <p className="white margin0 text4 marginleft1"> (edited)</p> : ""

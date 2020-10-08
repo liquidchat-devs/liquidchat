@@ -668,3 +668,10 @@ code {
   z-index: 2;
   display: none;
 }
+
+.invite-wrapper {
+  width: 290px;
+  height: 95px;
+  padding: 12px;
+  border-radius: 5px;
+}
