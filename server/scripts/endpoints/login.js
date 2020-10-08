@@ -26,8 +26,7 @@ class Endpoint {
                         const sessionID = this.app.crypto.randomBytes(16).toString("hex");
                         const session = {
                             id: sessionID,
-                            userID: user.id,
-                            status: 1
+                            userID: user.id
                         }
                 
                         this.app.sessions.set(sessionID, session);

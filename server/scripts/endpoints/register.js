@@ -19,8 +19,7 @@ class Endpoint {
 
                 const session = {
                     id: sessionID,
-                    userID: userID,
-                    status: 1
+                    userID: userID
                 }
 
                 const user = {
