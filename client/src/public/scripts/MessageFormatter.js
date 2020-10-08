@@ -28,6 +28,10 @@ function getVideoDomains() {
     "https://www.youtube.com", "https://www.youtu.be"]
 }
 
+function getInviteDomains() {
+    return ["http://nekonetwork.net/invite"]
+}
+
 function getYoutubeEmbedLink(link) {
     var i = link.indexOf("watch?v=");
     var result = link.substring(0, i) + "embed/" + link.substring(i + "watch?v=".length)
@@ -42,6 +46,7 @@ function getImageExtensions() {
 function toFormatLink(chat, message) {
     let imageResults = [];
     let videoResults = [];
+    let inviteResults = [];
     let results = [];
     let lastIndex = 0;
 
@@ -71,17 +76,43 @@ function toFormatLink(chat, message) {
                 videoResults.push(link)
             }
 
+            const inviteDomains = getInviteDomains()
+            var isInvite = inviteDomains.filter((dom) => { return link.startsWith(dom) }).length > 0
+            if(isInvite) {
+                inviteResults.push(link)
+            }
+
             results.push(`<a class="link" href="${link}" target="_blank">${link}</a>`)
             lastIndex += link.length
         }
     }
 
     imageResults.forEach(link => {
-        results.push(`<span><img alt="" class="message-image" src=${link}></span>`)
+        results.push(`<span>
+            <img alt="" class="message-image" src=${link}>
+        </span>`)
     })
 
     videoResults.forEach(link => {
-        results.push(`<br/><div class="video-player-wrapper chatColor"><a class="link video-text" href="${link}" target="_blank">some really cool video</a><br/><iframe class="video-player" src=${getYoutubeEmbedLink(link)}/></div>`)
+        results.push(`<br/>
+        <div class="video-player-wrapper chatColor">
+            <a class="link video-text" href="${link}" target="_blank">
+                some really cool video
+            </a>
+            <br/>
+            <iframe class="video-player" src=${getYoutubeEmbedLink(link)}/>
+        </div>`)
+    })
+
+    inviteResults.forEach(link => {
+        results.push(`<br/>
+        <div>
+            <div className="file-wrapper chatColor">
+                <a className="link file-link">${link}</a>
+                    <br/>
+                <a className="tipColor"></a>
+            </div>
+        </div>`)
     })
 
     return results.join("");

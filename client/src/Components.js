@@ -116,7 +116,7 @@ export class ChannelSelector extends React.Component {
       var user = author.id === loggedUser.id ? target : author;
 
       return (
-        <div className="friendRequestEntry selectedChannelColor" style={{ height: author.id === this.props.session.userID ? 117 : 81}}>
+        <div key={i} className="friendRequestEntry selectedChannelColor" style={{ height: author.id === this.props.session.userID ? 117 : 81}}>
           <div className="flex">
             <img alt="" className="avatar3 marginleft1 margintop1" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
             <div className="white marginleft2 margintop1b">
@@ -279,7 +279,7 @@ export class DialogManager extends React.Component {
         return <EditChannelDialog selectedChannel={this.props.selectedChannel} API={this.props.API} switchDialogState={this.props.switchDialogState} />
 
       case 12:
-        return <InviteFriendsBox fileEndpoint={this.props.fileEndpoint} getUser={this.props.getUser} session={this.props.session} selectedChannel={this.props.selectedChannel} API={this.props.API} switchDialogState={this.props.switchDialogState} />
+        return <InviteFriendsBox fileEndpoint={this.props.fileEndpoint} getChannel={this.props.getChannel} getServer={this.props.getServer} selectedServer={this.props.selectedServer} getUser={this.props.getUser} session={this.props.session} selectedChannel={this.props.selectedChannel} API={this.props.API} switchDialogState={this.props.switchDialogState} />
 
       case 13:
         return <SettingsBox fileEndpoint={this.props.fileEndpoint} API={this.props.API} switchDialogState={this.props.switchDialogState} session={this.props.session} getUser={this.props.getUser}/>
@@ -625,8 +625,17 @@ export class EditServerDialog extends React.Component {
 }
 
 export class InviteFriendsBox extends React.Component {
-  inviteUser = async (channelID, userID) => {
-    const res = await this.props.API.API_addToDMChannel(channelID, userID);
+  inviteUser = async (id, userID, type) => {
+    let res = -1;
+    switch(type) {
+      case 0:
+        res = await this.props.API.API_addToDMChannel(id, userID);
+        break;
+
+      case 1:
+        res = await this.props.API.API_sendDM(userID, 'http://nekonetwork.net/invite/' + id);
+        break;
+    }
     
     if(res === 1) { this.props.switchDialogState(-1); }
     return true;
@@ -634,6 +643,10 @@ export class InviteFriendsBox extends React.Component {
 
   render() {
     let loggedUser = this.props.getUser(this.props.session.userID);
+    let server = this.props.getServer(this.props.selectedServer);
+    let channel = this.props.getChannel(this.props.selectedChannel);
+    let target = channel.members === undefined ? server : channel;
+    let type = channel.members === undefined ? 1 : 0;
 
     const friendList = loggedUser.friends.map((friendID, i) => {
     const friend = this.props.getUser(friendID);
@@ -642,7 +655,7 @@ export class InviteFriendsBox extends React.Component {
       }
 
       return (
-        <div className="friendEntry selectedChannelColor" onContextMenu={(e) => { this.props.setSelectedUser(friend, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
+        <div key={i} className="friendEntry selectedChannelColor" onContextMenu={(e) => { this.props.setSelectedUser(friend, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="flex">
             <div className="aligny" style={{ height: 55 }}>
               <img alt="" className="avatar3 marginleft2" src={this.props.fileEndpoint + "/" + friend.avatar}/>
@@ -650,9 +663,9 @@ export class InviteFriendsBox extends React.Component {
                 {friend.username}
               </div>
               {
-                this.props.selectedChannel.members.includes(friend.id) ?
+                target.members.includes(friend.id) ?
                   <a className="button inviteButton" style={{ textDecoration: "none", right: 0, color: "#b3b3b3", border: "1px solid #b3b3b3", cursor: "default" }}>Joined!</a>
-                : <a className="button inviteButton" style={{ textDecoration: "none", right: 0 }} onClick={(e) => { this.inviteUser(this.props.selectedChannel.id, friend.id); e.preventDefault(); } }>Invite</a>
+                : <a className="button inviteButton" style={{ textDecoration: "none", right: 0 }} onClick={(e) => { this.inviteUser(target.id, friend.id, type); e.preventDefault(); } }>Invite</a>
               }
             </div>
           </div>
