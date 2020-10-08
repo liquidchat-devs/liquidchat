@@ -83,8 +83,9 @@ export default class Chat extends React.Component {
   }
 
   render() {
-    let channel = this.props.channels.get(this.props.currentChannel)
-    if(channel === undefined) {
+    let server = this.props.getServer(this.props.selectedServer)
+    let channel = this.props.getChannel(this.props.currentChannel)
+    if(channel === -1) {
       return (
         <div className="flex">
           <h3 className="white margin1 marginleft2"> No Channel Selected</h3>
@@ -93,7 +94,7 @@ export default class Chat extends React.Component {
     }
     
     let messages = channel.messages === undefined ? [] : channel.messages;
-    let members = channel.members;
+    let members = channel.members === undefined ? server.members : channel.members;
     let messageList = -1;
     let membersList = -1;
 
@@ -165,7 +166,7 @@ export default class Chat extends React.Component {
               <div className="marginleft2">
                 <div className="flex">
                   <div className="allignMiddle" style={{ margin: 0, color: "white", fontSize: 16, marginBottom: 5 }}>
-                    Members ({channel.members.length})
+                    Members ({members.length})
                   </div>
                 </div>
               </div>
