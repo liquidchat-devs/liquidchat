@@ -319,7 +319,7 @@ class API {
             email: email
         }, { withCredentials: true });
 
-        if(reply.data.status !== 1) {
+        if(reply.data.status !== undefined) {
             return reply.data.status;
         } else {
             return reply.data;
@@ -385,7 +385,7 @@ class API {
           password: _password
         }, { withCredentials: true });
     
-        if(reply.data.status !== 1) {
+        if(reply.data.status !== undefined) {
           return reply.data.status;
         } else {
           this.mainClass.setState({
@@ -410,7 +410,7 @@ class API {
             password2: _password2
         }, { withCredentials: true });
 
-        if(reply.data.status !== 1) {
+        if(reply.data.status !== undefined) {
             return reply.data.status;
         } else {
             this.mainClass.setState({
@@ -546,7 +546,7 @@ class API {
             name: serverName
         }, { withCredentials: true });
 
-        if(reply.data.status !== 1) {
+        if(reply.data.status !== undefined) {
             return reply.data.status;
         } else {
             return reply.data;
@@ -576,7 +576,7 @@ class API {
             id: serverID, name: serverName
         }, { withCredentials: true });
 
-        if(reply.data.status !== 1) {
+        if(reply.data.status !== undefined) {
             return reply.data.status;
         } else {
             return reply.data;
@@ -596,7 +596,7 @@ class API {
             id: serverID
         }, { withCredentials: true });
 
-        if(reply.data.status !== 1) {
+        if(reply.data.status !== undefined) {
             return reply.data.status;
         } else {
             return reply.data;
@@ -608,7 +608,7 @@ class API {
             id: serverID
         }, { withCredentials: true });
 
-        if(reply.data.status !== 1) {
+        if(reply.data.status !== undefined) {
             return reply.data.status;
         } else {
             return reply.data;
@@ -622,7 +622,7 @@ class API {
             server: { id: serverID }, name: channelName, type: channelType
         }, { withCredentials: true });
 
-        if(reply.data.status !== 1) {
+        if(reply.data.status !== undefined) {
             return reply.data.status;
         } else {
             return reply.data;
@@ -634,7 +634,7 @@ class API {
             name: channelName, type: 2, members: channelMembers
         }, { withCredentials: true });
 
-        if(reply.data.status !== 1) {
+        if(reply.data.status !== undefined) {
             return reply.data.status;
         } else {
             return reply.data;
@@ -646,7 +646,7 @@ class API {
             channel: { id: channelID }, user: { id: userID }
         }, { withCredentials: true });
 
-        if(reply.data.status !== 1) {
+        if(reply.data.status !== undefined) {
             return reply.data.status;
         } else {
             return reply.data;
@@ -658,7 +658,7 @@ class API {
             channel: { id: channelID }, user: { id: userID }
         }, { withCredentials: true });
 
-        if(reply.data.status !== 1) {
+        if(reply.data.status !== undefined) {
             return reply.data.status;
         } else {
             return reply.data;
@@ -670,7 +670,7 @@ class API {
             id: channelID, name: channelName
         }, { withCredentials: true });
 
-        if(reply.data.status !== 1) {
+        if(reply.data.status !== undefined) {
             return reply.data.status;
         } else {
             return reply.data;

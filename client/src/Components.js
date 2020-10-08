@@ -451,6 +451,9 @@ export class CreateServerBox extends React.Component {
           <div className="white text3 marginleft2 margintop1a">> Create new server-</div>
           <form onSubmit={this.handleSubmit} className="flex margintop1">
             <img alt="" className="avatar2 marginleft4 marginright2" ref="serverImage" src={this.props.fileEndpoint + "/defaultAvatar.png"} onMouseEnter={() => this.refs["serverEditOverlay"].style = "display: flex;" }/>
+            <div className="cropButton alignmiddle">
+                <div className="white text7">Crop</div>
+            </div>
             <label for="avatar-input">
               <div className="avatar2 avatarOverlay marginleft4 marginright2 alignmiddle" ref="serverEditOverlay" onMouseLeave={() => this.refs["serverEditOverlay"].style = "display: none;" }>
                 <div className="white text4 nopointer">Change Icon</div>

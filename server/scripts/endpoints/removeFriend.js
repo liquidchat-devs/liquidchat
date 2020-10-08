@@ -21,7 +21,7 @@ class Endpoint {
             res.send(JSON.stringify({ status: -1 }))
             return;
         } else {
-            res.send(JSON.stringify({ status: 1 }))
+            res.sendStatus(200);
         }
 
         var targetUser = await this.app.db.db_fetch.fetchUser(this.app.db, _removalRequest.target.id);

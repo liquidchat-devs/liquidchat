@@ -27,7 +27,7 @@ class Endpoint {
             res.send(JSON.stringify({ status: -3 }))
             return;
         } else {
-            res.send(JSON.stringify({ status: 1 }))
+            res.sendStatus(200);
         }
 
         //Make sure client doesn't overwrite something he's not allowed to

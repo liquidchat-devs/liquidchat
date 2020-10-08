@@ -31,7 +31,7 @@ class Endpoint {
 
             user.avatar = fileID2
             await this.app.epFunc.updateUser(this.app, user, true)
-            res.send(JSON.stringify({ status: 1 }))
+            res.sendStatus(200);
         }.bind(this));
     }
 }

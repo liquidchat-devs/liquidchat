@@ -16,7 +16,7 @@ class Endpoint {
             res.send(JSON.stringify({ status: -2 }))
             return;
         }  else {
-            res.send(JSON.stringify({ status: 1 }))
+            res.sendStatus(200);
         }
 
         await this.app.db.db_delete.deleteFriendRequest(this.app.db, friendRequest.id);
@@ -53,7 +53,7 @@ class Endpoint {
         var socket = this.app.sessionSockets.get(req.cookies['sessionID']);
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
-        res.send(JSON.stringify({ status: 1 }))
+        res.sendStatus(200);
 
         user.email = _user.email;
         await this.app.db.db_edit.editUser(this.app.db, user);

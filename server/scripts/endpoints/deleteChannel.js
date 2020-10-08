@@ -24,9 +24,9 @@ class Endpoint {
             res.send(JSON.stringify({ status: -2 }))
             return;
         } else {
-            res.send(JSON.stringify({ status: 1 }))
+            res.sendStatus(200);
         }
-        
+
         switch(_channel.type) {
             case 0:
             case 1:

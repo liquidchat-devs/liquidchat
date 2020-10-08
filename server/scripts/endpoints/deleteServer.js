@@ -24,7 +24,7 @@ class Endpoint {
             res.send(JSON.stringify({ status: -2 }))
             return;
         } else {
-            res.send(JSON.stringify({ status: 1 }))
+            res.sendStatus(200);
         }
 
         server.members.forEach(async(id) => {

@@ -31,7 +31,7 @@ class Endpoint {
             res.send(JSON.stringify({ status: -4 }))
             return;
         } else {
-            res.send(JSON.stringify({ status: 1 }))
+            res.sendStatus(200);
         }
 
         channel.members.push(targetUser.id);
