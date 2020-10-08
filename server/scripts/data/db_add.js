@@ -51,7 +51,7 @@ module.exports = {
         if(message.file != null) { query1.push(db.escapeString(message.file.name), message.file.size) }
         
         var query = "INSERT IGNORE INTO messages " + query0 + " VALUES" + db.contructQuestionMarks(query1.length);
-        db.sqlConn.promise().execute(query)
+        db.sqlConn.promise().execute(query, query1)
         .then((result, err) => {
             if(err) { throw err; }
         });
