@@ -23,8 +23,6 @@ class Endpoint {
         } else if(message.author.id !== user.id) {
             res.send(JSON.stringify({ status: -2 }))
             return;
-        } else {
-            res.sendStatus(200);
         }
 
         //Make sure client doesn't overwrite something he's not allowed to
@@ -49,6 +47,7 @@ class Endpoint {
         }
 
         await this.app.db.db_edit.editMessage(this.app.db, message);
+        res.send(JSON.stringify(message))
     }
 }
 

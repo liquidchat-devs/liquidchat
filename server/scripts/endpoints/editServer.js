@@ -26,8 +26,6 @@ class Endpoint {
         } else if(_server.name !== undefined && _server.name.length < 1) {
             res.send(JSON.stringify({ status: -3 }))
             return;
-        } else {
-            res.sendStatus(200);
         }
 
         //Make sure client doesn't overwrite something he's not allowed to
@@ -38,6 +36,7 @@ class Endpoint {
         });
 
         await this.app.db.db_edit.editServer(this.app.db, server);
+        res.send(JSON.stringify(server))
     }
 }
 

@@ -26,8 +26,6 @@ class Endpoint {
         } else if(_channel.name !== undefined && _channel.name.length < 1) {
             res.send(JSON.stringify({ status: -3 }))
             return;
-        } else {
-            res.sendStatus(200);
         }
 
         //Make sure client doesn't overwrite something he's not allowed to
@@ -50,6 +48,7 @@ class Endpoint {
         }
 
         await this.app.db.db_edit.editChannel(this.app.db, channel);
+        res.send(JSON.stringify(channel))
     }
 }
 

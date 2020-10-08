@@ -500,24 +500,28 @@ code {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .avatar2 {
   width: 100px;
   height: 100px;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .avatar3 {
   width: 35px;
   height: 35px;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .avatar4 {
   width: 35px;
   height: 35px;
   border-radius: 30%;
+  object-fit: cover;
 }
 
 .section {

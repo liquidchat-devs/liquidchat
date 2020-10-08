@@ -455,7 +455,7 @@ export class CreateServerBox extends React.Component {
                 <div className="white text7">Crop</div>
             </div>
             <label for="avatar-input">
-              <div className="avatar2 avatarOverlay marginleft4 marginright2 alignmiddle" ref="serverEditOverlay" onMouseLeave={() => this.refs["serverEditOverlay"].style = "display: none;" }>
+              <div className="avatar2 avatarOverlay marginleft4 alignmiddle" ref="serverEditOverlay" onMouseLeave={() => this.refs["serverEditOverlay"].style = "display: none;" }>
                 <div className="white text4 nopointer">Change Icon</div>
               </div>
             </label>
@@ -542,22 +542,25 @@ export class EditChannelDialog extends React.Component {
 export class EditServerDialog extends React.Component {
   state = {
     serverName: "",
+    serverAvatar: -1,
     serverEditResult: 0,
     avatarChangeResult: 0
   };
 
-  handleAvatar = async (id, e) => {
+  handleAvatar = async (box, e) => {
     if(e.target.files.length < 1) { return; }
     
     var file = e.target.files[0];
     e.target.value = ""
-    const res = await this.props.API.API_updateServerAvatar(id, file)
     this.setState({
-      avatarChangeResult: res,
+      serverAvatar: file,
     });
 
-    if(res === 1) { this.props.switchDialogState(-1); }
-    return true;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      box.refs["serverImage"].src = e.target.result;
+    }
+    reader.readAsDataURL(file);
   }
 
   handleChange = e => {
@@ -568,13 +571,28 @@ export class EditServerDialog extends React.Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    const res = await this.props.API.API_editServer(this.props.selectedServer, this.state.serverName);
+    let res = await this.props.API.API_editServer(this.props.selectedServer, this.state.serverName);
     this.setState({
       serverEditResult: res,
     });
+
+    if(isNaN(res)) {
+      if(this.state.serverAvatar !== -1) {
+        res = await this.props.API.API_updateServerAvatar(this.props.selectedServer, this.state.serverAvatar)
+        this.setState({
+          serverEditResult: res,
+        });
+      }
+    }
     
-    if(res === 1) { this.props.switchDialogState(-1); }
-    return true;
+    if(isNaN(res)) {
+      this.props.switchDialogState(-1);
+      return true;
+    } else {
+      this.setState({
+        serverEditResult: res,
+      });
+    }
   }
 
   getErrorText(code) {
@@ -602,13 +620,16 @@ export class EditServerDialog extends React.Component {
         <div className="absolutepos overlaybox">
           <div className="white text3 marginleft2 margintop1a">> Edit server-</div>
           <form onSubmit={this.handleSubmit} className="flex margintop1">
-            <img alt="" className="avatar2 marginleft4 marginright2" src={this.props.fileEndpoint + "/" + server.avatar} onMouseEnter={() => this.refs["serverEditOverlay"].style = "display: flex;" }/>
+            <img alt="" className="avatar2 marginleft4 marginright2" ref="serverImage" src={this.props.fileEndpoint + "/" + server.avatar} onMouseEnter={() => this.refs["serverEditOverlay"].style = "display: flex;" }/>
+            <div className="cropButton alignmiddle">
+                <div className="white text7">Crop</div>
+            </div>
             <label for="avatar-input">
-              <div className="avatar2 avatarOverlay marginleft4 marginright2 alignmiddle" ref="serverEditOverlay" onMouseLeave={() => this.refs["serverEditOverlay"].style = "display: none;" }>
+              <div className="avatar2 avatarOverlay marginleft4 alignmiddle" ref="serverEditOverlay" onMouseLeave={() => this.refs["serverEditOverlay"].style = "display: none;" }>
                 <div className="white text4 nopointer">Change Icon</div>
               </div>
             </label>
-            <input id="avatar-input" className="hide" onChange={(e) => this.handleAvatar(server.id, e) } type='file' name="fileUploaded"/>
+            <input id="avatar-input" className="hide" onChange={(e) => this.handleAvatar(this, e) } type='file' name="fileUploaded"/>
             <input className="inputfield1 marginleft2 margintop1" name="serverName" type="text" placeholder="Name..." required={true} onChange={this.handleChange} /><br />
           </form>
           <div className="alignmiddle margintop1" style={{ height: 40 }}>
