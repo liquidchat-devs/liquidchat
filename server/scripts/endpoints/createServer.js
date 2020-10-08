@@ -33,13 +33,16 @@ class Endpoint {
             members: [ user.id ]
         }
 
-        socket.emit("createServer", JSON.stringify(server))
+        server.members.forEach(async(id) => {
+            var user2 = await this.app.db.db_fetch.fetchUser(this.app.db, id);
+            user2.servers.push(server.id);
+            this.app.db.db_edit.editUser(this.app.db, user2);
+
+            this.app.epFunc.emitToUser(user2.id, "createServer", server);
+            this.app.epFunc.emitToUser(user2.id, "updateUser", user2);
+        });
+
         await this.app.db.db_add.addServer(this.app.db, server);
-
-        user.servers.push(server.id);
-        this.app.epFunc.emitToUser(user.id, "updateUser", user);
-        await this.app.db.db_edit.editUser(this.app.db, user);
-
         res.send(JSON.stringify(server))
     }
 }

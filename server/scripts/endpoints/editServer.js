@@ -32,12 +32,10 @@ class Endpoint {
 
         //Make sure client doesn't overwrite something he's not allowed to
         server.name = _server.name !== undefined ? _server.name : server.name;
-
-        this.app.sessionSockets.forEach(socket => {
-            if(socket.connected) {
-                socket.emit("updateServer", JSON.stringify(server))
-            }
-        })
+        
+        server.members.forEach(id => {
+            this.app.epFunc.emitToUser(id, "updateServer", server)
+        });
 
         await this.app.db.db_edit.editServer(this.app.db, server);
     }

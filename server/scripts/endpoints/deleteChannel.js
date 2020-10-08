@@ -26,19 +26,36 @@ class Endpoint {
         } else {
             res.send(JSON.stringify({ status: 1 }))
         }
-
-        this.app.sessionSockets.forEach(socket => {
-            if(socket.connected) {
-                socket.emit("deleteChannel", JSON.stringify(channel))
-            }
-        })
-
+        
         switch(_channel.type) {
+            case 0:
+            case 1:
+                var server = await this.app.db.db_fetch.fetchServer(this.app.db, _channel.server.id);
+                if(server === undefined) {
+                    res.send(JSON.stringify({ status: -2 }))
+                    return;
+                } else if(server.channels.includes(_channel.id) === false) {
+                    res.send(JSON.stringify({ status: -3 }))
+                    return;
+                }
+
+                server.channels.splice(server.channels.indexOf(_channel.id), 1)
+                server.members.forEach(id => {
+                    this.app.epFunc.emitToUser(id, "deleteChannel", channel)
+                });
+
+                await this.app.db.db_edit.editServer(this.app.db, server);
+                break;
+
             case 2:
+                channel.members = _channel.members;
                 channel.members.forEach(async(id) => {
                     var user2 = await this.app.db.db_fetch.fetchUser(this.app.db, id);
                     user2.dmChannels.splice(user2.dmChannels.indexOf(channel.id), 1);
                     this.app.db.db_edit.editUser(this.app.db, user2);
+
+                    this.app.epFunc.emitToUser(user2.id, "deleteChannel", channel);
+                    this.app.epFunc.emitToUser(user2.id, "updateUser", user2);
                 });
                 break;
         }

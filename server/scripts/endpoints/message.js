@@ -36,11 +36,21 @@ class Endpoint {
         }
         message.file = _message.file === undefined ? undefined : { name: _message.file.name, size: _message.file.size }
         
-        this.app.sessionSockets.forEach(socket => {
-            if(socket.connected) {
-                socket.emit("message", JSON.stringify(message))
-            }
-        })
+        switch(channel.type) {
+            case 0:
+            case 1:
+                var server = await this.app.db.db_fetch.fetchServer(this.app.db, channel.server.id);
+                server.members.forEach(id => {
+                    this.app.epFunc.emitToUser(id, "message", message)
+                });
+                break;
+
+            case 2:
+                channel.members.forEach(async(id) => {
+                    this.app.epFunc.emitToUser(id, "message", message)
+                });
+                break;
+        }
 
         await this.app.db.db_add.addMessage(this.app.db, message);
         res.send(JSON.stringify(message))

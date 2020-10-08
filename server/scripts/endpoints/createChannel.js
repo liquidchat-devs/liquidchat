@@ -18,7 +18,6 @@ class Endpoint {
             return;
         }
 
-        var socket = this.app.sessionSockets.get(req.cookies['sessionID']);
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
         var channel = {
@@ -34,12 +33,19 @@ class Endpoint {
         switch(_channel.type) {
             case 0:
             case 1:
+                var server = await this.app.db.db_fetch.fetchServer(this.app.db, _channel.server.id);
+                if(server === undefined) {
+                    res.send(JSON.stringify({ status: -2 }))
+                    return;
+                }
+
                 channel.server = { id: _channel.server.id };
-                this.app.sessionSockets.forEach(socket => {
-                    if(socket.connected) {
-                        socket.emit("createChannel", JSON.stringify(channel))
-                    }
-                })
+                server.channels.push(channel.id)
+                server.members.forEach(id => {
+                    this.app.epFunc.emitToUser(id, "createChannel", channel)
+                });
+
+                await this.app.db.db_edit.editServer(this.app.db, server);
                 break;
 
             case 2:
@@ -50,6 +56,7 @@ class Endpoint {
                     this.app.db.db_edit.editUser(this.app.db, user2);
 
                     this.app.epFunc.emitToUser(user2.id, "createChannel", channel);
+                    this.app.epFunc.emitToUser(user2.id, "updateUser", user2);
                 });
                 break;
         }

@@ -31,11 +31,22 @@ class Endpoint {
         message.text = _message.text;
         message.edited = true;
 
-        this.app.sessionSockets.forEach(socket => {
-            if(socket.connected) {
-                socket.emit("editMessage", JSON.stringify(message))
-            }
-        })
+        var channel = await this.app.db.db_fetch.fetchChannel(this.app.db, message.channel.id);
+        switch(channel.type) {
+            case 0:
+            case 1:
+                var server = await this.app.db.db_fetch.fetchServer(this.app.db, _channel.server.id);
+                server.members.forEach(id => {
+                    this.app.epFunc.emitToUser(id, "editMessage", message)
+                });
+                break;
+
+            case 2:
+                channel.members.forEach(async(id) => {
+                    this.app.epFunc.emitToUser(id, "editMessage", message)
+                });
+                break;
+        }
 
         await this.app.db.db_edit.editMessage(this.app.db, message);
     }

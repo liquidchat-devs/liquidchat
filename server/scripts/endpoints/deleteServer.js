@@ -27,6 +27,12 @@ class Endpoint {
             res.send(JSON.stringify({ status: 1 }))
         }
 
+        server.members.forEach(async(id) => {
+            var user2 = await this.app.db.db_fetch.fetchUser(this.app.db, id);
+            user2.servers.splice(user2.servers.indexOf(server.id), 1);
+            this.app.db.db_edit.editUser(this.app.db, user2);
+        });
+
         this.app.sessionSockets.forEach(socket => {
             if(socket.connected) {
                 socket.emit("deleteServer", JSON.stringify(server))

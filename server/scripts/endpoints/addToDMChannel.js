@@ -34,13 +34,13 @@ class Endpoint {
             res.send(JSON.stringify({ status: 1 }))
         }
 
-        targetUser.dmChannels.push(channel.id);
-        this.app.epFunc.emitToUser(targetUser.id, "createChannel", channel);
-
         channel.members.push(targetUser.id);
         channel.members.forEach(id => {
             this.app.epFunc.emitToUser(id, "updateChannel", channel)
         });
+
+        targetUser.dmChannels.push(channel.id);
+        this.app.epFunc.emitToUser(targetUser.id, "createChannel", channel);
 
         await this.app.db.db_edit.editChannel(this.app.db, channel);
         await this.app.db.db_edit.editUser(this.app.db, targetUser);
