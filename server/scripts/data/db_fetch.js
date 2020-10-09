@@ -171,6 +171,7 @@ module.exports = {
     formatServer(server) {
         server.channels = server.channels.split(",").filter(a => a.length > 0)
         server.members = server.members.split(",").filter(a => a.length > 0)
+        server.invites = server.invites.split(",").filter(a => a.length > 0)
         server.author = { id: server.authorID }
         delete server.authorID
         
