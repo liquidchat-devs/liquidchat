@@ -41,6 +41,10 @@ export default class Chat extends React.Component {
     this.video1.srcObject = remoteStream;
   }
 
+  isFullScreen() {
+    return !!(document.fullscreen || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement || document.fullscreenElement);
+  }
+
   videoAction(element, file, action) {
     switch(action) {
       case "playpause":
@@ -54,6 +58,20 @@ export default class Chat extends React.Component {
           this.refs["videoOverlay-" + file.name].classList.add("stopped");
           this.refs["videoOverlay-" + file.name].classList.remove("playing");
           this.refs["playButtonWrapper-" + file.name].innerHTML  = `<svg aria-hidden="false" width="22" height="22" viewBox="0 0 22 22"><polygon fill="currentColor" points="0 0 0 14 11 7" transform="translate(7 5)"></polygon></svg>`;
+        }
+        break;
+
+      case "fullscreen":
+        if (this.isFullScreen()) {
+          if (document.exitFullscreen) document.exitFullscreen();
+          else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+          else if (document.webkitCancelFullScreen) document.webkitCancelFullScreen();
+          else if (document.msExitFullscreen) document.msExitFullscreen();
+        } else {
+            if (element.requestFullscreen) element.requestFullscreen();
+            else if (element.mozRequestFullScreen) element.mozRequestFullScreen();
+            else if (element.webkitRequestFullScreen) element.webkitRequestFullScreen();
+            else if (element.msRequestFullscreen) element.msRequestFullscreen();
         }
         break;
     }
