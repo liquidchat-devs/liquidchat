@@ -96,5 +96,10 @@ module.exports = {
         .then((result, err) => {
             if(err) { throw err; }
         });
+        query = "DELETE FROM invites";
+        db.sqlConn.promise().query(query)
+        .then((result, err) => {
+            if(err) { throw err; }
+        });
     }
 }
