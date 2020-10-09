@@ -37,7 +37,7 @@ class Endpoint {
         }
 
         server.invites.push(invite);
-        channel.members.forEach(async(id) => {
+        server.members.forEach(async(id) => {
             this.app.epFunc.emitToUser(id, "updateServer", server);
         });
     
