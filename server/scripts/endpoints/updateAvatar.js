@@ -30,7 +30,7 @@ class Endpoint {
             });
 
             user.avatar = fileID2
-            await this.app.epFunc.updateUser(this.app, user, true)
+            await this.app.epFunc.updateUser(user, true)
             res.sendStatus(200);
         }.bind(this));
     }
