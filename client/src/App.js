@@ -168,27 +168,15 @@ class App extends React.Component {
   }
 
   getUser = (id) => {
-    if(this.state.users.has(id)) {
-      return this.state.users.get(id)
-    } else {
-      return -1;
-    }
+    return this.state.users.get(id)
   }
 
   getChannel = (id) => {
-    if(this.state.channels.has(id)) {
-      return this.state.channels.get(id)
-    } else {
-      return -1;
-    }
+    return this.state.channels.get(id)
   }
 
   getServer = (id) => {
-    if(this.state.servers.has(id)) {
-      return this.state.servers.get(id)
-    } else {
-      return -1;
-    }
+    return this.state.servers.get(id)
   }
 
   componentDidMount = () => {

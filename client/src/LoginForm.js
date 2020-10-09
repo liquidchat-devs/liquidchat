@@ -54,7 +54,7 @@ export default class LoginForm extends React.Component {
           return "";
   
         default:
-          return "Logging in as " + (user !== -1 ? user.username : "Loading") + "...";
+          return "Logging in as " + (user !== undefined ? user.username : "Loading") + "...";
       }
     }
   

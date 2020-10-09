@@ -32,7 +32,7 @@ class Endpoint {
             this.app.epFunc.emitToUser(id, "updateServer", server)
         });
 
-        user.servers.splice(user.servers.indexOf(user.id), 1);
+        user.servers.splice(user.servers.indexOf(server.id), 1);
         this.app.epFunc.emitToUser(user.id, "deleteServer", server);
 
         await this.app.db.db_edit.editServer(this.app.db, server);

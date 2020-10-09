@@ -674,6 +674,18 @@ class API {
             return reply.data;
         }
     }
+
+    async API_kickFromServer(serverID, userID) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/kickFromServer', {
+            server: { id: serverID }, user: { id: userID }
+        }, { withCredentials: true });
+
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return 1;
+        }
+    }
     //#endregion
 
     //#region Channels

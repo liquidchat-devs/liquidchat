@@ -9,7 +9,7 @@ export class Account extends React.Component {
       <div className="panel2 headerColor">
         <img alt="" className=" marginleft2 avatar" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.switchDialogState(4); this.props.setSelectedMessage(undefined, e.pageX, e.pageY); e.preventDefault(); }}/>
         <div className="flex marginleft3">
-          <div className="text2" style={{color: "white"}}>Username: {user !== -1 ? user.username : "Loading"}</div>
+          <div className="text2" style={{color: "white"}}>Username: {user !== undefined ? user.username : "Loading"}</div>
         </div>
       </div>
     );
@@ -151,7 +151,7 @@ export class ChannelSelector extends React.Component {
 
     const friendList = loggedUser.friends.map((friendID, i) => {
       const friend = this.props.getUser(friendID);
-      if(friend === -1) {
+      if(friend === undefined) {
         return null;
       }
 
@@ -169,7 +169,7 @@ export class ChannelSelector extends React.Component {
 
     const serverList = loggedUser.servers.map((serverID, i) => {
       const server = this.props.getServer(serverID);
-      if(server === -1) {
+      if(server === undefined) {
         return null;
       }
       
@@ -261,7 +261,7 @@ export class DialogManager extends React.Component {
         return <ProfileBox API={this.props.API} fileEndpoint={this.props.fileEndpoint} switchDialogState={this.props.switchDialogState} session={this.props.session} selectedUser={this.props.selectedUser}/>
 
       case 6:
-        return <ProfileOptionsBox channels={this.props.channels} currentChannel={this.props.currentChannel} switchChannelTypes={this.props.switchChannelTypes} switchChannel={this.props.switchChannel} API={this.props.API} getUser={this.props.getUser} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedUser={this.props.selectedUser} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
+        return <ProfileOptionsBox getChannel={this.props.getChannel} getServer={this.props.getServer} currentChannel={this.props.currentChannel} selectedServer={this.props.selectedServer} switchChannelTypes={this.props.switchChannelTypes} switchChannel={this.props.switchChannel} API={this.props.API} getUser={this.props.getUser} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedUser={this.props.selectedUser} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
 
       case 7:
         return <AddFriendBox API={this.props.API} switchDialogState={this.props.switchDialogState}/>
@@ -610,7 +610,7 @@ export class EditServerDialog extends React.Component {
 
   render() {
     const server = this.props.getServer(this.props.selectedServer);
-    if(server === -1) {
+    if(server === undefined) {
       return null;
     }
 
@@ -674,7 +674,7 @@ export class InviteFriendsBox extends React.Component {
 
     const friendList = loggedUser.friends.map((friendID, i) => {
     const friend = this.props.getUser(friendID);
-      if(friend === -1) {
+      if(friend === undefined) {
         return null;
       }
 
@@ -929,6 +929,10 @@ export class ProfileOptionsBox extends React.Component {
     this.props.API.API_removeFromDMChannel(channelID, id);
   }
 
+  removeFromServer(serverID, id) {
+    this.props.API.API_kickFromServer(serverID, id);
+  }
+
   async dmUser(id) {
     var channel = await this.props.API.API_getSuitableDMChannel(id);
     if(channel !== undefined) {
@@ -940,7 +944,8 @@ export class ProfileOptionsBox extends React.Component {
 
   render() {
     let loggedUser = this.props.getUser(this.props.session.userID);
-    let currentChannel = this.props.channels.get(this.props.currentChannel)
+    let currentChannel = this.props.getChannel(this.props.currentChannel)
+    let currentServer = this.props.getServer(this.props.selectedServer)
 
     return (
       <div>
@@ -969,10 +974,19 @@ export class ProfileOptionsBox extends React.Component {
             ""
           }
           {
-            currentChannel !== undefined && currentChannel.author.id === loggedUser.id && this.props.selectedUser.id !== loggedUser.id ?
+            currentChannel !== undefined && currentChannel.type === 2 && currentChannel.author.id === loggedUser.id && this.props.selectedUser.id !== loggedUser.id ?
             <div>
               <div className="button2 alignmiddle chatColor" onClick={() => { this.removeFromDMChannel(currentChannel.id ,this.props.selectedUser.id); }}>
                 <p className="white text1">> Remove from group</p>
+              </div>
+            </div> :
+            ""
+          }
+          {
+            currentServer !== undefined && currentServer.author.id === loggedUser.id && this.props.selectedUser.id !== loggedUser.id ?
+            <div>
+              <div className="button2 alignmiddle chatColor" onClick={() => { this.removeFromServer(currentServer.id ,this.props.selectedUser.id); }}>
+                <p className="white text1">> Kick from server</p>
               </div>
             </div> :
             ""
@@ -1004,7 +1018,7 @@ export class ChannelOptionsBox extends React.Component {
 
   render() {
     const channel = this.props.getChannel(this.props.selectedChannel)
-    if(channel === -1) {  return null; }
+    if(channel === undefined) {  return null; }
 
     return (
       <div>
@@ -1052,7 +1066,7 @@ export class ServerOptionsBox extends React.Component {
 
   render() {
     const server = this.props.getServer(this.props.selectedServer)
-    if(server === -1) {  return null; }
+    if(server === undefined) {  return null; }
 
     return (
       <div>
