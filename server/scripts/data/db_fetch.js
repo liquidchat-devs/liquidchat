@@ -154,6 +154,20 @@ module.exports = {
         return res
     },
 
+    async fetchInvite(db, id) {
+        if(db.DEBUG) {
+            console.log(" - [db] Loading Invite(target: " + id + ") from the database..."); 
+        }
+
+        var query0 = "SELECT * FROM invites WHERE id='" + id + "'";
+        var result = await db.sqlConn.promise().query(query0);
+        if(result.length < 1 || result[0].length < 1) {
+            return undefined;
+        }
+    
+        return this.formatInvite(result[0][0])
+    },
+
     formatServer(server) {
         server.channels = server.channels.split(",").filter(a => a.length > 0)
         server.members = server.members.split(",").filter(a => a.length > 0)
@@ -207,5 +221,14 @@ module.exports = {
         delete friendRequest.targetID
 
         return friendRequest;
+    },
+
+    formatInvite(invite) {
+        invite.author = { id: invite.authorID }
+        delete invite.authorID
+        invite.server = { id: invite.serverID }
+        delete invite.serverID
+        
+        return invite;
     }
 }

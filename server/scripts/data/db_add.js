@@ -4,8 +4,8 @@ module.exports = {
             console.log(" - [db] Adding Server(id: " + server.id + ") into the database..."); 
         }
 
-        var query = "INSERT IGNORE INTO servers (id, name, createdAt, authorID, avatar, channels, members) VALUES" + db.contructQuestionMarks(7);
-        db.sqlConn.promise().execute(query, [ server.id, db.escapeString(server.name), server.createdAt,  server.author.id, server.avatar, server.channels.join(","), server.members.join(",") ])
+        var query = "INSERT IGNORE INTO servers (id, name, createdAt, authorID, avatar, channels, members, invites) VALUES" + db.contructQuestionMarks(8);
+        db.sqlConn.promise().execute(query, [ server.id, db.escapeString(server.name), server.createdAt,  server.author.id, server.avatar, server.channels.join(","), server.members.join(","), server.invites.join(",") ])
         .then((result, err) => {
             if(err) { throw err; }
         });
@@ -63,6 +63,18 @@ module.exports = {
         }
         
         var query = "INSERT IGNORE INTO friendRequests (id, authorID, targetID, createdAt) VALUES('" + friendRequest.id + "', '" + friendRequest.author.id + "', '" + friendRequest.target.id + "', " + friendRequest.createdAt + ")";
+        db.sqlConn.promise().query(query)
+        .then((result, err) => {
+            if(err) { throw err; }
+        });
+    },
+
+    addInvite(db, invite) {
+        if(db.DEBUG) {
+            console.log(" - [db] Adding Invite(id: " + invite.id + ") into the database..."); 
+        }
+        
+        var query = "INSERT IGNORE INTO invites (id, authorID, serverID, createdAt) VALUES('" + invite.id + "', '" + invite.author.id + "', '" + invite.server.id + "', " + invite.createdAt + ")";
         db.sqlConn.promise().query(query)
         .then((result, err) => {
             if(err) { throw err; }
