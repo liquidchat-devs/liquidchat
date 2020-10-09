@@ -23,18 +23,13 @@ class Endpoint {
         } else if(channel.author.id !== user.id) {
             res.send(JSON.stringify({ status: -2 }))
             return;
-        } else {
-            res.sendStatus(200);
         }
 
         switch(_channel.type) {
             case 0:
             case 1:
                 var server = await this.app.db.db_fetch.fetchServer(this.app.db, _channel.server.id);
-                if(server === undefined) {
-                    res.send(JSON.stringify({ status: -2 }))
-                    return;
-                } else if(server.channels.includes(_channel.id) === false) {
+                if(server.channels.includes(_channel.id) === false) {
                     res.send(JSON.stringify({ status: -3 }))
                     return;
                 }
@@ -60,6 +55,7 @@ class Endpoint {
                 break;
         }
 
+        res.sendStatus(200);
         await this.app.db.db_delete.deleteChannel(this.app.db, channel.id);
     }
 }
