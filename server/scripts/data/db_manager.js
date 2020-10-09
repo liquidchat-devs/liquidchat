@@ -8,8 +8,11 @@ class DatabaseManager {
         this.db_edit = require('./db_edit');
         this.db_delete = require('./db_delete');
         this.db_fetch = require('./db_fetch');
-
         this.DEBUG = true;
+
+        if(process.argv.includes("-rd")) {
+            this.db_delete.deleteAllData(this);
+        }
     }
 
     contructQuestionMarks(i) {
