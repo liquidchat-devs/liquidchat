@@ -34,6 +34,8 @@ class Endpoint {
         switch(channel.type) {
             case 0:
             case 1:
+                channel.position = _channel.position !== undefined ? _channel.position : channel.position;
+                
                 var server = await this.app.db.db_fetch.fetchServer(this.app.db, _channel.server.id);
                 server.members.forEach(id => {
                     this.app.epFunc.emitToUser(id, "updateChannel", channel)

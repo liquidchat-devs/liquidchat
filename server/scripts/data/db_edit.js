@@ -51,8 +51,9 @@ module.exports = {
             console.log(" - [db] Editing Channel(id: " + channel.id + ") in the database..."); 
         }
 
-        var query0 = "name=?" + (channel.members == null ? "" : ", members=?")
+        var query0 = "name=?" + (channel.position == null ? "" : ", position=?") + (channel.members == null ? "" : ", members=?")
         var query1 = [ db.escapeString(channel.name) ]
+        if(channel.position != null) { query1.push(channel.position); }
         if(channel.members != null) { query1.push(channel.members.join(",")); }
 
         var query = "UPDATE channels SET " + query0 + " WHERE id='" + channel.id + "'";

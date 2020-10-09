@@ -40,6 +40,7 @@ class Endpoint {
                 }
 
                 channel.server = { id: _channel.server.id };
+                channel.position = server.channels.length;
                 server.channels.push(channel.id)
                 server.members.forEach(id => {
                     this.app.epFunc.emitToUser(id, "createChannel", channel)
