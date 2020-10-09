@@ -218,13 +218,16 @@ function formatMessage(chat, message) {
     var customMessage = false;
     
     if(messageFormatted.startsWith("http://nekonetwork.net/invite/")) {
-        let serverID = messageFormatted.substring("http://nekonetwork.net/invite/".length)
-        let server = chat.props.API.API_fetchServerSync(serverID);
+        let id = messageFormatted.substring("http://nekonetwork.net/invite/".length)
+        let invite = chat.props.API.API_fetchInviteSync(id);
+        let author = invite === -1 ? undefined : chat.props.getUser(invite.author.id);
+        let server = invite === -1 ? undefined : chat.props.getServer(invite.server.id);
 
-        if(server !== -1) {
+        if(server !== undefined) {
             messageFormatted = (
             <div>
                 <div className="invite-wrapper chatColor">
+                    <p className="profileTooltipColor text9 margin0 marginleft2 marginbot0b">{author.username} invited you to a server-</p>
                     <div className="flex">
                         <img alt="" className="avatar4 marginleft2 margintop1a" src={chat.props.fileEndpoint + "/" + server.avatar}/>
                         <div>

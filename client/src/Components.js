@@ -182,7 +182,7 @@ export class ChannelSelector extends React.Component {
         <div key={i}>
           <div className={this.props.selectedServer === server.id ? "white headerColor server selectedChannelColor" : "white headerColor server"} onClick={() => { this.props.setSelectedServer(server.id); }} onContextMenu={(e) => { this.props.setSelectedServer(server.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(17); e.preventDefault(); e.stopPropagation(); } }>
             <img alt="" className="avatar4 marginright2" src={this.props.fileEndpoint + "/" + server.avatar}/>
-            <div class="white text8">
+            <div className="white text8">
               {serverName}
             </div>
           </div>
@@ -337,7 +337,7 @@ export class CreateChannelDialog extends React.Component {
       channelCreationResult: res,
     });
     
-    if(res === 1) { this.props.switchDialogState(-1); }
+    if(isNaN(res)) { this.props.switchDialogState(-1); }
     return true;
   }
 
@@ -527,7 +527,7 @@ export class EditChannelDialog extends React.Component {
         <div className="absolutepos overlaybox">
           <div className="white text3 marginleft2 margintop1a">> Edit channel-</div>
           <form onSubmit={this.handleSubmit} className="flex margintop1">
-            <input className="inputfield1 marginleft2" name="channelName" type="text" placeholder="Name..." required={true} onChange={this.handleChange} /><br />
+            <input className="inputfield1 marginleft2" name="channelName" type="text" placeholder="Name..." required={true} value={this.state.channelName} onChange={this.handleChange} /><br />
           </form>
           <div className="alignmiddle margintop1" style={{ height: 40 }}>
             <div onClick={this.handleSubmit} className="button button1" style={{ marginTop: 15, marginLeft: 10 }} value="vsvsd">Edit!</div>
@@ -552,6 +552,15 @@ export class EditServerDialog extends React.Component {
     serverEditResult: 0,
     avatarChangeResult: 0
   };
+
+  componentDidMount = () => {
+    const server = this.props.getServer(this.props.selectedServer);
+    if(server !== undefined) {
+      this.setState({
+        serverName: server.name
+      })
+    }
+  }
 
   handleAvatar = async (box, e) => {
     if(e.target.files.length < 1) { return; }
@@ -636,7 +645,7 @@ export class EditServerDialog extends React.Component {
               </div>
             </label>
             <input id="avatar-input" className="hide" onChange={(e) => this.handleAvatar(this, e) } type='file' name="fileUploaded"/>
-            <input className="inputfield1 marginleft2 margintop1" name="serverName" type="text" placeholder="Name..." required={true} onChange={this.handleChange} /><br />
+            <input className="inputfield1 marginleft2 margintop1" name="serverName" type="text" placeholder="Name..." required={true} value={this.state.serverName} onChange={this.handleChange} /><br />
           </form>
           <div className="alignmiddle margintop1" style={{ height: 40 }}>
             <div onClick={this.handleSubmit} className="button button1" style={{ marginTop: 15, marginLeft: 10 }} value="vsvsd">Edit!</div>

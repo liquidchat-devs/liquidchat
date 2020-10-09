@@ -8,6 +8,7 @@ class API {
         this.wrtc = -1;
 
         this.queuedServers = [];
+        this.queuedInvites = [];
     }
 
     async API_initWebsockets(userID) {
@@ -84,6 +85,8 @@ class API {
             server.name = _server.name;
             server.avatar = _server.avatar;
             server.members = _server.members;
+            server.channels = _server.channels;
+            server.invites = _server.invites;
             newServers.set(server.id, server);
             this.mainClass.setState({
                 servers: newServers
@@ -272,7 +275,7 @@ class API {
       
             //Cache user
             var newInvites = this.mainClass.state.invites.set(invite.id, invite);
-            this.API_fetchServersForInvites([ invite ])
+            this.API_fetchAllForInvites([ invite ])
             this.mainClass.setState({
                 invites: newInvites
             });
@@ -326,12 +329,17 @@ class API {
         });
     }
 
-    async API_fetchServersForInvites(invites) {
+    async API_fetchAllForInvites(invites) {
         const queue = new Map();
         invites.forEach(invite => {
           if(!queue.has(invite.server.id)) {
             this.API_fetchServer(invite.server.id)
             queue.set(invite.server.id, 1)
+          }
+
+          if(!queue.has(invite.author.id)) {
+            this.API_fetchUser(invite.author.id)
+            queue.set(invite.author.id, 1)
           }
         })
     }

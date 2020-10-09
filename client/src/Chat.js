@@ -122,9 +122,9 @@ export default class Chat extends React.Component {
 
       return (
         <div key={i} className="paddingtop2 paddingbot2 flex message" onContextMenu={(e) => { this.props.switchDialogState(2); this.props.setSelectedMessage(message, e.pageX, e.pageY); e.preventDefault(); } } onMouseOver={(e) => e.currentTarget.classList.add("hoveredMessageColor")} onMouseLeave={(e) => e.currentTarget.classList.remove("hoveredMessageColor") }>
-          <div className="flex marginleft2">
+          <div className="flex marginleft2 fullwidth">
             <img alt="" className="avatar" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
-            <div className="marginleft2">
+            <div className="marginleft2 fullwidth">
               <div className="flex">
                 <div className="allignMiddle" style={{margin: 0, color: (user !== undefined && server !== undefined && server.author.id === user.id ? "yellow" : "red"), fontSize: 16}}>
                   {user !== undefined ? user.username : "Loading"}
@@ -133,10 +133,10 @@ export default class Chat extends React.Component {
                   {formatDate(message.createdAt)}
                 </div>
               </div>
-              <div className="flex">
+              <div className="flex fullwidth">
                 {message.id === this.props.editingMessage.id ?
-                <div>
-                    <form onSubmit={this.handleEdit} className="full">
+                <div className="fullwidth">
+                    <form onSubmit={this.handleEdit} className="full fullwidth">
                       <input className="input-message chatColor" type="text" value={this.props.editedMessage} required={true} onChange={(e) => { this.props.setEditedMessage(e.target.value) }}/>
                     </form>
                   </div>

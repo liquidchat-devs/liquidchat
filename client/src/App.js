@@ -42,6 +42,7 @@ class App extends React.Component {
     servers: new Map(),
     channels: new Map(),
     friendRequests: new Map(),
+    invites: new Map(),
 
     //Channel selector
     firstChannelElement: -1,

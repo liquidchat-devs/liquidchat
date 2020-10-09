@@ -172,6 +172,10 @@ code {
   margin-bottom: 0px;
 }
 
+.marginbot0b {
+  margin-bottom: 5px;
+}
+
 .marginbot1 {
   margin-bottom: 10px;
 }
@@ -289,6 +293,11 @@ code {
 
 .text8 {
   font-size: 14px;
+}
+
+.text9 {
+  font-size: 14px;
+  text-transform: capitalize;
 }
 
 /* Colors */
@@ -696,7 +705,7 @@ code {
 
 .invite-wrapper {
   width: 290px;
-  height: 95px;
+  height: 115px;
   padding: 12px;
   border-radius: 5px;
 }
