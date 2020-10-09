@@ -261,6 +261,38 @@ class API {
             friendRequests: friendRequests
         });
     }
+
+    async API_fetchInvite(id) {
+        if(this.mainClass.state.invites.has(id)) {
+            return this.mainClass.state.invites.get(id)
+        } else {
+            //Fetch user
+            const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchInvite?id=' + id, { withCredentials: true });
+            var invite = reply.data
+      
+            //Cache user
+            var newInvites = this.mainClass.state.invites.set(invite.id, invite);
+            this.API_fetchServersForInvites([ invite ])
+            this.mainClass.setState({
+                invites: newInvites
+            });
+  
+            return invite;
+        }
+    }
+
+    API_fetchInviteSync(id) {
+        if(this.mainClass.state.invites.has(id)) {
+            return this.mainClass.state.invites.get(id)
+        } else {
+            if(this.queuedInvites.includes(id)) {
+                return -1;
+            } else {
+                this.API_fetchInvite(id);
+                return -1
+            }
+        }
+    }
     //#endregion
 
     //#region Fetching Utils
@@ -292,6 +324,16 @@ class API {
         channel.members.forEach(userID => {
             this.API_fetchUser(userID);
         });
+    }
+
+    async API_fetchServersForInvites(invites) {
+        const queue = new Map();
+        invites.forEach(invite => {
+          if(!queue.has(invite.server.id)) {
+            this.API_fetchServer(invite.server.id)
+            queue.set(invite.server.id, 1)
+          }
+        })
     }
     //#endregion
 
