@@ -18,8 +18,11 @@ export class Account extends React.Component {
 
 export class ChannelHeader extends React.Component {
   render() {
-    let channel = this.props.channels.get(this.props.currentChannel)
-    if(channel === undefined) { return null; }
+    let server = this.props.getServer(this.props.selectedServer)
+    let channel = this.props.getChannel(this.props.currentChannel)
+    if(channel === undefined || (server !== undefined && server.channels.includes(channel.id) === false) || (channel.type !== 2 && server === undefined)) {
+      return null;
+    }
 
     let tip = -1;
     let messages = -1;
@@ -178,7 +181,9 @@ export class ChannelSelector extends React.Component {
         <div key={i}>
           <div className={this.props.selectedServer === server.id ? "white headerColor server selectedChannelColor" : "white headerColor server"} onClick={() => { this.props.setSelectedServer(server.id); }} onContextMenu={(e) => { this.props.setSelectedServer(server.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(17); e.preventDefault(); e.stopPropagation(); } }>
             <img alt="" className="avatar4 marginright2" src={this.props.fileEndpoint + "/" + server.avatar}/>
-            {serverName}
+            <div class="white text8">
+              {serverName}
+            </div>
           </div>
         </div>
       )
@@ -186,11 +191,11 @@ export class ChannelSelector extends React.Component {
 
     return (
       <div className="flex">
-        <div className="channels headerColor">
-          <div className={this.props.channelTypes === 3 ? "white headerColor channel selectedChannelColor" : "white headerColor channel"} onClick={() => { this.props.switchChannelTypes(3) }}>
+        <div className="servers headerColor">
+          <div className={this.props.channelTypes === 3 ? "white headerColor server2 selectedChannelColor" : "white headerColor server2"} onClick={() => { this.props.switchChannelTypes(3) }}>
             Friends
           </div>
-          <div className={this.props.channelTypes === 1 ? "white headerColor channel selectedChannelColor" : "white headerColor channel"} onClick={() => { this.props.switchChannelTypes(1) }}>
+          <div className={this.props.channelTypes === 1 ? "white headerColor server2 selectedChannelColor" : "white headerColor server2"} onClick={() => { this.props.switchChannelTypes(1) }}>
             DMs
           </div>
           {serverList}
@@ -669,8 +674,8 @@ export class InviteFriendsBox extends React.Component {
     let loggedUser = this.props.getUser(this.props.session.userID);
     let server = this.props.getServer(this.props.selectedServer);
     let channel = this.props.getChannel(this.props.selectedChannel);
-    let target = channel.members === undefined ? server : channel;
-    let type = channel.members === undefined ? 1 : 0;
+    let target = channel === undefined || channel.members === undefined ? server : channel;
+    let type = channel === undefined || channel.members === undefined ? 1 : 0;
 
     const friendList = loggedUser.friends.map((friendID, i) => {
     const friend = this.props.getUser(friendID);

@@ -287,6 +287,10 @@ code {
   font-size: 10px;
 }
 
+.text8 {
+  font-size: 14px;
+}
+
 /* Colors */
 .white {
   color: white;
@@ -434,7 +438,15 @@ code {
 
 .server {
   height: 52px;
-  width: 120px;
+  width: 145px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.server2 {
+  height: 36px;
+  width: 145px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -443,6 +455,11 @@ code {
 .channels {
   height: calc(100vh - 78px);
   width: 120px;
+}
+
+.servers {
+  height: calc(100vh - 78px);
+  width: 145px;
 }
 
 .chat-wrapper {

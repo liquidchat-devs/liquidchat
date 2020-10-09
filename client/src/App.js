@@ -221,7 +221,7 @@ class App extends React.Component {
               channels={this.state.channels} setFirstChannel={this.setFirstChannel} switchChannel={this.switchChannel} currentVoiceGroup={this.state.currentVoiceGroup} getUser={this.getUser}/>
               <div className="chat-wrapper">
                 <ChannelHeader
-                API={this.state.API} currentChannel={this.state.currentChannel} channels={this.state.channels} currentVoiceGroup={this.state.currentVoiceGroup}/>
+                API={this.state.API} currentChannel={this.state.currentChannel} getChannel={this.getChannel} selectedServer={this.state.selectedServer} getServer={this.getServer} currentVoiceGroup={this.state.currentVoiceGroup}/>
                 <Chat
                 session={this.state.session} uploadReceived={this.state.uploadReceived} uploadExpected={this.state.uploadExpected}
                 uploadFileID={this.state.uploadFileID} uploadFileName={this.state.uploadFileName} uploadFailed={this.state.uploadFailed}
@@ -230,7 +230,8 @@ class App extends React.Component {
                 editingMessage={this.state.editingMessage} editedMessage={this.state.editedMessage} setEditedMessage={this.setEditedMessage} endEditingMessage={this.endEditingMessage} getUser={this.getUser} fileEndpoint={this.state.fileEndpoint}/>
                 <Send
                 API={this.state.API}
-                currentChannel={this.state.currentChannel} channels={this.state.channels}/>
+                currentChannel={this.state.currentChannel} getChannel={this.getChannel}
+                selectedServer={this.state.selectedServer} getServer={this.getServer}/>
               </div>
             </div>
           </div> :
