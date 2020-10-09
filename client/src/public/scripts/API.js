@@ -854,6 +854,20 @@ class API {
         });
     }
     //#endregion
+
+    //#region Invites
+    async API_createInvite(serverID) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createInvite', {
+            server: { id: serverID }
+        }, { withCredentials: true });
+
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return reply.data;
+        }
+    }
+    //#endregion
 }
 
 export { API }

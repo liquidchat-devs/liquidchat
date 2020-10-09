@@ -116,6 +116,7 @@ export class ChannelSelector extends React.Component {
     const friendRequestsList = friendRequests.map((friendRequest, i) => {
       const author = this.props.getUser(friendRequest.author.id)
       const target = this.props.getUser(friendRequest.target.id)
+      if(author === undefined || target === undefined) { return; }
       var user = author.id === loggedUser.id ? target : author;
 
       return (
@@ -654,6 +655,10 @@ export class EditServerDialog extends React.Component {
 }
 
 export class InviteFriendsBox extends React.Component {
+  state = {
+    invitationResult: 0
+  };
+
   inviteUser = async (id, userID, type) => {
     let res = -1;
     switch(type) {
@@ -662,7 +667,21 @@ export class InviteFriendsBox extends React.Component {
         break;
 
       case 1:
-        res = await this.props.API.API_sendDM(userID, 'http://nekonetwork.net/invite/' + id);
+        res = await this.props.API.API_createInvite(id);
+        if(isNaN(res)) {
+          res = await this.props.API.API_sendDM(userID, 'http://nekonetwork.net/invite/' + res.id);
+          this.setState({
+            invitationResult: res,
+          });
+        }
+
+        if(isNaN(res)) {
+          return true;
+        } else {
+          this.setState({
+            invitationResult: res,
+          });
+        }
         break;
     }
     
