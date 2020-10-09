@@ -1,4 +1,5 @@
 import React from 'react';
+import { List } from 'react-movable';
 import { formatDuration } from './public/scripts/DateFormatter';
 
 export class Account extends React.Component {
@@ -73,45 +74,8 @@ export class ChannelSelector extends React.Component {
     let friendRequests = Array.from(this.props.friendRequests.values());
     let voiceGroup = this.props.currentVoiceGroup;
     let loggedUser = this.props.getUser(this.props.session.userID);
-
     channels = channels.filter(channel => { return ((channel.type === 0 || channel.type === 1) && this.props.channelTypes === 2 && channel.server.id === this.props.selectedServer) || (channel.type === 2 && this.props.channelTypes === 1); })
-    const channelList = channels.map((channel, i) => {
-      if(i === 0) { this.previousFirstChannel = this.firstChannel; this.firstChannel = channel.id; }
-      let channelName = channel.name.length < 12 ? channel.name : channel.name.substring(0, 9) + "..."
-
-      switch(channel.type) {
-        case 1:
-          if(voiceGroup !== -1) {
-            const userList = voiceGroup.users.map((userID, i) => {
-              const user = this.props.getUser(userID)
-  
-              return (
-                <div className="voiceUserEntry flex">
-                  <img alt="" className="avatar" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
-                  <div className="white headerColor">
-                    {user.username}
-                  </div>
-                </div>
-              )
-            });
-
-            return (
-              <div>
-                <div className="white headerColor channel" onClick={(e) => { this.props.switchChannel(channel.id) }} onContextMenu={(e) => { this.props.setSelectedChannel(channel.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } } ref={i === 0 ? "firstChannelElement" : undefined}>
-                  {channel.type === 0 ? "#" : "."}{channelName}
-                </div>
-                {userList}
-              </div>
-            )
-          }
-      }
-
-      return (
-        <div key={i} className={ this.props.currentChannel === channel.id ? "white headerColor channel selectedChannelColor" : "white headerColor channel" } onClick={(e) => { this.props.switchChannel(channel.id) }} onContextMenu={(e) => { this.props.setSelectedChannel(channel.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } } ref={i === 0 ? "firstChannelElement" : undefined}>
-          {channel.type === 1 ? "." : "#"}{channelName}
-        </div>
-      )
-    });
+    channels = channels.sort((a, b) => a.position - b.position)
 
     const friendRequestsList = friendRequests.map((friendRequest, i) => {
       const author = this.props.getUser(friendRequest.author.id)
@@ -190,6 +154,7 @@ export class ChannelSelector extends React.Component {
       )
     });
 
+    let i = 0;
     return (
       <div className="flex">
         <div className="servers headerColor">
@@ -206,7 +171,53 @@ export class ChannelSelector extends React.Component {
         </div>
         {this.props.channelTypes === 1 || this.props.channelTypes === 2 ?
           <div className="channels headerColor">
-            {channelList}
+            <List
+            onChange={({ oldIndex, newIndex }) =>
+              this.props.moveChannel(channels, oldIndex, newIndex)
+            }
+            values={channels}
+            beforeDrag={({ index }) =>
+              this.props.switchChannel(channels[index].id)
+            }
+            renderList={({ children, props }) => <div {...props}>{children}</div>}
+            renderItem={({ value, index, props }) => {
+              if(index === 0) { this.previousFirstChannel = this.firstChannel; this.firstChannel = value.id; }
+              let channelName = value.name.length < 12 ? value.name : value.name.substring(0, 9) + "..."
+
+              switch(value.type) {
+                case 1:
+                  if(voiceGroup !== -1) {
+                    const userList = voiceGroup.users.map((userID, i) => {
+                      const user = this.props.getUser(userID)
+          
+                      return (
+                        <div className="voiceUserEntry flex">
+                          <img alt="" className="avatar" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
+                          <div className="white headerColor">
+                            {user.username}
+                          </div>
+                        </div>
+                      )
+                    });
+
+                    return (
+                      <div>
+                        <div className="white headerColor channel" onClick={(e) => { this.props.switchChannel(value.id) }} onContextMenu={(e) => { this.props.setSelectedChannel(value.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } }>
+                          {value.type === 0 ? "#" : "."}{channelName}
+                        </div>
+                        {userList}
+                      </div>
+                    )
+                  }
+              }
+
+              return (
+                <div {...props} key={index} className={ this.props.currentChannel === value.id ? "white headerColor channel selectedChannelColor" : "white headerColor channel" } onContextMenu={(e) => { this.props.setSelectedChannel(value.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } }>
+                  {value.type === 1 ? "." : "#"}{channelName}
+                </div>
+              )
+              }}>
+            </List>
             {voiceGroup !== -1 ? 
               <div className="white headerColor vcInfo selectedChannelColor">
                 <div className="button2 alignmiddle chatColor" onClick={(e) => {  }}>

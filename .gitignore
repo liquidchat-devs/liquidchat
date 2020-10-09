@@ -9,3 +9,4 @@ icon/
 database.json
 .vscode
 *.dat
+.VSCodeCounter/

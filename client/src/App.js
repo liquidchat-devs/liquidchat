@@ -168,6 +168,18 @@ class App extends React.Component {
     });
   }
 
+  moveChannel = (channels, oldIndex, newIndex) => {
+    channels.splice(newIndex, 0, channels.splice(oldIndex, 1)[0]);
+    channels.forEach((c, index) => {
+      c.position = index;
+    });
+
+    let newChannels = new Map(channels.map(obj => [obj.id, obj]));
+    this.setState({
+        channels: newChannels
+    });
+  }
+
   getUser = (id) => {
     return this.state.users.get(id)
   }
@@ -216,7 +228,7 @@ class App extends React.Component {
             API={this.state.API} fileEndpoint={this.state.fileEndpoint} switchDialogState={this.switchDialogState} setSelectedMessage={this.setSelectedMessage}
             session={this.state.session} getUser={this.getUser}/>
             <div className="flex">
-              <ChannelSelector setBox={this.setBox} getServer={this.getServer} selectedServer={this.state.selectedServer} selectedChannel={this.state.selectedChannel} setSelectedServer={this.setSelectedServer} currentChannel={this.state.currentChannel}
+              <ChannelSelector moveChannel={this.moveChannel} setBox={this.setBox} getServer={this.getServer} selectedServer={this.state.selectedServer} selectedChannel={this.state.selectedChannel} setSelectedServer={this.setSelectedServer} currentChannel={this.state.currentChannel}
               setSelectedChannel={this.setSelectedChannel} API={this.state.API} switchDialogState={this.switchDialogState} channelTypes={this.state.channelTypes} switchChannelTypes={this.switchChannelTypes}
               session={this.state.session} fileEndpoint={this.state.fileEndpoint} friendRequests={this.state.friendRequests} setSelectedUser={this.setSelectedUser}
               channels={this.state.channels} setFirstChannel={this.setFirstChannel} switchChannel={this.switchChannel} currentVoiceGroup={this.state.currentVoiceGroup} getUser={this.getUser}/>
