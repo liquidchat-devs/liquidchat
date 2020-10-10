@@ -16,6 +16,7 @@ class App extends React.Component {
     //Page size
     pageWidth: 0,
     pageHeight: 0,
+    pageHeightOffset: 0,
 
     //Authorization
     waitingForSession: true,
@@ -202,6 +203,10 @@ class App extends React.Component {
         this.endEditingMessage();
       }
     }.bind(this);
+
+    this.setState({
+      pageHeightOffset: window.navigator.userAgent.includes("LiquidChat") === false ? 28 : 0
+    })
   }
   
   componentWillUnmount() {
@@ -215,6 +220,13 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
+        {window.navigator.userAgent.includes("LiquidChat") === false ?
+        <div className="header0 headerColor2 alignmiddle">
+          <div className="white text1 marginleft2">> Download a desktop version of Liquid Chat <a className="link marginleft1" href="https://github.com/LamkasDev/liquidchat/releases" target="_blank">(Download)</a></div>
+        </div>
+        :
+        ""
+        }
         <div className="header0 headerColor">
           <div className="white text1 marginleft2">LiquidChat (dev) <a className="link marginleft1" href="https://github.com/LamkasDev/liquidchat" target="_blank">(Github)</a></div>
         </div>
@@ -228,7 +240,7 @@ class App extends React.Component {
             API={this.state.API} fileEndpoint={this.state.fileEndpoint} switchDialogState={this.switchDialogState} setSelectedMessage={this.setSelectedMessage}
             session={this.state.session} getUser={this.getUser}/>
             <div className="flex">
-              <ChannelSelector moveChannel={this.moveChannel} setBox={this.setBox} getServer={this.getServer} selectedServer={this.state.selectedServer} selectedChannel={this.state.selectedChannel} setSelectedServer={this.setSelectedServer} currentChannel={this.state.currentChannel}
+              <ChannelSelector pageHeight={this.state.pageHeight} pageHeightOffset={this.state.pageHeightOffset} moveChannel={this.moveChannel} setBox={this.setBox} getServer={this.getServer} selectedServer={this.state.selectedServer} selectedChannel={this.state.selectedChannel} setSelectedServer={this.setSelectedServer} currentChannel={this.state.currentChannel}
               setSelectedChannel={this.setSelectedChannel} API={this.state.API} switchDialogState={this.switchDialogState} channelTypes={this.state.channelTypes} switchChannelTypes={this.switchChannelTypes}
               session={this.state.session} fileEndpoint={this.state.fileEndpoint} friendRequests={this.state.friendRequests} setSelectedUser={this.setSelectedUser}
               channels={this.state.channels} setFirstChannel={this.setFirstChannel} switchChannel={this.switchChannel} currentVoiceGroup={this.state.currentVoiceGroup} getUser={this.getUser}/>
@@ -236,6 +248,7 @@ class App extends React.Component {
                 <ChannelHeader
                 API={this.state.API} currentChannel={this.state.currentChannel} getChannel={this.getChannel} selectedServer={this.state.selectedServer} getServer={this.getServer} currentVoiceGroup={this.state.currentVoiceGroup}/>
                 <Chat
+                pageHeightOffset={this.state.pageHeightOffset}
                 session={this.state.session} uploadReceived={this.state.uploadReceived} uploadExpected={this.state.uploadExpected}
                 uploadFileID={this.state.uploadFileID} uploadFileName={this.state.uploadFileName} uploadFailed={this.state.uploadFailed}
                 pageHeight={this.state.pageHeight} API={this.state.API} setSelectedUser={this.setSelectedUser} currentVoiceGroup={this.state.currentVoiceGroup} setSelectedImage={this.setSelectedImage}

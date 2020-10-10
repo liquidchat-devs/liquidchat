@@ -174,7 +174,7 @@ export default class Chat extends React.Component {
       case 2:
         return (
           <div className="flex">
-            <div style={{ overflowY: "scroll", height: this.props.pageHeight - 165, width: membersList === -1 ? "100%" : "calc(100% - 200px)" }}>
+            <div style={{ overflowY: "scroll", height: this.props.pageHeight - 165 - this.props.pageHeightOffset, width: membersList === -1 ? "100%" : "calc(100% - 200px)" }}>
               {messageList}
               <div className="white">
                 {this.getUploadMessage(this.props.uploadFileID, this.props.uploadFileName, this.props.uploadReceived, this.props.uploadExpected, this.props.uploadFailed)}

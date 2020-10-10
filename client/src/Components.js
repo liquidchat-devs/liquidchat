@@ -157,7 +157,7 @@ export class ChannelSelector extends React.Component {
     let i = 0;
     return (
       <div className="flex">
-        <div className="servers headerColor">
+        <div className="servers headerColor" style={{ height: this.props.pageHeight - 128 - this.props.pageHeightOffset }}>
           <div className={this.props.channelTypes === 3 ? "white headerColor server2 selectedChannelColor" : "white headerColor server2"} onClick={() => { this.props.switchChannelTypes(3) }}>
             Friends
           </div>
@@ -170,7 +170,7 @@ export class ChannelSelector extends React.Component {
           </div>
         </div>
         {this.props.channelTypes === 1 || this.props.channelTypes === 2 ?
-          <div className="channels headerColor">
+          <div className="channels headerColor" style={{ height: this.props.pageHeight - 128 - this.props.pageHeightOffset }}>
             <List
             onChange={({ oldIndex, newIndex }) =>
               this.props.moveChannel(channels, oldIndex, newIndex)
@@ -232,7 +232,7 @@ export class ChannelSelector extends React.Component {
             : null}
           </div>
         :
-        <div className="channels headerColor">
+        <div className="channels headerColor" style={{ height: this.props.pageHeight - 128 - this.props.pageHeightOffset }}>
           {friendList}
           {friendRequestsList}
           <div className="white headerColor channel" onClick={() => { this.props.switchDialogState(7) }}>
