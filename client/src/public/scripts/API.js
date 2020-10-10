@@ -323,9 +323,13 @@ class API {
         })
     }
 
-    async API_fetchUsersForChannelMembers(channel) {
-        channel.members.forEach(userID => {
-            this.API_fetchUser(userID);
+    async API_fetchUsersForIDs(obj) {
+        const queue = new Map();
+        obj.forEach(userID => {
+            if(!queue.has(userID)) {
+                this.API_fetchUser(userID);
+                queue.set(userID, 1);
+            }
         });
     }
 
@@ -823,7 +827,7 @@ class API {
             var currentChannels = this.mainClass.state.channels;
             currentChannels.set(channel.id, channel);
 
-            if(channel.members !== undefined) { this.API_fetchUsersForChannelMembers(channel); }
+            if(channel.members !== undefined) { this.API_fetchUsersForIDs(channel.members); }
             this.API_fetchUsersForMessages(messages)
             this.mainClass.setState({
                 channels: currentChannels
@@ -849,13 +853,13 @@ class API {
                 newChannel.messages = messages;
                 newChannels.set(channel.id, newChannel)
 
-                if(channel.members !== undefined) { this.API_fetchUsersForChannelMembers(channel); }
                 this.API_fetchUsersForMessages(messages)
                 this.mainClass.setState({
                     channels: newChannels
                 }, () => { console.log("set server channels"); });
             });
 
+            if(server.members !== undefined) { this.API_fetchUsersForIDs(server.members); }
             this.mainClass.setState({
                 servers: newServers
             });
