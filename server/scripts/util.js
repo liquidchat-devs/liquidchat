@@ -55,7 +55,18 @@ class Util {
         this.app.DatabaseManager = require('./data/db_manager');
         this.app.db = new this.app.DatabaseManager(this.app, this.app.sql, conn);
 
-        this.app.use(this.app.cors({ origin: "http://localhost:3000", credentials: true }))
+        var origins = ["http://localhost:3000", "http://nekonetwork.net"]
+        var corsOptionsDelegate = function (req, callback) {
+            var corsOptions;
+            if (origins.indexOf(req.header('Origin')) !== -1) {
+              corsOptions = { origin: true, credentials: true }
+            } else {
+              corsOptions = { origin: false, credentials: true }
+            }
+            callback(null, corsOptions)
+        }
+
+        this.app.use(this.app.cors(corsOptionsDelegate))
         this.app.use(this.app.compression());
         this.app.use(this.app.cookieParser());
         this.app.use(this.app.bodyParser.json());
@@ -83,7 +94,7 @@ class Util {
     setupSocketServer() {
         this.app.io = require('socket.io')(this.app.server);
         this.app.io.origins((origin, callback) => {  
-            if (origin !== 'http://localhost:3000' && origin !== 'file://') {    
+            if (origin !== 'http://localhost:3000' && origin !== 'http://nekonetwork.net' && origin !== 'file://') {    
                 return callback('origin not allowed', false);  
             }  
            callback(null, true);
