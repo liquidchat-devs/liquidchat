@@ -19,7 +19,7 @@
 > File Support  
 > Friend Features (Adding/Removing friends)  
 
-💛 Official website: (soon)™️  
+💛 Official website: https://nekonetwork.net (need to get a domain, but you know i'm broke)™️  
 ✔️ Releases: https://github.com/LamkasDev/liquidchat/releases  
 
 📓 Documentation: (soon)™️  
