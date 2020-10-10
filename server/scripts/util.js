@@ -12,7 +12,7 @@ class Util {
         this.app.userSessions = new Map();
         this.app.sessionSockets = new Map();
         this.app.voiceGroups = new Map();
-        this.app.filesStorage = require("path").join(__dirname, "..", "..", "..", "liquidchat-fileserver/", "public")
+        this.app.filesStorage = require("path").join(__dirname, "..", "..", "..", "liquidchat-fileserver", "public/")
 
         this.app.crypto = require("crypto")
         this.app.cookieParser = require('cookie-parser');
