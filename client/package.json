@@ -28,7 +28,9 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "package": "electron-builder build --win -c.extraMetadata.main=build/electron/electron.js --publish never",
-    "createproduction": "react-scripts build && mkdir build\\electron && move build\\electron.js build\\electron\\electron.js && xcopy src build\\src /e /i /h && move build\\src\\public\\icon.ico build\\icon.ico && electron-builder build --win -c.extraMetadata.main=build/electron/electron.js --publish never"
+    "createproduction-win": "react-scripts build && mkdir build\\electron && move build\\electron.js build\\electron\\electron.js && xcopy src build\\src /e /i /h && move build\\src\\public\\icon.ico build\\icon.ico && electron-builder build --win -c.extraMetadata.main=build/electron/electron.js --publish never",
+    "createproduction-linux": "react-scripts build && mkdir build\\electron && move build\\electron.js build\\electron\\electron.js && xcopy src build\\src /e /i /h && move build\\src\\public\\icon.ico build\\icon.ico && electron-builder build --linux -c.extraMetadata.main=build/electron/electron.js --publish never",
+    "createproduction-wl": "react-scripts build && mkdir build\\electron && move build\\electron.js build\\electron\\electron.js && xcopy src build\\src /e /i /h && move build\\src\\public\\icon.ico build\\icon.ico && electron-builder build -wl -c.extraMetadata.main=build/electron/electron.js --publish never"
   },
   "eslintConfig": {
     "extends": "react-app"
