@@ -49,7 +49,7 @@
 
 ### Example Screenshots:  
 > Client (2020/10/6)
-![example1](https://qtlamkas.why-am-i-he.re/Tk61V0.png)
+![example1](https://qtlamkas.why-am-i-he.re/4h4YAh.png)
 
 > Documentation (2020/10/6)
-![example2](https://qtlamkas.why-am-i-he.re/CkPTZy.png)
+![example2](https://qtlamkas.why-am-i-he.re/3LsFwA.png)
