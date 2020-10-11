@@ -22,7 +22,7 @@
 💛 Official website: https://nekonetwork.net (need to get a domain, but you know i'm broke)™️  
 ✔️ Releases: https://github.com/LamkasDev/liquidchat/releases  
 
-📓 Documentation: (soon)™️  
+📓 Documentation: https://nekonetwork.net/docs
 🔥 API: https://github.com/LamkasDev/liquidchat.js  
 🔴 Found a bug or want to contribute?: [Open a pull request!](https://github.com/LamkasDev/liquidchat/pulls)
 
@@ -48,8 +48,8 @@
 > change `filesStorage` in `server.js` to directory where you run your file server  
 
 ### Example Screenshots:  
-> Client (2020/10/6)
+> Client (2020/10/11)
 ![example1](https://qtlamkas.why-am-i-he.re/4h4YAh.png)
 
-> Documentation (2020/10/6)
+> Documentation (2020/10/11)
 ![example2](https://qtlamkas.why-am-i-he.re/3LsFwA.png)
