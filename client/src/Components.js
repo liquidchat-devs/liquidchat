@@ -308,13 +308,16 @@ export class DialogManager extends React.Component {
         return <ForgottenPasswordBox API={this.props.API} switchDialogState={this.props.switchDialogState}/>
 
       case 16:
-        return <CreateServerBox fileEndpoint={this.props.fileEndpoint} API={this.props.API} switchDialogState={this.props.switchDialogState}/>
+        return <CreateServerBox setSelectedAvatar={this.props.setSelectedAvatar} fileEndpoint={this.props.fileEndpoint} API={this.props.API} switchDialogState={this.props.switchDialogState}/>
 
       case 17:
         return <ServerOptionsBox getServer={this.props.getServer} API={this.props.API} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedServer={this.props.selectedServer} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
 
       case 18:
-        return <EditServerDialog fileEndpoint={this.props.fileEndpoint} getServer={this.props.getServer} selectedServer={this.props.selectedServer} API={this.props.API} switchDialogState={this.props.switchDialogState} />
+        return <EditServerDialog setSelectedAvatar={this.props.setSelectedAvatar} fileEndpoint={this.props.fileEndpoint} getServer={this.props.getServer} selectedServer={this.props.selectedServer} API={this.props.API} switchDialogState={this.props.switchDialogState} />
+
+      case 19:
+        return <CropImageDialog fileEndpoint={this.props.fileEndpoint} API={this.props.API} switchDialogState={this.props.switchDialogState} selectedAvatar={this.props.selectedAvatar}/>
 
       default:
         return null;
@@ -398,7 +401,7 @@ export class CreateChannelDialog extends React.Component {
 export class CreateServerBox extends React.Component {
   state = {
     serverName: "",
-    serverAvatar: -1,
+    serverAvatar: "defaultAvatar.png",
     serverCreationResult: 0
   };
 
@@ -468,7 +471,7 @@ export class CreateServerBox extends React.Component {
           <div className="white text3 marginleft2 margintop1a">> Create new server-</div>
           <form onSubmit={this.handleSubmit} className="flex margintop1">
             <img alt="" className="avatar2 marginleft4 marginright2" ref="serverImage" src={this.props.fileEndpoint + "/defaultAvatar.png"} onMouseEnter={() => this.refs["serverEditOverlay"].style = "display: flex;" }/>
-            <div className="cropButton alignmiddle">
+            <div className="cropButton alignmiddle" onClick={() => { this.props.setSelectedAvatar(this.state.serverAvatar); this.props.switchDialogState(19) }}>
                 <div className="white text7">Crop</div>
             </div>
             <label for="avatar-input">
@@ -647,7 +650,7 @@ export class EditServerDialog extends React.Component {
           <div className="white text3 marginleft2 margintop1a">> Edit server-</div>
           <form onSubmit={this.handleSubmit} className="flex margintop1">
             <img alt="" className="avatar2 marginleft4 marginright2" ref="serverImage" src={this.props.fileEndpoint + "/" + server.avatar} onMouseEnter={() => this.refs["serverEditOverlay"].style = "display: flex;" }/>
-            <div className="cropButton alignmiddle">
+            <div className="cropButton alignmiddle" onClick={() => { this.props.setSelectedAvatar(server.avatar); this.props.switchDialogState(19) }}>
                 <div className="white text7">Crop</div>
             </div>
             <label for="avatar-input">
@@ -668,6 +671,33 @@ export class EditServerDialog extends React.Component {
             </div>
             : "")
           }
+        </div>
+      </div>
+    );
+  }
+}
+
+export class CropImageDialog extends React.Component {
+  componentDidMount = () => {
+    if(typeof this.props.selectedAvatar !== "string") {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        this.refs["serverImage"].src = e.target.result;
+      }.bind(this);
+
+      reader.readAsDataURL(this.props.selectedAvatar);
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlaybox5 alignmiddle">
+          <div style={{ width: "90%", height: "90%", position: "relative" }}>
+            <img alt="" className="avatar5" ref="serverImage" src={this.props.fileEndpoint + "/" + this.props.selectedAvatar}/>
+            <div className="cropOverlay"></div>
+          </div>
         </div>
       </div>
     );
@@ -732,8 +762,8 @@ export class InviteFriendsBox extends React.Component {
               </div>
               {
                 target.members.includes(friend.id) ?
-                  <a className="button inviteButton" style={{ textDecoration: "none", right: 0, color: "#b3b3b3", border: "1px solid #b3b3b3", cursor: "default" }}>Joined!</a>
-                : <a className="button inviteButton" style={{ textDecoration: "none", right: 0 }} onClick={(e) => { this.inviteUser(target.id, friend.id, type); e.preventDefault(); } }>Invite</a>
+                  <a className="button inviteButton" style={{ textDecoration: "none", right: 0, color: "#b3b3b3", border: "1px solid #b3b3b3", cursor: "default", position: "relative" }}>Joined!</a>
+                : <a className="button inviteButton" style={{ textDecoration: "none", right: 0, position: "relative" }} onClick={(e) => { this.inviteUser(target.id, friend.id, type); e.preventDefault(); } }>Invite</a>
               }
             </div>
           </div>

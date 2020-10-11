@@ -524,6 +524,24 @@ code {
   z-index: 3;
 }
 
+.overlaybox5 {
+  width: 600px;
+  height: 600px;
+  background-color: #353535;
+  border-radius: 10px;
+  z-index: 3;
+}
+
+.cropOverlay {
+  width: 100%;
+  height: 100%;
+  margin-top: calc(-100% - 5px);
+  background-color: #353535;
+  z-index: 4;
+  position: absolute;
+  opacity: 0.5;
+}
+
 .avatar {
   width: 40px;
   height: 40px;
@@ -549,6 +567,12 @@ code {
   width: 35px;
   height: 35px;
   border-radius: 30%;
+  object-fit: cover;
+}
+
+.avatar5 {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
