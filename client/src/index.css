@@ -745,3 +745,30 @@ code {
   z-index: 3;
   cursor: pointer;
 }
+
+.appHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #2b2b2b;
+}
+
+.appHeaderButtons {
+  width: 102px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.appHeaderButton {
+  height: 24px;
+  width: 24px;
+  margin-right: 10px;
+  border: none;
+  background: transparent;
+  outline: none;
+  position: relative;
+  color: #ff6b6b;
+  transform: scale(0.75);
+  cursor: pointer;
+}

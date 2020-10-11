@@ -201,9 +201,11 @@ class App extends React.Component {
   }
 
   componentDidMount = () => {
+    //Page dimensions hook
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
 
+    //Keyboard hooks
     document.onkeydown = function(evt) {
       evt = evt || window.event;
       if (evt.keyCode === 27) {
@@ -211,9 +213,42 @@ class App extends React.Component {
       }
     }.bind(this);
 
+    //Setup page offsets
     this.setState({
-      pageHeightOffset: window.navigator.userAgent.includes("LiquidChat") === false ? 28 : 0
+      pageHeightOffset: window.navigator.userAgent.includes("LiquidChat") === false ? 0 : 28
     })
+
+    //Setup menu bar
+    if(window.navigator.userAgent.includes("LiquidChat")) {
+      const minimizeButton = document.getElementById("minimize-btn");
+      const maxUnmaxButton = document.getElementById("max-unmax-btn");
+      const closeButton = document.getElementById("close-btn");
+    
+      minimizeButton.addEventListener("click", e => {
+        window.minimizeWindow();
+      });
+    
+      maxUnmaxButton.addEventListener("click", e => {
+        const icon = maxUnmaxButton.querySelector("i.far");
+        window.maxUnmaxWindow();
+
+        if (window.isWindowMaximized()) {
+          icon.classList.remove("fa-square");
+          icon.classList.add("fa-clone");
+        } else {
+          icon.classList.add("fa-square");
+          icon.classList.remove("fa-clone");
+        }
+      });
+    
+      closeButton.addEventListener("click", e => {
+        window.closeWindow();
+      });
+      
+      document.getElementById("web-header").remove();
+    } else {
+      document.getElementById("app-header").remove();
+    }
   }
   
   componentWillUnmount() {
@@ -227,16 +262,24 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        {window.navigator.userAgent.includes("LiquidChat") === false ?
-        <div className="header0 headerColor2 alignmiddle">
-          <div className="white text1 marginleft2">> Download a desktop version of Liquid Chat <a className="link marginleft1" href="https://github.com/LamkasDev/liquidchat/releases" target="_blank">(Download)</a></div>
+        <div id="web-header">
+          <div className="header0 headerColor2 alignmiddle">
+            <div className="white text1 marginleft2">> Download a desktop version of Liquid Chat <a className="link marginleft1" href="https://github.com/LamkasDev/liquidchat/releases" target="_blank">(Download)</a></div>
+          </div>
+          <div className="header0 headerColor">
+            <div className="white text1 marginleft2">LiquidChat (dev) <a className="link marginleft1" href="https://github.com/LamkasDev/liquidchat" target="_blank">(Github)</a></div>
+          </div>
         </div>
-        :
-        ""
-        }
-        <div className="header0 headerColor">
-          <div className="white text1 marginleft2">LiquidChat (dev) <a className="link marginleft1" href="https://github.com/LamkasDev/liquidchat" target="_blank">(Github)</a></div>
-        </div>
+        <div id="app-header" class="header0 headerColor appHeader">
+          <div class="fullwidth" style={{ "-webkit-app-region": "drag", width: "calc(100% - 102px)" }}>
+            <div class="white text1 marginleft2">LiquidChat</div>
+          </div>
+          <div class="appHeaderButtons">
+            <div class="button appHeaderButton" id="minimize-btn" style={{ transform: "scale(0.55)" }}><i class="fas fa-window-minimize"></i></div>
+            <div class="button appHeaderButton" id="max-unmax-btn"><i class="far fa-square"></i></div>
+            <div class="button appHeaderButton" id="close-btn"><i class="fas fa-times"></i></div>
+          </div>
+       </div>
         {this.state.waitingForSession === false ?
           <div>
             <DialogManager

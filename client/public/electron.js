@@ -1,16 +1,16 @@
 const electron = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
-const url = require('url');
 
 let app = electron.app;
 let mainWindow;
 let tray;
 
 function createWindow() {
-  mainWindow = new electron.BrowserWindow({ width: 900, height: 680, webPreferences: { zoomFactor: 0.8 } });
+  mainWindow = new electron.BrowserWindow({ width: 900, height: 680, webPreferences: { preload: path.join(__dirname, "preload.js"), zoomFactor: 0.8 }, frame: false });
   mainWindow.setMenu(null);
-  mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../index.html')}`);
+  mainWindow.loadURL(isDev ? 'http://localhost:3000' : `https://nekonetwork.net`);
+
   mainWindow.on('closed', () => mainWindow = null);
 }
 
