@@ -8,7 +8,7 @@ let mainWindow;
 let tray;
 
 function createWindow() {
-  mainWindow = new electron.BrowserWindow({width: 900, height: 680});
+  mainWindow = new electron.BrowserWindow({ width: 900, height: 680, webPreferences: { zoomFactor: 0.8 } });
   mainWindow.setMenu(null);
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../index.html')}`);
   mainWindow.on('closed', () => mainWindow = null);
