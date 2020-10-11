@@ -762,8 +762,8 @@ export class InviteFriendsBox extends React.Component {
               </div>
               {
                 target.members.includes(friend.id) ?
-                  <a className="button inviteButton" style={{ textDecoration: "none", right: 0, color: "#b3b3b3", border: "1px solid #b3b3b3", cursor: "default", position: "relative" }}>Joined!</a>
-                : <a className="button inviteButton" style={{ textDecoration: "none", right: 0, position: "relative" }} onClick={(e) => { this.inviteUser(target.id, friend.id, type); e.preventDefault(); } }>Invite</a>
+                  <a className="button inviteButton" style={{ textDecoration: "none", right: 0, color: "#b3b3b3", border: "1px solid #b3b3b3", cursor: "default" }}>Joined!</a>
+                : <a className="button inviteButton" style={{ textDecoration: "none", right: 0 }} onClick={(e) => { this.inviteUser(target.id, friend.id, type); e.preventDefault(); } }>Invite</a>
               }
             </div>
           </div>
