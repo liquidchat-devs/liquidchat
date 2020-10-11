@@ -44,7 +44,7 @@ class Endpoint {
                 }
 
                 res.cookie("sessionID", session.id, {
-                    sameSite: "None"
+                    sameSite: "None", secure: true
                 });
                 res.send(JSON.stringify(session));
             }
