@@ -235,7 +235,7 @@ function formatMessage(chat, message) {
                             <a className="tipColor marginleft2">{server.members.length} members</a>
                         </div>
                     </div>
-                    <a className="button inviteButton marginleft2 margintop1b" style={server.members.includes(chat.props.session.userID) === false ? {} : {color: "#b3b3b3", border: "1px solid #b3b3b3", cursor: "default"}}
+                    <a className="button inviteButton marginleft2 margintop1b" style={server.members.includes(chat.props.session.userID) === false ? {} : {color: "#b3b3b3", border: "1px solid #b3b3b3", cursor: "default", position: "relative" }}
                     onClick={() => { if(server.members.includes(chat.props.session.userID) === false) { chat.props.API.API_joinServer(server.id); } }}>Join</a>
                 </div>
             </div>)
