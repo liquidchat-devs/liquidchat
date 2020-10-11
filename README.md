@@ -22,7 +22,7 @@
 💛 Official website: https://nekonetwork.net (need to get a domain, but you know i'm broke)™️  
 ✔️ Releases: https://github.com/LamkasDev/liquidchat/releases  
 
-📓 Documentation: https://nekonetwork.net/docs
+📓 Documentation: https://nekonetwork.net/docs  
 🔥 API: https://github.com/LamkasDev/liquidchat.js  
 🔴 Found a bug or want to contribute?: [Open a pull request!](https://github.com/LamkasDev/liquidchat/pulls)
 
