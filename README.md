@@ -28,7 +28,7 @@
 
 ### Build instructions:
 ##### a) How to build client (Windows)
-> run `npm run buildproduction`  
+> run `npm run createproduction-win`  
 > the installer will be built into `client/dist`  
 
 ##### b) How to build web version (Windows)
