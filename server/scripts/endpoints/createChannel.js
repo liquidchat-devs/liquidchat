@@ -43,7 +43,8 @@ class Endpoint {
                 channel.position = server.channels.length;
                 server.channels.push(channel.id)
                 server.members.forEach(id => {
-                    this.app.epFunc.emitToUser(id, "createChannel", channel)
+                    this.app.epFunc.emitToUser(id, "createChannel", channel);
+                    this.app.epFunc.emitToUser(id, "updateServer", server);
                 });
 
                 await this.app.db.db_edit.editServer(this.app.db, server);

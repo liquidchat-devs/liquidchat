@@ -803,9 +803,9 @@ class API {
         }
     }
 
-    async API_deleteChannel(channel) {
+    async API_deleteChannel(channelID) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/deleteChannel', {
-            id: channel.id
+            id: channelID
         }, { withCredentials: true });
 
         if(reply.data.status !== undefined) {
