@@ -215,7 +215,7 @@ class App extends React.Component {
 
     //Setup page offsets
     this.setState({
-      pageHeightOffset: window.navigator.userAgent.includes("LiquidChat") === false ? 0 : 28
+      pageHeightOffset: window.navigator.userAgent.includes("LiquidChat") === false ? 28 : 0
     })
 
     //Setup menu bar
