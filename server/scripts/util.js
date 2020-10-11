@@ -33,9 +33,9 @@ class Util {
         this.app.epFunc = new Endpoint(this.app);
 
         this.app.readJSON = path =>
-            JSON.parse(this.app.fs.readFileSync(process.cwd() + path))
+            JSON.parse(this.app.fs.readFileSync(require("path").join(__dirname + path)))
         
-        this.app.config = this.app.readJSON("/data/config_persistent.txt");
+        this.app.config = this.app.readJSON("/../data/config_persistent.txt");
 
         //SQL Setup
         const conn = this.app.sql.createConnection({
@@ -82,8 +82,8 @@ class Util {
     //Setups a http server
     setupServer() {
         const options = {
-            key: this.app.fs.readFileSync("./keys/key.pem"),
-            cert: this.app.fs.readFileSync("./keys/cert.pem")
+            key: this.app.fs.readFileSync(require("path").join(__dirname, "/../keys/key.pem")),
+            cert: this.app.fs.readFileSync(require("path").join(__dirname, "/../keys/cert.pem"))
         };
         
         this.app.server = this.app.https.createServer(options, this.app).listen(8080);
