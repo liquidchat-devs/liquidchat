@@ -91,6 +91,9 @@ class App extends React.Component {
         this.state.API.API_joinVoiceChannel(channel)
         break;
     }
+
+    let chat = document.getElementById('chat-container');
+    if(chat !== undefined) { chat.scrollTop = chat.scrollHeight; }
   }
 
   switchFormState = () => {

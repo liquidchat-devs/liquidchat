@@ -37,7 +37,7 @@ class API {
                 window.setIcon(true);
             } else {
                 let chat = document.getElementById('chat-container');
-                chat.scrollTop = chat.scrollHeight;
+                if(chat !== undefined) { chat.scrollTop = chat.scrollHeight; }
             }
 
             this.API_fetchEmotesForMessages([ message ])
@@ -383,14 +383,14 @@ class API {
                     if(a == -1 || b == -1) {
                         i = message.text.length;
                     } else {
-                        let id = currMessage.substring(a + "<:".length, b - ":>".length)
+                        let id = currMessage.substring(a + "<:".length, b)
                         if(id.length != 32) {
                             i = message.text.length;
                             break;
                         }
 
                         this.API_fetchEmote(id);
-                        i += a;
+                        i += b + 3;
                     }
                 }
             }
@@ -915,6 +915,7 @@ class API {
             currentChannels.set(channel.id, channel);
 
             if(channel.members !== undefined) { this.API_fetchUsersForIDs(channel.members); }
+            this.API_fetchEmotesForMessages(messages)
             this.API_fetchUsersForMessages(messages)
             this.mainClass.setState({
                 channels: currentChannels
