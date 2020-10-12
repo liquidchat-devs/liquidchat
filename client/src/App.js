@@ -185,16 +185,15 @@ class App extends React.Component {
 
     //Find channels that has been sorted and assign the new position to them, so we don't lose channels not included in the sorting
     channels = new Map(channels.map(obj => [obj.id, obj]))
-    let newChannels = Array.from(new Map(this.state.channels));
+    let newChannels = Array.from(this.state.channels.values());
     newChannels = newChannels.reduce((acc, curr) => {
       if(channels.has(curr.id)) {
         curr.position = channels.get(curr.id).position;
-      };
+      }
       
       acc.set(curr.id, curr);
       return acc;
     }, new Map())
-    newChannels = new Map(newChannels.map(obj => [obj.id, obj]))
 
     this.setState({
         channels: newChannels
