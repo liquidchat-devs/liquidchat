@@ -5,7 +5,6 @@
 ⭐ Open-source chat application similar to Discord-  
 
 🚩 **Planned features:**  
-> Personal Emotes  
 > Server Emotes  
 > Idle/DND/Invisible Status  
 > Custom Statuses  
@@ -17,6 +16,7 @@
 > DM Channels  
 > Group Chats  
 > File Support  
+> Personal Emotes  
 > Friend Features (Adding/Removing friends)  
 
 💛 Official website: https://nekonetwork.net (need to get a domain, but you know i'm broke)™️  
