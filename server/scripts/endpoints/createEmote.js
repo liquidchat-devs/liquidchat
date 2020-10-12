@@ -7,7 +7,7 @@ class Endpoint {
         this.app.post('/createEmote', (async(req, res) => {
             if(!this.app.isSessionValid(this.app, req, res)) { return; }
 
-            await this.createEmote(req, res, req.query.name, req.query.serverID, req.query.type);
+            await this.createEmote(req, res, req.query.emoteName, req.query.serverID, req.query.type);
             console.log("> created emote - " + req.query.name + "/" + req.query.serverID + "/" + req.query.type);
         }).bind(this));
     }
@@ -28,7 +28,7 @@ class Endpoint {
         }
 
         switch(type) {
-            case 0:
+            case "0":
                 var server = await this.app.db.db_fetch.fetchServer(this.app.db, id);
 
                 if(server === undefined) {
@@ -60,7 +60,7 @@ class Endpoint {
                 }.bind(this));
                 break;
 
-            case 1:
+            case "1":
                 form.uploadDir = this.app.filesStorage;
                 form.keepExtensions = true;
         
