@@ -171,6 +171,8 @@ class API {
             var user = JSON.parse(userData);
             if(this.mainClass.state.users.has(user.id)) {
                 var newUsers = this.mainClass.state.users.set(user.id, user);
+                if(this.mainClass.state.session.userID === user.id) { this.API_fetchEmotesForIDs(user.emotes); }
+
                 this.mainClass.setState({
                     users: newUsers
                 });

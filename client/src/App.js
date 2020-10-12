@@ -330,7 +330,7 @@ class App extends React.Component {
                 selectedServer={this.state.selectedServer} getChannel={this.getChannel} getServer={this.getServer} currentChannel={this.state.currentChannel} switchDialogState={this.switchDialogState} setSelectedMessage={this.setSelectedMessage}
                 editingMessage={this.state.editingMessage} editedMessage={this.state.editedMessage} setEditedMessage={this.setEditedMessage} endEditingMessage={this.endEditingMessage} getUser={this.getUser} fileEndpoint={this.state.fileEndpoint}/>
                 <Send
-                fileEndpoint={this.state.fileEndpoint} emotes={this.state.emotes} API={this.state.API}
+                session={this.state.session} fileEndpoint={this.state.fileEndpoint} emotes={this.state.emotes} API={this.state.API}
                 currentChannel={this.state.currentChannel} getChannel={this.getChannel}
                 selectedServer={this.state.selectedServer} getServer={this.getServer}/>
               </div>
