@@ -4,9 +4,9 @@ module.exports = {
             console.log(" - [db] Editing Server(id: " + server.id + ") in the database..."); 
         }
 
-        var query0 = "name=?, avatar=?, channels=?, members=?"
+        var query0 = "name=?, avatar=?, channels=?, members=?, emotes=?"
         var query = "UPDATE servers SET " + query0 + " WHERE id='" + server.id + "'";
-        db.sqlConn.promise().execute(query, [ db.escapeString(server.name), server.avatar, server.channels.join(","), server.members.join(",") ])
+        db.sqlConn.promise().execute(query, [ db.escapeString(server.name), server.avatar, server.channels.join(","), server.members.join(","), server.emotes.join(",") ])
         .then((result, err) => {
             if(err) { throw err; }
         });
@@ -17,8 +17,8 @@ module.exports = {
             console.log(" - [db] Editing User(id: " + user.id + ") in the database..."); 
         }
 
-        var query0 = "username=?, avatar=?, friends=?, dmChannels=?, servers=?, status=?" + (user.email == null ? "" : ", email=?") + (user.password == null ? "" : ", password=?")
-        var query1 = [ db.escapeString(user.username), user.avatar, user.friends.join(","), user.dmChannels.join(","), user.servers.join(","), user.status ]
+        var query0 = "username=?, avatar=?, friends=?, dmChannels=?, servers=?, status=?, emotes=?" + (user.email == null ? "" : ", email=?") + (user.password == null ? "" : ", password=?")
+        var query1 = [ db.escapeString(user.username), user.avatar, user.friends.join(","), user.dmChannels.join(","), user.servers.join(","), user.status, user.emotes.join(",") ]
         if(user.email != null) { query1.push(db.escapeString(user.email)); }
         if(user.password != null) { query1.push(user.password); }
 
