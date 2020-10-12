@@ -1025,7 +1025,7 @@ export class SettingsBox extends React.Component {
           <div className="white text3 marginleft2b margintop1a">Emotes ({emotes.length})</div>
           <div className="flex marginleft2b">
             {emoteList}
-            <div className="button2 addEmoteButton alignmiddle chatColor marginleft2b" onClick={() => { this.props.switchDialogState(20); }}>
+            <div className="button2 addEmoteButton alignmiddle chatColor" onClick={() => { this.props.switchDialogState(20); }}>
               +
             </div>
           </div>

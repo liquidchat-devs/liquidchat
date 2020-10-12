@@ -40,6 +40,7 @@ class API {
                 chat.scrollTop = chat.scrollHeight;
             }
 
+            this.API_fetchEmotesForMessages([ message ])
             this.API_fetchUsersForMessages([ message ])
         });
         socket.on('editMessage', (messageData) => {
