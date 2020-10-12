@@ -54,9 +54,9 @@ class Endpoint {
                     
                     emote.file = fileID2;
                     emote.server = { id: serverID }
-                    server.emotes.push(emote)
+                    server.emotes.push(emote.id)
                     await this.app.epFunc.updateServer(server, true)
-                    res.sendStatus(200);
+                    res.send(JSON.stringify(emote));
                 }.bind(this));
                 break;
 
@@ -75,9 +75,9 @@ class Endpoint {
                     });
 
                     emote.file = fileID2;
-                    user.emotes.push(emote)
+                    user.emotes.push(emote.id)
                     await this.app.epFunc.updateUser(user, true)
-                    res.sendStatus(200);
+                    res.send(JSON.stringify(emote));
                 }.bind(this));
                 break;
         }
