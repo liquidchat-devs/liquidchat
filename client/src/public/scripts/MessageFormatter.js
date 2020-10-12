@@ -33,10 +33,13 @@ function getInviteDomains() {
 }
 
 function getYoutubeEmbedLink(link) {
-    var i = link.indexOf("watch?v=");
-    var result = link.substring(0, i) + "embed/" + link.substring(i + "watch?v=".length)
-
-    return result
+    if(link.includes("youtu.be")) {
+        const i = link.indexOf("youtu.be/");
+        return "https://youtube.com/embed/watch?v=" + link.substring(i + "youtu.be/".length)
+    } else {
+        const i = link.indexOf("watch?v=");
+        return "https://youtube.com/embed/" + link.substring(i + "watch?v=".length)
+    }
 }
 
 function getImageExtensions() {
@@ -88,9 +91,9 @@ function toFormatLink(chat, message) {
     }
 
     imageResults.forEach(link => {
-        results.push(`<span>
+        results.push(`<div><span>
             <img alt="" class="message-image" src=${link}>
-        </span>`)
+        </span></div>`)
     })
 
     videoResults.forEach(link => {

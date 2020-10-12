@@ -824,6 +824,7 @@ class API {
             const reply2 = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannelMessages?id=' + channel.id, { withCredentials: true }));
             var messages = reply2.data;
             channel.messages = messages;
+
             var currentChannels = this.mainClass.state.channels;
             currentChannels.set(channel.id, channel);
 
@@ -848,14 +849,14 @@ class API {
             newChannels.forEach(async(channel) => {
                 const reply2 = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannelMessages?id=' + channel.id, { withCredentials: true }));
                 var messages = reply2.data;
+                channel.messages = messages;
 
-                var newChannel = newChannels.get(channel.id)
-                newChannel.messages = messages;
-                newChannels.set(channel.id, newChannel)
+                var currentChannels = this.mainClass.state.channels;
+                currentChannels.set(channel.id, channel)
 
                 this.API_fetchUsersForMessages(messages)
                 this.mainClass.setState({
-                    channels: newChannels
+                    channels: currentChannels
                 }, () => { console.log("set server channels"); });
             });
 

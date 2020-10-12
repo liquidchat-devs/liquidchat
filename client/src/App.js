@@ -177,12 +177,25 @@ class App extends React.Component {
   }
 
   moveChannel = (channels, oldIndex, newIndex) => {
+    //Sort the channels
     channels.splice(newIndex, 0, channels.splice(oldIndex, 1)[0]);
     channels.forEach((c, index) => {
       c.position = index;
     });
 
-    let newChannels = new Map(channels.map(obj => [obj.id, obj]));
+    //Find channels that has been sorted and assign the new position to them, so we don't lose channels not included in the sorting
+    channels = new Map(channels.map(obj => [obj.id, obj]))
+    let newChannels = Array.from(new Map(this.state.channels));
+    newChannels = newChannels.reduce((acc, curr) => {
+      if(channels.has(curr.id)) {
+        curr.position = channels.get(curr.id).position;
+      };
+      
+      acc.set(curr.id, curr);
+      return acc;
+    }, new Map())
+    newChannels = new Map(newChannels.map(obj => [obj.id, obj]))
+
     this.setState({
         channels: newChannels
     });
@@ -264,20 +277,20 @@ class App extends React.Component {
       <div className="App">
         <div id="web-header">
           <div className="header0 headerColor2 alignmiddle">
-            <div className="white text1 marginleft2">> Download a desktop version of Liquid Chat <a className="link marginleft1" href="https://github.com/LamkasDev/liquidchat/releases" target="_blank">(Download)</a></div>
+            <div className="white text1 marginleft2">> Download a desktop version of Liquid Chat <a className="link marginleft1" href="https://github.com/LamkasDev/liquidchat/releases/latest/download/LiquidChat.Installer.exe" target="_blank">(Download)</a></div>
           </div>
           <div className="header0 headerColor">
             <div className="white text1 marginleft2">LiquidChat (dev) <a className="link marginleft1" href="https://github.com/LamkasDev/liquidchat" target="_blank">(Github)</a></div>
           </div>
         </div>
-        <div id="app-header" class="header0 headerColor appHeader">
-          <div class="fullwidth" style={{ "-webkit-app-region": "drag", width: "calc(100% - 102px)" }}>
-            <div class="white text1 marginleft2">LiquidChat</div>
+        <div id="app-header" className="header0 headerColor appHeader">
+          <div className="fullwidth" style={{ "WebkitAppRegion": "drag", width: "calc(100% - 102px)" }}>
+            <div className="white text1 marginleft2">LiquidChat</div>
           </div>
-          <div class="appHeaderButtons">
-            <div class="button appHeaderButton" id="minimize-btn" style={{ transform: "scale(0.55)" }}><i class="fas fa-window-minimize"></i></div>
-            <div class="button appHeaderButton" id="max-unmax-btn"><i class="far fa-square"></i></div>
-            <div class="button appHeaderButton" id="close-btn"><i class="fas fa-times"></i></div>
+          <div className="appHeaderButtons">
+            <div className="button appHeaderButton" id="minimize-btn" style={{ transform: "scale(0.55)" }}><i className="fas fa-window-minimize"></i></div>
+            <div className="button appHeaderButton" id="max-unmax-btn"><i className="far fa-square"></i></div>
+            <div className="button appHeaderButton" id="close-btn"><i className="fas fa-times"></i></div>
           </div>
        </div>
         {this.state.waitingForSession === false ?
@@ -286,9 +299,6 @@ class App extends React.Component {
             setSelectedAvatar={this.setSelectedAvatar} selectedAvatar={this.state.selectedAvatar} getChannel={this.getChannel} getServer={this.getServer} selectedServer={this.state.selectedServer} channels={this.state.channels} currentChannel={this.state.currentChannel} switchChannelTypes={this.switchChannelTypes} switchChannel={this.switchChannel} setSelectedChannel={this.setSelectedChannel} selectedChannel={this.state.selectedChannel} selectedImage={this.state.selectedImage} API={this.state.API}
             dialogState={this.state.dialogState} switchDialogState={this.switchDialogState} startEditingMessage={this.startEditingMessage} setSelectedUser={this.setSelectedUser} getUser={this.getUser} selectedUser={this.state.selectedUser}
             boxX={this.state.boxX} boxY={this.state.boxY} selectedMessage={this.state.selectedMessage} session={this.state.session} fileEndpoint={this.state.fileEndpoint} setEditedMessage={this.setEditedMessage} setSelectedMessage={this.setSelectedMessage}/>
-            <Account
-            API={this.state.API} fileEndpoint={this.state.fileEndpoint} switchDialogState={this.switchDialogState} setSelectedMessage={this.setSelectedMessage}
-            session={this.state.session} getUser={this.getUser}/>
             <div className="flex">
               <ChannelSelector pageHeight={this.state.pageHeight} pageHeightOffset={this.state.pageHeightOffset} moveChannel={this.moveChannel} setBox={this.setBox} getServer={this.getServer} selectedServer={this.state.selectedServer} selectedChannel={this.state.selectedChannel} setSelectedServer={this.setSelectedServer} currentChannel={this.state.currentChannel}
               setSelectedChannel={this.setSelectedChannel} API={this.state.API} switchDialogState={this.switchDialogState} channelTypes={this.state.channelTypes} switchChannelTypes={this.switchChannelTypes}

@@ -2,21 +2,6 @@ import React from 'react';
 import { List } from 'react-movable';
 import { formatDuration } from './public/scripts/DateFormatter';
 
-export class Account extends React.Component {
-  render() {
-    const user = this.props.getUser(this.props.session.userID)
-
-    return (
-      <div className="panel2 headerColor">
-        <img alt="" className=" marginleft2 avatar" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.switchDialogState(4); this.props.setSelectedMessage(undefined, e.pageX, e.pageY); e.preventDefault(); }}/>
-        <div className="flex marginleft3">
-          <div className="text2" style={{color: "white"}}>Username: {user !== undefined ? user.username : "Loading"}</div>
-        </div>
-      </div>
-    );
-  }
-}
-
 export class ChannelHeader extends React.Component {
   render() {
     let server = this.props.getServer(this.props.selectedServer)
@@ -157,7 +142,7 @@ export class ChannelSelector extends React.Component {
     let i = 0;
     return (
       <div className="flex">
-        <div className="servers headerColor" style={{ height: this.props.pageHeight - 128 - this.props.pageHeightOffset }}>
+        <div className="servers headerColor" style={{ height: this.props.pageHeight - 78 - this.props.pageHeightOffset }}>
           <div className={this.props.channelTypes === 3 ? "white headerColor server2 selectedChannelColor" : "white headerColor server2"} onClick={() => { this.props.switchChannelTypes(3) }}>
             Friends
           </div>
@@ -170,7 +155,7 @@ export class ChannelSelector extends React.Component {
           </div>
         </div>
         {this.props.channelTypes === 1 || this.props.channelTypes === 2 ?
-          <div className="channels headerColor" style={{ height: this.props.pageHeight - 128 - this.props.pageHeightOffset }}>
+          <div className="channels headerColor" style={{ height: this.props.pageHeight - 78 - this.props.pageHeightOffset }}>
             <List
             onChange={({ oldIndex, newIndex }) =>
               this.props.moveChannel(channels, oldIndex, newIndex)
@@ -232,7 +217,7 @@ export class ChannelSelector extends React.Component {
             : null}
           </div>
         :
-        <div className="channels headerColor" style={{ height: this.props.pageHeight - 128 - this.props.pageHeightOffset }}>
+        <div className="channels headerColor" style={{ height: this.props.pageHeight - 78 - this.props.pageHeightOffset }}>
           {friendList}
           {friendRequestsList}
           <div className="white headerColor channel" onClick={() => { this.props.switchDialogState(7) }}>
@@ -240,7 +225,15 @@ export class ChannelSelector extends React.Component {
           </div>
         </div>}
         <div className="accountSettings chatColor aligny">
-            <div className="button settingsButton marginleft2" style={{ width: 28, height: 28, position: "relative" }} onClick={() => { this.props.switchDialogState(13) }}>⚙️</div>
+            <div className="account">
+              <img alt="" className=" marginleft2 avatar" src={this.props.fileEndpoint + "/" + loggedUser.avatar} onContextMenu={(e) => { this.props.switchDialogState(4); this.props.setBox(e.pageX, e.pageY); e.preventDefault(); }}/>
+              <div className="flex marginleft2">
+                <div className="text2" style={{color: "white"}}>{loggedUser !== undefined ? loggedUser.username : "Loading"}</div>
+              </div>
+            </div>
+            <div className="button settingsButton marginleft2" style={{ width: 28, height: 28, position: "relative" }} onClick={() => { this.props.switchDialogState(13) }}>
+              <svg aria-hidden="false" width="28" height="28" viewBox="0 0 24 24"><path fill="currentColor" d="M19.738 10H22V14H19.739C19.498 14.931 19.1 15.798 18.565 16.564L20 18L18 20L16.565 18.564C15.797 19.099 14.932 19.498 14 19.738V22H10V19.738C9.069 19.498 8.203 19.099 7.436 18.564L6 20L4 18L5.436 16.564C4.901 15.799 4.502 14.932 4.262 14H2V10H4.262C4.502 9.068 4.9 8.202 5.436 7.436L4 6L6 4L7.436 5.436C8.202 4.9 9.068 4.502 10 4.262V2H14V4.261C14.932 4.502 15.797 4.9 16.565 5.435L18 3.999L20 5.999L18.564 7.436C19.099 8.202 19.498 9.069 19.738 10ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z"></path></svg>
+            </div>
         </div>
       </div>
     );
@@ -1198,7 +1191,7 @@ export class AccountOptionsBox extends React.Component {
     return (
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0); }} style={{ opacity: 0.3 }}></div>
-        <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY, height: 80 }}>
+        <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY - 128, height: 128 }}>
           <div className="button2 alignmiddle chatColor" onClick={(e) => { this.props.setSelectedUser(user, 0, 0); this.props.switchDialogState(5); }}>
             <p className="white text1">> Profile</p>
           </div>
@@ -1368,4 +1361,4 @@ export class ForgottenPasswordBox extends React.Component {
   }
 }
 
-export default { ChannelHeader, Account, ChannelSelector };
+export default { ChannelHeader, ChannelSelector };

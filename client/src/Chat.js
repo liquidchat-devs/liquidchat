@@ -121,7 +121,7 @@ export default class Chat extends React.Component {
       const user = this.props.getUser(message.author.id)
 
       return (
-        <div key={i} className="paddingtop2 paddingbot2 flex message" onContextMenu={(e) => { this.props.switchDialogState(2); this.props.setSelectedMessage(message, e.pageX, e.pageY); e.preventDefault(); } } onMouseOver={(e) => e.currentTarget.classList.add("hoveredMessageColor")} onMouseLeave={(e) => e.currentTarget.classList.remove("hoveredMessageColor") }>
+        <div key={i} className="paddingtop2 paddingbot2 flex message messageHover" onContextMenu={(e) => { this.props.switchDialogState(2); this.props.setSelectedMessage(message, e.pageX, e.pageY); e.preventDefault(); } }>
           <div className="flex marginleft2 fullwidth">
             <img alt="" className="avatar" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
             <div className="marginleft2 fullwidth">
@@ -153,7 +153,7 @@ export default class Chat extends React.Component {
       const user = this.props.getUser(memberID)
 
       return (
-        <div key={i} className="paddingtop2 paddingbot2 flex" onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } } onMouseOver={(e) => e.currentTarget.classList.add("hoveredMessageColor")} onMouseLeave={(e) => e.currentTarget.classList.remove("hoveredMessageColor") }>
+        <div key={i} className="paddingtop2 paddingbot2 flex message messageHover" onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="flex marginleft2">
             <img alt="" className="avatar3" src={this.props.fileEndpoint + "/" + user.avatar}/>
             <div style={{ marginLeft: -12, marginTop: 18, backgroundColor: (user.status === 1 ? "#3baf3b" : "#f15252"), borderRadius: "50%", width: 12, height: 12 }}/>
@@ -174,7 +174,7 @@ export default class Chat extends React.Component {
       case 2:
         return (
           <div className="flex">
-            <div style={{ overflowY: "scroll", height: this.props.pageHeight - 165 - this.props.pageHeightOffset, width: membersList === -1 ? "100%" : "calc(100% - 200px)" }}>
+            <div style={{ overflowY: "scroll", height: this.props.pageHeight - 115 - this.props.pageHeightOffset, width: membersList === -1 ? "100%" : "calc(100% - 200px)" }}>
               {messageList}
               <div className="white">
                 {this.getUploadMessage(this.props.uploadFileID, this.props.uploadFileName, this.props.uploadReceived, this.props.uploadExpected, this.props.uploadFailed)}
