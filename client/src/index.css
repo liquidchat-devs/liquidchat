@@ -209,6 +209,10 @@ code {
   margin-right: 10px;
 }
 
+.marginright1 {
+  margin-right: 5px;
+}
+
 /* Buttons */
 .button1 {
   width: 170px;
@@ -650,6 +654,12 @@ code {
 .settingsButton {
   border: 0;
   color: #ff6161;
+}
+
+.addEmoteButton {
+  border: 0;
+  color: #ff6161;
+  width: 30px;
 }
 
 .accountBox {

@@ -7,8 +7,8 @@ class Endpoint {
         this.app.post('/createEmote', (async(req, res) => {
             if(!this.app.isSessionValid(this.app, req, res)) { return; }
 
-            await this.createEmote(req, res, req.query.name + "/" + req.query.serverID + "/" + req.query.type);
-            console.log("> created emote - " + req.query.name);
+            await this.createEmote(req, res, req.query.name, req.query.serverID, req.query.type);
+            console.log("> created emote - " + req.query.name + "/" + req.query.serverID + "/" + req.query.type);
         }).bind(this));
     }
 

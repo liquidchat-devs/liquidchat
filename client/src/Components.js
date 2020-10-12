@@ -231,7 +231,7 @@ export class ChannelSelector extends React.Component {
                 <div className="text2" style={{color: "white"}}>{loggedUser !== undefined ? loggedUser.username : "Loading"}</div>
               </div>
             </div>
-            <div className="button settingsButton marginleft2" style={{ width: 28, height: 28, position: "relative" }} onClick={() => { this.props.switchDialogState(13) }}>
+            <div className="button settingsButton marginleft2" style={{ width: 28, height: 28, position: "relative", transform: "scale(0.85)" }} onClick={() => { this.props.switchDialogState(13) }}>
               <svg aria-hidden="false" width="28" height="28" viewBox="0 0 24 24"><path fill="currentColor" d="M19.738 10H22V14H19.739C19.498 14.931 19.1 15.798 18.565 16.564L20 18L18 20L16.565 18.564C15.797 19.099 14.932 19.498 14 19.738V22H10V19.738C9.069 19.498 8.203 19.099 7.436 18.564L6 20L4 18L5.436 16.564C4.901 15.799 4.502 14.932 4.262 14H2V10H4.262C4.502 9.068 4.9 8.202 5.436 7.436L4 6L6 4L7.436 5.436C8.202 4.9 9.068 4.502 10 4.262V2H14V4.261C14.932 4.502 15.797 4.9 16.565 5.435L18 3.999L20 5.999L18.564 7.436C19.099 8.202 19.498 9.069 19.738 10ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z"></path></svg>
             </div>
         </div>
@@ -311,6 +311,9 @@ export class DialogManager extends React.Component {
 
       case 19:
         return <CropImageDialog fileEndpoint={this.props.fileEndpoint} API={this.props.API} switchDialogState={this.props.switchDialogState} selectedAvatar={this.props.selectedAvatar}/>
+
+      case 20:
+        return <CreateEmoteBox setSelectedAvatar={this.props.setSelectedAvatar} fileEndpoint={this.props.fileEndpoint} API={this.props.API} switchDialogState={this.props.switchDialogState}/>
 
       default:
         return null;
@@ -482,6 +485,94 @@ export class CreateServerBox extends React.Component {
             (this.getErrorText(this.state.serverCreationResult).length > 0 ?
             <div className="marginleft2 margintop1 errorColor">
               {this.getErrorText(this.state.serverCreationResult)}
+            </div>
+            : "")
+          }
+        </div>
+      </div>
+    );
+  }
+}
+
+export class CreateEmoteBox extends React.Component {
+  state = {
+    emoteName: "",
+    emoteAvatar: "defaultAvatar.png",
+    emoteCreationResult: 0
+  };
+
+  handleAvatar = async (box, e) => {
+    if(e.target.files.length < 1) { return; }
+    
+    var file = e.target.files[0];
+    e.target.value = ""
+    this.setState({
+      emoteAvatar: file,
+    });
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      box.refs["emoteImage"].src = e.target.result;
+    }
+    reader.readAsDataURL(file);
+  }
+
+  handleChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  handleSubmit = async e => {
+    e.preventDefault();
+    let res = await this.props.API.API_createEmote(this.state.emoteAvatar, this.state.emoteName);
+    this.setState({
+      emoteCreationResult: res,
+    });
+    
+    if(isNaN(res)) {
+      this.props.switchDialogState(-1);
+      return true;
+    } else {
+      this.setState({
+        emoteCreationResult: res,
+      });
+    }
+  }
+
+  getErrorText(code) {
+    switch(code) {
+      case -1:
+        return "Emote name is too short-";
+
+      default:
+        return "";
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlaybox">
+          <div className="white text3 marginleft2 margintop1a">> Create new emote-</div>
+          <form onSubmit={this.handleSubmit} className="flex margintop1">
+            <img alt="" className="avatar2 marginleft4 marginright1" ref="emoteImage" src={this.props.fileEndpoint + "/defaultAvatar.png"} onMouseEnter={() => this.refs["emoteEditOverlay"].style = "display: flex;" }/>
+            <label for="avatar-input">
+              <div className="avatar2 avatarOverlay marginleft4 alignmiddle" ref="emoteEditOverlay" onMouseLeave={() => this.refs["emoteEditOverlay"].style = "display: none;" }>
+                <div className="white text4 nopointer">Change Image</div>
+              </div>
+            </label>
+            <input id="avatar-input" className="hide" onChange={(e) => this.handleAvatar(this, e) } type='file' name="fileUploaded"/>
+            <input className="inputfield1 marginleft2 margintop1" name="emoteName" type="text" placeholder="Name..." required={true} onChange={this.handleChange} /><br />
+          </form>
+          <div className="alignmiddle margintop1" style={{ height: 40 }}>
+            <div onClick={this.handleSubmit} className="button button1" style={{ marginTop: 15, marginLeft: 10 }}>Create!</div>
+          </div>
+          {
+            (this.getErrorText(this.state.emoteCreationResult).length > 0 ?
+            <div className="marginleft2 margintop1 errorColor">
+              {this.getErrorText(this.state.emoteCreationResult)}
             </div>
             : "")
           }
@@ -903,7 +994,7 @@ export class SettingsBox extends React.Component {
 
     let emoteList = emotes.reduce(e => {
       return <img className="emoteImage marginleft2" src={this.props.fileEndpoint + "/" + e.file} />
-    })
+    }, null)
 
     return (
       <div>
@@ -929,6 +1020,9 @@ export class SettingsBox extends React.Component {
           </div>
           <div className="white text3 marginleft2b margintop1a">Emotes</div>
           {emoteList}
+          <div className="button2 addEmoteButton alignmiddle chatColor marginleft2b" onClick={() => { this.props.switchDialogState(20); }}>
+            +
+          </div>
         </div>
       </div>
     );
