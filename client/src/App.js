@@ -45,6 +45,7 @@ class App extends React.Component {
     channels: new Map(),
     friendRequests: new Map(),
     invites: new Map(),
+    unreadMessages: new Map(),
 
     //Channel selector
     firstChannelElement: -1,
@@ -224,6 +225,17 @@ class App extends React.Component {
         this.endEditingMessage();
       }
     }.bind(this);
+
+    //Notification hooks
+    document.onfocus = function(e) {
+      if(window.navigator.userAgent.includes("LiquidChat")) {
+        this.setState({
+          unreadMessages: new Map()
+        });
+
+        window.setIcon(false);
+      }
+    }
 
     //Setup page offsets
     this.setState({

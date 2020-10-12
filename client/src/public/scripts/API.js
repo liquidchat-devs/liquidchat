@@ -32,6 +32,12 @@ class API {
             this.mainClass.setState({
                 channels: newChannels
             });
+            if(document.hasFocus() == false && window.navigator.userAgent.includes("LiquidChat")) {
+                window.setIcon(true);
+            } else {
+                let chat = document.getElementById('chat-container');
+                chat.scrollTop = chat.scrollHeight;
+            }
 
             this.API_fetchUsersForMessages([ message ])
         });

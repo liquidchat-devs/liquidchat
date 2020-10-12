@@ -6,10 +6,21 @@ window.addEventListener("DOMContentLoaded", () => {
     window.maxUnmaxWindow = maxUnmaxWindow;
     window.isWindowMaximized = isWindowMaximized;
     window.closeWindow = closeWindow;
+    window.setIcon = setIcon;
 });
 
 function getCurrentWindow() {
   return remote.getCurrentWindow();
+}
+
+function setIcon(type, mainWindow = getCurrentWindow()) {
+  if(type === true) {
+    mainWindow.setOverlayIcon(require("path").join(__dirname, "../logo192_notif.png"), "New Message")
+    mainWindow.flashFrame(true);
+  } else {
+    mainWindow.setOverlayIcon(null, "")
+    mainWindow.flashFrame(false);
+  }
 }
 
 function minimizeWindow(mainWindow = getCurrentWindow()) {
