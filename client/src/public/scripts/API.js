@@ -308,17 +308,19 @@ class API {
         if(this.mainClass.state.emotes.has(id)) {
           return this.mainClass.state.emotes.get(id)
         } else {
-          //Fetch emote
-          const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchEmote?id=' + id, { withCredentials: true });
-          var emote = reply.data
-    
-          //Cache emote
-          var newEmotes = this.mainClass.state.emotes.set(emote.id, emote);
-          this.mainClass.setState({
-            emotes: newEmotes
-          });
+            //Fetch emote
+            const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchEmote?id=' + id, { withCredentials: true });
+            var emote = reply.data
+        
+            //Cache emote
+            if(emote.status === undefined) {
+                var newEmotes = this.mainClass.state.emotes.set(emote.id, emote);
+                this.mainClass.setState({
+                    emotes: newEmotes
+                });
+            }
 
-          return emote;
+            return emote;
         }
     }
     //#endregion
@@ -366,6 +368,32 @@ class API {
                 queue.set(emoteID, 1);
             }
         });
+    }
+
+    async API_fetchEmotesForMessages(obj) {
+        obj.forEach(message => {
+            if(message.text !== undefined) {
+                let i = 0;
+                while(i < message.text.length) {
+                    let currMessage = message.text.substring(i);
+                    let a = currMessage.indexOf("<:")
+                    let b = currMessage.indexOf(":>")
+                    
+                    if(a == -1 || b == -1) {
+                        i = message.text.length;
+                    } else {
+                        let id = currMessage.substring(a + "<:".length, b - ":>".length)
+                        if(id.length != 32) {
+                            i = message.text.length;
+                            break;
+                        }
+
+                        this.API_fetchEmote(id);
+                        i += a;
+                    }
+                }
+            }
+        })
     }
 
     async API_fetchAllForInvites(invites) {
@@ -911,6 +939,7 @@ class API {
                 var currentChannels = this.mainClass.state.channels;
                 currentChannels.set(channel.id, channel)
 
+                this.API_fetchEmotesForMessages(messages)
                 this.API_fetchUsersForMessages(messages)
                 this.mainClass.setState({
                     channels: currentChannels

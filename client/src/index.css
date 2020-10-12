@@ -836,3 +836,43 @@ code {
   width: 24px;
   object-fit: cover;
 }
+
+.emoteImage2 {
+  height: 30px;
+  width: 30px;
+  object-fit: cover;
+}
+
+.emoteImage3 {
+  height: 40px;
+  width: 40px;
+  object-fit: cover;
+}
+
+.tooltipText {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  left: -45px;
+  bottom: 80px;
+  position: relative;
+}
+
+.emoteImage2 .tooltipText::after {
+  content: " ";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+.emoteImage2:hover .tooltipText {
+  visibility: visible;
+}

@@ -988,14 +988,17 @@ export class SettingsBox extends React.Component {
 
     let emotes = []
     loggedUser.emotes.forEach(emoteID => {
-      let e = this.props.emotes.get(emoteID);
-      emotes.push(e)
+      if(this.props.emotes.has(emoteID)) {
+        emotes.push(this.props.emotes.get(emoteID));
+      }
     })
 
-    let emoteList = emotes.reduce(e => {
-      if(e == null) { return null; }
-      return <img className="emoteImage marginleft2" src={this.props.fileEndpoint + "/" + e.file} />
-    }, null)
+    let emoteList = emotes.map(emote => {
+      return <div className="emoteImage2">
+          <img className="emoteImage2" src={this.props.fileEndpoint + "/" + emote.file} />
+          <span class="tooltipText">:{emote.name}:</span>
+        </div>
+    }, "")
 
     return (
       <div>
@@ -1019,10 +1022,12 @@ export class SettingsBox extends React.Component {
               </div>
             </div>
           </div>
-          <div className="white text3 marginleft2b margintop1a">Emotes</div>
-          {emoteList}
-          <div className="button2 addEmoteButton alignmiddle chatColor marginleft2b" onClick={() => { this.props.switchDialogState(20); }}>
-            +
+          <div className="white text3 marginleft2b margintop1a">Emotes ({emotes.length})</div>
+          <div className="flex marginleft2b">
+            {emoteList}
+            <div className="button2 addEmoteButton alignmiddle chatColor marginleft2b" onClick={() => { this.props.switchDialogState(20); }}>
+              +
+            </div>
           </div>
         </div>
       </div>

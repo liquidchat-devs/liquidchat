@@ -248,8 +248,12 @@ function formatMessage(chat, message) {
         styles.forEach((val, i) => {
             messageFormatted = toFormat(messageFormatted == null ? "" : messageFormatted, val);
         });
-
         messageFormatted = toFormatLink(chat, messageFormatted == null ? "" : messageFormatted);
+
+        chat.props.emotes.forEach(e => {
+            let link = chat.props.fileEndpoint + "/" + e.file;
+            messageFormatted = messageFormatted.split("<:" + e.id + ":>").join(`<img class='emoteImage3' src=${link}>`)
+        });
     }
 
     return (
