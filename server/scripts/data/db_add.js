@@ -88,7 +88,7 @@ module.exports = {
         }
 
         var query0 = "(id, name, createdAt, authorID, file, type" + (emote.server == null ? ")" : ", serverID)")
-        var query1 = [ emote.id, emote.createdAt, emote.author.id, emote.file, emote.type ]
+        var query1 = [ emote.id, emote.name, emote.createdAt, emote.author.id, emote.file, emote.type ]
         if(emote.server != null) { query1.push(db.escapeString(emote.server.id)) }
 
         var query = "INSERT IGNORE INTO emotes " + query0 + " VALUES" + db.contructQuestionMarks(query1.length);

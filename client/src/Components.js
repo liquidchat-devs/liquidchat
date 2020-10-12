@@ -993,6 +993,7 @@ export class SettingsBox extends React.Component {
     })
 
     let emoteList = emotes.reduce(e => {
+      if(e == null) { return null; }
       return <img className="emoteImage marginleft2" src={this.props.fileEndpoint + "/" + e.file} />
     }, null)
 
