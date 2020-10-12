@@ -107,6 +107,10 @@ code {
   width: 100%;
 }
 
+.fullheight {
+  height: 100%;
+}
+
 .link {
   text-decoration: underline;
   color: #6767ff;
