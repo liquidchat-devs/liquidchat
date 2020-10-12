@@ -121,6 +121,20 @@ module.exports = {
         return this.formatFriendRequest(result[0][0])
     },
 
+    async fetchEmote(db, id) {
+        if(db.DEBUG) {
+            console.log(" - [db] Loading Emote(id: " + id + ") from the database..."); 
+        }
+
+        var query0 = "SELECT * FROM emotes WHERE id='" + id + "'";
+        var result = await db.sqlConn.promise().query(query0);
+        if(result.length < 1 || result[0].length < 1) {
+            return undefined;
+        }
+    
+        return this.formatEmote(result[0][0])
+    },
+
     async fetchFriendRequestByTarget(db, id) {
         if(db.DEBUG) {
             console.log(" - [db] Loading FriendRequest(target: " + id + ") from the database..."); 
@@ -172,6 +186,7 @@ module.exports = {
         server.channels = server.channels.split(",").filter(a => a.length > 0)
         server.members = server.members.split(",").filter(a => a.length > 0)
         server.invites = server.invites.split(",").filter(a => a.length > 0)
+        server.emotes = server.emotes.split(",").filter(a => a.length > 0)
         server.author = { id: server.authorID }
         delete server.authorID
         
@@ -182,6 +197,7 @@ module.exports = {
         user.friends = user.friends.split(",").filter(a => a.length > 0)
         user.dmChannels = user.dmChannels.split(",").filter(a => a.length > 0)
         user.servers = user.servers.split(",").filter(a => a.length > 0)
+        user.emotes = user.emotes.split(",").filter(a => a.length > 0)
 
         if(containPassword !== true) {
             delete user.password
@@ -231,5 +247,14 @@ module.exports = {
         delete invite.serverID
         
         return invite;
+    },
+
+    formatEmote(emote) {
+        emote.author = { id: emote.authorID }
+        delete emote.authorID
+        emote.server = emote.serverID == null ? undefined : { id: emote.serverID }
+        delete emote.serverID
+        
+        return emote;
     }
 }

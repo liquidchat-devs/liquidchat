@@ -80,5 +80,21 @@ module.exports = {
         .then((result, err) => {
             if(err) { throw err; }
         });
-    }
+    },
+
+    addEmote(db, emote) {
+        if(db.DEBUG) {
+            console.log(" - [db] Adding Emote(id: " + emote.id + ") into the database..."); 
+        }
+
+        var query0 = "(id, name, createdAt, authorID, file, type" + (emote.server == null ? ")" : ", serverID)")
+        var query1 = [ emote.id, emote.createdAt, emote.author.id, emote.file, emote.type ]
+        if(emote.server != null) { query1.push(db.escapeString(emote.server.id)) }
+
+        var query = "INSERT IGNORE INTO emotes " + query0 + " VALUES" + db.contructQuestionMarks(query1.length);
+        db.sqlConn.promise().execute(query, query1)
+        .then((result, err) => {
+            if(err) { throw err; }
+        });
+    },
 }

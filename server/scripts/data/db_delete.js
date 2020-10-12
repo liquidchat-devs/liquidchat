@@ -70,6 +70,18 @@ module.exports = {
             if(err) { throw err; }
         });
     },
+
+    deleteEmote(db, id) {
+        if(db.DEBUG) {
+            console.log(" - [db] Deleting Emote(id: " + id + ") from the database..."); 
+        }
+
+        var query = "DELETE FROM emotes WHERE id='" + id + "'";
+        db.sqlConn.promise().query(query)
+        .then((result, err) => {
+            if(err) { throw err; }
+        });
+    },
     
     deleteAllData(db) {
         if(db.DEBUG) {
@@ -97,6 +109,11 @@ module.exports = {
             if(err) { throw err; }
         });
         query = "DELETE FROM invites";
+        db.sqlConn.promise().query(query)
+        .then((result, err) => {
+            if(err) { throw err; }
+        });
+        query = "DELETE FROM emotes";
         db.sqlConn.promise().query(query)
         .then((result, err) => {
             if(err) { throw err; }

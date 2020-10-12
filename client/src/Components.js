@@ -292,7 +292,7 @@ export class DialogManager extends React.Component {
         return <InviteFriendsBox fileEndpoint={this.props.fileEndpoint} getChannel={this.props.getChannel} getServer={this.props.getServer} selectedServer={this.props.selectedServer} getUser={this.props.getUser} session={this.props.session} selectedChannel={this.props.selectedChannel} API={this.props.API} switchDialogState={this.props.switchDialogState} />
 
       case 13:
-        return <SettingsBox fileEndpoint={this.props.fileEndpoint} API={this.props.API} switchDialogState={this.props.switchDialogState} session={this.props.session} getUser={this.props.getUser}/>
+        return <SettingsBox fileEndpoint={this.props.fileEndpoint} emotes={this.props.emotes} API={this.props.API} switchDialogState={this.props.switchDialogState} session={this.props.session} getUser={this.props.getUser}/>
 
       case 14:
         return <AccountEditBox API={this.props.API} switchDialogState={this.props.switchDialogState}/>
@@ -895,6 +895,16 @@ export class SettingsBox extends React.Component {
   render() {
     let loggedUser = this.props.getUser(this.props.session.userID);
 
+    let emotes = []
+    loggedUser.emotes.forEach(emoteID => {
+      let e = this.props.emotes.get(emoteID);
+      emotes.push(e)
+    })
+
+    let emoteList = emotes.reduce(e => {
+      return <img className="emoteImage marginleft2" src={this.props.fileEndpoint + "/" + e.file} />
+    })
+
     return (
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
@@ -917,6 +927,8 @@ export class SettingsBox extends React.Component {
               </div>
             </div>
           </div>
+          <div className="white text3 marginleft2b margintop1a">Emotes</div>
+          {emoteList}
         </div>
       </div>
     );

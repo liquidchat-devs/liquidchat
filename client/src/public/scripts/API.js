@@ -19,8 +19,9 @@ class API {
 
         socket.on('connect', async() => {
             console.log("> socket.io connected!");
-            await this.API_fetchUser(userID, true);
-            this.API_fetchUsersForFriends(userID);
+            let user = await this.API_fetchUser(userID, true);
+            await this.API_fetchUsersForFriends(userID);
+            await this.API_fetchEmotesForIDs(user.emotes);
         });
         
         socket.on('message', (messageData) => {
@@ -302,6 +303,24 @@ class API {
             }
         }
     }
+
+    async API_fetchEmote(id) {
+        if(this.mainClass.state.emotes.has(id)) {
+          return this.mainClass.state.emotes.get(id)
+        } else {
+          //Fetch emote
+          const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchEmote?id=' + id, { withCredentials: true });
+          var emote = reply.data
+    
+          //Cache emote
+          var newEmotes = this.mainClass.state.emotes.set(emote.id, emote);
+          this.mainClass.setState({
+            emotes: newEmotes
+          });
+
+          return emote;
+        }
+    }
     //#endregion
 
     //#region Fetching Utils
@@ -335,6 +354,16 @@ class API {
             if(!queue.has(userID)) {
                 this.API_fetchUser(userID);
                 queue.set(userID, 1);
+            }
+        });
+    }
+
+    async API_fetchEmotesForIDs(obj) {
+        const queue = new Map();
+        obj.forEach(emoteID => {
+            if(!queue.has(emoteID)) {
+                this.API_fetchEmote(emoteID);
+                queue.set(emoteID, 1);
             }
         });
     }
@@ -453,6 +482,28 @@ class API {
             return reply.data.status;
         } else {
             return 1;
+        }
+    }
+
+    async API_createEmote(file, emoteName) {
+        var data = new FormData();
+        data.append("fileUploaded", file)
+
+        const reply = await axios({
+            method: 'post',
+            url: this.mainClass.state.APIEndpoint + '/createEmote?fileName=' + file.name + '&emoteName=' + emoteName + '&type=1',
+            processData: false,
+            contentType: false,
+            cache: false,
+            enctype: 'multipart/form-data',
+            data: data,
+            withCredentials: true
+        });
+
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return reply.data;
         }
     }
     //#endregion
