@@ -14,7 +14,8 @@ export default class Send extends React.Component {
   handleSubmit = async e => {
     e.preventDefault();
 
-    let a = this.state.message.substring(this.state.message.lastIndexOf(":") + 1)
+    let a0 = this.state.message.lastIndexOf(":");
+    let a = this.state.message.substring(a0 > -1 ? a0 + 1 : this.state.message.length)
     let possibleEmotes = Array.from(this.props.emotes.values()).filter(e => { return a.length > 0 && e.name.startsWith(a); })
 
     if(possibleEmotes.length < 1) {
@@ -47,12 +48,13 @@ export default class Send extends React.Component {
       return null;
     }
 
-    let a = this.state.message.substring(this.state.message.lastIndexOf(":") + 1)
+    let a0 = this.state.message.lastIndexOf(":");
+    let a = this.state.message.substring(a0 > -1 ? a0 + 1 : this.state.message.length)
     let possibleEmotes = Array.from(this.props.emotes.values()).filter(e => { return e.author.id === this.props.session.userID && a.length > 0 && e.name.startsWith(a); })
     let emoteList = possibleEmotes.map(emote => {
       return <div className="emoteItemWrapper">
         <div className="emoteItem">
-          <img className="emoteImage marginleft2" src={this.props.fileEndpoint + "/" + emote.file} />
+          <img alt="" className="emoteImage marginleft2" src={this.props.fileEndpoint + "/" + emote.file} />
           <div className="white text5 marginleft2">
             :{emote.name}:
           </div>

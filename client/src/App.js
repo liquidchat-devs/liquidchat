@@ -3,7 +3,7 @@ import Chat from './Chat'
 import Send from './Send';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
-import { Account, ChannelHeader, ChannelSelector, DialogManager } from './Components.js';
+import { ChannelHeader, ChannelSelector, DialogManager } from './Components.js';
 import { API } from './public/scripts/API';
 
 class App extends React.Component {
@@ -354,10 +354,10 @@ class App extends React.Component {
         }
         <div id="web-header">
           <div className="header0 headerColor2 alignmiddle">
-            <div className="white text1 marginleft2">> Download a desktop version of Liquid Chat <a className="link marginleft1" href="https://github.com/LamkasDev/liquidchat/releases/latest/download/LiquidChat.Installer.exe" target="_blank">(Download)</a></div>
+            <div className="white text1 marginleft2">> Download a desktop version of Liquid Chat <a className="link marginleft1" href="https://github.com/LamkasDev/liquidchat/releases/latest/download/LiquidChat.Installer.exe" target="_blank" rel="noopener noreferrer">(Download)</a></div>
           </div>
           <div className="header0 headerColor">
-            <div className="white text1 marginleft2">LiquidChat (dev) <a className="link marginleft1" href="https://github.com/LamkasDev/liquidchat" target="_blank">(Github)</a></div>
+            <div className="white text1 marginleft2">LiquidChat (dev) <a className="link marginleft1" href="https://github.com/LamkasDev/liquidchat" target="_blank" rel="noopener noreferrer">(Github)</a></div>
           </div>
         </div>
         <div id="app-header" className="header0 headerColor appHeader">

@@ -61,8 +61,8 @@ export default class LoginForm extends React.Component {
     render() {
       const form = (
         <form onSubmit={this.handleSubmit}  >
-          <input className="inputfield1" name="username" type="text" placeholder="Username..." required={true} onChange={this.handleChange}  /><br />
-          <input className="inputfield1 margin1" name="password" type="password" placeholder="Password..." required={true} onChange={this.handleChange}  />
+          <input className="inputfield1" name="username" type="text" autoComplete="username" placeholder="Username..." required={true} onChange={this.handleChange}  /><br />
+          <input className="inputfield1 margin1" name="password" type="password" autoComplete="current-password" placeholder="Password..." required={true} onChange={this.handleChange}  />
         </form>
         );
       return (

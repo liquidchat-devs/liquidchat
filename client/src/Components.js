@@ -65,7 +65,7 @@ export class ChannelSelector extends React.Component {
     const friendRequestsList = friendRequests.map((friendRequest, i) => {
       const author = this.props.getUser(friendRequest.author.id)
       const target = this.props.getUser(friendRequest.target.id)
-      if(author === undefined || target === undefined) { return; }
+      if(author === undefined || target === undefined) { return null; }
       var user = author.id === loggedUser.id ? target : author;
 
       return (
@@ -139,7 +139,6 @@ export class ChannelSelector extends React.Component {
       )
     });
 
-    let i = 0;
     return (
       <div className="flex">
         <div className="servers headerColor" style={{ height: this.props.pageHeight - 78 - this.props.pageHeightOffset }}>
@@ -1010,10 +1009,10 @@ export class SettingsBox extends React.Component {
       }
     })
 
-    let emoteList = emotes.map(emote => {
-      return <div className="emoteImage2 tooltipWrapper">
-          <img className="emoteImage2" src={this.props.fileEndpoint + "/" + emote.file} />
-          <span class="tooltipText">:{emote.name}:</span>
+    let emoteList = emotes.map((emote, i) => {
+      return <div key={i} className="emoteImage2 tooltipWrapper">
+          <img alt="" className="emoteImage2" src={this.props.fileEndpoint + "/" + emote.file} />
+          <span className="tooltipText">:{emote.name}:</span>
         </div>
     }, "")
 
@@ -1462,7 +1461,7 @@ export class ForgottenPasswordBox extends React.Component {
               <div className="marginleft2b" style={{ height: 40 }}>
                 <p className="white text5 margintop0 margintop0b" onClick={() => { this.props.switchDialogState(14); }}>To recover your account enter a code that was sent to your email-</p>
               </div>
-              <div onClick={this.handleSubmit} className="button button1 marginleft2b" style={{ marginTop: 15 }} onClick={() => { this.setState({ state: 1 }) }}>I'm ready!</div>
+              <div className="button button1 marginleft2b" style={{ marginTop: 15 }} onClick={() => { this.setState({ state: 1 }) }}>I'm ready!</div>
               {
                 (this.getErrorText(this.state.passwordRecoveryResult).length > 0 ?
                 <div className="marginleft2 margintop1 errorColor">

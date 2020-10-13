@@ -33,7 +33,7 @@ class API {
             this.mainClass.setState({
                 channels: newChannels
             });
-            if(document.hasFocus() == false && window.navigator.userAgent.includes("LiquidChat")) {
+            if(document.hasFocus() === false && window.navigator.userAgent.includes("LiquidChat")) {
                 window.setIcon(true);
             } else {
                 let chat = document.getElementById('chat-container');
@@ -382,11 +382,11 @@ class API {
                     let a = currMessage.indexOf("<:")
                     let b = currMessage.indexOf(":>")
                     
-                    if(a == -1 || b == -1) {
+                    if(a === -1 || b === -1) {
                         i = message.text.length;
                     } else {
                         let id = currMessage.substring(a + "<:".length, b)
-                        if(id.length != 32) {
+                        if(id.length !== 32) {
                             i = message.text.length;
                             break;
                         }
