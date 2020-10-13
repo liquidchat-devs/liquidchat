@@ -61,6 +61,7 @@ class App extends React.Component {
     uploadFileID: -1,
     uploadFileName: -1,
     uploadFailed: false,
+    isFileDraggingOver: false,
 
     //API
     API: new API(this),
@@ -241,6 +242,15 @@ class App extends React.Component {
       }
     }
 
+    //
+    document.ondragover = function(e) {
+      e.preventDefault();
+    }
+
+    document.ondragenter = function(e) {
+      this.onFileEnter(e);
+    }.bind(this);
+
     //Setup page offsets
     this.setState({
       pageHeightOffset: window.navigator.userAgent.includes("LiquidChat") === false ? 28 : 0
@@ -287,9 +297,61 @@ class App extends React.Component {
     this.setState({ pageWidth: window.innerWidth, pageHeight: window.innerHeight });
   }
 
+  onFileEnter = function(e) {
+    if(this.isInChannel()) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.setState({ isFileDraggingOver: true });
+    }
+  }
+
+  onFileLeave = function(e) {
+    if(this.isInChannel()) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.setState({ isFileDraggingOver: false });
+    }
+  }.bind(this);
+
+  onFileDrop = function(e) {
+    if(this.isInChannel()) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      let droppedFiles = e.dataTransfer.files;
+      if(droppedFiles.length < 1) { return; }
+
+      var file = droppedFiles[0];
+      this.state.API.API_sendFile(file, "")
+      this.setState({ isFileDraggingOver: false });
+    }
+  }.bind(this);
+
+  isInChannel = function() {
+    let server = this.getServer(this.state.selectedServer)
+    let channel = this.getChannel(this.state.currentChannel)
+    return !(channel === undefined || (server !== undefined && server.channels.includes(channel.id) === false) || (channel.type !== 2 && server === undefined) || channel.type === 1);
+  }.bind(this);
+
   render() {
+    let server = this.getServer(this.state.selectedServer)
+    let channel = this.getChannel(this.state.currentChannel)
+
     return (
       <div className="App">
+        {
+          this.state.isFileDraggingOver === true && this.isInChannel() ?
+          <div className="absolutepos overlay" onDragLeave={this.onFileLeave} onDrop={this.onFileDrop}>
+              <div className="absolutepos overlaybox6">
+                <div>
+                  <div className="white text3 alignmiddle">Upload a file-</div>
+                  <div className="profileTooltipColor text8 alignmiddle">(to #{channel.name}{server !== undefined ? ` in ${server.name}` : ""})</div>
+                </div>
+              </div>
+          </div>
+          :
+          ""
+        }
         <div id="web-header">
           <div className="header0 headerColor2 alignmiddle">
             <div className="white text1 marginleft2">> Download a desktop version of Liquid Chat <a className="link marginleft1" href="https://github.com/LamkasDev/liquidchat/releases/latest/download/LiquidChat.Installer.exe" target="_blank">(Download)</a></div>
@@ -323,16 +385,16 @@ class App extends React.Component {
                 <ChannelHeader
                 API={this.state.API} currentChannel={this.state.currentChannel} getChannel={this.getChannel} selectedServer={this.state.selectedServer} getServer={this.getServer} currentVoiceGroup={this.state.currentVoiceGroup}/>
                 <Chat
-                emotes={this.state.emotes} pageHeightOffset={this.state.pageHeightOffset}
+                isInChannel={this.isInChannel} emotes={this.state.emotes} pageHeightOffset={this.state.pageHeightOffset}
                 session={this.state.session} uploadReceived={this.state.uploadReceived} uploadExpected={this.state.uploadExpected}
                 uploadFileID={this.state.uploadFileID} uploadFileName={this.state.uploadFileName} uploadFailed={this.state.uploadFailed}
                 pageHeight={this.state.pageHeight} API={this.state.API} setSelectedUser={this.setSelectedUser} currentVoiceGroup={this.state.currentVoiceGroup} setSelectedImage={this.setSelectedImage}
                 selectedServer={this.state.selectedServer} getChannel={this.getChannel} getServer={this.getServer} currentChannel={this.state.currentChannel} switchDialogState={this.switchDialogState} setSelectedMessage={this.setSelectedMessage}
                 editingMessage={this.state.editingMessage} editedMessage={this.state.editedMessage} setEditedMessage={this.setEditedMessage} endEditingMessage={this.endEditingMessage} getUser={this.getUser} fileEndpoint={this.state.fileEndpoint}/>
                 <Send
-                session={this.state.session} fileEndpoint={this.state.fileEndpoint} emotes={this.state.emotes} API={this.state.API}
-                currentChannel={this.state.currentChannel} getChannel={this.getChannel}
-                selectedServer={this.state.selectedServer} getServer={this.getServer}/>
+                isInChannel={this.isInChannel} session={this.state.session} fileEndpoint={this.state.fileEndpoint} emotes={this.state.emotes} API={this.state.API}
+                currentChannel={this.state.currentChannel}
+                selectedServer={this.state.selectedServer}/>
               </div>
             </div>
           </div> :

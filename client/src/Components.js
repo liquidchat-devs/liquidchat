@@ -71,7 +71,7 @@ export class ChannelSelector extends React.Component {
       return (
         <div key={i} className="friendRequestEntry selectedChannelColor" style={{ height: author.id === this.props.session.userID ? 117 : 81}}>
           <div className="flex">
-            <img alt="" className="avatar3 marginleft1 margintop1" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
+            <img alt="" className="avatar marginleft2 margintop1" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
             <div className="white marginleft2 margintop1b">
               {user.username}
             </div>
@@ -111,7 +111,7 @@ export class ChannelSelector extends React.Component {
       return (
         <div key={i} className="friendEntry selectedChannelColor" onContextMenu={(e) => { this.props.setSelectedUser(friend, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="aligny fullheight">
-            <img alt="" className="avatar3 marginleft1" src={this.props.fileEndpoint + "/" + friend.avatar}/>
+            <img alt="" className="avatar marginleft2" src={this.props.fileEndpoint + "/" + friend.avatar}/>
             <div className="white marginleft2">
               {friend.username}
             </div>
@@ -150,7 +150,7 @@ export class ChannelSelector extends React.Component {
             DMs
           </div>
           {serverList}
-          <div className="white headerColor channel" onClick={() => { this.props.switchDialogState(16) }}>
+          <div className="white headerColor server2" onClick={() => { this.props.switchDialogState(16) }}>
             + Server
           </div>
         </div>
@@ -840,7 +840,7 @@ export class InviteFriendsBox extends React.Component {
         <div key={i} className="friendEntry selectedChannelColor" onContextMenu={(e) => { this.props.setSelectedUser(friend, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="flex">
             <div className="aligny" style={{ height: 55 }}>
-              <img alt="" className="avatar3 marginleft2" src={this.props.fileEndpoint + "/" + friend.avatar}/>
+              <img alt="" className="avatar marginleft2" src={this.props.fileEndpoint + "/" + friend.avatar}/>
               <div className="white marginleft2">
                 {friend.username}
               </div>
@@ -983,6 +983,23 @@ export class AccountEditBox extends React.Component {
 }
 
 export class SettingsBox extends React.Component {
+  state = {
+    avatarChangeResult: 0
+  };
+
+  handleAvatar = async e => {
+    if(e.target.files.length < 1) { return; }
+    
+    var file = e.target.files[0];
+    e.target.value = ""
+    const res = await this.props.API.API_updateAvatar(file)
+    this.setState({
+      avatarChangeResult: res,
+    });
+
+    return true;
+  }
+
   render() {
     let loggedUser = this.props.getUser(this.props.session.userID);
 
@@ -994,7 +1011,7 @@ export class SettingsBox extends React.Component {
     })
 
     let emoteList = emotes.map(emote => {
-      return <div className="emoteImage2">
+      return <div className="emoteImage2 tooltipWrapper">
           <img className="emoteImage2" src={this.props.fileEndpoint + "/" + emote.file} />
           <span class="tooltipText">:{emote.name}:</span>
         </div>
@@ -1007,7 +1024,16 @@ export class SettingsBox extends React.Component {
           <div className="white text3 marginleft2b margintop1a">My Account</div>
           <div className="accountBox">
             <div className="flex">
-              <img alt="" className="avatar2 margintop3 marginleft3" src={this.props.fileEndpoint + "/" + loggedUser.avatar}/>
+              <form onSubmit={this.handleSubmit} className="flex margintop1">
+                <img alt="" className="avatar2 margintop3 marginleft3" src={this.props.fileEndpoint + "/" + loggedUser.avatar} onMouseEnter={() => this.refs["userEditOverlay"].style = "display: flex;" }/>
+                <label for="avatar-input">
+                  <div className="avatar2 avatarOverlay avatarOverlay2 margintop3 marginleft3 alignmiddle" ref="userEditOverlay" onMouseLeave={() => this.refs["userEditOverlay"].style = "display: none;" }>
+                    <div className="white text4 nopointer">Change Avatar</div>
+                  </div>
+                </label>
+                <input id="avatar-input" className="hide" onChange={(e) => this.handleAvatar(e) } type='file' name="fileUploaded"/>
+              </form>
+
               <div>
                 <div className="margintop4 marginleft2b" style={{ height: 40 }}>
                   <p className="profileTooltipColor text6 margintop0 marginbot0">Username</p>
@@ -1279,40 +1305,16 @@ export class ServerOptionsBox extends React.Component {
 }
 
 export class AccountOptionsBox extends React.Component {
-  state = {
-    avatarChangeResult: 0
-  };
-
-  handleAvatar = async e => {
-    if(e.target.files.length < 1) { return; }
-    
-    var file = e.target.files[0];
-    e.target.value = ""
-    const res = await this.props.API.API_updateAvatar(file)
-    this.setState({
-      avatarChangeResult: res,
-    });
-
-    if(res === 1) { this.props.switchDialogState(-1); }
-    return true;
-  }
-
   render() {
     const user = this.props.getUser(this.props.session.userID)
 
     return (
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0); }} style={{ opacity: 0.3 }}></div>
-        <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY - 128, height: 128 }}>
+        <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY - 96, height: 96 }}>
           <div className="button2 alignmiddle chatColor" onClick={(e) => { this.props.setSelectedUser(user, 0, 0); this.props.switchDialogState(5); }}>
             <p className="white text1">> Profile</p>
           </div>
-          <label for="avatar-input">
-            <div className="button2 alignmiddle chatColor">
-              <p className="white text1">> Change Avatar</p>
-            </div>
-          </label>
-          <input id="avatar-input" className="hide" onChange={this.handleAvatar} type='file' name="fileUploaded"/>
           <div className="button2 alignmiddle chatColor" onClick={() => { this.props.copyID(this.props.session.userID); }}>
             <p className="white text1">> Copy ID</p>
           </div>
@@ -1334,7 +1336,10 @@ export class ProfileBox extends React.Component {
             <div className="section chatColor">
               <div className="flex marginleft3 paddingtop3">
                 <img alt="" className="avatar2" src={this.props.fileEndpoint + "/" + this.props.selectedUser.avatar}/>
-                <div style={{ marginLeft: -28, marginTop: 75, backgroundColor: (this.props.selectedUser.status === 1 ? "#3baf3b" : "#f15252"), borderRadius: "50%", width: 24, height: 24 }}/>
+                <div className="tooltipWrapper statusWrapper">
+                  <div className="status" style={{ backgroundColor: (this.props.selectedUser.status === 1 ? "#3baf3b" : "#676767") }}/>
+                  <span className="tooltipText tooltipText2">{this.props.selectedUser.status === 1 ? "Online" : "Offline"}</span>
+                </div>
                 <div className="marginleft3">
                   <div className="flex margintop1">
                     <p className="profileTooltipColor text5 marginleft2 margintop0 marginbot0">> Username: </p>

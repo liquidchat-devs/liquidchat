@@ -515,6 +515,7 @@ code {
   background-color: #353535;
   border-radius: 10px;
   z-index: 3;
+  padding: 5px;
 }
 
 .overlaybox3 {
@@ -539,6 +540,8 @@ code {
   height: 80vh;
   background-color: #353535;
   z-index: 3;
+  border-radius: 10px;
+  padding: 5px;
 }
 
 .overlaybox5 {
@@ -547,6 +550,17 @@ code {
   background-color: #353535;
   border-radius: 10px;
   z-index: 3;
+}
+
+.overlaybox6 {
+  width: 300px;
+  height: 100px;
+  background-color: #353535;
+  border-radius: 10px;
+  z-index: -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cropOverlay {
@@ -595,7 +609,9 @@ code {
 
 .section {
   height: 40%;
-  width: 100%;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding: 5px;
 }
 
 .channelHeader {
@@ -615,6 +631,7 @@ code {
 .friendEntry {
   width: 100%;
   height: 55px;
+  margin-bottom: 2px;
 }
 
 .vcInfo {
@@ -665,8 +682,7 @@ code {
 .accountBox {
   height: 155px;
   width: 70%;
-  margin: 20px 20px 20px 20px;
-  margin-top: 20px;
+  margin: 10px 20px 15px 15px;
   background-color: #232323;
   border-radius: 10px;
   border: 1px solid #1b1b1b;
@@ -750,6 +766,10 @@ code {
   background-color: rgb(0, 0, 0);
   z-index: 2;
   display: none;
+}
+
+.avatarOverlay2 {
+  margin-left: -100px;
 }
 
 .invite-wrapper {
@@ -863,7 +883,12 @@ code {
   position: relative;
 }
 
-.emoteImage2 .tooltipText::after {
+.tooltipText2 {
+  left: -47px;
+  bottom: 70px;
+}
+
+.tooltipWrapper .tooltipText::after {
   content: " ";
   position: absolute;
   top: 100%;
@@ -874,6 +899,32 @@ code {
   border-color: black transparent transparent transparent;
 }
 
-.emoteImage2:hover .tooltipText {
+.tooltipWrapper:hover .tooltipText {
   visibility: visible;
+}
+
+.statusWrapper {
+  margin-left: -28px;
+  margin-top: 75px;
+  width: 24px;
+  height: 24px;
+}
+
+.status {
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+}
+
+.statusWrapper2 {
+  margin-left: -12px;
+  margin-top: 23px;
+  width: 12px;
+  height: 12px;
+}
+
+.status2 {
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
 }

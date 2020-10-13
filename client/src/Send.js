@@ -43,9 +43,7 @@ export default class Send extends React.Component {
   }
 
   render() {
-    let server = this.props.getServer(this.props.selectedServer)
-    let channel = this.props.getChannel(this.props.currentChannel)
-    if(channel === undefined || (server !== undefined && server.channels.includes(channel.id) === false) || (channel.type !== 2 && server === undefined) || channel.type === 1) {
+    if(this.props.isInChannel() === false) {
       return null;
     }
 

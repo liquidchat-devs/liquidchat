@@ -104,7 +104,7 @@ export default class Chat extends React.Component {
   render() {
     let server = this.props.getServer(this.props.selectedServer)
     let channel = this.props.getChannel(this.props.currentChannel)
-    if(channel === undefined || (server !== undefined && server.channels.includes(channel.id) === false) || (channel.type !== 2 && server === undefined)) {
+    if(this.props.isInChannel() === false) {
       return (
         <div className="flex">
           <h3 className="white margin1 marginleft2"> No Channel Selected</h3>
@@ -156,10 +156,12 @@ export default class Chat extends React.Component {
         <div key={i} className="paddingtop2 paddingbot2 flex message messageHover" onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="flex marginleft2">
             <img alt="" className="avatar3" src={this.props.fileEndpoint + "/" + user.avatar}/>
-            <div style={{ marginLeft: -12, marginTop: 18, backgroundColor: (user.status === 1 ? "#3baf3b" : "#f15252"), borderRadius: "50%", width: 12, height: 12 }}/>
+            <div className="statusWrapper2">
+              <div className="status2" style={{ backgroundColor: (user.status === 1 ? "#3baf3b" : "#676767") }}/>
+            </div>
             <div className="marginleft2">
               <div className="flex">
-                <div className="allignMiddle" style={{margin: 0, color: (user !== undefined && server !== undefined && server.author.id === user.id ? "yellow" : "red"), fontSize: 16}}>
+                <div className="allignMiddle" style={{margin: 0, color: (user !== undefined && ((server !== undefined && server.author.id === user.id) || (server === undefined && channel.author.id === user.id)) ? "yellow" : "red"), fontSize: 16}}>
                   {user !== undefined ? user.username : "Loading"}
                 </div>
               </div>
