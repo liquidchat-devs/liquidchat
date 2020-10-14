@@ -87,7 +87,7 @@ export default class EditServerDialog extends React.Component {
     let emotes = []
     server.emotes.forEach(emoteID => {
       if(this.props.emotes.has(emoteID)) {
-        server.push(this.props.emotes.get(emoteID));
+        emotes.push(this.props.emotes.get(emoteID));
       }
     })
 

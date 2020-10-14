@@ -277,4 +277,4 @@ function formatMessage(chat, message) {
     );
 }
 
-export { formatMessage }
+export { formatMessage, toFormatLink, toFormat }

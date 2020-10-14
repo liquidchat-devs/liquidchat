@@ -95,7 +95,11 @@ export default class API {
             server.members = _server.members;
             server.channels = _server.channels;
             server.invites = _server.invites;
+            server.emotes = _server.emotes;
             newServers.set(server.id, server);
+
+            this.API_fetchEmotesForIDs(server.emotes)
+            if(server.members !== undefined) { this.API_fetchUsersForIDs(server.members); }
             this.mainClass.setState({
                 servers: newServers
             });
@@ -972,6 +976,7 @@ export default class API {
                 }, () => { console.log("set server channels"); });
             });
 
+            this.API_fetchEmotesForIDs(server.emotes)
             if(server.members !== undefined) { this.API_fetchUsersForIDs(server.members); }
             this.mainClass.setState({
                 servers: newServers
