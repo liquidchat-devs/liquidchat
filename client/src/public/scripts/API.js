@@ -1,7 +1,7 @@
 import axios from 'axios';
 import io from "socket.io-client";
 
-class API {
+export default class API {
     constructor(_main) {
         this.mainClass = _main;
         this.socket = -1;
@@ -826,6 +826,28 @@ class API {
             return reply.data.status;
         } else {
             return 1;
+        }
+    }
+
+    async API_createServerEmote(file, emoteName, serverID) {
+        var data = new FormData();
+        data.append("fileUploaded", file)
+
+        const reply = await axios({
+            method: 'post',
+            url: this.mainClass.state.APIEndpoint + '/createEmote?fileName=' + file.name + '&emoteName=' + emoteName + '&type=0&serverID=' + serverID,
+            processData: false,
+            contentType: false,
+            cache: false,
+            enctype: 'multipart/form-data',
+            data: data,
+            withCredentials: true
+        });
+
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return reply.data;
         }
     }
     //#endregion

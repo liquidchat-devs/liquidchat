@@ -3,8 +3,9 @@ import Chat from './Chat'
 import Send from './Send';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
-import { ChannelHeader, ChannelSelector, DialogManager } from './Components.js';
-import { API } from './public/scripts/API';
+import API from './public/scripts/API';
+import DialogManager from './Components.js';
+import * as c from './components/index';
 
 class App extends React.Component {
   constructor(props) {
@@ -114,6 +115,8 @@ class App extends React.Component {
       channelTypes: id,
       selectedServer: -1,
     });
+
+    this.switchChannel(-1);
   }
 
   setSelectedMessage = (message, x, y) => {
@@ -149,6 +152,7 @@ class App extends React.Component {
   }
 
   setSelectedServer = val => {
+    if(this.state.selectedServer !== val) { this.switchChannel(-1); }
     this.setState({
       channelTypes: 2,
       selectedServer: val
@@ -327,10 +331,25 @@ class App extends React.Component {
     }
   }.bind(this);
 
+  getOwnServers = function() {
+    let servers = new Map();
+    this.state.servers.forEach(server => {
+      if(server.members.includes(this.state.session.userID)) {
+        servers.set(server.id, server);
+      }
+    })
+
+    return servers;
+  }.bind(this);
+
   isInChannel = function() {
     let server = this.getServer(this.state.selectedServer)
     let channel = this.getChannel(this.state.currentChannel)
     return !(channel === undefined || (server !== undefined && server.channels.includes(channel.id) === false) || (channel.type !== 2 && server === undefined) || channel.type === 1);
+  }.bind(this);
+
+  isInServer = function(id) {
+    return this.getOwnServers().has(id);
   }.bind(this);
 
   render() {
@@ -377,12 +396,12 @@ class App extends React.Component {
             dialogState={this.state.dialogState} switchDialogState={this.switchDialogState} startEditingMessage={this.startEditingMessage} setSelectedUser={this.setSelectedUser} getUser={this.getUser} selectedUser={this.state.selectedUser}
             boxX={this.state.boxX} boxY={this.state.boxY} selectedMessage={this.state.selectedMessage} session={this.state.session} fileEndpoint={this.state.fileEndpoint} setEditedMessage={this.setEditedMessage} setSelectedMessage={this.setSelectedMessage}/>
             <div className="flex">
-              <ChannelSelector pageHeight={this.state.pageHeight} pageHeightOffset={this.state.pageHeightOffset} moveChannel={this.moveChannel} setBox={this.setBox} getServer={this.getServer} selectedServer={this.state.selectedServer} selectedChannel={this.state.selectedChannel} setSelectedServer={this.setSelectedServer} currentChannel={this.state.currentChannel}
+              <c.ChannelSelector getOwnServers={this.getOwnServers} pageHeight={this.state.pageHeight} pageHeightOffset={this.state.pageHeightOffset} moveChannel={this.moveChannel} setBox={this.setBox} getServer={this.getServer} selectedServer={this.state.selectedServer} selectedChannel={this.state.selectedChannel} setSelectedServer={this.setSelectedServer} currentChannel={this.state.currentChannel}
               setSelectedChannel={this.setSelectedChannel} API={this.state.API} switchDialogState={this.switchDialogState} channelTypes={this.state.channelTypes} switchChannelTypes={this.switchChannelTypes}
               session={this.state.session} fileEndpoint={this.state.fileEndpoint} friendRequests={this.state.friendRequests} setSelectedUser={this.setSelectedUser}
               channels={this.state.channels} setFirstChannel={this.setFirstChannel} switchChannel={this.switchChannel} currentVoiceGroup={this.state.currentVoiceGroup} getUser={this.getUser}/>
               <div className="chat-wrapper">
-                <ChannelHeader
+                <c.ChannelHeader
                 API={this.state.API} currentChannel={this.state.currentChannel} getChannel={this.getChannel} selectedServer={this.state.selectedServer} getServer={this.getServer} currentVoiceGroup={this.state.currentVoiceGroup}/>
                 <Chat
                 isInChannel={this.isInChannel} emotes={this.state.emotes} pageHeightOffset={this.state.pageHeightOffset}
@@ -392,7 +411,7 @@ class App extends React.Component {
                 selectedServer={this.state.selectedServer} getChannel={this.getChannel} getServer={this.getServer} currentChannel={this.state.currentChannel} switchDialogState={this.switchDialogState} setSelectedMessage={this.setSelectedMessage}
                 editingMessage={this.state.editingMessage} editedMessage={this.state.editedMessage} setEditedMessage={this.setEditedMessage} endEditingMessage={this.endEditingMessage} getUser={this.getUser} fileEndpoint={this.state.fileEndpoint}/>
                 <Send
-                isInChannel={this.isInChannel} session={this.state.session} fileEndpoint={this.state.fileEndpoint} emotes={this.state.emotes} API={this.state.API}
+                isInServer={this.isInServer} isInChannel={this.isInChannel} session={this.state.session} fileEndpoint={this.state.fileEndpoint} emotes={this.state.emotes} API={this.state.API}
                 currentChannel={this.state.currentChannel}
                 selectedServer={this.state.selectedServer}/>
               </div>

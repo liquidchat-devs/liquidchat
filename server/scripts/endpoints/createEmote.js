@@ -29,7 +29,7 @@ class Endpoint {
 
         switch(type) {
             case "0":
-                var server = await this.app.db.db_fetch.fetchServer(this.app.db, id);
+                var server = await this.app.db.db_fetch.fetchServer(this.app.db, serverID);
 
                 if(server === undefined) {
                     res.send(JSON.stringify({ status: -1 }))

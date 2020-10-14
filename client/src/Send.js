@@ -50,7 +50,7 @@ export default class Send extends React.Component {
 
     let a0 = this.state.message.lastIndexOf(":");
     let a = this.state.message.substring(a0 > -1 ? a0 + 1 : this.state.message.length)
-    let possibleEmotes = Array.from(this.props.emotes.values()).filter(e => { return e.author.id === this.props.session.userID && a.length > 0 && e.name.startsWith(a); })
+    let possibleEmotes = Array.from(this.props.emotes.values()).filter(e => { return (e.author.id === this.props.session.userID || (e.server !== undefined && this.props.isInServer(e.server.id))) && a.length > 0 && e.name.startsWith(a); })
     let emoteList = possibleEmotes.map(emote => {
       return <div className="emoteItemWrapper">
         <div className="emoteItem">
