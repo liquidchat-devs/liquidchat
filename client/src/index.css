@@ -433,6 +433,15 @@ code {
   height: 45px;
   padding: 12px;
   border-radius: 5px;
+  margin-top: 5px;
+}
+
+.audio-wrapper {
+  width: 425px;
+  height: 85px;
+  padding: 12px;
+  border-radius: 5px;
+  margin-top: 5px;
 }
 
 .file-link {
@@ -707,6 +716,13 @@ code {
   width: 420px;
   z-index: 1;
   margin-top: 207px;
+  height: 33px;
+  background-color: #1f1f1f;
+}
+
+.audioControls {
+  width: 420px;
+  z-index: 1;
   height: 33px;
   background-color: #1f1f1f;
 }

@@ -194,9 +194,35 @@ function formatFile(chat, file) {
             </div>
         }
 
-        return <audio controls>
-            <source src={chat.props.fileEndpoint + "/" + file.name} type={ mimeType}/>
-        </audio>
+        return <div>
+            <div className="audio-wrapper chatColor">
+                <a className="link file-link" onClick={() => window.open(chat.props.fileEndpoint + "/" + file.name) }>{file.name}</a>
+                <br/>
+                <a className="tipColor">({formatBytes(file.size, true)})</a>
+                <audio className="audio" ref={"audio-" + file.name}
+                onTimeUpdate={() => {
+                    chat.refs["progress-" + file.name].style.width = Math.floor((chat.refs["audio-" + file.name].currentTime / chat.refs["audio-" + file.name].duration) * 100) + "%"; 
+                    chat.refs["progressText-" + file.name].text = formatDuration2(Math.floor(chat.refs["audio-" + file.name].currentTime) * 1000) + "/" + formatDuration2(Math.floor(chat.refs["audio-" + file.name].duration) * 1000);
+                }}
+                onClick={() => {
+                    chat.videoAction(chat.refs["audio-" + file.name], file, "playpause");
+                }}>
+                    <source src={chat.props.fileEndpoint + "/" + file.name} type={mimeType}/>
+                </audio>
+                <div className="audioControls aligny margintop1">
+                    <div className="button button1 marginleft2 videoButton" ref={"playButtonWrapper-" + file.name} onClick={() => { chat.videoAction(chat.refs["audio-" + file.name], file, "playpause"); }}>
+                        <svg aria-hidden="false" width="22" height="22" viewBox="0 0 22 22"><polygon fill="currentColor" points="0 0 0 14 11 7" transform="translate(7 5)"></polygon></svg>
+                    </div>
+                    <a className="tipColor marginleft1" ref={"progressText-" + file.name} style={{ fontSize: 13 }}>0:00</a>
+                    <div className="progressWrapper marginleft2b" onClick={(e) => {
+                            var pos = (e.pageX  - (e.currentTarget.offsetLeft + e.currentTarget.offsetParent.offsetLeft)) / e.currentTarget.offsetWidth;
+                            chat.refs["audio-" + file.name].currentTime = pos * chat.refs["audio-" + file.name].duration;
+                        }}>
+                        <div className="progress" ref={"progress-" + file.name} />
+                    </div>
+                </div>
+            </div>
+        </div>
     }
 
     return <div>
