@@ -182,7 +182,7 @@ export default class ChannelSelector extends React.Component {
         </div>}
         <div className="accountSettings chatColor aligny">
             <div className="account">
-              <img alt="" className=" marginleft2 avatar" src={this.props.fileEndpoint + "/" + loggedUser.avatar} onContextMenu={(e) => { this.props.switchDialogState(4); this.props.setBox(e.pageX, e.pageY); e.preventDefault(); }}/>
+              <img alt="" className=" marginleft2 avatar" src={this.props.fileEndpoint + "/" + loggedUser.avatar} onContextMenu={(e) => { this.props.switchDialogState(4); this.props.setBox(e.pageX, e.pageY); e.preventDefault(); }} onClick={(e) => { this.props.switchDialogState(22); this.props.setBox(e.pageX, e.pageY); e.preventDefault(); }}/>
               <div className="flex marginleft2">
                 <div className="text2" style={{color: "white"}}>{loggedUser !== undefined ? loggedUser.username : "Loading"}</div>
               </div>

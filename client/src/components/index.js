@@ -1,4 +1,5 @@
 export {default as AccountOptionsDialog} from './AccountOptionsDialog'
+export {default as AccountStatusDialog} from './AccountStatusDialog'
 export {default as AddFriendsDialog} from './AddFriendsDialog'
 export {default as ChannelHeader} from './ChannelHeader'
 export {default as ChannelOptionsDialog} from './ChannelOptionsDialog'

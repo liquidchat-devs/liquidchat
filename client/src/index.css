@@ -225,7 +225,17 @@ code {
   cursor: pointer;
 }
 
+.button3 {
+  width: 100%;
+  height: 36px;
+  cursor: pointer;
+}
+
 .button2:hover {
+  background-color: #333;
+}
+
+.button3:hover {
   background-color: #333;
 }
 
@@ -824,7 +834,7 @@ code {
 }
 
 .emoteSelector {
-  height: 200px;
+  height: 190px;
   width: calc(100% - 220px);
   background-color: white;
   z-index: 10;
@@ -928,4 +938,14 @@ code {
   border-radius: 50%;
   width: 12px;
   height: 12px;
+}
+
+.status3 {
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+}
+
+.statusText {
+  width: calc(150px - 28px);
 }

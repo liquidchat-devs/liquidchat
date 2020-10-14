@@ -79,6 +79,9 @@ export default class DialogManager extends React.Component {
       case 21:
         return <c.CreateEmoteDialog type={0} setSelectedAvatar={this.props.setSelectedAvatar} fileEndpoint={this.props.fileEndpoint} API={this.props.API} switchDialogState={this.props.switchDialogState} selectedServer={this.props.selectedServer}/>
 
+      case 22:
+        return <c.AccountStatusDialog API={this.props.API} getUser={this.props.getUser} switchDialogState={this.props.switchDialogState} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session} copyID={this.copyID} setSelectedUser={this.props.setSelectedUser}/>
+
       default:
         return null;
     }

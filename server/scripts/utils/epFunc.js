@@ -53,14 +53,18 @@ class Endpoint {
         var socket = this.app.sessionSockets.get(req.cookies['sessionID']);
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
-        res.sendStatus(200);
 
-        user.email = _user.email;
-        await this.app.db.db_edit.editUser(this.app.db, user);
-
-        if(socket.connected) {
-            socket.emit("updateUser", JSON.stringify(user))
+        let availableStatuses = [0, 1, 2, 3]
+        if(_user.status !== undefined && availableStatuses.includes(_user.status) === false) {
+            res.send(JSON.stringify({ error: -1 }))
+            return;
         }
+
+        user.email = _user.email !== undefined ? _user.email : user.email;
+        user.status = _user.status !== undefined ? _user.status : user.status;
+        this.updateUser(user, true);
+
+        res.send(JSON.stringify(user));
     }
 
     async updateUser(user, broadcast) {

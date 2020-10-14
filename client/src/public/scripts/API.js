@@ -454,6 +454,18 @@ export default class API {
         }
     }
 
+    async API_updateStatus(type) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/editUser', {
+            status: type
+        }, { withCredentials: true });
+
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return reply.data;
+        }
+    }
+
     async API_sendFriendRequest(userID) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/sendFriendRequest', {
             target: {
