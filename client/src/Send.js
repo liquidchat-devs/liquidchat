@@ -32,7 +32,8 @@ export default class Send extends React.Component {
 
     this.setState({
       message: message,
-      currentEmotes: possibleEmotes
+      currentEmotes: possibleEmotes,
+      currentEmoteIndex: this.state.currentEmoteIndex >= possibleEmotes.length ? (possibleEmotes.length === 0 ? 0 : possibleEmotes.length - 1) : this.state.currentEmoteIndex
     });
   }
 
@@ -70,11 +71,20 @@ export default class Send extends React.Component {
     }
 
     let emoteList = this.state.currentEmotes.map((emote, i) => {
+      let server = emote.server !== undefined ? this.props.getServer(emote.server.id) : undefined;
+
       return <div className="emoteItemWrapper">
         <div className={this.state.currentEmoteIndex === i ? "emoteItem bgColor" : "emoteItem"} onClick={(e) => { this.setState({ currentEmoteIndex: i }); this.handleSubmit(e); }}>
-          <img alt="" className="emoteImage marginleft2" src={this.props.fileEndpoint + "/" + emote.file} />
-          <div className="white text5 marginleft2">
-            :{emote.name}:
+          <div className="flex" style={{ flex: "1 1 auto" }}>
+            <img alt="" className="emoteImage marginleft2" src={this.props.fileEndpoint + "/" + emote.file} />
+            <div className="white text5 marginleft2">
+              :{emote.name}:
+            </div>
+          </div>
+          <div className="flex">
+            <div className="profileTooltipColor text5 marginright3">
+              from {server !== undefined ? server.name : "Personal Emotes"}
+            </div>
           </div>
         </div>
       </div>
