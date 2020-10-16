@@ -37,6 +37,7 @@ class Endpoint {
 
         await this.app.db.db_edit.editServer(this.app.db, server);
         await this.app.db.db_edit.editUser(this.app.db, user);
+        if(server.channels.length > 0) { this.app.epFunc.sendSystemMessage({ channel: { id: server.channels[0] }, text: "<@" + user.id + "> left the server!", type: 4 }) }
     }
 }
 

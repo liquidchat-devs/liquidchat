@@ -42,9 +42,9 @@ class Endpoint {
         targetUser.dmChannels.push(channel.id);
         this.app.epFunc.emitToUser(targetUser.id, "createChannel", channel);
 
-        this.app.epFunc.sendSystemMessage({ channel: { id: channel.id }, text: "<@" + targetUser.id + "> was added by <@" + user.id + ">", type: 1 })
         await this.app.db.db_edit.editChannel(this.app.db, channel);
         await this.app.db.db_edit.editUser(this.app.db, targetUser);
+        this.app.epFunc.sendSystemMessage({ channel: { id: channel.id }, text: "<@" + targetUser.id + "> was added by <@" + user.id + ">", type: 1 })
     }
 }
 
