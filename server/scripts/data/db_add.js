@@ -46,9 +46,10 @@ module.exports = {
             console.log(" - [db] Adding Message(id: " + message.id + ") into the database..."); 
         }
 
-        var query0 = "(id, createdAt, authorID, channelID, edited, type" + (message.text == null ? "" : ", text") + (message.file == null ? ")" : ", fileName, fileSize)")
-        var query1 = [ message.id, message.createdAt, message.author.id, message.channel.id, message.edited, message.type ]
+        var query0 = "(id, createdAt, channelID, edited, type" + (message.text == null ? "" : ", text") + (message.author == null ? "" : ", authorID") + (message.file == null ? ")" : ", fileName, fileSize)")
+        var query1 = [ message.id, message.createdAt, message.channel.id, message.edited, message.type ]
         if(message.text != null) { query1.push(db.escapeString(message.text)) }
+        if(message.author != null) { query1.push(message.author.id) }
         if(message.file != null) { query1.push(db.escapeString(message.file.name), message.file.size) }
         
         var query = "INSERT IGNORE INTO messages " + query0 + " VALUES" + db.contructQuestionMarks(query1.length);

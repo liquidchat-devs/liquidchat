@@ -144,7 +144,6 @@ class Endpoint {
     async sendSystemMessage(_message) {
         var channel = await this.app.db.db_fetch.fetchChannel(this.app.db, _message.channel.id);
         if(channel === undefined) {
-            res.send(JSON.stringify({ status: -1 }))
             return;
         }
 
