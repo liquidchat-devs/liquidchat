@@ -34,8 +34,8 @@ module.exports = {
             console.log(" - [db] Editing Message(id: " + message.id + ") in the database..."); 
         }
 
-        var query0 = "edited=?" + (message.text == null ? "" : ", text=?") + (message.file == null ? "" : ", fileName=?, fileSize=?")
-        var query1 = [ message.edited ]
+        var query0 = "edited=?, type=?" + (message.text == null ? "" : ", text=?") + (message.file == null ? "" : ", fileName=?, fileSize=?")
+        var query1 = [ message.edited, message.type ]
         if(message.text != null) { query1.push(db.escapeString(message.text)); }
         if(message.file != null) { query1.push(db.escapeString(message.file.name), message.file.size); }
 

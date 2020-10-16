@@ -46,8 +46,8 @@ module.exports = {
             console.log(" - [db] Adding Message(id: " + message.id + ") into the database..."); 
         }
 
-        var query0 = "(id, createdAt, authorID, channelID, edited" + (message.text == null ? "" : ", text") + (message.file == null ? ")" : ", fileName, fileSize)")
-        var query1 = [ message.id, message.createdAt, message.author.id, message.channel.id, message.edited ]
+        var query0 = "(id, createdAt, authorID, channelID, edited, type" + (message.text == null ? "" : ", text") + (message.file == null ? ")" : ", fileName, fileSize)")
+        var query1 = [ message.id, message.createdAt, message.author.id, message.channel.id, message.edited, message.type ]
         if(message.text != null) { query1.push(db.escapeString(message.text)) }
         if(message.file != null) { query1.push(db.escapeString(message.file.name), message.file.size) }
         

@@ -42,6 +42,7 @@ class Endpoint {
         targetUser.dmChannels.splice(targetUser.dmChannels.indexOf(channel.id), 1);
         this.app.epFunc.emitToUser(targetUser.id, "deleteChannel", channel);
 
+        this.app.epFunc.sendSystemMessage({ channel: { id: channel.id }, text: "<@" + targetUser.id + "> was removed by <@" + user.id + ">", type: 2 })
         await this.app.db.db_edit.editChannel(this.app.db, channel);
         await this.app.db.db_edit.editUser(this.app.db, targetUser);
     }

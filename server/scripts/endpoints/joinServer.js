@@ -36,6 +36,7 @@ class Endpoint {
             this.app.epFunc.emitToUser(id, "updateServer", server)
         });
 
+        if(server.channels.length > 0) { this.app.epFunc.sendSystemMessage({ channel: { id: server.channels[0] }, text: "<@" + user.id + "> joined the server!", type: 3 }) }
         await this.app.db.db_edit.editServer(this.app.db, server);
         await this.app.db.db_edit.editUser(this.app.db, user);
     }
