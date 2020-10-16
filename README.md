@@ -5,18 +5,20 @@
 ⭐ Open-source chat application similar to Discord-  
 
 🚩 **Planned features:**  
-> Server Emotes  
-> Idle/DND/Invisible Status  
 > Custom Statuses  
-> Server Settings  
+> Server Discovery  
+> Better Server Management (Built-in bans, mutes, assigning server moderators)  
+> Voice Channels  
 > a lot more...  
 
 🏁 **Features:**  
-> Servers with text channels  
+> Servers with Text Channels  
 > DM Channels  
 > Group Chats  
-> File Support  
-> Personal Emotes  
+> File Support (up to 100MB by default)  
+> Personal Emotes (max. 500)  
+> Server Emotes (max. 400)  
+> Idle/DND/Invisible Status  
 > Friend Features (Adding/Removing friends)  
 
 💛 Official website: https://nekonetwork.net (need to get a domain, but you know i'm broke)™️  
