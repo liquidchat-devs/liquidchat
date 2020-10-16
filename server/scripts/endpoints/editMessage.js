@@ -33,7 +33,7 @@ class Endpoint {
         switch(channel.type) {
             case 0:
             case 1:
-                var server = await this.app.db.db_fetch.fetchServer(this.app.db, _channel.server.id);
+                var server = await this.app.db.db_fetch.fetchServer(this.app.db, channel.server.id);
                 server.members.forEach(id => {
                     this.app.epFunc.emitToUser(id, "editMessage", message)
                 });

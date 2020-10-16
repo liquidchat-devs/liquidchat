@@ -693,10 +693,7 @@ export default class API {
     async API_editMessage(originalMessage, newText) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/editMessage', {
             id: originalMessage.id,
-            text: newText,
-            channel: {
-                id: this.mainClass.state.currentChannel
-            }
+            text: newText
         }, { withCredentials: true });
 
         if(reply.data.status !== undefined) {
@@ -708,10 +705,7 @@ export default class API {
 
     async API_deleteMessage(message) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/deleteMessage', {
-            id: message.id,
-            channel: {
-                id: message.channel.id
-            }
+            id: message.id
         }, { withCredentials: true });
 
         if(reply.data.status !== undefined) {
