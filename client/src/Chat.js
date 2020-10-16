@@ -124,11 +124,12 @@ export default class Chat extends React.Component {
     let membersList = -1;
 
     messageList = messages.map((message, i) => {
-      const user = this.props.getUser(message.author.id)
+      let messageHTML;
+      switch(message.type) {
+        case 0:
+          const user = this.props.getUser(message.author.id)
 
-      return (
-        <div key={i} className="paddingtop2 paddingbot2 flex message messageHover" onContextMenu={(e) => { this.props.switchDialogState(2); this.props.setSelectedMessage(message, e.pageX, e.pageY); e.preventDefault(); } }>
-          <div className="flex marginleft2 fullwidth">
+          messageHTML = <div className="flex marginleft2 fullwidth">
             <img alt="" className="avatar" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
             <div className="marginleft2 fullwidth">
               <div className="flex">
@@ -151,6 +152,39 @@ export default class Chat extends React.Component {
               </div>
             </div>
           </div>
+          break;
+
+        case 1:
+        case 2:
+        case 3:
+          messageHTML = <div className="flex marginleft2 fullwidth">
+            <div className="marginleft2 alignmiddle">
+              <img className="messageIcon" src={this.props.fileEndpoint + "/" + (message.type === 1 || message.type === 3 ? "join.svg" : "leave.svg")}/>
+            </div>
+            <div className="marginleft2 fullwidth">
+              <div className="flex">
+                <div className="allignMiddle margintop1a" style={{fontSize: 10, color: "#acacac"}}>
+                  {formatDate(message.createdAt)}
+                </div>
+              </div>
+              <div className="flex fullwidth">
+                {message.id === this.props.editingMessage.id ?
+                <div className="fullwidth">
+                    <form onSubmit={this.handleEdit} className="full fullwidth">
+                      <input className="input-message chatColor" type="text" value={this.props.editedMessage} required={true} onChange={(e) => { this.props.setEditedMessage(e.target.value) }}/>
+                    </form>
+                  </div>
+                : formatMessage(this, message)
+                }
+              </div>
+            </div>
+          </div>
+          break;
+      }
+
+      return (
+        <div key={i} className="paddingtop2 paddingbot2 flex message messageHover" onContextMenu={(e) => { this.props.switchDialogState(2); this.props.setSelectedMessage(message, e.pageX, e.pageY); e.preventDefault(); } }>
+          {messageHTML}
         </div>
       )
     });

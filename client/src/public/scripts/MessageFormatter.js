@@ -280,17 +280,20 @@ function formatMessage(chat, message) {
             let link = chat.props.fileEndpoint + "/" + e.file;
             messageFormatted = messageFormatted.split("<:" + e.id + ":>").join(`<img class='emoteImage3' src=${link}>`)
         });
+        chat.props.users.forEach(e => {
+            messageFormatted = messageFormatted.split("<@" + e.id + ">").join(`<div class='white margin0 mention'>@${e.username}</div>`)
+        });
     }
 
     return (
     <div>
         <div className="flex">
             {customMessage ?
-                <div className="white margin0">
+                <div className="white margin0 flex prspace">
                     {messageFormatted}
                 </div>
             :
-                <p className="white margin0" dangerouslySetInnerHTML={{__html: messageFormatted}}></p>
+                <p className="white margin0 flex prspace" dangerouslySetInnerHTML={{__html: messageFormatted}}></p>
             }
             {
             message.edited ? <p className="white margin0 text4 marginleft1"> (edited)</p> : ""

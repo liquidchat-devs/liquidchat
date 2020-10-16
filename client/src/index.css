@@ -654,7 +654,7 @@ code {
 .friendEntry {
   width: 100%;
   height: 55px;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 
 .vcInfo {
@@ -968,4 +968,22 @@ code {
 
 .statusText {
   width: calc(150px - 28px);
+}
+
+.mention {
+  color: #6767ff;
+  cursor: pointer;
+}
+
+.mention:hover {
+  text-decoration: underline;
+}
+
+.prspace {
+  white-space: pre;
+}
+
+.messageIcon {
+  width: 20px;
+  height: 20px;
 }

@@ -404,7 +404,7 @@ class App extends React.Component {
                 <c.ChannelHeader
                 API={this.state.API} currentChannel={this.state.currentChannel} getChannel={this.getChannel} selectedServer={this.state.selectedServer} getServer={this.getServer} currentVoiceGroup={this.state.currentVoiceGroup}/>
                 <Chat
-                isInChannel={this.isInChannel} emotes={this.state.emotes} pageHeightOffset={this.state.pageHeightOffset}
+                users={this.state.users} isInChannel={this.isInChannel} emotes={this.state.emotes} pageHeightOffset={this.state.pageHeightOffset}
                 session={this.state.session} uploadReceived={this.state.uploadReceived} uploadExpected={this.state.uploadExpected}
                 uploadFileID={this.state.uploadFileID} uploadFileName={this.state.uploadFileName} uploadFailed={this.state.uploadFailed}
                 pageHeight={this.state.pageHeight} API={this.state.API} setSelectedUser={this.setSelectedUser} currentVoiceGroup={this.state.currentVoiceGroup} setSelectedImage={this.setSelectedImage}

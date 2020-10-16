@@ -81,6 +81,10 @@ export default class API {
         socket.on('createServer', (serverData) => {
             var server = JSON.parse(serverData);
             var newServers = this.mainClass.state.servers.set(server.id, server);
+
+            this.API_fetchChannelsForServer(server);
+            this.API_fetchEmotesForIDs(server.emotes)
+            if(server.members !== undefined) { this.API_fetchUsersForIDs(server.members); }
             this.mainClass.setState({
                 servers: newServers
             });
@@ -396,7 +400,33 @@ export default class API {
                         }
 
                         this.API_fetchEmote(id);
-                        i += b + 3;
+                        i += b + 2;
+                    }
+                }
+            }
+        })
+    }
+
+    async API_fetchMentionsForMessages(obj) {
+        obj.forEach(message => {
+            if(message.text !== undefined) {
+                let i = 0;
+                while(i < message.text.length) {
+                    let currMessage = message.text.substring(i);
+                    let a = currMessage.indexOf("<@")
+                    let b = currMessage.indexOf(">")
+                    
+                    if(a === -1 || b === -1) {
+                        i = message.text.length;
+                    } else {
+                        let id = currMessage.substring(a + "<@".length, b)
+                        if(id.length !== 32) {
+                            i = message.text.length;
+                            break;
+                        }
+
+                        this.API_fetchUser(id);
+                        i += b + 1;
                     }
                 }
             }
@@ -961,32 +991,36 @@ export default class API {
         const reply0 = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchServers', { withCredentials: true }));
         var newServers = reply0.data;
         newServers = new Map(newServers.map(obj => [obj.id, obj]));
-
         newServers.forEach(async(server) => {
-            const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannels?id=' + server.id, { withCredentials: true }));
-            var newChannels = reply.data;
-            newChannels = new Map(newChannels.map(obj => [obj.id, obj]));
-
-            newChannels.forEach(async(channel) => {
-                const reply2 = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannelMessages?id=' + channel.id, { withCredentials: true }));
-                var messages = reply2.data;
-                channel.messages = messages;
-
-                var currentChannels = this.mainClass.state.channels;
-                currentChannels.set(channel.id, channel)
-
-                this.API_fetchEmotesForMessages(messages)
-                this.API_fetchUsersForMessages(messages)
-                this.mainClass.setState({
-                    channels: currentChannels
-                }, () => { console.log("set server channels"); });
-            });
+            this.API_fetchChannelsForServer(server);
 
             this.API_fetchEmotesForIDs(server.emotes)
             if(server.members !== undefined) { this.API_fetchUsersForIDs(server.members); }
             this.mainClass.setState({
                 servers: newServers
             });
+        });
+    }
+
+    async API_fetchChannelsForServer(server) {
+        const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannels?id=' + server.id, { withCredentials: true }));
+        var newChannels = reply.data;
+        newChannels = new Map(newChannels.map(obj => [obj.id, obj]));
+
+        newChannels.forEach(async(channel) => {
+            const reply2 = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannelMessages?id=' + channel.id, { withCredentials: true }));
+            var messages = reply2.data;
+            channel.messages = messages;
+
+            var currentChannels = this.mainClass.state.channels;
+            currentChannels.set(channel.id, channel)
+
+            this.API_fetchEmotesForMessages(messages)
+            this.API_fetchUsersForMessages(messages)
+            this.API_fetchMentionsForMessages(messages)
+            this.mainClass.setState({
+                channels: currentChannels
+            }, () => { console.log("set server channels"); });
         });
     }
     //#endregion
