@@ -111,7 +111,7 @@ export default class Send extends React.Component {
             </div>
           </div>
           <div className="flex">
-            <div className="profileTooltipColor text5 marginright3">
+            <div className="tooltipColor text5 marginright3">
               from {server !== undefined ? server.name : "Personal Emotes"}
             </div>
           </div>
@@ -129,7 +129,7 @@ export default class Send extends React.Component {
             </div>
           </div>
           <div className="flex">
-            <div className="profileTooltipColor text5 marginright3">
+            <div className="tooltipColor text5 marginright3">
               {member.username}
             </div>
           </div>

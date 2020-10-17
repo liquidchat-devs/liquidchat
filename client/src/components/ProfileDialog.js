@@ -16,11 +16,11 @@ export default class ProfileDialog extends React.Component {
                 </div>
                 <div className="marginleft3">
                   <div className="flex margintop1">
-                    <p className="profileTooltipColor text5 marginleft2 margintop0 marginbot0">> Username: </p>
+                    <p className="tooltipColor text5 marginleft2 margintop0 marginbot0">> Username: </p>
                     <p className="white text5 marginleft1 margintop0 marginbot0">{this.props.selectedUser.username}</p>
                   </div>
                   <div className="flex margintop1a">
-                    <p className="profileTooltipColor text5 marginleft2 margintop0 marginbot0">> Created: </p>
+                    <p className="tooltipColor text5 marginleft2 margintop0 marginbot0">> Created: </p>
                     <p className="white text5 marginleft1 margintop0 marginbot0">{dateFormatter.formatDuration(this.props.selectedUser.createdAt, Date.now())} ago</p>
                   </div>
                 </div>

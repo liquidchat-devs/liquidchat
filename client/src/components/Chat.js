@@ -183,7 +183,7 @@ export default class Chat extends React.Component {
       }
 
       return (
-        <div key={i} className="paddingtop2 paddingbot2 flex message messageHover" onContextMenu={(e) => { this.props.switchDialogState(2); this.props.setSelectedMessage(message, e.pageX, e.pageY); e.preventDefault(); } }>
+        <div key={i} className="paddingtop2 paddingbot2 flex message hover" onContextMenu={(e) => { this.props.switchDialogState(2); this.props.setSelectedMessage(message, e.pageX, e.pageY); e.preventDefault(); } }>
           {messageHTML}
         </div>
       )
@@ -193,7 +193,7 @@ export default class Chat extends React.Component {
       const user = this.props.getUser(memberID)
 
       return (
-        <div key={i} className="paddingtop2 paddingbot2 flex message messageHover" onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
+        <div key={i} className="paddingtop2 paddingbot2 flex message hover" onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="flex marginleft2">
             <img alt="" className="avatar3" src={this.props.fileEndpoint + "/" + user.avatar}/>
             <div className="statusWrapper2">
@@ -241,7 +241,7 @@ export default class Chat extends React.Component {
         return (
           <div className="flex">
             <div>
-              <div className="button2 alignmiddle chatColor" onClick={(e) => { this.setupScreenshare(); }}>
+              <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.setupScreenshare(); }}>
                 <p className="white text1">Screenshare</p>
               </div>
               <div className="flex">

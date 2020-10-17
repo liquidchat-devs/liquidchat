@@ -49,10 +49,10 @@ export default class CreateChannelDialog extends React.Component {
           <form onSubmit={this.handleSubmit} className="flex margintop1">
             <input className="inputfield1 marginleft2" name="channelName" type="text" placeholder="Name..." required={true} onChange={this.handleChange} /><br />
             <div className="aligny marginleft2b" style={{ width: "50%" }}>
-              <div className={this.state.channelType === 0 ? "button2 alignmiddle chatColor" : "button2 alignmiddle"} onClick={(e) => { this.handleChangeType(0); }}>
+              <div className={this.state.channelType === 0 ? "button2 hover alignmiddle chatColor" : "button2 hover alignmiddle"} onClick={(e) => { this.handleChangeType(0); }}>
                 <p className="white text1">Text</p>
               </div>
-              <div className={this.state.channelType === 1 ? "button2 alignmiddle chatColor" : "button2 alignmiddle"} onClick={(e) => { this.handleChangeType(1); }}>
+              <div className={this.state.channelType === 1 ? "button2 hover alignmiddle chatColor" : "button2 hover alignmiddle"} onClick={(e) => { this.handleChangeType(1); }}>
                 <p className="white text1">Voice</p>
               </div>
             </div>

@@ -35,11 +35,11 @@ code {
 }
 
 ::-webkit-scrollbar-track {
-  background: #2b2b2b;
+  background: var(--color5);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #232323;
+  background: var(--color4);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -235,14 +235,6 @@ code {
   cursor: pointer;
 }
 
-.button2:hover {
-  background-color: #333;
-}
-
-.button3:hover {
-  background-color: #333;
-}
-
 /* Paddings */
 .padding0 {
   padding: 0;
@@ -329,64 +321,78 @@ code {
 }
 
 /* Colors */
-.white {
-  color: white;
+* {
+  --color1: white;
+  --color2: grey;
+  --color3: #333;
+  --color4: #232323;
+  --color5: #2b2b2b;
+  --color7: #bdbdbd;
+  --color8: #ff6161;
+  --color9: #56e456;
+  --color10: #ffc061;
+  --color11: #63307d;
+  --color12: #2f2e2e;
 }
 
-.profileTooltipColor {
-  color: grey;
+.white {
+  color: var(--color1);
+}
+
+.tooltipColor {
+  color: var(--color2);
 }
 
 .bgColor {
-  background-color: #333;
+  background-color: var(--color3);
 }
 
 .headerColor {
-  background-color: #232323;
+  background-color: var(--color4);
 }
 
 .chatColor {
-  background-color: #2b2b2b;
-}
-
-.chatColor2 {
-  color: #2b2b2b;
+  background-color: var(--color5);
 }
 
 .tipColor {
-  color: #bdbdbd;
-}
-
-.errorColor {
-  color: red;
-}
-
-.successColor {
-  color: green;
+  color: var(--color7);
 }
 
 .acceptColor {
-  color: #56e456;
+  color: var(--color9);
 }
 
 .declineColor {
-  color: #ff6161;
+  color: var(--color8);
+}
+
+.declineColor-b {
+  background-color: var(--color8);
+}
+
+.errorColor {
+  color: var(--color8);
+}
+
+.successColor {
+  color: var(--color8);
 }
 
 .pendingColor {
-  color: #ffc061;
+  color: var(--color10);
 }
 
 .headerColor2 {
-  background-color: #63307d;
+  background-color: var(--color11);
 }
 
-.messageHover:hover {
-  background-color: #2f2e2e;
+.hover:hover {
+  background-color: var(--color12)
 }
 
-.selectedChannelColor {
-  background-color: #333;
+.selectedColor {
+  background-color: var(--color3);
 }
 
 /* Chat */
@@ -481,7 +487,7 @@ code {
 
 .channel {
   height: 36px;
-  width: 120px;
+  width: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -506,7 +512,7 @@ code {
 }
 
 .channels {
-  width: 120px;
+  width: 150px;
 }
 
 .servers {
@@ -642,8 +648,9 @@ code {
 }
 
 .voiceUserEntry {
-  width: 100%;
-  height: 35px;
+  width: 130px;
+  height: 45px;
+  margin-left: 20px;
 }
 
 .friendRequestEntry {
@@ -687,18 +694,18 @@ code {
   bottom: 0px;
   left: 0px;
   position: absolute;
-  width: 265px;
+  width: 295px;
   height: 50px;
 }
 
 .settingsButton {
   border: 0;
-  color: #ff6161;
+  color: var(--color8)
 }
 
 .addEmoteButton {
   border: 0;
-  color: #ff6161;
+  color: var(--color8);
   width: 30px;
 }
 
@@ -706,7 +713,7 @@ code {
   height: 155px;
   width: 70%;
   margin: 10px 20px 15px 15px;
-  background-color: #232323;
+  background-color: var(--color4);
   border-radius: 10px;
   border: 1px solid #1b1b1b;
 }
@@ -811,7 +818,7 @@ code {
 
 .cropButton {
   margin-left: -40px;
-  background-color: #232323;
+  background-color: var(--color4);
   width: 35px;
   height: 25px;
   border-radius: 10px;
@@ -823,7 +830,7 @@ code {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #2b2b2b;
+  background: var(--color5)
 }
 
 .appHeaderButtons {
@@ -860,7 +867,7 @@ code {
   z-index: 10;
   margin-bottom: 10px;
   position: relative;
-  background-color: #232323;
+  background-color: var(--color4);
   border-radius: 10px;
   padding-top: 10px;
 }

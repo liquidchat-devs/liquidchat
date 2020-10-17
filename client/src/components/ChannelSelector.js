@@ -31,7 +31,7 @@ export default class ChannelSelector extends React.Component {
       var user = author.id === loggedUser.id ? target : author;
 
       return (
-        <div key={i} className="friendRequestEntry selectedChannelColor" style={{ height: author.id === this.props.session.userID ? 117 : 81}}>
+        <div key={i} className="friendRequestEntry selectedColor" style={{ height: author.id === this.props.session.userID ? 117 : 81}}>
           <div className="flex">
             <img alt="" className="avatar marginleft2 margintop1" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
             <div className="white marginleft2 margintop1b">
@@ -71,7 +71,7 @@ export default class ChannelSelector extends React.Component {
       }
 
       return (
-        <div key={i} className="friendEntry selectedChannelColor" style={{ marginBottom: (i === 0 ? 2 : 1) }} onContextMenu={(e) => { this.props.setSelectedUser(friend, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
+        <div key={i} className="friendEntry selectedColor" style={{ marginBottom: (i === 0 ? 2 : 1) }} onContextMenu={(e) => { this.props.setSelectedUser(friend, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="aligny fullheight">
             <img alt="" className="avatar marginleft2" src={this.props.fileEndpoint + "/" + friend.avatar}/>
             <div className="white marginleft2">
@@ -86,7 +86,7 @@ export default class ChannelSelector extends React.Component {
       let serverName = server.name.length < 12 ? server.name : server.name.substring(0, 9) + "..."
       return (
         <div key={i}>
-          <div className={this.props.selectedServer === server.id ? "white headerColor server selectedChannelColor" : "white headerColor server"} onClick={() => { this.props.setSelectedServer(server.id); }} onContextMenu={(e) => { this.props.setSelectedServer(server.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(17); e.preventDefault(); e.stopPropagation(); } }>
+          <div className={this.props.selectedServer === server.id ? "white headerColor server selectedColor" : "white headerColor server"} onClick={() => { this.props.setSelectedServer(server.id); }} onContextMenu={(e) => { this.props.setSelectedServer(server.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(17); e.preventDefault(); e.stopPropagation(); } }>
             <img alt="" className="avatar4 marginright2" src={this.props.fileEndpoint + "/" + server.avatar}/>
             <div className="white text8">
               {serverName}

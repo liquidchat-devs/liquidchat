@@ -33,25 +33,25 @@ export default class MessageOptionsDialog extends React.Component {
         <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY, height: this.props.selectedMessage.author.id === this.props.session.userID ? 90 : 30 }}>
           {
             this.props.selectedMessage.author.id === this.props.session.userID ?
-            <div className="button2 alignmiddle chatColor" onClick={(e) => { this.handleDelete(e); }}>
+            <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleDelete(e); }}>
               <p className="white text1">> Delete</p>
             </div> :
             ""
           }
           {
             this.props.selectedMessage.author.id === this.props.session.userID ?
-            <div className="button2 alignmiddle chatColor" onClick={(e) => { this.handleEdit(e); }}>
+            <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleEdit(e); }}>
               <p className="white text1">> Edit</p>
             </div> :
             ""
           }
           {
             this.props.selectedMessage.file == null ? "" :
-            <div className="button2 alignmiddle chatColor" onClick={(e) => { this.props.copyID(this.props.fileEndpoint + "/" + this.props.selectedMessage.file.name); }}>
+            <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.props.copyID(this.props.fileEndpoint + "/" + this.props.selectedMessage.file.name); }}>
               <p className="white text1">> Copy link to file</p>
             </div>
           }
-          <div className="button2 alignmiddle chatColor" onClick={() => { this.props.copyID(this.props.selectedMessage.id); }}>
+          <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.copyID(this.props.selectedMessage.id); }}>
             <p className="white text1">> Copy ID</p>
           </div>
         </div>

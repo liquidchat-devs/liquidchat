@@ -54,11 +54,11 @@ export default class SettingsDialog extends React.Component {
 
               <div>
                 <div className="margintop4 marginleft2b" style={{ height: 40 }}>
-                  <p className="profileTooltipColor text6 margintop0 marginbot0">Username</p>
+                  <p className="tooltipColor text6 margintop0 marginbot0">Username</p>
                   <p className="white text5 margintop0 margintop0b">{loggedUser.username}</p>
                 </div>
                 <div className="margintop1c marginleft2b" style={{ height: 40 }}>
-                  <p className="profileTooltipColor text6 margintop0 marginbot0">Email</p>
+                  <p className="tooltipColor text6 margintop0 marginbot0">Email</p>
                   {loggedUser.email === null ? 
                   <p className="text5 margintop0 margintop0b link" onClick={() => { this.props.switchDialogState(14); }}>Set an email-</p>
                   : <p className="white text5 margintop0 margintop0b">{loggedUser.email}</p>}
@@ -69,7 +69,7 @@ export default class SettingsDialog extends React.Component {
           <div className="white text3 marginleft2b margintop1a">Emotes ({emotes.length})</div>
           <div className="flex marginleft2b">
             {emoteList}
-            <div className="button2 addEmoteButton alignmiddle chatColor" onClick={() => { this.props.switchDialogState(20); }}>
+            <div className="button2 hover addEmoteButton alignmiddle chatColor" onClick={() => { this.props.switchDialogState(20); }}>
               +
             </div>
           </div>

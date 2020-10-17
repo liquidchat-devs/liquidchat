@@ -368,7 +368,7 @@ class App extends React.Component {
               <div className="absolutepos overlaybox6">
                 <div>
                   <div className="white text3 alignmiddle">Upload a file-</div>
-                  <div className="profileTooltipColor text8 alignmiddle">(to #{channel.name}{server !== undefined ? ` in ${server.name}` : ""})</div>
+                  <div className="tooltipColor text8 alignmiddle">(to #{channel.name}{server !== undefined ? ` in ${server.name}` : ""})</div>
                 </div>
               </div>
           </div>

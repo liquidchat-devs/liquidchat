@@ -119,7 +119,7 @@ export default class EditServerDialog extends React.Component {
           <div className="white text3 marginleft2b margintop1a">Server Emotes ({emotes.length})</div>
           <div className="flex marginleft2b">
             {emoteList}
-            <div className="button2 addEmoteButton alignmiddle chatColor" onClick={() => { this.props.switchDialogState(21); }}>
+            <div className="button2 hover addEmoteButton alignmiddle chatColor" onClick={() => { this.props.switchDialogState(21); }}>
               +
             </div>
           </div>
