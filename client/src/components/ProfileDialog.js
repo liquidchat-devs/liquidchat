@@ -11,7 +11,7 @@ export default class ProfileDialog extends React.Component {
               <div className="flex marginleft3 paddingtop3">
                 <img alt="" className="avatar2" src={this.props.fileEndpoint + "/" + this.props.selectedUser.avatar}/>
                 <div className="tooltipWrapper statusWrapper">
-                  <div className="status" style={{ backgroundColor: (this.props.selectedUser.status === 1 ? "#3baf3b" : "#676767") }}/>
+                  <div className="status" style={{ backgroundColor: this.props.const.getStatusColor(this.props.selectedUser.status) }}/>
                   <span className="tooltipText tooltipText2">{this.props.selectedUser.status === 1 ? "Online" : "Offline"}</span>
                 </div>
                 <div className="marginleft3">

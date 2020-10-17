@@ -1,9 +1,6 @@
 import React from 'react';
-import Chat from './Chat'
-import Send from './Send';
-import LoginForm from './LoginForm';
-import RegisterForm from './RegisterForm';
 import API from './public/scripts/API';
+import Constants from './public/scripts/Constants';
 import DialogManager from './Components.js';
 import * as c from './components/index';
 
@@ -68,6 +65,9 @@ class App extends React.Component {
     API: new API(this),
     APIEndpoint: "https://nekonetwork.net:8080",
     fileEndpoint: "https://nekonetwork.net:8081",
+    
+    //Utils
+    const: new Constants(this)
   };
 
   setFirstChannel = (_e, _channelID) => {
@@ -396,7 +396,7 @@ class App extends React.Component {
         {this.state.waitingForSession === false ?
           <div>
             <DialogManager
-            emotes={this.state.emotes} setSelectedAvatar={this.setSelectedAvatar} selectedAvatar={this.state.selectedAvatar} getChannel={this.getChannel} getServer={this.getServer} selectedServer={this.state.selectedServer} channels={this.state.channels} currentChannel={this.state.currentChannel} switchChannelTypes={this.switchChannelTypes} switchChannel={this.switchChannel} setSelectedChannel={this.setSelectedChannel} selectedChannel={this.state.selectedChannel} selectedImage={this.state.selectedImage} API={this.state.API}
+            const={this.state.const} emotes={this.state.emotes} setSelectedAvatar={this.setSelectedAvatar} selectedAvatar={this.state.selectedAvatar} getChannel={this.getChannel} getServer={this.getServer} selectedServer={this.state.selectedServer} channels={this.state.channels} currentChannel={this.state.currentChannel} switchChannelTypes={this.switchChannelTypes} switchChannel={this.switchChannel} setSelectedChannel={this.setSelectedChannel} selectedChannel={this.state.selectedChannel} selectedImage={this.state.selectedImage} API={this.state.API}
             dialogState={this.state.dialogState} switchDialogState={this.switchDialogState} startEditingMessage={this.startEditingMessage} setSelectedUser={this.setSelectedUser} getUser={this.getUser} selectedUser={this.state.selectedUser}
             boxX={this.state.boxX} boxY={this.state.boxY} selectedMessage={this.state.selectedMessage} session={this.state.session} fileEndpoint={this.state.fileEndpoint} setEditedMessage={this.setEditedMessage} setSelectedMessage={this.setSelectedMessage}/>
             <div className="flex">
@@ -407,14 +407,14 @@ class App extends React.Component {
               <div className="chat-wrapper">
                 <c.ChannelHeader
                 API={this.state.API} currentChannel={this.state.currentChannel} getChannel={this.getChannel} selectedServer={this.state.selectedServer} getServer={this.getServer} currentVoiceGroup={this.state.currentVoiceGroup}/>
-                <Chat
-                users={this.state.users} isInChannel={this.isInChannel} emotes={this.state.emotes} pageHeightOffset={this.state.pageHeightOffset}
+                <c.Chat
+                const={this.state.const} users={this.state.users} isInChannel={this.isInChannel} emotes={this.state.emotes} pageHeightOffset={this.state.pageHeightOffset}
                 session={this.state.session} uploadReceived={this.state.uploadReceived} uploadExpected={this.state.uploadExpected}
                 uploadFileID={this.state.uploadFileID} uploadFileName={this.state.uploadFileName} uploadFailed={this.state.uploadFailed}
                 pageHeight={this.state.pageHeight} API={this.state.API} setSelectedUser={this.setSelectedUser} currentVoiceGroup={this.state.currentVoiceGroup} setSelectedImage={this.setSelectedImage}
                 selectedServer={this.state.selectedServer} getChannel={this.getChannel} getServer={this.getServer} currentChannel={this.state.currentChannel} switchDialogState={this.switchDialogState} setSelectedMessage={this.setSelectedMessage}
                 editingMessage={this.state.editingMessage} editedMessage={this.state.editedMessage} setEditedMessage={this.setEditedMessage} endEditingMessage={this.endEditingMessage} getUser={this.getUser} fileEndpoint={this.state.fileEndpoint}/>
-                <Send
+                <c.Send
                 getUser={this.getUser} getChannel={this.getChannel} getServer={this.getServer} isInServer={this.isInServer} isInChannel={this.isInChannel} session={this.state.session} fileEndpoint={this.state.fileEndpoint} emotes={this.state.emotes} API={this.state.API}
                 currentChannel={this.state.currentChannel}
                 selectedServer={this.state.selectedServer}/>
@@ -425,14 +425,14 @@ class App extends React.Component {
           <div>
             <DialogManager dialogState={this.state.dialogState} switchDialogState={this.switchDialogState} />
             <div className="margintop2 fullwidth textcenter text0" style={{color: "white"}}>Login</div>
-            <LoginForm
+            <c.LoginForm
             API={this.state.API} switchDialogState={this.switchDialogState}
             session={this.state.session} getUser={this.getUser}
             formState={this.state.formState} switchFormState={this.switchFormState}/>
           </div> :
           <div>
             <div className="margintop2 fullwidth textcenter text0" style={{color: "white"}}>Register</div>
-            <RegisterForm
+            <c.RegisterForm
             API={this.state.API}
             formState={this.state.formState} switchFormState={this.switchFormState}/>
           </div>

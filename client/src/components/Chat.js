@@ -1,7 +1,7 @@
 import React from 'react';
-import { formatMessage } from './public/scripts/MessageFormatter';
-import { formatDate } from './public/scripts/DateFormatter';
-import { formatBytes } from './public/scripts/SizeFormatter';
+import { formatMessage } from '../public/scripts/MessageFormatter';
+import { formatDate } from '../public/scripts/DateFormatter';
+import { formatBytes } from '../public/scripts/SizeFormatter';
 
 export default class Chat extends React.Component {
   componentDidMount = async() => {
@@ -197,7 +197,7 @@ export default class Chat extends React.Component {
           <div className="flex marginleft2">
             <img alt="" className="avatar3" src={this.props.fileEndpoint + "/" + user.avatar}/>
             <div className="statusWrapper2">
-              <div className="status2" style={{ backgroundColor: (user.status === 1 ? "#3baf3b" : "#676767") }}/>
+              <div className="status2" style={{ backgroundColor: this.props.const.getStatusColor(user.status) }}/>
             </div>
             <div className="marginleft2">
               <div className="flex">
