@@ -247,6 +247,10 @@ class App extends React.Component {
     }
 
     //
+    document.ondragstart = function() {
+      return false;
+    }
+
     document.ondragover = function(e) {
       e.preventDefault();
     }
