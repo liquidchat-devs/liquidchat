@@ -666,7 +666,16 @@ code {
 
 .vcInfo {
   width: 100%;
-  height: 76px;
+  height: 68px;
+  padding-top: 10px;
+}
+
+.vcInfo2 {
+  height: 32px;
+}
+
+.vcInfo3 {
+  height: 16px;
 }
 
 .membersList {
