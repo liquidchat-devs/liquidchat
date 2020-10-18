@@ -4,15 +4,15 @@ class Endpoint {
     }
 
     handle() {
-        this.app.post('/joinVoiceChannel', (async(req, res) => {
+        this.app.post('/leaveVoiceChannel', (async(req, res) => {
             if(!this.app.isSessionValid(this.app, req, res)) { return; }
 
             await this.joinVoiceChannel(req, res, req.body)
-            console.log("> received voice connection - " + req.body.channel.id)
+            console.log("> received voice disconnection - " + req.body.channel.id)
         }).bind(this));
     }
 
-    async joinVoiceChannel(req, res, connection) {
+    async leaveVoiceChannel(req, res, connection) {
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
         var channel = await this.app.db.db_fetch.fetchChannel(this.app.db, connection.channel.id);
@@ -24,29 +24,21 @@ class Endpoint {
 
         var voiceGroup = -1;
         if(this.app.voiceGroups.has(channel.id) === false) {
-            voiceGroup = {
-                id: channel.id,
-                createdAt: Date.now(),
-                author: {
-                    id: user.id
-                },
-                users: [ user.id ]
-            }
-
-            this.app.voiceGroups.set(channel.id, voiceGroup);
+            res.send(JSON.stringify({ status: -2 }))
+            return;
         } else {
             voiceGroup = this.app.voiceGroups.get(channel.id)
             if(voiceGroup.users.includes(user.id) === false) {
-                voiceGroup.users.push(user.id);
+                res.send(JSON.stringify({ status: -3 }))
+                return;
             }
+
+            voiceGroup.users = voiceGroup.users.filter(u => { return u.id !== user.id; });
         }
 
-        res.send(JSON.stringify(voiceGroup));
+        res.sendStatus(200);
         voiceGroup.users.forEach(id => {
             this.app.epFunc.emitToUser(id, "updateVoiceGroup", voiceGroup)
-        });
-        voiceGroup.users.forEach(id => {
-            this.app.epFunc.emitToUser(id, "receiveVoiceOffer", connection.offer)
         });
     }
 }

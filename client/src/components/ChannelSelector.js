@@ -96,14 +96,8 @@ export default class ChannelSelector extends React.Component {
       )
     });
 
-    let voiceGroupChannel = undefined;
-    let voiceGroupServer = undefined;
-    /*
-    voiceGroup = {
-      channel: { id: "a959c0ed91c5e3bd2c3dc3a788d6a337" }, users: ["20e07b3804f49a7135ad6a6ffca916dc", "0c719f5b2f65dc7c37a82e830bf0cdcc"]
-    }
-    voiceGroupChannel = this.props.getChannel(voiceGroup.channel.id);
-    voiceGroupServer = this.props.getServer(voiceGroupChannel.server.id);*/
+    let voiceGroupChannel = voiceGroup !== -1 ? this.props.getChannel(voiceGroup.id) : undefined;
+    let voiceGroupServer = voiceGroupChannel !== undefined ? this.props.getServer(voiceGroupChannel.server.id) : undefined;
 
     return (
       <div className="flex">
@@ -138,7 +132,7 @@ export default class ChannelSelector extends React.Component {
               switch(value.type) {
                 case 1:
                   let userList = null;
-                  if(voiceGroup !== -1 && voiceGroupChannel.id === value.id) {
+                  if(voiceGroup !== -1 && voiceGroupChannel !== undefined && voiceGroupChannel.id === value.id) {
                     userList = voiceGroup.users.map((userID, i) => {
                       const user = this.props.getUser(userID)
           
@@ -177,7 +171,7 @@ export default class ChannelSelector extends React.Component {
             : null}
           </div>
           {
-            voiceGroup !== -1 ?
+            voiceGroup !== -1 && voiceGroupChannel !== undefined ?
             <div className="white chatColor vcInfo">
               <div className="white chatColor vcInfo2 prspace">
                 <div className="flex vcInfo3 aligny">
@@ -195,7 +189,7 @@ export default class ChannelSelector extends React.Component {
                   </div>
                 }
               </div>
-              <div className="white chatColor channel alignmiddle" onClick={(e) => {  }}>
+              <div className="white chatColor channel alignmiddle" onClick={(e) => { this.props.API.API_leaveVoiceChannel(voiceGroupChannel); }}>
                 <p className="white declineColor text1">> Disconnect</p>
               </div>
             </div> : null

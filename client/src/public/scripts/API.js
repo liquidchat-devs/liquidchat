@@ -200,6 +200,19 @@ export default class API {
             });
         });
         
+        socket.on('receiveVoiceOffer', async(voiceOfferData) => {
+            var voiceOffer = JSON.parse(voiceOfferData);
+            this.pc.setRemoteDescription(new RTCSessionDescription(voiceOffer));
+            const answer = await this.pc.createAnswer();
+            await this.pc.setLocalDescription(answer);
+            this.API_sendVoiceAnswer(this.mainClass.state.currentVoiceGroup.id, answer);
+        });
+        socket.on('receiveVoiceAnswer', async(voiceAnswerData) => {
+            var voiceAnswer = JSON.parse(voiceAnswerData);
+            const remoteDesc = new RTCSessionDescription(voiceAnswer);
+            await this.pc.setRemoteDescription(remoteDesc);
+        });
+        
         //Setups the WebRTC Client
         const wrtc = require('electron-webrtc')()
         wrtc.on('error', function (err) { console.log(err) })
@@ -746,10 +759,27 @@ export default class API {
     }
 
     async API_joinVoiceChannel(channel) {
+        const offer = await this.pc.createOffer();
+        await this.pc.setLocalDescription(offer);
+
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/joinVoiceChannel', {
             channel: {
                 id: channel.id
-            }
+            },
+            offer: offer
+        }, { withCredentials: true });
+
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return reply.data;
+        }
+    }
+
+    async API_sendVoiceAnswer(channelID, answer) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/sendVoiceAnswer', {
+            id: channelID,
+            answer: answer
         }, { withCredentials: true });
 
         if(reply.data.status !== undefined) {

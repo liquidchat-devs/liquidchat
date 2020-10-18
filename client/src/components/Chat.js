@@ -25,22 +25,6 @@ export default class Chat extends React.Component {
     this.props.endEditingMessage();
   }
 
-  async setupScreenshare() {
-    //Setups a testing MediaStream
-    var localStream = await window.navigator.mediaDevices.getDisplayMedia({
-      video: {
-        cursor: "always"
-      },
-      audio: false
-    });
-    
-    localStream.getTracks().forEach(track => this.props.API.pc.addTrack(track, localStream));
-    this.video0.srcObject = localStream;
-    
-    const remoteStream = new MediaStream(this.props.API.pc.getReceivers().map(receiver => receiver.track));
-    this.video1.srcObject = remoteStream;
-  }
-
   isFullScreen() {
     return !!(document.fullscreen || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement || document.fullscreenElement);
   }
