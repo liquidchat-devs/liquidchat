@@ -149,7 +149,7 @@ export default class ChannelSelector extends React.Component {
 
                   return (
                     <div>
-                      <div {...props} key={index} className="white headerColor channel" style={{ backgroundColor: (voiceGroup !== -1 && voiceGroupChannel.id === value.id ? "#67b167" : "var(--color4)") }} onClick={(e) => { this.props.switchChannel(value.id) }} onContextMenu={(e) => { this.props.setSelectedChannel(value.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } }>
+                      <div {...props} key={index} className="white headerColor channel" style={{ backgroundColor: (voiceGroup !== -1 && voiceGroupChannel.id === value.id ? "#67b167" : "var(--color4)") }} onContextMenu={(e) => { this.props.setSelectedChannel(value.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } }>
                         .{channelName}
                       </div>
                       {userList}

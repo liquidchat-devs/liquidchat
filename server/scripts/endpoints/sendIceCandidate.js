@@ -4,15 +4,15 @@ class Endpoint {
     }
 
     handle() {
-        this.app.post('/leaveVoiceChannel', (async(req, res) => {
+        this.app.post('/sendIceCandidate', (async(req, res) => {
             if(!this.app.isSessionValid(this.app, req, res)) { return; }
 
-            await this.leaveVoiceChannel(req, res, req.body)
+            await this.sendIceCandidate(req, res, req.body)
             console.log("> received voice disconnection - " + req.body.channel.id)
         }).bind(this));
     }
 
-    async leaveVoiceChannel(req, res, connection) {
+    async sendIceCandidate(req, res, connection) {
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
         var channel = await this.app.db.db_fetch.fetchChannel(this.app.db, connection.channel.id);
@@ -33,13 +33,12 @@ class Endpoint {
                 return;
             }
 
-            voiceGroup.users = voiceGroup.users.filter(u => { return u.id !== user.id; });
+            voiceGroup.users.forEach(id => {
+                this.app.epFunc.emitToUser(id, "receiveIceCandidate", connection.candidate)
+            });
         }
 
         res.sendStatus(200);
-        voiceGroup.users.forEach(id => {
-            this.app.epFunc.emitToUser(id, "updateVoiceGroup", voiceGroup)
-        });
     }
 }
 

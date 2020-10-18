@@ -199,9 +199,11 @@ export default class API {
                 friendRequests: friendRequests
             });
         });
-        
+
         socket.on('receiveVoiceOffer', async(voiceOfferData) => {
             var voiceOffer = JSON.parse(voiceOfferData);
+            console.log("received offer: ");
+            console.log(voiceOffer);
             this.pc.setRemoteDescription(new RTCSessionDescription(voiceOffer));
             const answer = await this.pc.createAnswer();
             await this.pc.setLocalDescription(answer);
@@ -209,8 +211,16 @@ export default class API {
         });
         socket.on('receiveVoiceAnswer', async(voiceAnswerData) => {
             var voiceAnswer = JSON.parse(voiceAnswerData);
+            console.log("received answer: ");
+            console.log(voiceAnswer);
             const remoteDesc = new RTCSessionDescription(voiceAnswer);
             await this.pc.setRemoteDescription(remoteDesc);
+        });
+        socket.on('receiveIceCandidate', async(iceCandidateData) => {
+            var iceCandidate = JSON.parse(iceCandidateData);
+            console.log("received candidate: ");
+            console.log(iceCandidate);
+            await this.pc.addIceCandidate(iceCandidate);
         });
         
         //Setups the WebRTC Client
@@ -778,8 +788,21 @@ export default class API {
 
     async API_sendVoiceAnswer(channelID, answer) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/sendVoiceAnswer', {
-            id: channelID,
+            channel: { id: channelID },
             answer: answer
+        }, { withCredentials: true });
+
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return 1;
+        }
+    }
+
+    async API_sendIceCandidate(channelID, candidate) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/sendIceCandidate', {
+            channel: { id: channelID },
+            candidate: candidate
         }, { withCredentials: true });
 
         if(reply.data.status !== undefined) {

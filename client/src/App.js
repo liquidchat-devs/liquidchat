@@ -112,6 +112,12 @@ class App extends React.Component {
     var remoteStream = new MediaStream(this.state.API.pc.getReceivers().map(receiver => receiver.track));
     document.getElementById("remoteAudio").srcObject = remoteStream;
     document.getElementById("remoteAudio").play();
+
+    this.state.pc.addEventListener('icecandidate', event => {
+      if (event.candidate) {
+        this.state.API.API_sendIceCandidate(this.state.currentVoiceGroup.id ,event.candidate);
+      }
+    });
   }
 
   switchFormState = () => {
