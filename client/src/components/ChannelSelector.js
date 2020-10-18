@@ -148,8 +148,8 @@ export default class ChannelSelector extends React.Component {
                   }
 
                   return (
-                    <div>
-                      <div {...props} key={index} className="white headerColor channel" style={{ backgroundColor: (voiceGroup !== -1 && voiceGroupChannel.id === value.id ? "#67b167" : "var(--color4)") }} onContextMenu={(e) => { this.props.setSelectedChannel(value.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } }>
+                    <div key={index}>
+                      <div {...props} className="white headerColor channel" style={{ backgroundColor: (voiceGroup !== -1 && voiceGroupChannel.id === value.id ? "#67b167" : "var(--color4)") }} onContextMenu={(e) => { this.props.setSelectedChannel(value.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } }>
                         .{channelName}
                       </div>
                       {userList}
@@ -189,7 +189,7 @@ export default class ChannelSelector extends React.Component {
                   </div>
                 }
               </div>
-              <div className="white chatColor channel alignmiddle" onClick={(e) => { this.props.API.API_leaveVoiceChannel(voiceGroupChannel); }}>
+              <div className="white chatColor channel alignmiddle" onClick={() => { this.props.API.API_leaveVoiceChannel(voiceGroupChannel); }}>
                 <p className="white declineColor text1">> Disconnect</p>
               </div>
             </div> : null

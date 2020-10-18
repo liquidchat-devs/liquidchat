@@ -1,11 +1,13 @@
 import axios from 'axios';
 import io from "socket.io-client";
+import SimplePeer from 'simple-peer';
 
 export default class API {
     constructor(_main) {
         this.mainClass = _main;
         this.socket = -1;
         this.wrtc = -1;
+        this.pc = [];
 
         this.queuedServers = [];
         this.queuedInvites = [];
@@ -202,19 +204,88 @@ export default class API {
 
         socket.on('receiveVoiceOffer', async(voiceOfferData) => {
             var voiceOffer = JSON.parse(voiceOfferData);
-            console.log("received offer: ");
+
+            //Create new PC
+            const config = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]}
+            var conn = new wrtc.RTCPeerConnection(config)
+            conn.onconnectionstatechange = function(e) {
+                switch(conn.connectionState) {
+                    case "connected":
+                        console.log("> WebRTC connected!")
+                        break;
+
+                    case "closed":
+                        console.log("> WebRTC closed-")
+                        break;
+                }
+            }
+            conn.addEventListener('icecandidate', event => {
+                if (event.candidate) {
+                  this.state.API.API_sendIceCandidate(this.state.currentVoiceGroup.id, event.candidate);
+                }
+            });
+
+            //Set data
+            console.log("creating new pc for offer:");
             console.log(voiceOffer);
-            this.pc.setRemoteDescription(new RTCSessionDescription(voiceOffer));
+            conn.setRemoteDescription(new RTCSessionDescription(voiceOffer.offer));
             const answer = await this.pc.createAnswer();
-            await this.pc.setLocalDescription(answer);
-            this.API_sendVoiceAnswer(this.mainClass.state.currentVoiceGroup.id, answer);
+            await conn.setLocalDescription(answer);
+
+            //Set streams
+            this.localStream.getTracks().forEach(track => conn.addTrack(track, this.localStream));
+            var remoteStream = new MediaStream(conn.getReceivers().map(receiver => receiver.track));
+            var audioElement = document.createElement("audio");
+            audioElement.id = "remoteAudio-" + voiceOffer.author.id;
+            audioElement.srcObject = remoteStream;
+            audioElement.play();
+
+            //Add to list
+            this.pc.push(conn);
+
+            //Send answer to the sender to create a new PC between local and him
+            this.API_sendVoiceAnswer(this.mainClass.state.currentVoiceGroup.id, voiceOffer.author.id, answer);
         });
         socket.on('receiveVoiceAnswer', async(voiceAnswerData) => {
             var voiceAnswer = JSON.parse(voiceAnswerData);
-            console.log("received answer: ");
+            
+            //Create new PC
+            const config = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]}
+            var conn = new wrtc.RTCPeerConnection(config)
+            conn.onconnectionstatechange = function(e) {
+                switch(conn.connectionState) {
+                    case "connected":
+                        console.log("> WebRTC connected!")
+                        break;
+
+                    case "closed":
+                        console.log("> WebRTC closed-")
+                        break;
+                }
+            }
+            conn.addEventListener('icecandidate', event => {
+                if (event.candidate) {
+                  this.state.API.API_sendIceCandidate(this.state.currentVoiceGroup.id, event.candidate);
+                }
+            });
+
+            //Set data
+            console.log("creating new pc for answer:");
             console.log(voiceAnswer);
-            const remoteDesc = new RTCSessionDescription(voiceAnswer);
-            await this.pc.setRemoteDescription(remoteDesc);
+            conn.setRemoteDescription(new RTCSessionDescription(voiceAnswer.answer));
+            const answer = await this.pc.createAnswer();
+            await conn.setLocalDescription(answer);
+
+            //Set streams
+            this.localStream.getTracks().forEach(track => conn.addTrack(track, this.localStream));
+            var remoteStream = new MediaStream(conn.getReceivers().map(receiver => receiver.track));
+            var audioElement = document.createElement("audio");
+            audioElement.id = "remoteAudio-" + voiceAnswer.author.id;
+            audioElement.srcObject = remoteStream;
+            audioElement.play();
+
+            //Add to list
+            this.pc.push(conn);
         });
         socket.on('receiveIceCandidate', async(iceCandidateData) => {
             var iceCandidate = JSON.parse(iceCandidateData);
@@ -226,24 +297,13 @@ export default class API {
         //Setups the WebRTC Client
         const wrtc = require('electron-webrtc')()
         wrtc.on('error', function (err) { console.log(err) })
-
-        const config = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]}
-        var pc = new wrtc.RTCPeerConnection(config)
-        pc.onconnectionstatechange = function(event) {
-            switch(pc.connectionState) {
-                case "connected":
-                    console.log("> WebRTC connected!")
-                    break;
-
-                case "closed":
-                    console.log("> WebRTC closed-")
-                    break;
-            }
-        }
+        var stream = await window.navigator.mediaDevices.getUserMedia({
+            audio: true
+        });
 
         this.socket = socket;
         this.wrtc = wrtc;
-        this.pc = pc;
+        this.localStream = stream;
     }
     
     //#region Fetching
@@ -786,9 +846,10 @@ export default class API {
         }
     }
 
-    async API_sendVoiceAnswer(channelID, answer) {
+    async API_sendVoiceAnswer(channelID, targetID, answer) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/sendVoiceAnswer', {
             channel: { id: channelID },
+            target: { id: targetID },
             answer: answer
         }, { withCredentials: true });
 

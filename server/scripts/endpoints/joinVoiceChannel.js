@@ -16,6 +16,7 @@ class Endpoint {
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
         var channel = await this.app.db.db_fetch.fetchChannel(this.app.db, connection.channel.id);
+        connection.author = { id: user.id }
 
         if(channel === undefined) {
             res.send(JSON.stringify({ status: -1 }))
@@ -46,7 +47,7 @@ class Endpoint {
             this.app.epFunc.emitToUser(id, "updateVoiceGroup", voiceGroup)
         });
         voiceGroup.users.forEach(id => {
-            this.app.epFunc.emitToUser(id, "receiveVoiceOffer", connection.offer)
+            this.app.epFunc.emitToUser(id, "receiveVoiceOffer", connection)
         });
     }
 }

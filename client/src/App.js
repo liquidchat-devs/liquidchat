@@ -91,33 +91,11 @@ class App extends React.Component {
     switch(channel.type) {
       case 1:
         this.state.API.API_joinVoiceChannel(channel)
-        this.setupCall();
         break;
     }
 
     let chat = document.getElementById('chat-container');
     if(chat !== null) { chat.scrollTop = chat.scrollHeight; }
-  }
-
-  async setupCall() {
-    //Setups a testing MediaStream
-    var localStream = await window.navigator.mediaDevices.getUserMedia({
-      audio: true
-    });
-    
-    localStream.getTracks().forEach(track => this.state.API.pc.addTrack(track, localStream));
-    document.getElementById("localAudio").srcObject = localStream;
-    document.getElementById("localAudio").play();
-
-    var remoteStream = new MediaStream(this.state.API.pc.getReceivers().map(receiver => receiver.track));
-    document.getElementById("remoteAudio").srcObject = remoteStream;
-    document.getElementById("remoteAudio").play();
-
-    this.state.pc.addEventListener('icecandidate', event => {
-      if (event.candidate) {
-        this.state.API.API_sendIceCandidate(this.state.currentVoiceGroup.id ,event.candidate);
-      }
-    });
   }
 
   switchFormState = () => {
