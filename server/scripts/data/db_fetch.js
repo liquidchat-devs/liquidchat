@@ -135,6 +135,25 @@ module.exports = {
         return this.formatEmote(result[0][0])
     },
 
+    async fetchDefaultEmotes(db) {
+        if(db.DEBUG) {
+            console.log(" - [db] Loading DefaultEmotes from the database...");
+        }
+
+        var query0 = "SELECT * FROM emotes WHERE type=2";
+        var result = await db.sqlConn.promise().query(query0);
+        if(result.length < 1 || result[0].length < 1) {
+            return [];
+        }
+
+        var res = result[0]
+        res.forEach(_res => {
+            _res = this.formatEmote(_res)
+        });
+    
+        return res
+    },
+
     async fetchFriendRequestByTarget(db, id) {
         if(db.DEBUG) {
             console.log(" - [db] Loading FriendRequest(target: " + id + ") from the database..."); 

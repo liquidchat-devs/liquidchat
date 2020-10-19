@@ -86,6 +86,28 @@ class Endpoint {
                     res.send(JSON.stringify(emote));
                 }.bind(this));
                 break;
+
+            case "2":
+                form.uploadDir = this.app.filesStorage;
+                form.keepExtensions = true;
+        
+                var fileName = req.query.fileName;
+                var fileID = this.app.crypto.randomBytes(16).toString("hex");
+                var fileID2 = fileID + (fileName.substring(fileName.lastIndexOf(".")))
+                console.log("> received emote - " + fileName)
+            
+                form.parse(req, async function(err, fields, files) {
+                    this.app.fs.rename(files.fileUploaded.path, this.app.filesStorage + fileID2, function(err) {
+                        if (err) { throw err; }
+                    });
+
+                    emote.file = fileID2;
+
+                    await this.app.db.db_add.addEmote(this.app.db, emote);
+
+                    res.send(JSON.stringify(emote));
+                }.bind(this));
+                break;
         }
     }
 }
