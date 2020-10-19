@@ -870,7 +870,7 @@ code {
 }
 
 .emoteSelector {
-  height: 190px;
+  height: 222px;
   width: calc(100% - 220px);
   background-color: white;
   z-index: 10;
@@ -879,6 +879,7 @@ code {
   background-color: var(--color4);
   border-radius: 10px;
   padding-top: 10px;
+  overflow-y: scroll;
 }
 
 .emoteItemWrapper {

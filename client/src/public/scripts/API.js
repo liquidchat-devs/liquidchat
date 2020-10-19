@@ -411,24 +411,20 @@ export default class API {
     }
 
     async API_fetchDefaultEmotes() {
-        if(this.mainClass.state.emotes.has(id)) {
-          return this.mainClass.state.emotes.get(id)
-        } else {
-            //Fetch emote
-            const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchDefaultEmotes', { withCredentials: true });
-            var defaultEmotes = reply.data;
+        //Fetch emotes
+        const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchDefaultEmotes', { withCredentials: true });
+        var defaultEmotes = reply.data;
+    
+        //Cache emotes
+        if(defaultEmotes.status === undefined) {
             defaultEmotes = new Map(defaultEmotes.map(obj => [obj.id, obj]))
-        
-            //Cache emote
-            if(emote.status === undefined) {
-                var newEmotes = new Map(...this.mainClass.state.emotes, ...defaultEmotes);
-                this.mainClass.setState({
-                    emotes: newEmotes
-                });
-            }
-
-            return emote;
+            var newEmotes = new Map([...this.mainClass.state.emotes, ...defaultEmotes]);
+            this.mainClass.setState({
+                emotes: newEmotes
+            });
         }
+
+        return defaultEmotes;
     }
     //#endregion
 

@@ -49,10 +49,10 @@ export default class Send extends React.Component {
 
     let a0 = message.lastIndexOf(":");
     let a = message.substring(a0 > -1 ? a0 + 1 : message.length)
-    let possibleEmotes = Array.from(this.props.emotes.values()).filter(e => { return (e.author.id === this.props.session.userID || (e.server !== undefined && this.props.isInServer(e.server.id))) && a.length > 0 && e.name.startsWith(a); })
+    let possibleEmotes = Array.from(this.props.emotes.values()).filter(e => { return (e.author.id === this.props.session.userID || (e.server !== undefined && this.props.isInServer(e.server.id))) && a.length > 0 && e.name.startsWith(a); }).sort((a, b) => { return a.name.length - b.name.length; }).slice(0, 4)
     let b0 = message.lastIndexOf("@");
     let b = message.substring(b0 > -1 ? b0 + 1 : message.length)
-    let possibleMentions = members.filter(e => { return b.length > 0 && e.username.startsWith(b); })
+    let possibleMentions = members.filter(e => { return b.length > 0 && e.username.startsWith(b); }).sort((a, b) => { return a.username.length - b.username.length; }).slice(0, 4)
 
     this.setState({
       message: message,
@@ -112,7 +112,7 @@ export default class Send extends React.Component {
           </div>
           <div className="flex">
             <div className="tooltipColor text5 marginright3">
-              from {server !== undefined ? server.name : "Personal Emotes"}
+              from {server !== undefined ? server.name : (emote.type === 1 ? "Personal Emotes" : "Default Emotes")}
             </div>
           </div>
         </div>
@@ -138,7 +138,7 @@ export default class Send extends React.Component {
     })
 
     return (
-      <div className="marginleft2 margintop1" style={{ marginTop: this.state.currentEmotes.length > 0 || this.state.currentMentions.length > 0 ? -200 : 10 }}>
+      <div className="marginleft2 margintop1" style={{ marginTop: this.state.currentEmotes.length > 0 || this.state.currentMentions.length > 0 ? -232 : 10 }}>
         <div className="emoteSelector" style={{ display: this.state.currentEmotes.length > 0 || this.state.currentMentions.length > 0 ? "block" : "none" }}>
           {emoteList}
           {mentionList}
