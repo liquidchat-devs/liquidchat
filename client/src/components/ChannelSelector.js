@@ -137,7 +137,7 @@ export default class ChannelSelector extends React.Component {
                       const user = this.props.getUser(userID)
           
                       return (
-                        <div className="voiceUserEntry aligny">
+                        <div key={i} className="voiceUserEntry aligny">
                           <img alt="" className="avatar marginleft1" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
                           <div className="white headerColor marginleft2">
                             {user.username}

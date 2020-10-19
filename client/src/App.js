@@ -362,8 +362,6 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <audio id="localAudio"/>
-        <audio id="remoteAudio"/>
         {
           this.state.isFileDraggingOver === true && this.isInChannel() ?
           <div className="absolutepos overlay" onDragLeave={this.onFileLeave} onDrop={this.onFileDrop}>
