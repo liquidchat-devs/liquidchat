@@ -39,7 +39,7 @@ export default class API {
                 window.setIcon(true);
             } else {
                 let chat = document.getElementById('chat-container');
-                if(chat !== undefined) { chat.scrollTop = chat.scrollHeight; }
+                if(chat !== null) { chat.scrollTop = chat.scrollHeight; }
             }
 
             this.API_fetchEmotesForMessages([ message ])

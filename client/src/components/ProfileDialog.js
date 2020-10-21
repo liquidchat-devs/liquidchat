@@ -2,24 +2,33 @@ import React from 'react';
 import * as dateFormatter from './../public/scripts/DateFormatter';
 
 export default class ProfileDialog extends React.Component {
+  state = {
+    focusedSection: 0
+  }
+
   render() {
-    let badgeList;
-    this.props.selectedUser.badges.forEach(badge => {
+    let badgeList = this.props.selectedUser.badges.map((badge, i) => {
       switch(badge) {
-        case 0:
-          badgeList += <div className="tooltipWrapper pointer marginright3" style={{ width: 24, height: 32 }}>
-            <img style={{ width: 24, height: 32 }} src={this.props.fileEndpoint + "/badge_staff.png"}/>
+        case "0":
+          return <div className="tooltipWrapper pointer marginright3" style={{ width: 22, height: 32 }}>
+            <img style={{ width: 22, height: 30, paddingTop: 2 }} src={this.props.fileEndpoint + "/badge_staff.png"}/>
             <span className="tooltipText tooltipText3">Staff</span>
           </div>
-          break;
 
-        case 1:
-          badgeList += <div className="tooltipWrapper pointer marginright3" style={{ width: 24, height: 32 }}>
-            <img style={{ width: 24, height: 30, paddingTop: 2 }} src={this.props.fileEndpoint + "/badge_verified.png"}/>
+        case "1":
+          return <div className="tooltipWrapper pointer marginright3" style={{ width: 22, height: 32 }}>
+            <img style={{ width: 22, height: 28, paddingTop: 4 }} src={this.props.fileEndpoint + "/badge_verified.png"}/>
             <span className="tooltipText tooltipText3">Verified</span>
           </div>
-          break;
+
+        case "2":
+          return <div className="tooltipWrapper pointer marginright3" style={{ width: 22, height: 32 }}>
+            <img style={{ width: 22, height: 28, paddingTop: 4 }} src={this.props.fileEndpoint + "/badge_developer.png"}/>
+            <span className="tooltipText tooltipText3">Developer</span>
+          </div>
       }
+
+      return null;
     })
 
     return (
@@ -47,6 +56,11 @@ export default class ProfileDialog extends React.Component {
               <div className="flex marginleft3 paddingtop3">
                 {badgeList}
               </div>
+            </div>
+            <div className="section2 chatColor">
+              <div className={this.state.focusedSection === 0 ? "button profileButton buttonFocused" : "button profileButton"} onClick={(e) => { this.setState({ focusedSection: 0 }); }}>User Info</div>
+              <div className={this.state.focusedSection === 1 ? "button profileButton buttonFocused" : "button profileButton"} onClick={(e) => { this.setState({ focusedSection: 1 }); }}>Mutual Friends</div>
+              <div className={this.state.focusedSection === 2 ? "button profileButton buttonFocused" : "button profileButton"} onClick={(e) => { this.setState({ focusedSection: 2 }); }}>Mutual Servers</div>
             </div>
         </div>
       </div>

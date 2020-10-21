@@ -117,7 +117,7 @@ code {
 
 .link {
   text-decoration: underline;
-  color: #6767ff;
+  color: var(--color13);
   cursor: pointer;
 }
 
@@ -337,6 +337,7 @@ code {
   --color10: #ffc061;
   --color11: #63307d;
   --color12: #2f2e2e;
+  --color13: #6767ff;
 }
 
 .white {
@@ -641,10 +642,16 @@ code {
 }
 
 .section {
-  height: 40%;
+  height: 35%;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   padding: 5px;
+}
+
+.section2 {
+  margin-top: 1px;
+  height: 48px;
+  display: flex;
 }
 
 .channelHeader {
@@ -689,18 +696,29 @@ code {
 
 .button {
   position: absolute;
-  border: 1px solid #6767ff;
+  border: 1px solid var(--color13);
   justify-content: center;
   display: flex;
   align-items: center;
   cursor: pointer;
-  color: #6767ff;
+  color: var(--color13);
 }
 
 .inviteButton {
   margin-right: 40px;
   height: 30px;
   width: 70px;
+}
+
+.profileButton {
+  width: 160px;
+  height: 48px;
+  border: none;
+  position: relative;
+}
+
+.buttonFocused {
+  border-bottom: 1px solid var(--color13);
 }
 
 .accountSettings {
@@ -764,7 +782,7 @@ code {
 
 .progress {
   height: 100%;
-  background-color: #6767ff;
+  background-color: var(--color13);
   border-radius: 10px;
 }
 
@@ -997,7 +1015,7 @@ code {
 }
 
 .mention {
-  color: #6767ff;
+  color: var(--color13);
   cursor: pointer;
 }
 
