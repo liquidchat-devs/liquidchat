@@ -46,9 +46,6 @@ class Endpoint {
         voiceGroup.users.forEach(id => {
             this.app.epFunc.emitToUser(id, "updateVoiceGroup", voiceGroup)
         });
-        voiceGroup.users.forEach(id => {
-            this.app.epFunc.emitToUser(id, "receiveVoiceOffer", connection)
-        });
     }
 }
 

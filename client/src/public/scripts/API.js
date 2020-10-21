@@ -246,17 +246,9 @@ export default class API {
         socket.on('receiveVoiceAnswer', async(voiceAnswerData) => {
             var voiceAnswer = JSON.parse(voiceAnswerData);
             
-            //Create new PC
-            const config = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]}
-            var conn = new wrtc.RTCPeerConnection(config)
-            conn.onconnectionstatechange = function(e) {
-                console.log(conn.connectionState);
-            }
-            conn.addEventListener('icecandidate', event => {
-                if (event.candidate) {
-                  this.state.API.API_sendIceCandidate(this.state.currentVoiceGroup.id, event.candidate);
-                }
-            });
+            //Get previously created pc with the same offer
+            var conn = this.pc.filter(pc => { return pc.localDescription.spd === voiceAnswer.offer.spd; })[0]
+            if(conn === undefined) { console.log("couldn't find any PC for:"); console.log(voiceAnswer); return; }
 
             //Set data
             console.log("creating new pc for answer:");
@@ -837,46 +829,57 @@ export default class API {
         }
     }
 
-    async API_joinVoiceChannel(channel) {
-        //Create new PC
-        const config = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]}
-        var conn = new this.wrtc.RTCPeerConnection(config)
-        conn.onconnectionstatechange = function(e) {
-            switch(conn.connectionState) {
-                case "connected":
-                    console.log("> WebRTC connected!")
-                    break;
-
-                case "closed":
-                    console.log("> WebRTC closed-")
-                    break;
-            }
-        }
-        conn.addEventListener('icecandidate', event => {
-            if (event.candidate) {
-              this.API_sendIceCandidate(this.mainClass.state.currentVoiceGroup.id, event.candidate);
-            }
-        });
-
-        const offer = await conn.createOffer({
-            'offerToReceiveAudio': true,
-            'offerToReceiveVideo': true    
-        });
-        await conn.setLocalDescription(offer);
-        console.log("sending an offer to everyone:");
-        console.log(offer);
-
+    async API_joinVoiceChannel(channel, createOffers = true) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/joinVoiceChannel', {
             channel: {
                 id: channel.id
-            },
-            offer: offer
+            }
         }, { withCredentials: true });
 
         if(reply.data.status !== undefined) {
             return reply.data.status;
         } else {
-            return reply.data;
+            var voiceGroup = reply.data;
+            if(createOffers !== false) {
+                voiceGroup.users.forEach(async(id) => {
+                    //Create new PC
+                    const config = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]}
+                    var conn = new this.wrtc.RTCPeerConnection(config)
+                    conn.onconnectionstatechange = function(e) {
+                        switch(conn.connectionState) {
+                            case "connected":
+                                console.log("> WebRTC connected!")
+                                break;
+
+                            case "closed":
+                                console.log("> WebRTC closed-")
+                                break;
+                        }
+                    }
+                    conn.addEventListener('icecandidate', event => {
+                        if (event.candidate) {
+                        this.API_sendIceCandidate(this.mainClass.state.currentVoiceGroup.id, event.candidate);
+                        }
+                    });
+
+                    //Set data
+                    const offer = await conn.createOffer({
+                        'offerToReceiveAudio': true,
+                        'offerToReceiveVideo': true    
+                    });
+                    await conn.setLocalDescription(offer);
+                    console.log("sending an offer to " + id);
+                    console.log(offer);
+
+                    //Add to list
+                    this.pc.push(conn);
+
+                    //Send an offer to a specified target, waiting for answer
+                    this.API_sendVoiceOffer(channel.id, id, offer);
+                });
+            }
+
+            return voiceGroup;
         }
     }
 
@@ -886,6 +889,20 @@ export default class API {
             target: { id: targetID },
             offer: offer,
             answer: answer
+        }, { withCredentials: true });
+
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return 1;
+        }
+    }
+
+    async API_sendVoiceOffer(channelID, targetID, offer) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/sendVoíceOffer', {
+            channel: { id: channelID },
+            target: { id: targetID },
+            offer: offer
         }, { withCredentials: true });
 
         if(reply.data.status !== undefined) {
@@ -918,6 +935,7 @@ export default class API {
         if(reply.data.status !== undefined) {
             return reply.data.status;
         } else {
+            this.mainClass.setState({ currentVoiceGroup: -1 });
             return 1;
         }
     }

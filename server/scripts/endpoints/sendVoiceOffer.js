@@ -4,15 +4,15 @@ class Endpoint {
     }
 
     handle() {
-        this.app.post('/sendVoiceAnswer', (async(req, res) => {
+        this.app.post('/sendVoiceOffer', (async(req, res) => {
             if(!this.app.isSessionValid(this.app, req, res)) { return; }
 
-            await this.sendVoiceAnswer(req, res, req.body)
-            console.log("> received voice answer - " + req.body.channel.id + "/" + connection.target.id);
+            await this.sendVoiceOffer(req, res, req.body)
+            console.log("> received voice offer - " + req.body.channel.id + "/" + connection.target.id);
         }).bind(this));
     }
 
-    async sendVoiceAnswer(req, res, connection) {
+    async sendVoiceOffer(req, res, connection) {
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
         var channel = await this.app.db.db_fetch.fetchChannel(this.app.db, connection.channel.id);
@@ -39,7 +39,7 @@ class Endpoint {
 
             voiceGroup.users.forEach(id => {
                 if(connection.target.id === id) {
-                    this.app.epFunc.emitToUser(id, "receiveVoiceAnswer", connection)
+                    this.app.epFunc.emitToUser(id, "receiveVoiceOffer", connection)
                 }
             });
         }
