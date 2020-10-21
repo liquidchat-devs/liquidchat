@@ -31,7 +31,7 @@ export default class ChannelOptionsDialog extends React.Component {
                 <p className="white text1">> Edit Channel</p>
               </div>
               <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleDelete(e); }}>
-                <p className="white text1">> Delete Channel</p>
+                <p className="declineColor text1">> Delete Channel</p>
               </div>
               {channel.type === 2 ?
               <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.switchDialogState(12); }}>

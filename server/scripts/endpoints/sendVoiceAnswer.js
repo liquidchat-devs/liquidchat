@@ -8,7 +8,7 @@ class Endpoint {
             if(!this.app.isSessionValid(this.app, req, res)) { return; }
 
             await this.sendVoiceAnswer(req, res, req.body)
-            console.log("> received voice answer - " + req.body.channel.id + "/" + connection.target.id);
+            console.log("> received voice answer - " + req.body.channel.id + "/" + req.body.target.id);
         }).bind(this));
     }
 

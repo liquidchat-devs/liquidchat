@@ -208,12 +208,30 @@ export default class API {
             //Create new PC
             const config = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]}
             var conn = new wrtc.RTCPeerConnection(config)
-            conn.onconnectionstatechange = function(e) {
-                console.log(conn.connectionState);
-            }
+
+            //Set streams
+            var audioElement = document.createElement("audio");
+            audioElement.id = "remoteAudio-" + voiceOffer.author.id;
+            audioElement.play();
+
+            //Set events
             conn.addEventListener('icecandidate', event => {
                 if (event.candidate) {
                   this.API_sendIceCandidate(this.mainClass.state.currentVoiceGroup.id, event.candidate);
+                }
+            });
+            conn.addEventListener('track', async (event) => {
+                console.log("adding remote stream...");
+                const remoteStream = MediaStream();
+                remoteStream.addTrack(event.track, remoteStream);
+                audioElement.srcObject = remoteStream;
+            });
+            conn.addEventListener("connectionstatechange", event =>{
+                if(conn.connectionState === "connected") {
+                    this.localStream.getTracks().forEach(track => {
+                        console.log("adding local stream...");
+                        conn.addTrack(track, this.localStream);
+                    });
                 }
             });
 
@@ -223,17 +241,6 @@ export default class API {
             await conn.setRemoteDescription(new RTCSessionDescription(voiceOffer.offer));
             const answer = await conn.createAnswer();
             await conn.setLocalDescription(answer);
-
-            //Set streams
-            var audioElement = document.createElement("audio");
-            audioElement.id = "remoteAudio-" + voiceOffer.author.id;
-            audioElement.play();
-
-            conn.addStream(this.localStream);
-            conn.onaddstream = function (e) {
-                console.log("adding new stream...");
-                audioElement.srcObject = e.stream;
-            }
 
             //Add to list
             this.pc.push(conn);
@@ -251,29 +258,15 @@ export default class API {
             if(conn === undefined) { console.log("couldn't find any PC for:"); console.log(voiceAnswer); return; }
 
             //Set data
-            console.log("creating new pc for answer:");
+            console.log("assigning answer to existing pc:");
             console.log(voiceAnswer);
             await conn.setLocalDescription(new RTCSessionDescription(voiceAnswer.offer));
             await conn.setRemoteDescription(new RTCSessionDescription(voiceAnswer.answer));
-
-            //Set streams
-            var audioElement = document.createElement("audio");
-            audioElement.id = "remoteAudio-" + voiceAnswer.author.id;
-            audioElement.play();
-
-            conn.addStream(this.localStream);
-            conn.onaddstream = function (e) { 
-                console.log("adding new stream...");
-                audioElement.srcObject = e.stream;
-            }
-
-            //Add to list
-            this.pc.push(conn);
         });
         socket.on('receiveIceCandidate', async(iceCandidateData) => {
             var iceCandidate = JSON.parse(iceCandidateData);
-            console.log("received candidate: ");
-            console.log(iceCandidate);
+            //console.log("received candidate: ");
+            //console.log(iceCandidate);
             await this.pc.forEach(pc => { pc.addIceCandidate(iceCandidate); });
         });
         
@@ -288,6 +281,7 @@ export default class API {
         this.wrtc = wrtc;
         this.localStream = stream;
         window.pc = this.pc;
+        window.localStream = this.localStream;
     }
     
     //#region Fetching
@@ -845,20 +839,30 @@ export default class API {
                     //Create new PC
                     const config = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]}
                     var conn = new this.wrtc.RTCPeerConnection(config)
-                    conn.onconnectionstatechange = function(e) {
-                        switch(conn.connectionState) {
-                            case "connected":
-                                console.log("> WebRTC connected!")
-                                break;
 
-                            case "closed":
-                                console.log("> WebRTC closed-")
-                                break;
-                        }
-                    }
+                    //Set streams
+                    var audioElement = document.createElement("audio");
+                    audioElement.id = "remoteAudio-" + id;
+                    audioElement.play();
+
+                    //Set events
                     conn.addEventListener('icecandidate', event => {
                         if (event.candidate) {
-                        this.API_sendIceCandidate(this.mainClass.state.currentVoiceGroup.id, event.candidate);
+                            this.API_sendIceCandidate(this.mainClass.state.currentVoiceGroup.id, event.candidate);
+                        }
+                    });
+                    conn.addEventListener('track', async (event) => {
+                        console.log("adding remote stream...");
+                        const remoteStream = MediaStream();
+                        remoteStream.addTrack(event.track, remoteStream);
+                        audioElement.srcObject = remoteStream;
+                    });
+                    conn.addEventListener("connectionstatechange", event =>{
+                        if(conn.connectionState === "connected") {
+                            this.localStream.getTracks().forEach(track => {
+                                console.log("adding local stream...");
+                                conn.addTrack(track, this.localStream);
+                            });
                         }
                     });
 
@@ -899,7 +903,7 @@ export default class API {
     }
 
     async API_sendVoiceOffer(channelID, targetID, offer) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/sendVoíceOffer', {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/sendVoiceOffer', {
             channel: { id: channelID },
             target: { id: targetID },
             offer: offer

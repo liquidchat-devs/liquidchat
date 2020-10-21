@@ -34,7 +34,7 @@ export default class MessageOptionsDialog extends React.Component {
           {
             this.props.selectedMessage.author.id === this.props.session.userID ?
             <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleDelete(e); }}>
-              <p className="white text1">> Delete</p>
+              <p className="declineColor text1">> Delete</p>
             </div> :
             ""
           }

@@ -51,6 +51,10 @@ code {
   cursor: default;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .opacity0 {
   opacity: 0
 }
@@ -934,6 +938,11 @@ code {
 .tooltipText2 {
   left: -47px;
   bottom: 70px;
+}
+
+.tooltipText3 {
+  left: -47px;
+  bottom: 80px;
 }
 
 .tooltipWrapper .tooltipText::after {

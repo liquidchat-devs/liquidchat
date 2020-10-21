@@ -31,7 +31,7 @@ export default class ServerOptionsDialog extends React.Component {
                 <p className="white text1">> Edit Server</p>
               </div>
               <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleDelete(e); }}>
-                <p className="white text1">> Delete Server</p>
+                <p className="declineColor text1">> Delete Server</p>
               </div>
               <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.switchDialogState(12); }}>
                 <p className="white text1">> Invite Friends</p>
