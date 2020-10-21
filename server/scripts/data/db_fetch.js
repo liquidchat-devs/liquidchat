@@ -217,6 +217,7 @@ module.exports = {
         user.dmChannels = user.dmChannels.split(",").filter(a => a.length > 0)
         user.servers = user.servers.split(",").filter(a => a.length > 0)
         user.emotes = user.emotes.split(",").filter(a => a.length > 0)
+        user.badges = user.badges.split(",").filter(a => a.length > 0)
 
         if(containPassword !== true) {
             delete user.password

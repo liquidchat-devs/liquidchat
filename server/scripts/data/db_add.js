@@ -16,8 +16,8 @@ module.exports = {
             console.log(" - [db] Adding User(id: " + user.id + ") into the database..."); 
         }
 
-        var query = "INSERT IGNORE INTO users (id, username, createdAt, avatar, password, friends, dmChannels, servers, status) VALUES" + db.contructQuestionMarks(9);
-        db.sqlConn.promise().execute(query, [ user.id, db.escapeString(user.username), user.createdAt, user.avatar, user.password, user.friends.join(","), user.dmChannels.join(","), user.servers.join(","), user.status ])
+        var query = "INSERT IGNORE INTO users (id, username, createdAt, avatar, password, friends, dmChannels, servers, status, badges) VALUES" + db.contructQuestionMarks(9);
+        db.sqlConn.promise().execute(query, [ user.id, db.escapeString(user.username), user.createdAt, user.avatar, user.password, user.friends.join(","), user.dmChannels.join(","), user.servers.join(","), user.status, user.badges.join(",") ])
         .then((result, err) => {
             if(err) { throw err; }
         });

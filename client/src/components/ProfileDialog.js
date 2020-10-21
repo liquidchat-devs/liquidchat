@@ -3,6 +3,25 @@ import * as dateFormatter from './../public/scripts/DateFormatter';
 
 export default class ProfileDialog extends React.Component {
   render() {
+    let badgeList;
+    this.props.selectedUser.badges.forEach(badge => {
+      switch(badge) {
+        case 0:
+          badgeList += <div className="tooltipWrapper pointer marginright3" style={{ width: 24, height: 32 }}>
+            <img style={{ width: 24, height: 32 }} src={this.props.fileEndpoint + "/badge_staff.png"}/>
+            <span className="tooltipText tooltipText3">Staff</span>
+          </div>
+          break;
+
+        case 1:
+          badgeList += <div className="tooltipWrapper pointer marginright3" style={{ width: 24, height: 32 }}>
+            <img style={{ width: 24, height: 30, paddingTop: 2 }} src={this.props.fileEndpoint + "/badge_verified.png"}/>
+            <span className="tooltipText tooltipText3">Verified</span>
+          </div>
+          break;
+      }
+    })
+
     return (
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
@@ -24,6 +43,9 @@ export default class ProfileDialog extends React.Component {
                     <p className="white text5 marginleft1 margintop0 marginbot0">{dateFormatter.formatDuration(this.props.selectedUser.createdAt, Date.now())} ago</p>
                   </div>
                 </div>
+              </div>
+              <div className="flex marginleft3 paddingtop3">
+                {badgeList}
               </div>
             </div>
         </div>

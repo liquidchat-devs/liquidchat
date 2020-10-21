@@ -17,8 +17,8 @@ module.exports = {
             console.log(" - [db] Editing User(id: " + user.id + ") in the database..."); 
         }
 
-        var query0 = "username=?, avatar=?, friends=?, dmChannels=?, servers=?, status=?, emotes=?" + (user.email == null ? "" : ", email=?") + (user.password == null ? "" : ", password=?")
-        var query1 = [ db.escapeString(user.username), user.avatar, user.friends.join(","), user.dmChannels.join(","), user.servers.join(","), user.status, user.emotes.join(",") ]
+        var query0 = "username=?, avatar=?, friends=?, dmChannels=?, servers=?, status=?, badges=?, emotes=?" + (user.email == null ? "" : ", email=?") + (user.password == null ? "" : ", password=?")
+        var query1 = [ db.escapeString(user.username), user.avatar, user.friends.join(","), user.dmChannels.join(","), user.servers.join(","), user.status, user.badges.join(","), user.emotes.join(",") ]
         if(user.email != null) { query1.push(db.escapeString(user.email)); }
         if(user.password != null) { query1.push(user.password); }
 
