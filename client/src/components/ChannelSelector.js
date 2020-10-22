@@ -33,7 +33,7 @@ export default class ChannelSelector extends React.Component {
       return (
         <div key={i} className="friendRequestEntry selectedColor" style={{ height: author.id === this.props.session.userID ? 117 : 81}}>
           <div className="flex">
-            <img alt="" className="avatar marginleft2 margintop1" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
+            <img alt="" className="avatar marginleft2 margintop1" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
             <div className="white marginleft2 margintop1b">
               {user.username}
             </div>
@@ -71,7 +71,7 @@ export default class ChannelSelector extends React.Component {
       }
 
       return (
-        <div key={i} className="friendEntry selectedColor" style={{ marginBottom: (i === 0 ? 2 : 1) }} onContextMenu={(e) => { this.props.setSelectedUser(friend, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
+        <div key={i} className="friendEntry selectedColor" style={{ marginBottom: (i === 0 ? 2 : 1) }} onContextMenu={(e) => { this.props.setSelectedUser(friend.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="aligny fullheight">
             <img alt="" className="avatar marginleft2" src={this.props.fileEndpoint + "/" + friend.avatar}/>
             <div className="white marginleft2">
@@ -138,7 +138,7 @@ export default class ChannelSelector extends React.Component {
           
                       return (
                         <div key={i} className="voiceUserEntry aligny">
-                          <img alt="" className="avatar marginleft1" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
+                          <img alt="" className="avatar marginleft1" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
                           <div className="white headerColor marginleft2">
                             {user.username}
                           </div>

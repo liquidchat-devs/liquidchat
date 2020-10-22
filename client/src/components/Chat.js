@@ -114,7 +114,7 @@ export default class Chat extends React.Component {
           const user = this.props.getUser(message.author.id)
 
           messageHTML = <div className="flex marginleft2 fullwidth">
-            <img alt="" className="avatar" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
+            <img alt="" className="avatar" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
             <div className="marginleft2 fullwidth">
               <div className="flex">
                 <div className="allignMiddle" style={{margin: 0, color: (user !== undefined && server !== undefined && server.author.id === user.id ? "yellow" : "red"), fontSize: 16}}>
@@ -177,7 +177,7 @@ export default class Chat extends React.Component {
       const user = this.props.getUser(memberID)
 
       return (
-        <div key={i} className="paddingtop2 paddingbot2 flex message hover" onContextMenu={(e) => { this.props.setSelectedUser(user, e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
+        <div key={i} className="paddingtop2 paddingbot2 flex message hover" onContextMenu={(e) => { this.props.setSelectedUser(user.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="flex marginleft2">
             <img alt="" className="avatar3" src={this.props.fileEndpoint + "/" + user.avatar}/>
             <div className="statusWrapper2">

@@ -29,7 +29,7 @@ export default class DialogManager extends React.Component {
         return <c.AccountOptionsDialog API={this.props.API} getUser={this.props.getUser} switchDialogState={this.props.switchDialogState} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session} copyID={this.copyID} setSelectedUser={this.props.setSelectedUser}/>
         
       case 5:
-        return <c.ProfileDialog const={this.props.const} API={this.props.API} fileEndpoint={this.props.fileEndpoint} switchDialogState={this.props.switchDialogState} session={this.props.session} selectedUser={this.props.selectedUser}/>
+        return <c.ProfileDialog setSelectedServer={this.props.setSelectedServer} setSelectedUser={this.props.setSelectedUser} getServer={this.props.getServer} getUser={this.props.getUser} const={this.props.const} API={this.props.API} fileEndpoint={this.props.fileEndpoint} switchDialogState={this.props.switchDialogState} session={this.props.session} selectedUser={this.props.selectedUser}/>
 
       case 6:
         return <c.ProfileOptionsDialog getChannel={this.props.getChannel} getServer={this.props.getServer} currentChannel={this.props.currentChannel} selectedServer={this.props.selectedServer} switchChannelTypes={this.props.switchChannelTypes} switchChannel={this.props.switchChannel} API={this.props.API} getUser={this.props.getUser} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedUser={this.props.selectedUser} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
@@ -50,7 +50,7 @@ export default class DialogManager extends React.Component {
         return <c.EditChannelDialog selectedChannel={this.props.selectedChannel} API={this.props.API} switchDialogState={this.props.switchDialogState} />
 
       case 12:
-        return <c.InviteFriendsDialog fileEndpoint={this.props.fileEndpoint} getChannel={this.props.getChannel} getServer={this.props.getServer} selectedServer={this.props.selectedServer} getUser={this.props.getUser} session={this.props.session} selectedChannel={this.props.selectedChannel} API={this.props.API} switchDialogState={this.props.switchDialogState} />
+        return <c.InviteFriendsDialog fileEndpoint={this.props.fileEndpoint} setBox={this.props.setBox} getChannel={this.props.getChannel} getServer={this.props.getServer} selectedServer={this.props.selectedServer} getUser={this.props.getUser} session={this.props.session} selectedChannel={this.props.selectedChannel} API={this.props.API} switchDialogState={this.props.switchDialogState} />
 
       case 13:
         return <c.SettingsDialog fileEndpoint={this.props.fileEndpoint} emotes={this.props.emotes} API={this.props.API} switchDialogState={this.props.switchDialogState} session={this.props.session} getUser={this.props.getUser}/>

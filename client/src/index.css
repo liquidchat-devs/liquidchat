@@ -658,6 +658,12 @@ code {
   display: flex;
 }
 
+.section3 {
+  height: calc(100% - 35% - 59px);
+  background-color: var(--color3);
+  padding: 7px;
+}
+
 .channelHeader {
   height: 35px;
 }
@@ -1044,4 +1050,18 @@ code {
 .badgeImage {
   width: 100%;
   height: 100%;
+}
+
+.mutual {
+  width: 100%;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+  border-radius: 10px;
+}
+
+.mutual:hover {
+  background-color: var(--color12);
+  cursor: pointer;
 }
