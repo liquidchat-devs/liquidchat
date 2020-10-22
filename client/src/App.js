@@ -67,7 +67,8 @@ class App extends React.Component {
     fileEndpoint: "https://nekonetwork.net:8081",
     
     //Utils
-    const: new Constants(this)
+    const: new Constants(this),
+    registeredHooks: false
   };
 
   setFirstChannel = (_e, _channelID) => {
@@ -222,29 +223,35 @@ class App extends React.Component {
 
   componentDidMount = () => {
     //Page dimensions hook
-    this.updateWindowDimensions();
-    window.addEventListener('resize', this.updateWindowDimensions);
-
-    //Keyboard hooks
-    document.onkeydown = function(evt) {
-      evt = evt || window.event;
-      if (evt.keyCode === 27) {
-        this.endEditingMessage();
-      }
-    }.bind(this);
-
-    //Notification hooks
-    document.onfocus = function(e) {
-      if(window.navigator.userAgent.includes("LiquidChat")) {
-        this.setState({
-          unreadMessages: new Map()
-        });
-
-        window.setIcon(false);
-      }
+    if(this.state.registeredHooks === false) {
+      this.updateWindowDimensions();
+      window.addEventListener("resize", () => {
+        this.updateWindowDimensions();
+      });
     }
 
-    //
+    //Keyboard hooks
+    if(this.state.registeredHooks === false) {
+      window.addEventListener("keydown", (evt) => {
+        evt = evt || window.event;
+        if (evt.keyCode === 27) { this.endEditingMessage(); }
+      });
+    }
+
+    //Notification hooks
+    if(this.state.registeredHooks === false) {
+      window.addEventListener("focus", () => {
+        if(window.navigator.userAgent.includes("LiquidChat")) {
+          this.setState({
+            unreadMessages: new Map()
+          });
+
+          window.setIcon(false);
+        }
+      });
+    }
+
+    //Drag hooks
     document.ondragstart = function() {
       return false;
     }
@@ -264,35 +271,41 @@ class App extends React.Component {
 
     //Setup menu bar
     if(window.navigator.userAgent.includes("LiquidChat")) {
-      const minimizeButton = document.getElementById("minimize-btn");
-      const maxUnmaxButton = document.getElementById("max-unmax-btn");
-      const closeButton = document.getElementById("close-btn");
-    
-      minimizeButton.addEventListener("click", e => {
-        window.minimizeWindow();
-      });
-    
-      maxUnmaxButton.addEventListener("click", e => {
-        const icon = maxUnmaxButton.querySelector("i.far");
-        window.maxUnmaxWindow();
-
-        if (window.isWindowMaximized()) {
-          icon.classList.remove("fa-square");
-          icon.classList.add("fa-clone");
-        } else {
-          icon.classList.add("fa-square");
-          icon.classList.remove("fa-clone");
-        }
-      });
-    
-      closeButton.addEventListener("click", e => {
-        window.closeWindow();
-      });
+      if(this.state.registeredHooks === true) {
+        const minimizeButton = document.getElementById("minimize-btn");
+        const maxUnmaxButton = document.getElementById("max-unmax-btn");
+        const closeButton = document.getElementById("close-btn");
       
-      document.getElementById("web-header").remove();
+        minimizeButton.addEventListener("click", e => {
+          window.minimizeWindow();
+        });
+      
+        maxUnmaxButton.addEventListener("click", e => {
+          const icon = maxUnmaxButton.querySelector("i.far");
+          window.maxUnmaxWindow();
+
+          if (window.isWindowMaximized()) {
+            icon.classList.remove("fa-square");
+            icon.classList.add("fa-clone");
+          } else {
+            icon.classList.add("fa-square");
+            icon.classList.remove("fa-clone");
+          }
+        });
+      
+        closeButton.addEventListener("click", e => {
+          window.closeWindow();
+        });
+        
+        document.getElementById("web-header").remove();
+      }
     } else {
       document.getElementById("app-header").remove();
     }
+
+    this.setState({
+      registeredHooks: true
+    });
   }
   
   componentWillUnmount() {
