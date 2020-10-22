@@ -67,6 +67,10 @@ code {
   display: flex;
 }
 
+.displaygrid {
+  display: inline-grid;
+}
+
 .alignmiddle {
   display: flex;
   align-items: center;

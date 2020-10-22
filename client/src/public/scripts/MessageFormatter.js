@@ -90,11 +90,13 @@ function toFormatLink(chat, message) {
         }
     }
 
+    if(imageResults.length > 0) { results.unshift(`<div class="displaygrid">`) }
     imageResults.forEach(link => {
-        results.push(`<div><span>
+        results.push(`
             <img alt="" class="message-image" src=${link}>
-        </span></div>`)
+        `)
     })
+    if(imageResults.length > 0) { results.push(`</div>`) }
 
     videoResults.forEach(link => {
         results.push(`<br/>
