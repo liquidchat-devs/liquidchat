@@ -6,19 +6,25 @@
 Open-source chat application similar to Discord-
 </p>
 
-![Build](https://travis-ci.org/LamkasDev/liquidchat.svg?branch=master)
-![Dependencies](https://david-dm.org/LamkasDev/liquidchat.svg)
-[![HitCount](http://hits.dwyl.com/LamkasDev/liquidchat.svg)](http://hits.dwyl.com/LamkasDev/liquidchat)
-
-<p align="center">
-💛 Official website: https://nekonetwork.net (need to get a domain, but you know i'm broke)™️  
-✔️ Releases: https://github.com/LamkasDev/liquidchat/releases  
+<p align="center" style="display :flex;">
+<img src="https://travis-ci.org/LamkasDev/liquidchat.svg?branch=master"/>
+<img src="https://david-dm.org/LamkasDev/liquidchat.svg"/>
+<img src="http://hits.dwyl.com/LamkasDev/liquidchat.svg"/>
 </p>
 
 <p align="center">
-📓 Documentation: https://nekonetwork.net/docs  
-🔥 API: https://github.com/LamkasDev/liquidchat.js  
-🔴 Found a bug or want to contribute?: [Open a pull request!](https://github.com/LamkasDev/liquidchat/pulls)
+💛 Official website: <a href="https://nekonetwork.net">https://nekonetwork.net</a>
+<br/>
+✔️ Releases: <a href="https://github.com/LamkasDev/liquidchat/releases  ">https://github.com/LamkasDev/liquidchat/releases</a>  
+</p>
+
+<p align="center">
+📓 Documentation: <a href="https://nekonetwork.net/docs">https://nekonetwork.net/docs</a>
+<br/>
+🔥 API: <a href="https://github.com/LamkasDev/liquidchat.js">https://github.com/LamkasDev/liquidchat.js</a>  
+<br/>
+🔴 Found a bug or want to contribute?:
+<a href="https://github.com/LamkasDev/liquidchat/pulls">[Open a pull request]</a>
 </p>
 
 
