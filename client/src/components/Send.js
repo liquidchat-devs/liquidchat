@@ -1,5 +1,4 @@
 import React from 'react';
-import { toFormatLink, toFormat } from '../public/scripts/MessageFormatter'
 
 export default class Send extends React.Component {
   state = {

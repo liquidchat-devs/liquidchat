@@ -58,8 +58,8 @@ export default class InviteFriendsDialog extends React.Component {
               </div>
               {
                 target.members.includes(friend.id) ?
-                  <a className="button inviteButton" style={{ textDecoration: "none", right: 0, color: "#b3b3b3", border: "1px solid #b3b3b3", cursor: "default" }}>Joined!</a>
-                : <a className="button inviteButton" style={{ textDecoration: "none", right: 0 }} onClick={(e) => { this.inviteUser(target.id, friend.id, type); e.preventDefault(); } }>Invite</a>
+                  <div className="button inviteButton" style={{ textDecoration: "none", right: 0, color: "#b3b3b3", border: "1px solid #b3b3b3", cursor: "default" }}>Joined!</div>
+                : <div className="button inviteButton" style={{ textDecoration: "none", right: 0 }} onClick={(e) => { this.inviteUser(target.id, friend.id, type); e.preventDefault(); } }>Invite</div>
               }
             </div>
           </div>

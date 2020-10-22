@@ -28,20 +28,20 @@ export default class ChannelOptionsDialog extends React.Component {
             channel.author.id === this.props.session.userID ?
             <div>
               <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.switchDialogState(11); }}>
-                <p className="white text1">> Edit Channel</p>
+                <p className="white text1">&gt; Edit Channel</p>
               </div>
               <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleDelete(e); }}>
-                <p className="declineColor text1">> Delete Channel</p>
+                <p className="declineColor text1">&gt; Delete Channel</p>
               </div>
               {channel.type === 2 ?
               <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.switchDialogState(12); }}>
-                <p className="white text1">> Add Friends</p>
+                <p className="white text1">&gt; Add Friends</p>
               </div> : ""}
             </div> :
             ""
           }
           <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.copyID(this.props.selectedChannel); }}>
-            <p className="white text1">> Copy ID</p>
+            <p className="white text1">&gt; Copy ID</p>
           </div>
         </div>
       </div>

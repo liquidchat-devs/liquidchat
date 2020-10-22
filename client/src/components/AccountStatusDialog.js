@@ -2,7 +2,7 @@ import React from 'react';
 
 export default class AccountStatusDialog extends React.Component {
   render() {
-    const user = this.props.getUser(this.props.session.userID)
+    //const user = this.props.getUser(this.props.session.userID)
 
     return (
       <div>

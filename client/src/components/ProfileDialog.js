@@ -11,19 +11,19 @@ export default class ProfileDialog extends React.Component {
       switch(badge) {
         case "0":
           return <div className="tooltipWrapper pointer marginright3" style={{ width: 22, height: 32 }}>
-            <img style={{ width: 22, height: 30, paddingTop: 2 }} src={this.props.fileEndpoint + "/badge_staff.png"}/>
+            <img alt="" style={{ width: 22, height: 30, paddingTop: 2 }} src={this.props.fileEndpoint + "/badge_staff.png"}/>
             <span className="tooltipText tooltipText3">Staff</span>
           </div>
 
         case "1":
           return <div className="tooltipWrapper pointer marginright3" style={{ width: 22, height: 32 }}>
-            <img style={{ width: 22, height: 28, paddingTop: 4 }} src={this.props.fileEndpoint + "/badge_verified.png"}/>
+            <img alt="" style={{ width: 22, height: 28, paddingTop: 4 }} src={this.props.fileEndpoint + "/badge_verified.png"}/>
             <span className="tooltipText tooltipText3">Verified</span>
           </div>
 
         case "2":
           return <div className="tooltipWrapper pointer marginright3" style={{ width: 22, height: 32 }}>
-            <img style={{ width: 22, height: 28, paddingTop: 4 }} src={this.props.fileEndpoint + "/badge_developer.png"}/>
+            <img alt="" style={{ width: 22, height: 28, paddingTop: 4 }} src={this.props.fileEndpoint + "/badge_developer.png"}/>
             <span className="tooltipText tooltipText3">Developer</span>
           </div>
       }
@@ -44,11 +44,11 @@ export default class ProfileDialog extends React.Component {
                 </div>
                 <div className="marginleft3">
                   <div className="flex margintop1">
-                    <p className="tooltipColor text5 marginleft2 margintop0 marginbot0">> Username: </p>
+                    <p className="tooltipColor text5 marginleft2 margintop0 marginbot0">&gt; Username: </p>
                     <p className="white text5 marginleft1 margintop0 marginbot0">{this.props.selectedUser.username}</p>
                   </div>
                   <div className="flex margintop1a">
-                    <p className="tooltipColor text5 marginleft2 margintop0 marginbot0">> Created: </p>
+                    <p className="tooltipColor text5 marginleft2 margintop0 marginbot0">&gt; Created: </p>
                     <p className="white text5 marginleft1 margintop0 marginbot0">{dateFormatter.formatDuration(this.props.selectedUser.createdAt, Date.now())} ago</p>
                   </div>
                 </div>

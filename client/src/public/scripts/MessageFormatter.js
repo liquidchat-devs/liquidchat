@@ -175,13 +175,13 @@ function formatFile(chat, file) {
                     <div className="video-overlay white marginleft2 margintop1" style={{ width: 420, position: "relative" }}>
                         {file.name}
                         <br/>
-                        <a className="tipColor">({formatBytes(file.size, true)})</a>
+                        <div className="tipColor">({formatBytes(file.size, true)})</div>
                     </div>
                     <div className="videoControls aligny">
                         <div className="button button1 marginleft2 videoButton" ref={"playButtonWrapper-" + file.name} onClick={() => { chat.videoAction(chat.refs["video-" + file.name], file, "playpause"); }}>
                             <svg aria-hidden="false" width="22" height="22" viewBox="0 0 22 22"><polygon fill="currentColor" points="0 0 0 14 11 7" transform="translate(7 5)"></polygon></svg>
                         </div>
-                        <a className="tipColor marginleft1" ref={"progressText-" + file.name} style={{ fontSize: 13 }}>0:00</a>
+                        <div className="tipColor marginleft1" ref={"progressText-" + file.name} style={{ fontSize: 13 }}>0:00</div>
                         <div className="progressWrapper marginleft2b" onClick={(e) => {
                                 var pos = (e.pageX  - (e.currentTarget.offsetLeft + e.currentTarget.offsetParent.offsetLeft)) / e.currentTarget.offsetWidth;
                                 chat.refs["video-" + file.name].currentTime = pos * chat.refs["video-" + file.name].duration;
@@ -198,9 +198,9 @@ function formatFile(chat, file) {
 
         return <div>
             <div className="audio-wrapper chatColor">
-                <a className="link file-link" onClick={() => window.open(chat.props.fileEndpoint + "/" + file.name) }>{file.name}</a>
+                <div className="link file-link" onClick={() => window.open(chat.props.fileEndpoint + "/" + file.name) }>{file.name}</div>
                 <br/>
-                <a className="tipColor">({formatBytes(file.size, true)})</a>
+                <div className="tipColor">({formatBytes(file.size, true)})</div>
                 <audio className="audio" ref={"audio-" + file.name}
                 onTimeUpdate={() => {
                     chat.refs["progress-" + file.name].style.width = Math.floor((chat.refs["audio-" + file.name].currentTime / chat.refs["audio-" + file.name].duration) * 100) + "%"; 
@@ -215,7 +215,7 @@ function formatFile(chat, file) {
                     <div className="button button1 marginleft2 videoButton" ref={"playButtonWrapper-" + file.name} onClick={() => { chat.videoAction(chat.refs["audio-" + file.name], file, "playpause"); }}>
                         <svg aria-hidden="false" width="22" height="22" viewBox="0 0 22 22"><polygon fill="currentColor" points="0 0 0 14 11 7" transform="translate(7 5)"></polygon></svg>
                     </div>
-                    <a className="tipColor marginleft1" ref={"progressText-" + file.name} style={{ fontSize: 13 }}>0:00</a>
+                    <div className="tipColor marginleft1" ref={"progressText-" + file.name} style={{ fontSize: 13 }}>0:00</div>
                     <div className="progressWrapper marginleft2b" onClick={(e) => {
                             var pos = (e.pageX  - (e.currentTarget.offsetLeft + e.currentTarget.offsetParent.offsetLeft)) / e.currentTarget.offsetWidth;
                             chat.refs["audio-" + file.name].currentTime = pos * chat.refs["audio-" + file.name].duration;
@@ -229,9 +229,9 @@ function formatFile(chat, file) {
 
     return <div>
         <div className="file-wrapper chatColor">
-            <a className="link file-link" onClick={() => window.open(chat.props.fileEndpoint + "/" + file.name) }>{file.name}</a>
+            <div className="link file-link" onClick={() => window.open(chat.props.fileEndpoint + "/" + file.name) }>{file.name}</div>
             <br/>
-            <a className="tipColor">({formatBytes(file.size, true)})</a>
+            <div className="tipColor">({formatBytes(file.size, true)})</div>
         </div>
     </div>
 }
@@ -263,11 +263,11 @@ function formatMessage(chat, message) {
                         <img alt="" className="avatar4 marginleft2 margintop1a" src={chat.props.fileEndpoint + "/" + server.avatar}/>
                         <div>
                             <div className="white marginleft2 margintop1a">{server.name}</div>
-                            <a className="tipColor marginleft2">{server.members.length} members</a>
+                            <div className="tipColor marginleft2">{server.members.length} members</div>
                         </div>
                     </div>
-                    <a className="button inviteButton marginleft2 margintop1b" style={server.members.includes(chat.props.session.userID) === false ? {} : {color: "#b3b3b3", border: "1px solid #b3b3b3", cursor: "default", position: "relative" }}
-                    onClick={() => { if(server.members.includes(chat.props.session.userID) === false) { chat.props.API.API_joinServer(server.id); } }}>Join</a>
+                    <div className="button inviteButton marginleft2 margintop1b" style={server.members.includes(chat.props.session.userID) === false ? {} : {color: "#b3b3b3", border: "1px solid #b3b3b3", cursor: "default", position: "relative" }}
+                    onClick={() => { if(server.members.includes(chat.props.session.userID) === false) { chat.props.API.API_joinServer(server.id); } }}>Join</div>
                 </div>
             </div>)
             customMessage = true;

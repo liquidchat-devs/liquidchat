@@ -34,25 +34,25 @@ export default class MessageOptionsDialog extends React.Component {
           {
             this.props.selectedMessage.author.id === this.props.session.userID ?
             <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleDelete(e); }}>
-              <p className="declineColor text1">> Delete</p>
+              <p className="declineColor text1">&gt; Delete</p>
             </div> :
             ""
           }
           {
             this.props.selectedMessage.author.id === this.props.session.userID ?
             <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleEdit(e); }}>
-              <p className="white text1">> Edit</p>
+              <p className="white text1">&gt; Edit</p>
             </div> :
             ""
           }
           {
             this.props.selectedMessage.file == null ? "" :
             <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.props.copyID(this.props.fileEndpoint + "/" + this.props.selectedMessage.file.name); }}>
-              <p className="white text1">> Copy link to file</p>
+              <p className="white text1">&gt; Copy link to file</p>
             </div>
           }
           <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.copyID(this.props.selectedMessage.id); }}>
-            <p className="white text1">> Copy ID</p>
+            <p className="white text1">&gt; Copy ID</p>
           </div>
         </div>
       </div>

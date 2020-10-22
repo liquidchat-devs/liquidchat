@@ -80,7 +80,7 @@ export default class Chat extends React.Component {
     return text.length < 1 ? null : <div className="paddingtop2 paddingbot2 flex message">
       <div className="flex marginleft2">
         <div className="marginleft2 file-wrapper chatColor">
-            <a className="white">{text}</a>
+            <div className="white">{text}</div>
         </div>
       </div>
     </div>
@@ -143,7 +143,7 @@ export default class Chat extends React.Component {
         case 3:
           messageHTML = <div className="flex marginleft2 fullwidth">
             <div className="marginleft2 alignmiddle">
-              <img className="messageIcon" src={this.props.fileEndpoint + "/" + (message.type === 1 || message.type === 3 ? "join.svg" : "leave.svg")}/>
+              <img alt="" className="messageIcon" src={this.props.fileEndpoint + "/" + (message.type === 1 || message.type === 3 ? "join.svg" : "leave.svg")}/>
             </div>
             <div className="marginleft2 fullwidth">
               <div className="flex">
@@ -233,7 +233,7 @@ export default class Chat extends React.Component {
                 <div className="video-overlay white marginleft2 margintop1" style={{ marginLeft: -790 }}>
                     Local
                     <br/>
-                    <a className="tipColor">(test)</a>
+                    <div className="tipColor">(test)</div>
                 </div>
               </div>
               <div className="flex">
@@ -241,7 +241,7 @@ export default class Chat extends React.Component {
                 <div className="video-overlay white marginleft2 margintop1" style={{ marginLeft: -790 }}>
                     Remote
                     <br/>
-                    <a className="tipColor">(test)</a>
+                    <div className="tipColor">(test)</div>
                 </div>
               </div>
             </div>
