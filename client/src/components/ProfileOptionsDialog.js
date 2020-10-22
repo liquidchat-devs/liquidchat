@@ -37,12 +37,19 @@ export default class ProfileOptionsDialog extends React.Component {
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0); }} style={{ opacity: 0.3 }}></div>
         <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY, height: selectedUser.id === this.props.session.userID ? 30 : 45  }}>
           <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.switchDialogState(5); }}>
-            <p className="white text1">> Profile</p>
+            <p className="white text1">&gt; Profile</p>
           </div>
+          {
+            loggedUser.friends.includes(selectedUser.id) === true ?
+            <div className="button2 hover alignmiddle chatColor" onClick={() => { this.dmUser(selectedUser.id); }}>
+                <p className="white text1">&gt; Message</p>
+            </div> :
+            ""
+          }
           {
             selectedUser.id !== loggedUser.id && loggedUser.friends.includes(selectedUser.id) === false ?
             <div className="button2 hover alignmiddle chatColor" onClick={() => { this.sendFriendRequest(selectedUser.id); }}>
-              <p className="white text1">> Add Friend</p>
+              <p className="white text1">&gt; Add Friend</p>
             </div> :
             ""
           }
@@ -50,10 +57,7 @@ export default class ProfileOptionsDialog extends React.Component {
             loggedUser.friends.includes(selectedUser.id) === true ?
             <div>
               <div className="button2 hover alignmiddle chatColor" onClick={() => { this.removeFriend(selectedUser.id); }}>
-                <p className="declineColor text1">> Remove Friend</p>
-              </div>
-              <div className="button2 hover alignmiddle chatColor" onClick={() => { this.dmUser(selectedUser.id); }}>
-                <p className="white text1">> Message</p>
+                <p className="declineColor text1">&gt; Remove Friend</p>
               </div>
             </div> :
             ""
@@ -62,7 +66,7 @@ export default class ProfileOptionsDialog extends React.Component {
             currentChannel !== undefined && currentChannel.type === 2 && currentChannel.author.id === loggedUser.id && selectedUser.id !== loggedUser.id ?
             <div>
               <div className="button2 hover alignmiddle chatColor" onClick={() => { this.removeFromDMChannel(currentChannel.id , selectedUser.id); }}>
-                <p className="declineColor text1">> Remove from group</p>
+                <p className="declineColor text1">&gt; Remove from group</p>
               </div>
             </div> :
             ""
@@ -71,13 +75,13 @@ export default class ProfileOptionsDialog extends React.Component {
             currentServer !== undefined && currentServer.author.id === loggedUser.id && selectedUser.id !== loggedUser.id ?
             <div>
               <div className="button2 hover alignmiddle chatColor" onClick={() => { this.removeFromServer(currentServer.id, selectedUser.id); }}>
-                <p className="white text1">> Kick from server</p>
+                <p className="declineColor text1">&gt; Kick from server</p>
               </div>
             </div> :
             ""
           }
           <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.copyID(selectedUser.id); }}>
-            <p className="white text1">> Copy ID</p>
+            <p className="white text1">&gt; Copy ID</p>
           </div>
         </div>
       </div>
