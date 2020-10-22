@@ -10,20 +10,20 @@ export default class ProfileDialog extends React.Component {
     let badgeList = this.props.selectedUser.badges.map((badge, i) => {
       switch(badge) {
         case "0":
-          return <div className="tooltipWrapper pointer marginright3" style={{ width: 22, height: 32 }}>
-            <img alt="" style={{ width: 22, height: 30, paddingTop: 2 }} src={this.props.fileEndpoint + "/badge_staff.png"}/>
+          return <div className="tooltipWrapper pointer marginright3 badge">
+            <img className="badgeImage" alt="" src={this.props.fileEndpoint + "/badge_staff.svg"}/>
             <span className="tooltipText tooltipText3">Staff</span>
           </div>
 
         case "1":
-          return <div className="tooltipWrapper pointer marginright3" style={{ width: 22, height: 32 }}>
-            <img alt="" style={{ width: 22, height: 28, paddingTop: 4 }} src={this.props.fileEndpoint + "/badge_verified.png"}/>
+          return <div className="tooltipWrapper pointer marginright3 badge">
+            <img className="badgeImage" alt="" src={this.props.fileEndpoint + "/badge_verified.svg"}/>
             <span className="tooltipText tooltipText3">Verified</span>
           </div>
 
         case "2":
-          return <div className="tooltipWrapper pointer marginright3" style={{ width: 22, height: 32 }}>
-            <img alt="" style={{ width: 22, height: 28, paddingTop: 4 }} src={this.props.fileEndpoint + "/badge_developer.png"}/>
+          return <div className="tooltipWrapper pointer marginright3 badge">
+            <img className="badgeImage" alt="" src={this.props.fileEndpoint + "/badge_developer.svg"}/>
             <span className="tooltipText tooltipText3">Developer</span>
           </div>
       }
