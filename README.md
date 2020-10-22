@@ -1,32 +1,42 @@
-# LiquidChat
+<p align="center">
+  <img src="https://github.com/jasscod/liquidchat/blob/master/liquidchat_githublogo.png?raw=true">
+</p>
+
+<p align="center">
+Open-source chat application similar to Discord-
+</p>
+
 ![Build](https://travis-ci.org/LamkasDev/liquidchat.svg?branch=master)
 ![Dependencies](https://david-dm.org/LamkasDev/liquidchat.svg)
-[![HitCount](http://hits.dwyl.com/LamkasDev/liquidchat.svg)](http://hits.dwyl.com/LamkasDev/liquidchat)  
-⭐ Open-source chat application similar to Discord-  
+[![HitCount](http://hits.dwyl.com/LamkasDev/liquidchat.svg)](http://hits.dwyl.com/LamkasDev/liquidchat)
 
-🚩 **Planned features:**  
-> Custom Statuses  
-> Server Discovery  
-> Better Server Management (Built-in bans, mutes, assigning server moderators)  
-> Voice Channels  
-> a lot more...  
-
-🏁 **Features:**  
-> Servers with Text Channels  
-> DM Channels  
-> Group Chats  
-> File Support (up to 100MB by default)  
-> Personal Emotes (max. 500)  
-> Server Emotes (max. 400)  
-> Idle/DND/Invisible Status  
-> Friend Features (Adding/Removing friends)  
-
+<p align="center">
 💛 Official website: https://nekonetwork.net (need to get a domain, but you know i'm broke)™️  
 ✔️ Releases: https://github.com/LamkasDev/liquidchat/releases  
+</p>
 
+<p align="center">
 📓 Documentation: https://nekonetwork.net/docs  
 🔥 API: https://github.com/LamkasDev/liquidchat.js  
 🔴 Found a bug or want to contribute?: [Open a pull request!](https://github.com/LamkasDev/liquidchat/pulls)
+</p>
+
+
+🏁 **Features:**
+- [x] Servers with Text Channels
+- [x] DM Channels 
+- [x] Group Chats
+- [x] File Support (up to 100MB by default)
+- [x] Personal Emotes (max. 500) 
+- [x] Server Emotes (max. 400)
+- [x] Idle/DND/Invisible Status 
+- [x] Friend Features (Adding/Removing friends)  
+- [ ] Better Server Management (Built-in bans, mutes, assigning server moderators) 
+- [ ] Server Discovery
+- [ ] Voice Channels
+- [ ] Custom Statuses 
+- [ ]  a lot more...
+
 
 ### Build instructions:
 ##### a) How to build client (Windows)
