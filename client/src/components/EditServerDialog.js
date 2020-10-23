@@ -114,7 +114,8 @@ export default class EditServerDialog extends React.Component {
               </div>
             </label>
             <input id="avatar-input" className="hide" onChange={(e) => this.handleAvatar(this, e) } type='file' name="fileUploaded"/>
-            <input className="inputfield1 marginleft2 margintop1" name="serverName" type="text" placeholder="Name..." required={true} value={this.state.serverName} onChange={this.handleChange} /><br />
+            <input className="inputfield1 marginleft2 margintop1" name="serverName" type="text" placeholder="Name..." required={true} value={this.state.serverName} onChange={this.handleChange} />
+            <br />
           </form>
           <div className="white text3 marginleft2b margintop1a">Server Emotes ({emotes.length})</div>
           <div className="flex marginleft2b">

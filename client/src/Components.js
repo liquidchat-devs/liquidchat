@@ -47,7 +47,7 @@ export default class DialogManager extends React.Component {
         return <c.ChannelOptionsDialog getChannel={this.props.getChannel} API={this.props.API} copyID={this.copyID} switchDialogState={this.props.switchDialogState} selectedChannel={this.props.selectedChannel} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session}/>
 
       case 11:
-        return <c.EditChannelDialog selectedChannel={this.props.selectedChannel} API={this.props.API} switchDialogState={this.props.switchDialogState} />
+        return <c.EditChannelDialog getChannel={this.props.getChannel} selectedChannel={this.props.selectedChannel} API={this.props.API} switchDialogState={this.props.switchDialogState} />
 
       case 12:
         return <c.InviteFriendsDialog fileEndpoint={this.props.fileEndpoint} setBox={this.props.setBox} getChannel={this.props.getChannel} getServer={this.props.getServer} selectedServer={this.props.selectedServer} getUser={this.props.getUser} session={this.props.session} selectedChannel={this.props.selectedChannel} API={this.props.API} switchDialogState={this.props.switchDialogState} />
