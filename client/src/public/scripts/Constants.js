@@ -16,6 +16,9 @@ export default class Constants {
 
             case 3:
                 return "#ff6161";
+
+            case 4:
+                return "#6b61ff";
         }
     }
 }

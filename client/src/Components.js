@@ -82,6 +82,9 @@ export default class DialogManager extends React.Component {
       case 22:
         return <c.AccountStatusDialog const={this.props.const} API={this.props.API} getUser={this.props.getUser} switchDialogState={this.props.switchDialogState} boxX={this.props.boxX} boxY={this.props.boxY} session={this.props.session} copyID={this.copyID} setSelectedUser={this.props.setSelectedUser}/>
 
+      case 23:
+        return <c.SetCustomStatusDialog API={this.props.API} switchDialogState={this.props.switchDialogState}/>
+
       default:
         return null;
     }

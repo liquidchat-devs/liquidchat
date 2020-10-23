@@ -284,6 +284,16 @@ code {
   border: 0;
 }
 
+.firstBorder {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.lastBorder {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
 /* Texts */
 .textcenter {
   text-align: center;
@@ -619,6 +629,17 @@ code {
   background-color: #353535;
   border-radius: 10px;
   z-index: -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlaybox7 {
+  width: 300px;
+  height: 100px;
+  background-color: #353535;
+  border-radius: 10px;
+  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1102,6 +1123,10 @@ code {
 .volumeWrapper {
   opacity: 0;
   pointer-events: all;
+}
+
+.statusDialog {
+  width: 200px;
 }
 
 .inputfieldPrefix {
