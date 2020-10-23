@@ -1,6 +1,9 @@
 language: node_js
 node_js:
   - lts/*
+before_install:
+  - cd client
+  - npm install
 before_script:
    - cd client
 script:
