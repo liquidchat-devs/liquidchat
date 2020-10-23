@@ -1,5 +1,4 @@
 language: node_js
-warnings_are_errors: false
 node_js:
   - lts/*
 before_install:
@@ -8,4 +7,4 @@ before_install:
   - rm -rf node_modules
   - yarn cache clean
 script:
-   - npm run build
+   - CI=false npm run build
