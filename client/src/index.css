@@ -200,6 +200,10 @@ code {
   margin-bottom: 10px;
 }
 
+.marginbot2 {
+  margin-bottom: 15px;
+}
+
 .marginleft1 {
   margin-left: 5px;
 }
@@ -300,7 +304,8 @@ code {
 }
 
 .text0 {
-  font-size: 36px;
+  font-size: 30px;
+  padding: 8px 0px 8px 0px;
 }
 
 .text1 {
@@ -580,6 +585,15 @@ code {
   z-index: 2;
 }
 
+.overlaybox0 {
+  width: 800px;
+  height: 500px;
+  background-color: #353535;
+  border-radius: 10px;
+  z-index: 3;
+  padding: 5px;
+}
+
 .overlaybox {
   width: 450px;
   height: 400px;
@@ -686,6 +700,12 @@ code {
 .avatar5 {
   width: 100%;
   height: 100%;
+  object-fit: cover;
+}
+
+.avatar6 {
+  height: 40px;
+  border-radius: 50%;
   object-fit: cover;
 }
 
@@ -1134,4 +1154,8 @@ code {
   font-size: 15px;
   width: 188px;
   pointer-events: none;
+}
+
+.overlaybg {
+  background: url("https://nekonetwork.net:8081/bg.png");
 }

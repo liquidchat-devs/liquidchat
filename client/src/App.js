@@ -435,16 +435,15 @@ class App extends React.Component {
         (this.state.formState === 0 ?
           <div>
             <DialogManager dialogState={this.state.dialogState} switchDialogState={this.switchDialogState} />
-            <div className="margintop2 fullwidth textcenter text0" style={{color: "white"}}>Login</div>
             <c.LoginForm
-            API={this.state.API} switchDialogState={this.switchDialogState}
+            fileEndpoint={this.state.fileEndpoint} API={this.state.API} switchDialogState={this.switchDialogState}
             session={this.state.session} getUser={this.getUser}
             formState={this.state.formState} switchFormState={this.switchFormState}/>
           </div> :
           <div>
             <div className="margintop2 fullwidth textcenter text0" style={{color: "white"}}>Register</div>
             <c.RegisterForm
-            API={this.state.API}
+            fileEndpoint={this.state.fileEndpoint} API={this.state.API}
             formState={this.state.formState} switchFormState={this.switchFormState}/>
           </div>
         )}

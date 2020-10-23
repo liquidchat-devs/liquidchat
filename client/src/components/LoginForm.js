@@ -66,30 +66,33 @@ export default class LoginForm extends React.Component {
         </form>
         );
       return (
-        <div className="margin1 alignmiddle">
-          <div style={{ width: 185 }}>
-            {form}
-            <div className="alignmiddle margintop1" style={{ height: 40 }}>
-              <div onClick={this.handleSubmit} className="button button1">Login!</div>
-            </div>
-            <div className="alignmiddle margintop1" style={{ height: 40 }}>
-              <div onClick={this.props.switchFormState} className="button button1">Register!</div>
-            </div>
-            <div className="alignmiddle margintop1" style={{ height: 25 }}>
-             <p className="text5 marginbot0 margintop0 link" onClick={() => { this.props.switchDialogState(15); }}>Forgotten password?</p>
-            </div>
-            {
-              (this.getErrorText(this.state.loginResult).length > 0 ?
-              <div className="margintop1 errorColor textcenter">
-                {this.getErrorText(this.state.loginResult)}
+        <div>
+          <div className="absolutepos overlaybg"></div>
+          <div className="absolutepos overlaybox0">
+            <div style={{ width: "100%", padding: 24 }}>
+              <div className="aligny marginbot2" style={{ height: 40 }}>
+                <img alt="" className="avatar6 marginright2" src={this.props.fileEndpoint + "/defaultAvatar.png"}/>
+                <div className="text0" style={{color: "white"}}>Login</div>
               </div>
-              : (this.getSuccessText(this.state.loginResult).length > 0 ?
-              <div className="margintop1 successColor textcenter">
-                {this.getSuccessText(this.state.loginResult)}
+              {form}
+              <div className="margintop1" style={{ height: 40 }}>
+                <div onClick={this.handleSubmit} className="button button1">Login!</div>
               </div>
-              :
-              ""))
-            }
+              <div className="margintop1" style={{ height: 5 }}></div>
+              <p className="text5 marginbot0 margintop0 link" onClick={() => { this.props.switchFormState(); }}>Register?</p>
+              {
+                (this.getErrorText(this.state.loginResult).length > 0 ?
+                <div className="margintop1 errorColor">
+                  {this.getErrorText(this.state.loginResult)}
+                </div>
+                : (this.getSuccessText(this.state.loginResult).length > 0 ?
+                <div className="margintop1 successColor">
+                  {this.getSuccessText(this.state.loginResult)}
+                </div>
+                :
+                ""))
+              }
+            </div>
           </div>
         </div>
       );
