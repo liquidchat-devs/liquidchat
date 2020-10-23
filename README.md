@@ -46,24 +46,53 @@ Open-source chat application similar to Discord-
 
 ### Build instructions:
 ##### a) How to build client (Windows)
-> run `npm run createproduction-win`  
-> the installer will be built into `client/dist`  
-
-##### b) How to build web version (Windows)
-> run `npm run build`  
-> all website's assets will be packed into `client/build`
+<pre>
+run <b>npm run createproduction-win</b>
+the installer will be built into /client/dist
+</pre>
 
 ##### c) How to test client (Windows)
-> run `yarn start`  
+<pre>
+run <b>yarn start</b>
+</pre>
 
 ##### d) How to host server yourself
-> run `node server.js`  
-> run `http-server -p 8081` in a separate directory outside `/server`
+<pre>
+1) Setup your folder structure to look like the following:
 
-##### e) Additional setup
-> change `APIEndpoint` in `App.js` to your server's adress:8080  
-> change `fileEnpoint` in `App.js` to your server's adress:8081  
-> change `filesStorage` in `server.js` to directory where you run your file server  
+<a href="https://pastebin.com/1pNnc6EA">lc-full.sh</a>
+/lc
+   <a href="https://github.com/LamkasDev/liquidchat/archive/master.zip">/liquidchat<a/>
+      /client
+      /server
+   /liquidchat-fileserver
+      /public
+      /keys
+      <a href="https://pastebin.com/VWsgQmCP">simpleserver.js</a>
+   /liquidchat-web
+      /public
+      /keys
+      <a href="https://pastebin.com/zXxF1PGx">server.js</a>
+  
+ 2) Get a certificate and key for your server's domain, if you don't have one already
+ 3) Put key.pem and cert.pem into each /keys directories
+ 4) Run <b>sudo lc-full.sh /home/YOUR_USERNAME/lc/</b>
+</pre>
+
+##### d) How to deploy web versions
+<pre>
+1) On your local machine, in the /client directory run <b>npm run build</b>
+2) Zip all the files in the /client/build folder (not the folder) into a file named build.zip
+3) Place this file into /lc folder on your server
+4) Restart your server (that'll unpack the assets from build.zip and place them into /liquidchat-web/public)
+</pre>
+
+##### f) Additional setup
+<pre>
+change <b>APIEndpoint</b> in /client/App.js to your server's domain:8080  
+change <b>fileEnpoint</b> in /client/App.js to your server's domain:8081  
+change <b>filesStorage</b> in /server/server.js to directory where you run your file server 
+</pre>
 
 ### Example Screenshots:  
 > Client (2020/10/11)
