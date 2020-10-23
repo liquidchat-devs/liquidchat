@@ -6,6 +6,6 @@ before_install:
   - cd client
   - rm -f package-lock.json
   - rm -rf node_modules
-  - npm install
+  - yarn cache clean
 script:
    - npm run build
