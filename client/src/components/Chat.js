@@ -51,6 +51,16 @@ export default class Chat extends React.Component {
         }
         break;
 
+      case "pause":
+        element.pause();
+        if(this.refs["videoOverlay-" + file.name] !== undefined) {
+          this.refs["videoOverlay-" + file.name].classList.add("stopped");
+          this.refs["videoOverlay-" + file.name].classList.remove("playing");
+        }
+
+        this.refs["playButtonWrapper-" + file.name].innerHTML  = `<svg aria-hidden="false" width="22" height="22" viewBox="0 0 22 22"><polygon fill="currentColor" points="0 0 0 14 11 7" transform="translate(7 5)"></polygon></svg>`;
+        break;
+
       case "fullscreen":
         if (this.isFullScreen()) {
           if (document.exitFullscreen) document.exitFullscreen();
