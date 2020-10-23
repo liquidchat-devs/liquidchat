@@ -9,10 +9,10 @@ export default class ImageDialog extends React.Component {
           {this.props.isMenuOpen === true ?
             <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY, height: 40 }}>
             <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.props.copyID(this.props.fileEndpoint + "/" + this.props.selectedImage.name); }}>
-                <p className="white text1">> Copy Link</p>
+                <p className="white text1">&gt; Copy Link</p>
             </div>
             <div className="button2 hover alignmiddle chatColor" onClick={() => { window.open(this.props.fileEndpoint + "/" + this.props.selectedImage.name); }}>
-                <p className="white text1">> Open Link</p>
+                <p className="white text1">&gt; Open Link</p>
             </div>
             </div>
             : ""

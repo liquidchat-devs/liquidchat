@@ -70,7 +70,7 @@ export default class CreateServerDialog extends React.Component {
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox">
-          <div className="white text3 marginleft2 margintop1a">> Create new server-</div>
+          <div className="white text3 marginleft2 margintop1a">Create new server-</div>
           <form onSubmit={this.handleSubmit} className="flex margintop1">
             <img alt="" className="avatar2 marginleft4 marginright2" ref="serverImage" src={this.props.fileEndpoint + "/defaultAvatar.png"} onMouseEnter={() => this.refs["serverEditOverlay"].style = "display: flex;" }/>
             <div className="cropButton alignmiddle" onClick={() => { this.props.setSelectedAvatar(this.state.serverAvatar); this.props.switchDialogState(19) }}>

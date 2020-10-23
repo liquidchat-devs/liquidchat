@@ -190,7 +190,7 @@ export default class ChannelSelector extends React.Component {
                 }
               </div>
               <div className="white chatColor channel alignmiddle" onClick={() => { this.props.API.API_leaveVoiceChannel(voiceGroupChannel); }}>
-                <p className="white declineColor text1">> Disconnect</p>
+                <p className="white declineColor text1">&gt; Disconnect</p>
               </div>
             </div> : null
           }

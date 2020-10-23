@@ -35,7 +35,7 @@ export default class EditAccountDialog extends React.Component {
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox">
-          <div className="white text3 marginleft2 margintop1a">> Manage Account-</div>
+          <div className="white text3 marginleft2 margintop1a">Manage Account-</div>
           <form onSubmit={this.handleSubmit} className="flex margintop1">
             <input className="inputfield1 marginleft2" name="email" type="text" placeholder="Email..." required={true} onChange={this.handleChange} /><br />
           </form>

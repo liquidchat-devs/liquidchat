@@ -45,7 +45,7 @@ export default class CreateChannelDialog extends React.Component {
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox">
-          <div className="white text3 marginleft2 margintop1a">> Create new channel-</div>
+          <div className="white text3 marginleft2 margintop1a">Create new channel-</div>
           <form onSubmit={this.handleSubmit} className="flex margintop1">
             <input className="inputfield1 inputfield2 marginleft2" name="channelName" type="text" placeholder="Name..." required={true} onChange={this.handleChange} />
             <div className="inputfieldPrefix tooltipColor text3">{this.state.channelType === 1 ? "." : "#"}</div>

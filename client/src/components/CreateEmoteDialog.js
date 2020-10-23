@@ -72,7 +72,7 @@ export default class CreateEmoteDialog extends React.Component {
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox">
-          <div className="white text3 marginleft2 margintop1a">> Create new{this.props.type === 0 ? " server" : ""} emote-</div>
+          <div className="white text3 marginleft2 margintop1a">Create new{this.props.type === 0 ? " server" : ""} emote-</div>
           <form onSubmit={this.handleSubmit} className="flex margintop1">
             <img alt="" className="avatar2 marginleft4 marginright1" ref="emoteImage" src={this.props.fileEndpoint + "/defaultAvatar.png"} onMouseEnter={() => this.refs["emoteEditOverlay"].style = "display: flex;" }/>
             <label for="avatar-input">
