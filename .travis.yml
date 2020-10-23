@@ -4,6 +4,9 @@ node_js:
   - lts/*
 before_install:
   - cd client
+  - rm -f package-lock.json
+  - rm -rf node_modules
+  - npm cache clean
   - npm install
 script:
    - npm run build
