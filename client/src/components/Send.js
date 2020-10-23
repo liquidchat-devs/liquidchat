@@ -143,7 +143,7 @@ export default class Send extends React.Component {
           {mentionList}
         </div>
         <div className="flex">
-          <label for="file-input">
+          <label htmlFor="file-input">
             <div className="full alignmiddle chatColor">
               <i className="fa fa-image file-icon"></i>
             </div>

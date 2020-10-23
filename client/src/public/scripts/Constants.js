@@ -12,7 +12,7 @@ export default class Constants {
                 return "#3baf3b";
 
             case 2:
-                return "#ffc061";
+                return "#ec9c24";
 
             case 3:
                 return "#ff6161";

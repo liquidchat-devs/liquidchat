@@ -407,8 +407,21 @@ code {
   background-color: var(--color12)
 }
 
+.hoverunderline:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .selectedColor {
   background-color: var(--color3);
+}
+
+.selectedColor.server {
+  border-radius: 5px;
+}
+
+.selectedColor.channel {
+  border-radius: 5px;
 }
 
 /* Chat */
@@ -426,6 +439,7 @@ code {
 .message-image {
   width: 40%;
   cursor: pointer;
+  padding-top: 4px;
 }
 
 .file-icon {
@@ -508,6 +522,7 @@ code {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transform: scale(0.9);
 }
 
 .server {
@@ -517,6 +532,7 @@ code {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transform: scale(0.9);
 }
 
 .server2 {
@@ -743,7 +759,7 @@ code {
   left: 0px;
   position: absolute;
   width: 295px;
-  height: 50px;
+  height: 55px;
 }
 
 .settingsButton {

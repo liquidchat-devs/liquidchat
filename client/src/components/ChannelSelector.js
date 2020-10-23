@@ -101,7 +101,7 @@ export default class ChannelSelector extends React.Component {
 
     return (
       <div className="flex">
-        <div className="servers headerColor" style={{ height: this.props.pageHeight - 78 - this.props.pageHeightOffset }}>
+        <div className="servers headerColor" style={{ height: this.props.pageHeight - 83 - this.props.pageHeightOffset }}>
           <div className={this.props.channelTypes === 3 ? "white headerColor server2 selectedColor" : "white headerColor server2"} onClick={() => { this.props.switchChannelTypes(3) }}>
             Friends
           </div>
@@ -115,7 +115,7 @@ export default class ChannelSelector extends React.Component {
         </div>
         {this.props.channelTypes === 1 || this.props.channelTypes === 2 ?
         <div>
-          <div className="channels headerColor" style={{ height: this.props.pageHeight - 78 - this.props.pageHeightOffset - (voiceGroup !== -1 ? 78 : 0) }}>
+          <div className="channels headerColor" style={{ height: this.props.pageHeight - 83 - this.props.pageHeightOffset - (voiceGroup !== -1 ? 83 : 0) }}>
             <List
             onChange={({ oldIndex, newIndex }) =>
               this.props.moveChannel(channels, oldIndex, newIndex)
@@ -205,7 +205,7 @@ export default class ChannelSelector extends React.Component {
         </div>}
         <div className="accountSettings chatColor aligny">
             <div className="account">
-              <img alt="" className="marginleft2 avatar pointer" src={this.props.fileEndpoint + "/" + loggedUser.avatar} onContextMenu={(e) => { this.props.switchDialogState(4); this.props.setBox(e.pageX, e.pageY); e.preventDefault(); }} onClick={(e) => { this.props.switchDialogState(22); this.props.setBox(e.pageX, e.pageY); e.preventDefault(); }}/>
+              <img alt="" className="marginleft2 avatar pointer" src={this.props.fileEndpoint + "/" + loggedUser.avatar} onContextMenu={(e) => { this.props.switchDialogState(4); this.props.setBox(e.pageX, e.pageY); e.preventDefault(); }} onClick={(e) => { this.props.switchDialogState(22); this.props.setBox(e.currentTarget.getBoundingClientRect().left, e.currentTarget.getBoundingClientRect().top - 20); e.preventDefault(); }}/>
               <div className="flex marginleft2">
                 <div className="text2" style={{color: "white"}}>{loggedUser !== undefined ? loggedUser.username : "Loading"}</div>
               </div>

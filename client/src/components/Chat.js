@@ -127,7 +127,7 @@ export default class Chat extends React.Component {
             <img alt="" className="avatar" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
             <div className="marginleft2 fullwidth">
               <div className="flex">
-                <div className="allignMiddle" style={{margin: 0, color: (user !== undefined && server !== undefined && server.author.id === user.id ? "yellow" : "red"), fontSize: 16}}>
+                <div className="allignMiddle hoverunderline" style={{margin: 0, color: (user !== undefined && server !== undefined && server.author.id === user.id ? "yellow" : "red"), fontSize: 16}}>
                   {user !== undefined ? user.username : "Loading"}
                 </div>
                 <div className="allignMiddle margintop1a" style={{marginLeft: 5, fontSize: 10, color: "#acacac"}}>

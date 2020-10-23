@@ -13,19 +13,19 @@ export default class ProfileDialog extends React.Component {
     let badgeList = selectedUser.badges.map((badge, i) => {
       switch(badge) {
         case "0":
-          return <div className="tooltipWrapper pointer marginright3 badge">
+          return <div key={i} className="tooltipWrapper pointer marginright3 badge">
             <img className="badgeImage" alt="" src={this.props.fileEndpoint + "/badge_staff.svg"}/>
             <span className="tooltipText tooltipText3">Staff</span>
           </div>
 
         case "1":
-          return <div className="tooltipWrapper pointer marginright3 badge">
+          return <div key={i} className="tooltipWrapper pointer marginright3 badge">
             <img className="badgeImage" alt="" src={this.props.fileEndpoint + "/badge_verified.svg"}/>
             <span className="tooltipText tooltipText3">Verified</span>
           </div>
 
         case "2":
-          return <div className="tooltipWrapper pointer marginright3 badge">
+          return <div key={i} className="tooltipWrapper pointer marginright3 badge">
             <img className="badgeImage" alt="" src={this.props.fileEndpoint + "/badge_developer.svg"}/>
             <span className="tooltipText tooltipText3">Developer</span>
           </div>
