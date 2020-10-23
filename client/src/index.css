@@ -763,16 +763,16 @@ code {
   margin-left: -420px;
   width: 420px;
   z-index: 1;
-  margin-top: 207px;
+  margin-top: 210px;
   height: 33px;
-  background-color: #1f1f1f;
+  background-color: var(--color4);
 }
 
 .audioControls {
   width: 420px;
   z-index: 1;
   height: 33px;
-  background-color: #1f1f1f;
+  background-color: var(--color4);
 }
 
 .videoButton {
@@ -1064,4 +1064,19 @@ code {
 .mutual:hover {
   background-color: var(--color12);
   cursor: pointer;
+}
+
+.volumeWrapper {
+  position: relative;
+  transform: rotate(270deg);
+  padding: 4px;
+  background-color: var(--color4);
+  margin-left: -117px;
+  margin-top: -185px;
+  width: 165px;
+}
+
+.volumeWrapper {
+  opacity: 0;
+  pointer-events: all;
 }

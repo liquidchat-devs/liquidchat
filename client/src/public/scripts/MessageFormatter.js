@@ -157,9 +157,20 @@ function formatFile(chat, file) {
                         overlay.classList.remove("fadeIn"); if(!overlay.classList.contains("stopped")) { overlay.classList.add("fadeOut"); } overlay.classList.remove("playing");
                     }}>
                 <video width="420" height="240" ref={"video-" + file.name} className="video"
+                    onCanPlay={() => {
+                        let video = chat.refs["video-" + file.name];
+                        let progress = chat.refs["progress-" + file.name];
+                        let text = chat.refs["progressText-" + file.name];
+
+                        progress.style.width = Math.floor((video.currentTime / video.duration) * 100) + "%"; 
+                        text.innerHTML = formatDuration2(Math.floor(video.currentTime) * 1000) + "/" + formatDuration2(Math.floor(video.duration) * 1000);
+                    }}
                     onTimeUpdate={() => {
                         chat.refs["progress-" + file.name].style.width = Math.floor((chat.refs["video-" + file.name].currentTime / chat.refs["video-" + file.name].duration) * 100) + "%"; 
-                        chat.refs["progressText-" + file.name].text = formatDuration2(Math.floor(chat.refs["video-" + file.name].currentTime) * 1000) + "/" + formatDuration2(Math.floor(chat.refs["video-" + file.name].duration) * 1000);
+                        chat.refs["progressText-" + file.name].innerHTML = formatDuration2(Math.floor(chat.refs["video-" + file.name].currentTime) * 1000) + "/" + formatDuration2(Math.floor(chat.refs["video-" + file.name].duration) * 1000);
+                    }}
+                    onVolumeChange={() => {
+                        chat.refs["volume-" + file.name].style.width = Math.floor(chat.refs["video-" + file.name].volume * 100) + "%";
                     }}
                     onClick={() => {
                         chat.videoAction(chat.refs["video-" + file.name], file, "playpause");
@@ -179,17 +190,42 @@ function formatFile(chat, file) {
                     </div>
                     <div className="videoControls aligny">
                         <div className="button button1 marginleft2 videoButton" ref={"playButtonWrapper-" + file.name} onClick={() => { chat.videoAction(chat.refs["video-" + file.name], file, "playpause"); }}>
-                            <svg aria-hidden="false" width="22" height="22" viewBox="0 0 22 22"><polygon fill="currentColor" points="0 0 0 14 11 7" transform="translate(7 5)"></polygon></svg>
+                            <svg aria-hidden="false" width="24" height="24" viewBox="0 0 24 24"><polygon fill="currentColor" points="0 0 0 14 11 7" transform="translate(7 5)"></polygon></svg>
                         </div>
-                        <div className="tipColor marginleft1" ref={"progressText-" + file.name} style={{ fontSize: 13 }}>0:00</div>
-                        <div className="progressWrapper marginleft2b" onClick={(e) => {
+                        <div className="tipColor marginleft1" ref={"progressText-" + file.name} style={{ fontSize: 13, width: 100 }}>0:00</div>
+                        <div className="progressWrapper marginleft2"
+                            onClick={(e) => {
                                 var pos = (e.pageX  - (e.currentTarget.offsetLeft + e.currentTarget.offsetParent.offsetLeft)) / e.currentTarget.offsetWidth;
                                 chat.refs["video-" + file.name].currentTime = pos * chat.refs["video-" + file.name].duration;
                             }}>
                             <div className="progress" ref={"progress-" + file.name} />
                         </div>
+                        <div className="button button1 marginleft2 videoButton"
+                            onMouseEnter={() => {
+                                let wrapper = chat.refs["volumeWrapper-" + file.name];
+                                clearTimeout(wrapper.lastTimeout);
+                                wrapper.style.opacity = 1; wrapper.style.pointerEvents = "all";
+                            }}
+                            onMouseLeave={() => {
+                                let wrapper = chat.refs["volumeWrapper-" + file.name];
+                                wrapper.lastTimeout = setTimeout(() => {
+                                    if(wrapper.isBarHovered === false) { wrapper.style.opacity = 0; wrapper.style.pointerEvents = "none"; }
+                                }, 1000);
+                            }}>
+                            <svg aria-hidden="false" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M11.383 3.07904C11.009 2.92504 10.579 3.01004 10.293 3.29604L6 8.00204H3C2.45 8.00204 2 8.45304 2 9.00204V15.002C2 15.552 2.45 16.002 3 16.002H6L10.293 20.71C10.579 20.996 11.009 21.082 11.383 20.927C11.757 20.772 12 20.407 12 20.002V4.00204C12 3.59904 11.757 3.23204 11.383 3.07904ZM14 5.00195V7.00195C16.757 7.00195 19 9.24595 19 12.002C19 14.759 16.757 17.002 14 17.002V19.002C17.86 19.002 21 15.863 21 12.002C21 8.14295 17.86 5.00195 14 5.00195ZM14 9.00195C15.654 9.00195 17 10.349 17 12.002C17 13.657 15.654 15.002 14 15.002V13.002C14.551 13.002 15 12.553 15 12.002C15 11.451 14.551 11.002 14 11.002V9.00195Z"></path></svg>
+                        </div>
                         <div className="button button1 marginleft2 videoButton" onClick={() => { chat.videoAction(chat.refs["video-" + file.name], file, "fullscreen"); }}>
                             <svg aria-hidden="false" width="24" height="24" viewBox="0 0 24 24" style={{ marginLeft: 0 }}><path fill="currentColor" d="M19,3H14V5h5v5h2V5A2,2,0,0,0,19,3Z"></path><path fill="currentColor" d="M19,19H14v2h5a2,2,0,0,0,2-2V14H19Z"></path><path fill="currentColor" d="M3,5v5H5V5h5V3H5A2,2,0,0,0,3,5Z"></path><path fill="currentColor" d="M5,14H3v5a2,2,0,0,0,2,2h5V19H5Z"></path></svg>
+                        </div>
+                        <div className="progressWrapper marginleft2 volumeWrapper" ref={"volumeWrapper-" + file.name}
+                            onClick={(e) => {
+                                var pos = (Math.floor(e.currentTarget.getBoundingClientRect().bottom) - e.pageY) / e.currentTarget.clientWidth;
+                                chat.refs["video-" + file.name].volume = pos;
+                                chat.refs["volume-" + file.name].style.width = Math.floor(chat.refs["video-" + file.name].volume * 100) + "%";
+                            }}
+                            onMouseEnter={() => { chat.refs["volumeWrapper-" + file.name].style.opacity = 1; chat.refs["volumeWrapper-" + file.name].style.pointerEvents = "all"; chat.refs["volumeWrapper-" + file.name].isBarHovered = true; }}
+                            onMouseLeave={() => { chat.refs["volumeWrapper-" + file.name].style.opacity = 0; chat.refs["volumeWrapper-" + file.name].style.pointerEvents = "none"; chat.refs["volumeWrapper-" + file.name].isBarHovered = false; }}>
+                            <div className="progress" ref={"volume-" + file.name}/>
                         </div>
                     </div>
                 </div>
@@ -202,25 +238,65 @@ function formatFile(chat, file) {
                 <br/>
                 <div className="tipColor">({formatBytes(file.size, true)})</div>
                 <audio className="audio" ref={"audio-" + file.name}
-                onTimeUpdate={() => {
-                    chat.refs["progress-" + file.name].style.width = Math.floor((chat.refs["audio-" + file.name].currentTime / chat.refs["audio-" + file.name].duration) * 100) + "%"; 
-                    chat.refs["progressText-" + file.name].text = formatDuration2(Math.floor(chat.refs["audio-" + file.name].currentTime) * 1000) + "/" + formatDuration2(Math.floor(chat.refs["audio-" + file.name].duration) * 1000);
-                }}
-                onClick={() => {
-                    chat.videoAction(chat.refs["audio-" + file.name], file, "playpause");
-                }}>
+                    onCanPlay={() => {
+                        let audio = chat.refs["audio-" + file.name];
+                        let progress = chat.refs["progress-" + file.name];
+                        let text = chat.refs["progressText-" + file.name];
+
+                        progress.style.width = Math.floor((audio.currentTime / audio.duration) * 100) + "%"; 
+                        text.innerHTML = formatDuration2(Math.floor(audio.currentTime) * 1000) + "/" + formatDuration2(Math.floor(audio.duration) * 1000);
+                    }}
+                    onTimeUpdate={() => {
+                        chat.refs["progress-" + file.name].style.width = Math.floor((chat.refs["audio-" + file.name].currentTime / chat.refs["audio-" + file.name].duration) * 100) + "%"; 
+                        chat.refs["progressText-" + file.name].innerHTML = formatDuration2(Math.floor(chat.refs["audio-" + file.name].currentTime) * 1000) + "/" + formatDuration2(Math.floor(chat.refs["audio-" + file.name].duration) * 1000);
+                    }}
+                    onVolumeChange={() => {
+                        chat.refs["volume-" + file.name].style.width = Math.floor(chat.refs["audio-" + file.name].volume * 100) + "%";
+                    }}
+                    onClick={() => {
+                        chat.videoAction(chat.refs["audio-" + file.name], file, "playpause");
+                    }}>
                     <source src={chat.props.fileEndpoint + "/" + file.name} type={mimeType}/>
                 </audio>
                 <div className="audioControls aligny margintop1">
                     <div className="button button1 marginleft2 videoButton" ref={"playButtonWrapper-" + file.name} onClick={() => { chat.videoAction(chat.refs["audio-" + file.name], file, "playpause"); }}>
                         <svg aria-hidden="false" width="22" height="22" viewBox="0 0 22 22"><polygon fill="currentColor" points="0 0 0 14 11 7" transform="translate(7 5)"></polygon></svg>
                     </div>
-                    <div className="tipColor marginleft1" ref={"progressText-" + file.name} style={{ fontSize: 13 }}>0:00</div>
-                    <div className="progressWrapper marginleft2b" onClick={(e) => {
+                    <div className="tipColor marginleft1" ref={"progressText-" + file.name} style={{ fontSize: 13, width: 100 }}>0:00</div>
+                    <div className="progressWrapper marginleft2"
+                        onClick={(e) => {
+                            var pos = (e.pageX  - (e.currentTarget.offsetLeft + e.currentTarget.offsetParent.offsetLeft)) / e.currentTarget.offsetWidth;
+                            chat.refs["audio-" + file.name].currentTime = pos * chat.refs["audio-" + file.name].duration;
+                        }}
+                        onDrag={(e) => {
                             var pos = (e.pageX  - (e.currentTarget.offsetLeft + e.currentTarget.offsetParent.offsetLeft)) / e.currentTarget.offsetWidth;
                             chat.refs["audio-" + file.name].currentTime = pos * chat.refs["audio-" + file.name].duration;
                         }}>
                         <div className="progress" ref={"progress-" + file.name} />
+                    </div>
+                    <div className="button button1 marginleft2 videoButton"
+                        onMouseEnter={() => {
+                            let wrapper = chat.refs["volumeWrapper-" + file.name];
+                            clearTimeout(wrapper.lastTimeout);
+                            wrapper.style.opacity = 1; wrapper.style.pointerEvents = "all";
+                        }}
+                        onMouseLeave={() => {
+                            let wrapper = chat.refs["volumeWrapper-" + file.name];
+                            wrapper.lastTimeout = setTimeout(() => {
+                                if(wrapper.isBarHovered === false) { wrapper.style.opacity = 0; wrapper.style.pointerEvents = "none"; }
+                            }, 1000);
+                        }}>
+                        <svg aria-hidden="false" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M11.383 3.07904C11.009 2.92504 10.579 3.01004 10.293 3.29604L6 8.00204H3C2.45 8.00204 2 8.45304 2 9.00204V15.002C2 15.552 2.45 16.002 3 16.002H6L10.293 20.71C10.579 20.996 11.009 21.082 11.383 20.927C11.757 20.772 12 20.407 12 20.002V4.00204C12 3.59904 11.757 3.23204 11.383 3.07904ZM14 5.00195V7.00195C16.757 7.00195 19 9.24595 19 12.002C19 14.759 16.757 17.002 14 17.002V19.002C17.86 19.002 21 15.863 21 12.002C21 8.14295 17.86 5.00195 14 5.00195ZM14 9.00195C15.654 9.00195 17 10.349 17 12.002C17 13.657 15.654 15.002 14 15.002V13.002C14.551 13.002 15 12.553 15 12.002C15 11.451 14.551 11.002 14 11.002V9.00195Z"></path></svg>
+                    </div>
+                    <div className="progressWrapper marginleft2 volumeWrapper" style={{ marginLeft: -85 }} ref={"volumeWrapper-" + file.name}
+                        onClick={(e) => {
+                            var pos = (Math.floor(e.currentTarget.getBoundingClientRect().bottom) - e.pageY) / e.currentTarget.clientWidth;
+                            chat.refs["audio-" + file.name].volume = pos;
+                            chat.refs["volume-" + file.name].style.width = Math.floor(chat.refs["audio-" + file.name].volume * 100) + "%";
+                        }}
+                        onMouseEnter={() => { chat.refs["volumeWrapper-" + file.name].style.opacity = 1; chat.refs["volumeWrapper-" + file.name].style.pointerEvents = "all"; chat.refs["volumeWrapper-" + file.name].isBarHovered = true; }}
+                        onMouseLeave={() => { chat.refs["volumeWrapper-" + file.name].style.opacity = 0; chat.refs["volumeWrapper-" + file.name].style.pointerEvents = "none"; chat.refs["volumeWrapper-" + file.name].isBarHovered = false; }}>
+                        <div className="progress" ref={"volume-" + file.name}/>
                     </div>
                 </div>
             </div>
