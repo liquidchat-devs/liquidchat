@@ -62,6 +62,7 @@ class Endpoint {
 
         user.email = _user.email !== undefined ? _user.email : user.email;
         user.status = _user.status !== undefined ? _user.status : user.status;
+        user.customStatus = _user.customStatus !== undefined ? _user.customStatus : user.customStatus;
         this.updateUser(user, true);
 
         res.send(JSON.stringify(user));
