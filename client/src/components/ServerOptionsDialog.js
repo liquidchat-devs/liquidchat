@@ -30,9 +30,6 @@ export default class ServerOptionsDialog extends React.Component {
               <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.switchDialogState(18); }}>
                 <p className="white text1">&gt; Edit Server</p>
               </div>
-              <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleDelete(e); }}>
-                <p className="declineColor text1">&gt; Delete Server</p>
-              </div>
               <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.switchDialogState(12); }}>
                 <p className="white text1">&gt; Invite Friends</p>
               </div>
@@ -40,8 +37,15 @@ export default class ServerOptionsDialog extends React.Component {
             ""
           }
           <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.API.API_leaveServer(server.id); }}>
-            <p className="white text1">&gt; Leave Server</p>
+            <p className="declineColor text1">&gt; Leave Server</p>
           </div>
+          {
+            server.author.id === this.props.session.userID ?
+            <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleDelete(e); }}>
+                <p className="declineColor text1">&gt; Delete Server</p>
+            </div>:
+            ""
+          }
           <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.copyID(server.id); }}>
             <p className="white text1">&gt; Copy ID</p>
           </div>
