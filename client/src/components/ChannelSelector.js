@@ -71,7 +71,7 @@ export default class ChannelSelector extends React.Component {
       }
 
       return (
-        <div key={i} className="friendEntry selectedColor" style={{ marginBottom: (i === 0 ? 2 : 1) }} onContextMenu={(e) => { this.props.setSelectedUser(friend.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
+        <div key={i} className="friendEntry selectedColor" onContextMenu={(e) => { this.props.setSelectedUser(friend.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="aligny fullheight">
             <img alt="" className="avatar marginleft2" src={this.props.fileEndpoint + "/" + friend.avatar}/>
             <div className="white marginleft2">
