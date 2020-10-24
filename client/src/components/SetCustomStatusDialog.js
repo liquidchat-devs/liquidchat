@@ -6,6 +6,15 @@ export default class SetCustomStatusDialog extends React.Component {
     statusChangeResult: 0
   };
 
+  componentDidMount = () => {
+    const user = this.props.getUser(this.props.session.userID);
+    if(user !== undefined) {
+      this.setState({
+        status: user.customStatus
+      })
+    }
+  }
+
   handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value,
@@ -40,7 +49,7 @@ export default class SetCustomStatusDialog extends React.Component {
         <div className="absolutepos overlaybox">
           <div className="white text3 marginleft2 margintop1a">Set a custom status</div>
           <form onSubmit={this.handleSubmit} className="flex margintop1">
-            <input className="inputfield1 inputfield2 marginleft2" name="status" type="text" placeholder="Status..." required={true} onChange={this.handleChange} />
+            <input className="inputfield1 inputfield2 marginleft2" name="status" type="text" placeholder="Status..." required={true} value={this.state.status} onChange={this.handleChange} />
             <div className="inputfieldPrefix tooltipColor text3">~</div>
             <br />
           </form>

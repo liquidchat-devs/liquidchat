@@ -59,7 +59,7 @@ export default class EditChannelDialog extends React.Component {
             <br />
           </form>
           <div className="alignmiddle margintop1" style={{ height: 40 }}>
-            <div onClick={this.handleSubmit} className="button button1" style={{ marginTop: 15, marginLeft: 10 }} value="vsvsd">Edit!</div>
+            <div onClick={this.handleSubmit} className="button button1" style={{ marginTop: 15, marginLeft: 10 }}>Edit!</div>
           </div>
           {
             (this.getErrorText(this.state.channelEditResult).length > 0 ?

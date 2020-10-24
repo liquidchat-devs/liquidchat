@@ -2,7 +2,7 @@ import React from 'react';
 
 export default class AccountStatusDialog extends React.Component {
   render() {
-    //const user = this.props.getUser(this.props.session.userID)
+    const user = this.props.getUser(this.props.session.userID)
 
     return (
       <div>
@@ -26,7 +26,7 @@ export default class AccountStatusDialog extends React.Component {
           </div>
           <div className="button3 hover chatColor aligny lastBorder" onClick={() => { this.props.switchDialogState(23); }}>
             <div className="status3 marginleft2" style={{ backgroundColor: this.props.const.getStatusColor(4) }}/>
-            <p className="white text1 marginleft2b alignmiddle">Change Status</p>
+    <p className="text1 marginleft2b alignmiddle" style={{ color: user.customStatus === undefined ? "var(--color1)" : "var(--color2)" }}>{ user.customStatus === undefined ? "Change Status" : user.customStatus }</p>
           </div>
         </div>
       </div>

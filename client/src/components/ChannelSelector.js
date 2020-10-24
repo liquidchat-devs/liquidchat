@@ -207,7 +207,10 @@ export default class ChannelSelector extends React.Component {
             <div className="account">
               <img alt="" className="marginleft2 avatar pointer" src={this.props.fileEndpoint + "/" + loggedUser.avatar} onContextMenu={(e) => { this.props.switchDialogState(4); this.props.setBox(e.pageX, e.pageY); e.preventDefault(); }} onClick={(e) => { this.props.switchDialogState(22); this.props.setBox(e.currentTarget.getBoundingClientRect().left, e.currentTarget.getBoundingClientRect().top - 20); e.preventDefault(); }}/>
               <div className="flex marginleft2">
-                <div className="text2" style={{color: "white"}}>{loggedUser !== undefined ? loggedUser.username : "Loading"}</div>
+                <div>
+                  <div className="white text2b">{loggedUser !== undefined ? loggedUser.username : "Loading"}</div>
+                  <div className="tooltipColor text4">{loggedUser !== undefined ? loggedUser.customStatus : "Loading"}</div>
+                </div>
               </div>
             </div>
             <div className="button settingsButton marginleft2" style={{ width: 28, height: 28, position: "relative", transform: "scale(0.85)" }} onClick={() => { this.props.switchDialogState(13) }}>

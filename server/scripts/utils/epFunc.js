@@ -69,23 +69,24 @@ class Endpoint {
     }
 
     async updateUser(user, broadcast) {
+        await this.app.db.db_edit.editUser(this.app.db, user);
+
+        if(user.customStatus.length < 0) { user.customStatus = undefined; }
         this.app.sessionSockets.forEach(socket => {
             if(broadcast && socket.connected) {
                 socket.emit("updateUser", JSON.stringify(user))
             }
         })
-
-        await this.app.db.db_edit.editUser(this.app.db, user);
     }
 
     async updateServer(server, broadcast) {
+        await this.app.db.db_edit.editServer(this.app.db, server);
+
         this.app.sessionSockets.forEach(socket => {
             if(broadcast && socket.connected) {
                 socket.emit("updateServer", JSON.stringify(server))
             }
         })
-
-        await this.app.db.db_edit.editServer(this.app.db, server);
     }
 
     async emitToUser(id, type, data) {
