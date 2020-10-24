@@ -31,17 +31,17 @@ Open-source chat application similar to Discord-
 
 🏁 **Features:**
 - [x] Servers with Text Channels
-- [x] DM Channels 
+- [x] DM Channels
 - [x] Group Chats
 - [x] File Support (up to 100MB by default)
-- [x] Personal Emotes (max. 500) 
+- [x] Personal Emotes (max. 500)
 - [x] Server Emotes (max. 400)
-- [x] Idle/DND/Invisible Status 
-- [x] Friend Features (Adding/Removing friends)  
-- [ ] Better Server Management (Built-in bans, mutes, assigning server moderators) 
+- [x] Idle/DND/Invisible Status
+- [x] Custom Statuses
+- [x] Friend Features (Adding/Removing friends)
+- [ ] Better Server Management (Built-in bans, mutes, assigning server moderators)
 - [ ] Server Discovery
 - [ ] Voice Channels
-- [ ] Custom Statuses 
 - [ ]  a lot more...
 
 
