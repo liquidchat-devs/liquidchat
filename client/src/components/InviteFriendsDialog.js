@@ -2,7 +2,8 @@ import React from 'react';
 
 export default class InviteFriendsDialog extends React.Component {
   state = {
-    invitationResult: 0
+    invitationResult: 0,
+    pendingInvitations: []
   };
 
   inviteUser = async (id, userID, type) => {
@@ -22,6 +23,12 @@ export default class InviteFriendsDialog extends React.Component {
         }
 
         if(isNaN(res)) {
+          let newPending = this.state.pendingInvitations;
+          newPending.push(userID);
+          this.setState({
+            pendingInvitations: newPending
+          });
+
           return true;
         } else {
           this.setState({
@@ -30,8 +37,6 @@ export default class InviteFriendsDialog extends React.Component {
         }
         break;
     }
-    
-    if(res === 1) { this.props.switchDialogState(-1); }
     return true;
   }
 
@@ -58,8 +63,11 @@ export default class InviteFriendsDialog extends React.Component {
               </div>
               {
                 target.members.includes(friend.id) ?
-                  <div className="button inviteButton" style={{ textDecoration: "none", right: 0, color: "#b3b3b3", border: "1px solid #b3b3b3", cursor: "default" }}>Joined!</div>
-                : <div className="button inviteButton" style={{ textDecoration: "none", right: 0 }} onClick={(e) => { this.inviteUser(target.id, friend.id, type); e.preventDefault(); } }>Invite</div>
+                  <div className="button inviteButton" style={{ textDecoration: "none", right: 0, color: "#b3b3b3", border: "1px solid", cursor: "default" }}>Joined!</div>
+                : (this.state.pendingInvitations.includes(friend.id) ?
+                    <div className="button inviteButton" style={{ textDecoration: "none", right: 0, color: "var(--color9)", border: "1px solid", cursor: "default" }}>Invited!</div> :
+                    <div className="button inviteButton" style={{ textDecoration: "none", right: 0 }} onClick={(e) => { this.inviteUser(target.id, friend.id, type); e.preventDefault(); } }>Invite</div>
+                  )
               }
             </div>
           </div>
