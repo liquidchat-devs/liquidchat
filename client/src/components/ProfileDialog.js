@@ -87,9 +87,17 @@ export default class ProfileDialog extends React.Component {
                   </div>
                 </div>
               </div>
-              <div className="flex marginleft3 paddingtop3">
-                {badgeList}
-              </div>
+              {badgeList.length > 0 ?
+                <div className="flex marginleft3 paddingtop3">
+                  {badgeList}
+                </div>
+              : null}
+              {selectedUser.customStatus !== undefined ?
+                <div className="flex marginleft3 paddingtop2c">
+                  <p className="tooltipColor text5 margintop0 marginbot0">Custom Status: </p>
+                  <p className="pendingColor text5 marginleft1 margintop0 marginbot0">{selectedUser.customStatus}</p>
+                </div>
+              : ""}
             </div>
             <div className="section2 chatColor">
               <div className={this.state.focusedSection === 0 ? "button profileButton buttonFocused" : "button profileButton"} onClick={(e) => { this.setState({ focusedSection: 0 }); }}>User Info</div>

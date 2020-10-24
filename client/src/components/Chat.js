@@ -199,6 +199,15 @@ export default class Chat extends React.Component {
                   {user !== undefined ? user.username : "Loading"}
                 </div>
               </div>
+              {
+                user !== undefined && user.customStatus !== undefined ?
+                <div className="flex">
+                  <div className="tooltipColor allignMiddle" style={{margin: 0, fontSize: 11}}>
+                    {user.customStatus}
+                  </div>
+                </div>
+              : ""
+              }
             </div>
           </div>
         </div>
