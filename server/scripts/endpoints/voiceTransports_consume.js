@@ -19,7 +19,7 @@ class Endpoint {
 
         var transports = this.app.voiceGroupTransports.get(channel.id);
         var consumer = transports.consumer.get(user.id);
-        var a = await consumer.consume({ producerID: connection.producerID, rtpCapabilities: connection.rtpCapabilities });
+        var a = await consumer.consume({ producerId: connection.producerID, rtpCapabilities: connection.rtpCapabilities });
         var b = {
             producerID: connection.producerID,
             id: a.id,
