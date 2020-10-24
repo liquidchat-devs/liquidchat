@@ -27,10 +27,13 @@ class Util {
         this.app.sql = require('mysql2');
         this.app.https = require("https");
         this.app.path = require("path");
+        this.app.mediasoup = require("mediasoup");
         this.app.isSessionValid = this.isSessionValid;
 
         var Endpoint = require('./utils/epFunc');
         this.app.epFunc = new Endpoint(this.app);
+        var Endpoint2 = require('./utils/mediaFunc');
+        this.app.mediaFunc = new Endpoint2(this.app);
 
         this.app.readJSON = path =>
             JSON.parse(this.app.fs.readFileSync(require("path").join(__dirname + path)))
@@ -77,6 +80,12 @@ class Util {
         this.app.use(this.express.static("../client/public"));
         this.app.use(this.express.json());
         this.app.use(this.express.urlencoded());
+
+        //Mediasoup Workers
+        this.app.mediaWorkers = [];
+        this.app.voiceGroupRouters = new Map();
+        this.app.voiceGroupTransports = new Map();
+        this.app.mediaFunc.setupMediaWorker();
     }
 
     //Setups a http server

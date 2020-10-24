@@ -25,15 +25,22 @@ class Endpoint {
 
         var voiceGroup = -1;
         if(this.app.voiceGroups.has(channel.id) === false) {
+            //Create Mediasoup Router
+            let router = await this.app.mediaWorkers[0].createRouter();
+            this.app.voiceGroupRouters.set(channel.id, router);
+            this.app.voiceGroupTransports.set(channel.id, { consumer: new Map(), producer: new Map() })
+
+            //Create Voice Group
             voiceGroup = {
                 id: channel.id,
                 createdAt: Date.now(),
                 author: {
                     id: user.id
                 },
-                users: [ user.id ]
+                users: [ user.id ],
+                rtpCapabilities: router.rtpCapabilities
             }
-
+            
             this.app.voiceGroups.set(channel.id, voiceGroup);
         } else {
             voiceGroup = this.app.voiceGroups.get(channel.id)

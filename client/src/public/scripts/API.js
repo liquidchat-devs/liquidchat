@@ -1,5 +1,6 @@
 import axios from 'axios';
 import io from "socket.io-client";
+import mediasoup from "mediasoup-client";
 
 export default class API {
     constructor(_main) {
@@ -7,6 +8,11 @@ export default class API {
         this.socket = -1;
         this.wrtc = -1;
         this.pc = [];
+        this.device = -1;
+        this.consumerTranport = -1;
+        this.producerTransport = -1;
+        this.consumerParameters = -1;
+        this.producerParameters = -1;
 
         this.queuedServers = [];
         this.queuedInvites = [];
@@ -194,6 +200,17 @@ export default class API {
                 currentVoiceGroup: voiceGroup
             });
         });
+        socket.on('newProducer', (producerData) => {
+            var producer = JSON.parse(producerData);
+            var data = await this.API_consumeVoiceTransports(producer.channel.id, producer.id, this.device.rtpCapabilities);
+            var a = this.consumerTranport.consume({ id: data.id, producerId: data.producerID, kind: data.kind, rtpParameters: data.rtpParameters, codecOptions: data.codecOptions });
+            const stream = new MediaStream();
+            stream.addTrack(a.track);
+
+            const audio = document.createElement("audio");
+            audio.id = "remoteaudio-" + producer.id;
+            audio.srcObject = stream;
+        });
         socket.on('updateFriendRequests', (friendRequestsData) => {
             var friendRequests = JSON.parse(friendRequestsData);
             this.API_fetchUsersForFriendRequests(friendRequests);
@@ -202,85 +219,9 @@ export default class API {
             });
         });
 
-        socket.on('receiveVoiceOffer', async(voiceOfferData) => {
-            var voiceOffer = JSON.parse(voiceOfferData);
-
-            //Create new PC
-            const config = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]}
-            var conn = new wrtc.RTCPeerConnection(config)
-
-            //Set streams
-            var audioElement = document.createElement("audio");
-            audioElement.id = "remoteAudio-" + voiceOffer.author.id;
-            audioElement.play();
-
-            //Set events
-            conn.addEventListener('icecandidate', event => {
-                if (event.candidate) {
-                  this.API_sendIceCandidate(this.mainClass.state.currentVoiceGroup.id, event.candidate);
-                }
-            });
-            conn.addEventListener('track', async (event) => {
-                console.log("adding remote stream...");
-                const remoteStream = MediaStream();
-                remoteStream.addTrack(event.track, remoteStream);
-                audioElement.srcObject = remoteStream;
-            });
-            conn.addEventListener("connectionstatechange", event =>{
-                if(conn.connectionState === "connected") {
-                    this.localStream.getTracks().forEach(track => {
-                        console.log("adding local stream...");
-                        conn.addTrack(track, this.localStream);
-                    });
-                }
-            });
-
-            //Set data
-            console.log("creating new pc for offer:");
-            console.log(voiceOffer);
-            await conn.setRemoteDescription(new RTCSessionDescription(voiceOffer.offer));
-            const answer = await conn.createAnswer();
-            await conn.setLocalDescription(answer);
-
-            //Add to list
-            this.pc.push(conn);
-
-            //Send answer to the sender to create a new PC between local and him
-            console.log("sending an answer back:");
-            console.log(answer);
-            this.API_sendVoiceAnswer(this.mainClass.state.currentVoiceGroup.id, voiceOffer.author.id, voiceOffer.offer, answer);
-        });
-        socket.on('receiveVoiceAnswer', async(voiceAnswerData) => {
-            var voiceAnswer = JSON.parse(voiceAnswerData);
-            
-            //Get previously created pc with the same offer
-            var conn = this.pc.filter(pc => { return pc.localDescription.spd === voiceAnswer.offer.spd; })[0]
-            if(conn === undefined) { console.log("couldn't find any PC for:"); console.log(voiceAnswer); return; }
-
-            //Set data
-            console.log("assigning answer to existing pc:");
-            console.log(voiceAnswer);
-            await conn.setLocalDescription(new RTCSessionDescription(voiceAnswer.offer));
-            await conn.setRemoteDescription(new RTCSessionDescription(voiceAnswer.answer));
-        });
-        socket.on('receiveIceCandidate', async(iceCandidateData) => {
-            var iceCandidate = JSON.parse(iceCandidateData);
-            //console.log("received candidate: ");
-            //console.log(iceCandidate);
-            await this.pc.forEach(pc => { pc.addIceCandidate(iceCandidate); });
-        });
-        
-        //Setups the WebRTC Client
-        const wrtc = require('electron-webrtc')()
-        wrtc.on('error', function (err) { console.log(err) })
-        var stream = await window.navigator.mediaDevices.getUserMedia({
-            audio: true
-        });
-
+        let stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         this.socket = socket;
-        this.wrtc = wrtc;
         this.localStream = stream;
-        window.pc = this.pc;
         window.localStream = this.localStream;
     }
     
@@ -835,7 +776,7 @@ export default class API {
         }
     }
 
-    async API_joinVoiceChannel(channel, createOffers = true) {
+    async API_joinVoiceChannel(channel) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/joinVoiceChannel', {
             channel: {
                 id: channel.id
@@ -846,98 +787,89 @@ export default class API {
             return reply.data.status;
         } else {
             var voiceGroup = reply.data;
-            if(createOffers !== false) {
-                voiceGroup.users.forEach(async(id) => {
-                    //Create new PC
-                    const config = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]}
-                    var conn = new this.wrtc.RTCPeerConnection(config)
-
-                    //Set streams
-                    var audioElement = document.createElement("audio");
-                    audioElement.id = "remoteAudio-" + id;
-                    audioElement.play();
-
-                    //Set events
-                    conn.addEventListener('icecandidate', event => {
-                        if (event.candidate) {
-                            this.API_sendIceCandidate(this.mainClass.state.currentVoiceGroup.id, event.candidate);
-                        }
-                    });
-                    conn.addEventListener('track', async (event) => {
-                        console.log("adding remote stream...");
-                        const remoteStream = MediaStream();
-                        remoteStream.addTrack(event.track, remoteStream);
-                        audioElement.srcObject = remoteStream;
-                    });
-                    conn.addEventListener("connectionstatechange", event =>{
-                        if(conn.connectionState === "connected") {
-                            this.localStream.getTracks().forEach(track => {
-                                console.log("adding local stream...");
-                                conn.addTrack(track, this.localStream);
-                            });
-                        }
-                    });
-
-                    //Set data
-                    const offer = await conn.createOffer({
-                        'offerToReceiveAudio': true,
-                        'offerToReceiveVideo': true    
-                    });
-                    await conn.setLocalDescription(offer);
-                    console.log("sending an offer to " + id);
-                    console.log(offer);
-
-                    //Add to list
-                    this.pc.push(conn);
-
-                    //Send an offer to a specified target, waiting for answer
-                    this.API_sendVoiceOffer(channel.id, id, offer);
-                });
-            }
-
+            this.device = new mediasoup.Device();
+            await this.device.load({ routerRtpCapabilities: voiceGroup.rtpCapabilities })
+            await this.API_createVoiceTransports(channel.id);
             return voiceGroup;
         }
     }
 
-    async API_sendVoiceAnswer(channelID, targetID, offer, answer) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/sendVoiceAnswer', {
-            channel: { id: channelID },
-            target: { id: targetID },
-            offer: offer,
-            answer: answer
+    async API_createVoiceTransports(channelID) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createVoiceTransports', {
+            channel: { id: channelID }
         }, { withCredentials: true });
 
         if(reply.data.status !== undefined) {
             return reply.data.status;
         } else {
-            return 1;
+            const transportData = reply.data;
+            const consumerTransport = this.device.createRecvTransport(transportData.consumerData);
+            const producerTransport = this.device.createSendTransport(transportData.producerData);
+            consumerTransport.on('connect', async({ dtlsParameters }, callback, errback) => {
+                this.consumerParameters = dtlsParameters;
+                if(this.consumerParameters !== -1 && this.producerParameters !== -1) {
+                    await this.API_connectVoiceTransports(channelID, this.consumerParameters, this.producerParameters);
+                }
+                callback();
+            });
+            producerTransport.on('connect', async({ dtlsParameters }, callback, errback) => {
+                this.producerParameters = dtlsParameters;
+                if(this.consumerParameters !== -1 && this.producerParameters !== -1) {
+                    await this.API_connectVoiceTransports(channelID, this.consumerParameters, this.producerParameters);
+                }
+                callback();
+            });
+            producerTransport.on('produce', async({ kind, rtpParameters }, callback, errback) => {
+                const data = await this.API_produceVoiceTransports(channelID, kind, rtpParameters);
+                callback(data.id);
+            });
+
+            return { consumerTransport, producerTransport };
         }
     }
 
-    async API_sendVoiceOffer(channelID, targetID, offer) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/sendVoiceOffer', {
+    async API_connectVoiceTransports(channelID, consumerDTLS, producerDTLS) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/connectVoiceTransports', {
             channel: { id: channelID },
-            target: { id: targetID },
-            offer: offer
+            consumerDTLS: consumerDTLS,
+            producerDTLS: producerDTLS
         }, { withCredentials: true });
 
         if(reply.data.status !== undefined) {
             return reply.data.status;
         } else {
-            return 1;
+            return reply.data;
         }
     }
 
-    async API_sendIceCandidate(channelID, candidate) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/sendIceCandidate', {
+    async API_produceVoiceTransports(channelID, kind, rtpParameters ) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/produceVoiceTransports', {
             channel: { id: channelID },
-            candidate: candidate
+            kind: kind,
+            rtpParameters : rtpParameters 
         }, { withCredentials: true });
 
         if(reply.data.status !== undefined) {
             return reply.data.status;
         } else {
-            return 1;
+            const track = this.localStream.getAudioTracks()[0];
+            producer = await transport.produce({ track: track });
+
+            return reply.data;
+        }
+    }
+
+    async API_consumeVoiceTransports(channelID, id, rtpCapabilities) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/consumeVoiceTransports', {
+            channel: { id: channelID },
+            producerID: id,
+            rtpCapabilities : rtpCapabilities 
+        }, { withCredentials: true });
+
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return reply.data;
         }
     }
 
