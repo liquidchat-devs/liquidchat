@@ -798,6 +798,7 @@ export default class API {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createVoiceTransports', {
             channel: { id: channelID }
         }, { withCredentials: true });
+        console.log(reply.data);
 
         if(reply.data.status !== undefined) {
             return reply.data.status;
@@ -823,6 +824,24 @@ export default class API {
                 const data = await this.API_produceVoiceTransports(channelID, kind, rtpParameters);
                 callback(data.id);
             });
+            consumerTransport.on('connectionstatechange', (state) => {
+                console.log("con: " + state);
+            });
+            producerTransport.on('connectionstatechange', (state) => {
+                console.log("prod: " + state);
+            });
+
+            this.consumerTransport = consumerTransport;
+            this.producerTransport = producerTransport;
+            const track = this.localStream.getAudioTracks()[0];
+            var a = await this.producerTransport.produce({ track: track });
+
+            window.transports = [];
+            window.transports.push(consumerTransport);
+            window.transports.push(producerTransport);
+            console.log(this.device);
+            console.log(consumerTransport);
+            console.log(producerTransport);
 
             return { consumerTransport, producerTransport };
         }
@@ -842,7 +861,7 @@ export default class API {
         }
     }
 
-    async API_produceVoiceTransports(channelID, kind, rtpParameters ) {
+    async API_produceVoiceTransports(channelID, kind, rtpParameters) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/produceVoiceTransports', {
             channel: { id: channelID },
             kind: kind,
@@ -852,9 +871,6 @@ export default class API {
         if(reply.data.status !== undefined) {
             return reply.data.status;
         } else {
-            const track = this.localStream.getAudioTracks()[0];
-            var a = await this.producerTransport.produce({ track: track });
-
             return reply.data;
         }
     }

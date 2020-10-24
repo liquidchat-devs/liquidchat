@@ -26,7 +26,26 @@ class Endpoint {
         var voiceGroup = -1;
         if(this.app.voiceGroups.has(channel.id) === false) {
             //Create Mediasoup Router
-            let router = await this.app.mediaWorkers[0].createRouter();
+            const mediaCodecs = [
+            {
+                kind        : "audio",
+                mimeType    : "audio/opus",
+                clockRate   : 48000,
+                channels    : 2
+            },
+            {
+                kind       : "video",
+                mimeType   : "video/H264",
+                clockRate  : 90000,
+                parameters :
+                {
+                "packetization-mode"      : 1,
+                "profile-level-id"        : "42e01f",
+                "level-asymmetry-allowed" : 1
+                }
+            }];
+
+            let router = await this.app.mediaWorkers[0].createRouter({ mediaCodecs });
             this.app.voiceGroupRouters.set(channel.id, router);
             this.app.voiceGroupTransports.set(channel.id, { consumer: new Map(), producer: new Map() })
 
@@ -40,7 +59,7 @@ class Endpoint {
                 users: [ user.id ],
                 rtpCapabilities: router.rtpCapabilities
             }
-            
+
             this.app.voiceGroups.set(channel.id, voiceGroup);
         } else {
             voiceGroup = this.app.voiceGroups.get(channel.id)

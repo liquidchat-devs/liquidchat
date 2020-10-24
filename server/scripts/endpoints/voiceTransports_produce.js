@@ -16,6 +16,7 @@ class Endpoint {
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
         var channel = await this.app.db.db_fetch.fetchChannel(this.app.db, connection.channel.id);
+        var voiceGroup = this.app.voiceGroups.get(channel.id);
 
         var transports = this.app.voiceGroupTransports.get(channel.id);
         var producer = transports.producer.get(user.id);
