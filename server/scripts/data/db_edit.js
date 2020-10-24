@@ -17,14 +17,21 @@ module.exports = {
             console.log(" - [db] Editing User(id: " + user.id + ") in the database..."); 
         }
 
-        var query0 = "username=?, avatar=?, friends=?, dmChannels=?, servers=?, status=?, badges=?, emotes=?" + (user.email == null ? "" : ", email=?") + (user.password == null ? "" : ", password=?") + (user.customStatus == null ? "" : ", customStatus=?")
+        var query0 = "username=?, avatar=?, friends=?, dmChannels=?, servers=?, status=?, badges=?, emotes=?" + (user.email == null ? "" : ", email=?") + (user.password == null ? "" : ", password=?") + (user.customStatus == null || user.customStatus.length < 1 ? "" : ", customStatus=?")
         var query1 = [ db.escapeString(user.username), user.avatar, user.friends.join(","), user.dmChannels.join(","), user.servers.join(","), user.status, user.badges.join(","), user.emotes.join(",") ]
         if(user.email != null) { query1.push(db.escapeString(user.email)); }
         if(user.password != null) { query1.push(user.password); }
-        if(user.customStatus != null) { if(user.customStatus.length > 0) { query1.push(user.customStatus); } else { query1.push("NULL") } }
+        if(user.customStatus != null) { if(user.customStatus.length < 1) { this.clearUserStatus(db, user); } else { query1.push(user.customStatus); } }
 
         var query = "UPDATE users SET " + query0 + " WHERE id='" + user.id + "'";
         db.sqlConn.promise().execute(query, query1)
+        .then((result, err) => {
+            if(err) { throw err; }
+        });
+    },
+
+    clearUserStatus(db, user) {
+        db.sqlConn.promise().query("UPDATE users SET customStatus=NULL WHERE id='" + user.id + "'")
         .then((result, err) => {
             if(err) { throw err; }
         });

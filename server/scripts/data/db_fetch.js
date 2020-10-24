@@ -218,6 +218,7 @@ module.exports = {
         user.servers = user.servers.split(",").filter(a => a.length > 0)
         user.emotes = user.emotes.split(",").filter(a => a.length > 0)
         user.badges = user.badges.split(",").filter(a => a.length > 0)
+        user.customStatus = user.customStatus == null ? undefined : user.customStatus
 
         if(containPassword !== true) {
             delete user.password
