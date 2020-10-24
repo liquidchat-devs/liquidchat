@@ -1,6 +1,6 @@
 import axios from 'axios';
 import io from "socket.io-client";
-import mediasoup from "mediasoup-client";
+import { Device } from "mediasoup-client";
 
 export default class API {
     constructor(_main) {
@@ -200,7 +200,7 @@ export default class API {
                 currentVoiceGroup: voiceGroup
             });
         });
-        socket.on('newProducer', (producerData) => {
+        socket.on('newProducer', async(producerData) => {
             var producer = JSON.parse(producerData);
             var data = await this.API_consumeVoiceTransports(producer.channel.id, producer.id, this.device.rtpCapabilities);
             var a = this.consumerTranport.consume({ id: data.id, producerId: data.producerID, kind: data.kind, rtpParameters: data.rtpParameters, codecOptions: data.codecOptions });
@@ -787,7 +787,7 @@ export default class API {
             return reply.data.status;
         } else {
             var voiceGroup = reply.data;
-            this.device = new mediasoup.Device();
+            this.device = new Device();
             await this.device.load({ routerRtpCapabilities: voiceGroup.rtpCapabilities })
             await this.API_createVoiceTransports(channel.id);
             return voiceGroup;
@@ -853,7 +853,7 @@ export default class API {
             return reply.data.status;
         } else {
             const track = this.localStream.getAudioTracks()[0];
-            producer = await transport.produce({ track: track });
+            var a = await this.producerTransport.produce({ track: track });
 
             return reply.data;
         }

@@ -14,9 +14,9 @@ class Endpoint2 {
     }
 
     async createMediaTransport(channelID) {
-        var router = this.app.voiceGroupRouters[channelID];
+        var router = this.app.voiceGroupRouters.get(channelID);
         var transport = await router.createWebRtcTransport();
-        
+
         return transport;
     }
 }

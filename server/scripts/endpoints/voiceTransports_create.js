@@ -19,7 +19,7 @@ class Endpoint {
         
         var consumer = await this.app.mediaFunc.createMediaTransport(channel.id);
         var producer = await this.app.mediaFunc.createMediaTransport(channel.id);
-        var transports = this.app.voiceGroupTransports[channel.id];
+        var transports = this.app.voiceGroupTransports.get(channel.id);
         transports.consumer.set(user.id, consumer);
         transports.producer.set(user.id, producer);
 

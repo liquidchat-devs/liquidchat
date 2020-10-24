@@ -17,9 +17,9 @@ class Endpoint {
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
         var channel = await this.app.db.db_fetch.fetchChannel(this.app.db, connection.channel.id);
 
-        var transports = this.app.voiceGroupTransports[channel.id];
-        var consumer = transports.consumer[user.id];
-        var producer = transports.producer[user.id];
+        var transports = this.app.voiceGroupTransports.get(channel.id);
+        var consumer = transports.consumer.get(user.id);
+        var producer = transports.producer.get(user.id);
         consumer.connect({ dtlsParameters: connection.consumerDTLS });
         producer.connect({ dtlsParameters: connection.producerDTLS });
 
