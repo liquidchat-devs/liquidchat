@@ -31,13 +31,14 @@ class Endpoint {
         //Make sure client doesn't overwrite something he's not allowed to
         channel.name = _channel.name !== undefined ? _channel.name : channel.name;
         channel.description = _channel.description !== undefined ? _channel.description : channel.description;
+        channel.nsfw = _channel.nsfw !== undefined ? _channel.nsfw : channel.nsfw;
 
         switch(channel.type) {
             case 0:
             case 1:
                 channel.position = _channel.position !== undefined ? _channel.position : channel.position;
                 
-                var server = await this.app.db.db_fetch.fetchServer(this.app.db, _channel.server.id);
+                var server = await this.app.db.db_fetch.fetchServer(this.app.db, channel.server.id);
                 server.members.forEach(id => {
                     this.app.epFunc.emitToUser(id, "updateChannel", channel)
                 });
