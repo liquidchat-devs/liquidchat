@@ -28,8 +28,13 @@ export default class ChannelHeader extends React.Component {
       case 2:
         return (
           <div className="chatColor fullwidth channelHeader">
-            <div className="flex marginleft3">
-              <div className="text2" style={{color: "white"}}>{tip}</div>
+            <div className="aligny fullheight marginleft3">
+              <div className="white text2b">{tip}</div>
+              {
+                channel.description !== undefined ?
+                <div className="tooltipColor marginleft2 text2b">- {channel.description}</div>
+                : ""
+              }
             </div>
           </div>
         );

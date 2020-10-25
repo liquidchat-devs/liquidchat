@@ -11,7 +11,8 @@ export default class EditChannelDialog extends React.Component {
     const channel = this.props.getChannel(this.props.selectedChannel);
     if(channel !== undefined) {
       this.setState({
-        channelName: channel.name
+        channelName: channel.name,
+        channelDescription: channel.description === undefined ? "" : channel.description
       })
     }
   }
@@ -60,7 +61,7 @@ export default class EditChannelDialog extends React.Component {
               <div className="inputfieldPrefix tooltipColor text3">{channel.type === 1 ? "." : "#"}</div>
             </div>
             <div className="flex margintop1">
-              <input className="inputfield1 inputfield2c marginleft2" name="channelDescription" type="text" placeholder="Description..." required={true} onChange={this.handleChange} />
+              <input className="inputfield1 inputfield2c marginleft2" name="channelDescription" type="text" placeholder="Description..." required={true} value={this.state.channelDescription} onChange={this.handleChange} />
             </div>
           </form>
           <div className="alignmiddle margintop1" style={{ height: 40 }}>
