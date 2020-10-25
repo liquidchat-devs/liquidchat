@@ -16,10 +16,7 @@ class Endpoint2 {
     async createMediaTransport(channelID) {
         var router = this.app.voiceGroupRouters.get(channelID);
         var transport = await router.createWebRtcTransport({
-            listenIps: [ { ip: "::", announcedIp: "35.189.74.206" } ],
-            enableUdp : true,
-            enableTcp : true,
-            preferUdp : true
+            listenIps: [ { ip: "::", announcedIp: "35.189.74.206" } ]
         });
 
         return transport;
