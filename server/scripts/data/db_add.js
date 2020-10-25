@@ -32,8 +32,8 @@ module.exports = {
             console.log(" - [db] Adding Channel(id: " + channel.id + ") into the database..."); 
         }
 
-        var query0 = "(id, name, type, createdAt, authorID" + (channel.position == null ? "" : ", position") + (channel.members == null ? "" : ", members") + (channel.description == null ? "" : ", description") + (channel.server == null ? ")" : ", serverID)")
-        var query1 = [ channel.id, db.escapeString(channel.name), channel.type, channel.createdAt, channel.author.id ]
+        var query0 = "(id, name, type, nsfw, createdAt, authorID" + (channel.position == null ? "" : ", position") + (channel.members == null ? "" : ", members") + (channel.description == null ? "" : ", description") + (channel.server == null ? ")" : ", serverID)")
+        var query1 = [ channel.id, db.escapeString(channel.name), channel.type, channel.nsfw, channel.createdAt, channel.author.id ]
         if(channel.position != null) { query1.push(channel.position) }
         if(channel.members != null) { query1.push(channel.members.join(",")) }
         if(channel.description != null) { query1.push(channel.description) }

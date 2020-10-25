@@ -24,6 +24,7 @@ class Endpoint {
             id: this.app.crypto.randomBytes(16).toString("hex"),
             name: _channel.name,
             description: _channel.description,
+            nsfw: _channel.nsfw === undefined ? false : _channel.nsfw,
             type: _channel.type,
             createdAt: Date.now(),
             author: {

@@ -4,6 +4,7 @@ export default class EditChannelDialog extends React.Component {
   state = {
     channelName: "",
     channelDescription: "",
+    isNSFW: false,
     channelEditResult: 0
   };
 
@@ -12,7 +13,8 @@ export default class EditChannelDialog extends React.Component {
     if(channel !== undefined) {
       this.setState({
         channelName: channel.name,
-        channelDescription: channel.description === undefined ? "" : channel.description
+        channelDescription: channel.description === undefined ? "" : channel.description,
+        isNSFW: channel.nsfw
       })
     }
   }
@@ -23,9 +25,15 @@ export default class EditChannelDialog extends React.Component {
     });
   }
 
+  handleSwitchNSFW = () => {
+    this.setState({
+      isNSFW: !this.state.isNSFW,
+    });
+  }
+
   handleSubmit = async e => {
     e.preventDefault();
-    const res = await this.props.API.API_editChannel(this.props.selectedChannel, this.state.channelName, this.state.channelDescription);
+    const res = await this.props.API.API_editChannel(this.props.selectedChannel, this.state.channelName, this.state.channelDescription, this.state.isNSFW);
     this.setState({
       channelEditResult: res,
     });
@@ -62,6 +70,13 @@ export default class EditChannelDialog extends React.Component {
             </div>
             <div className="flex margintop1">
               <input className="inputfield1 inputfield2c marginleft2" name="channelDescription" type="text" placeholder="Description..." required={true} value={this.state.channelDescription} onChange={this.handleChange} />
+            </div>
+            <div className="flex margintop1">
+              <div className="aligny marginleft2" style={{ width: "25%" }}>
+                  <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleSwitchNSFW(); }}>
+                    <p className="white text1">{this.state.isNSFW === true ? "NSFW" : "SFW"}</p>
+                  </div>
+                </div>
             </div>
           </form>
           <div className="alignmiddle margintop1" style={{ height: 40 }}>
