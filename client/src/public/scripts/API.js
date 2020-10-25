@@ -798,7 +798,6 @@ export default class API {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createVoiceTransports', {
             channel: { id: channelID }
         }, { withCredentials: true });
-        console.log(reply.data);
 
         if(reply.data.status !== undefined) {
             return reply.data.status;
@@ -1024,9 +1023,9 @@ export default class API {
     //#endregion
 
     //#region Channels
-    async API_createChannel(serverID, channelName, channelType, channelDescription) {
+    async API_createChannel(serverID, channelName, channelType, channelDescription, channelNSFW) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createChannel', {
-            server: { id: serverID }, name: channelName, type: channelType, description: channelDescription.length > 0 ? channelDescription : undefined
+            server: { id: serverID }, name: channelName, type: channelType, description: channelDescription.length > 0 ? channelDescription : undefined, nsfw: channelNSFW
         }, { withCredentials: true });
 
         if(reply.data.status !== undefined) {
@@ -1072,9 +1071,9 @@ export default class API {
         }
     }
 
-    async API_editChannel(channelID, channelName, channelDescription) {
+    async API_editChannel(channelID, channelName, channelDescription, channelNSFW) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/editChannel', {
-            id: channelID, name: channelName, description: channelDescription.length > 0 ? channelDescription : undefined
+            id: channelID, name: channelName, description: channelDescription.length > 0 ? channelDescription : undefined, nsfw: channelNSFW
         }, { withCredentials: true });
 
         if(reply.data.status !== undefined) {

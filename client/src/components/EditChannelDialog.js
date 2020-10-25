@@ -74,7 +74,7 @@ export default class EditChannelDialog extends React.Component {
             <div className="flex margintop1">
               <div className="aligny marginleft2" style={{ width: "25%" }}>
                   <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleSwitchNSFW(); }}>
-                    <p className="white text1">{this.state.isNSFW === true ? "NSFW" : "SFW"}</p>
+                    <p className="white text1">{this.state.isNSFW ? "NSFW" : "SFW"}</p>
                   </div>
                 </div>
             </div>

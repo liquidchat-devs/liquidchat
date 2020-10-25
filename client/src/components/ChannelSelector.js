@@ -160,6 +160,9 @@ export default class ChannelSelector extends React.Component {
               return (
                 <div {...props} key={index} className={this.props.currentChannel === value.id ? "white headerColor channel selectedColor" : "white headerColor channel"} onContextMenu={(e) => { this.props.setSelectedChannel(value.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } }>
                   #{channelName}
+                  {value.nsfw ?
+                  <svg width="24" height="24" viewBox="0 0 24 24" style={{ marginTop: 20, marginLeft: -10 }}><path fill="currentColor" d="M21.025 5V4C21.025 2.88 20.05 2 19 2C17.95 2 17 2.88 17 4V5C16.4477 5 16 5.44772 16 6V9C16 9.55228 16.4477 10 17 10H19H21C21.5523 10 22 9.55228 22 9V5.975C22 5.43652 21.5635 5 21.025 5ZM20 5H18V4C18 3.42857 18.4667 3 19 3C19.5333 3 20 3.42857 20 4V5Z"></path></svg>
+                  : ""}
                 </div>
               )
               }}>
