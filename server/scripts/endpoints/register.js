@@ -31,6 +31,7 @@ class Endpoint {
                     friends: [],
                     dmChannels: [],
                     servers: [],
+                    badges: [],
                     status: 0
                 }
         
