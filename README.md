@@ -8,7 +8,6 @@ Open-source chat application similar to Discord-
 
 <p align="center" style="display :flex;">
 <img src="https://travis-ci.org/LamkasDev/liquidchat.svg?branch=master"/>
-<img src="https://img.shields.io/librariesio/github/lamkasdev/liquidchat"/>
 <img src="https://img.shields.io/github/contributors/LamkasDev/liquidchat"/>
 <img src="https://img.shields.io/uptimerobot/ratio/7/m786204603-8c2555ef72f2fddab53b181a"/>
 </p>
