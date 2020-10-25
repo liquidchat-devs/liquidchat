@@ -248,6 +248,7 @@ module.exports = {
         channel.server = { id: channel.serverID }
         delete channel.serverID
         channel.members = channel.members == null ? undefined : channel.members.split(",").filter(a => a.length > 0)
+        channel.description = channel.description == null ? undefined : channel.description
 
         return channel;
     },
