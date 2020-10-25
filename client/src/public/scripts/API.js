@@ -9,7 +9,7 @@ export default class API {
         this.wrtc = -1;
         this.pc = [];
         this.device = -1;
-        this.consumerTranport = -1;
+        this.consumerTransport = -1;
         this.producerTransport = -1;
         this.consumerParameters = -1;
         this.producerParameters = -1;
@@ -203,7 +203,7 @@ export default class API {
         socket.on('newProducer', async(producerData) => {
             var producer = JSON.parse(producerData);
             var data = await this.API_consumeVoiceTransports(producer.channel.id, producer.id, this.device.rtpCapabilities);
-            var a = this.consumerTranport.consume({ id: data.id, producerId: data.producerID, kind: data.kind, rtpParameters: data.rtpParameters, codecOptions: data.codecOptions });
+            var a = await this.consumerTransport.consume({ id: data.id, producerId: data.producerID, kind: data.kind, rtpParameters: data.rtpParameters, codecOptions: data.codecOptions });
             const stream = new MediaStream();
             stream.addTrack(a.track);
 
@@ -1024,9 +1024,9 @@ export default class API {
     //#endregion
 
     //#region Channels
-    async API_createChannel(serverID, channelName, channelType) {
+    async API_createChannel(serverID, channelName, channelType, channelDescription) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createChannel', {
-            server: { id: serverID }, name: channelName, type: channelType
+            server: { id: serverID }, name: channelName, type: channelType, description: channelDescription.length > 0 ? channelDescription : undefined
         }, { withCredentials: true });
 
         if(reply.data.status !== undefined) {
@@ -1072,9 +1072,9 @@ export default class API {
         }
     }
 
-    async API_editChannel(channelID, channelName) {
+    async API_editChannel(channelID, channelName, channelDescription) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/editChannel', {
-            id: channelID, name: channelName
+            id: channelID, name: channelName, description: channelDescription.length > 0 ? channelDescription : undefined
         }, { withCredentials: true });
 
         if(reply.data.status !== undefined) {

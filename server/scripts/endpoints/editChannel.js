@@ -30,6 +30,7 @@ class Endpoint {
 
         //Make sure client doesn't overwrite something he's not allowed to
         channel.name = _channel.name !== undefined ? _channel.name : channel.name;
+        channel.description = _channel.description !== undefined ? _channel.description : channel.description;
 
         switch(channel.type) {
             case 0:

@@ -59,10 +59,11 @@ module.exports = {
             console.log(" - [db] Editing Channel(id: " + channel.id + ") in the database..."); 
         }
 
-        var query0 = "name=?" + (channel.position == null ? "" : ", position=?") + (channel.members == null ? "" : ", members=?")
+        var query0 = "name=?" + (channel.position == null ? "" : ", position=?") + (channel.members == null ? "" : ", members=?") + (channel.description == null ? "" : ", description=?")
         var query1 = [ db.escapeString(channel.name) ]
         if(channel.position != null) { query1.push(channel.position); }
         if(channel.members != null) { query1.push(channel.members.join(",")); }
+        if(channel.description != null) { query1.push(channel.description); }
 
         var query = "UPDATE channels SET " + query0 + " WHERE id='" + channel.id + "'";
         db.sqlConn.promise().execute(query, query1)
