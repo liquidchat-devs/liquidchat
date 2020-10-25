@@ -836,7 +836,6 @@ code {
   margin: 10px 20px 15px 15px;
   background-color: var(--color4);
   border-radius: 10px;
-  border: 1px solid #1b1b1b;
 }
 
 .videoControls {
@@ -1174,4 +1173,11 @@ code {
 
 .overlaybg {
   background: url("https://nekonetwork.net:8081/bg.png");
+}
+
+.statusBorder {
+  background-color: var(--color3);
+  border-radius: 50%;
+  padding-left: 2px;
+  padding-top: 2px;
 }
