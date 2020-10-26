@@ -713,11 +713,11 @@ export default class API {
         return suitableChannels[0];
     }
 
-    async API_sendMessage(message) {
+    async API_sendMessage(channelID, text) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/message', {
-            text: message,
+            text: text,
             channel: {
-                id: this.mainClass.state.currentChannel
+                id: channelID
             }
         }, { withCredentials: true });
 
@@ -728,12 +728,12 @@ export default class API {
         }
     }
 
-    async API_sendDM(userID, message) {
+    async API_sendDM(userID, text) {
         var channel = await this.API_getSuitableDMChannel(userID)
         if(channel === undefined) { return false; }
 
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/message', {
-            text: message,
+            text: text,
             channel: {
                 id: channel.id
             }
@@ -746,10 +746,10 @@ export default class API {
         }
     }
 
-    async API_sendFile(file, message) {
+    async API_sendFile(file, text) {
         var data = new FormData();
         data.append("fileUploaded", file)
-        data.append("text", message)
+        data.append("text", text)
         data.append("channel.id", this.mainClass.state.currentChannel)
 
         const reply = await axios({
@@ -770,9 +770,9 @@ export default class API {
         }
     }
 
-    async API_editMessage(originalMessage, newText) {
+    async API_editMessage(originalMessageID, newText) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/editMessage', {
-            id: originalMessage.id,
+            id: originalMessageID,
             text: newText
         }, { withCredentials: true });
 
@@ -783,9 +783,9 @@ export default class API {
         }
     }
 
-    async API_deleteMessage(message) {
+    async API_deleteMessage(messageID) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/deleteMessage', {
-            id: message.id
+            id: messageID
         }, { withCredentials: true });
 
         if(reply.data.status !== undefined) {
@@ -795,10 +795,10 @@ export default class API {
         }
     }
 
-    async API_joinVoiceChannel(channel) {
+    async API_joinVoiceChannel(channelID) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/joinVoiceChannel', {
             channel: {
-                id: channel.id
+                id: channelID
             }
         }, { withCredentials: true });
 
@@ -808,7 +808,7 @@ export default class API {
             var voiceGroup = reply.data;
             this.device = new Device();
             await this.device.load({ routerRtpCapabilities: voiceGroup.rtpCapabilities })
-            await this.API_createVoiceTransports(channel.id);
+            await this.API_createVoiceTransports(channelID);
             return voiceGroup;
         }
     }
@@ -1045,9 +1045,13 @@ export default class API {
     //#endregion
 
     //#region Channels
-    async API_createChannel(serverID, channelName, channelType, channelDescription, channelNSFW) {
+    async API_createChannel(channel) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createChannel', {
-            server: { id: serverID }, name: channelName, type: channelType, description: channelDescription.length > 0 ? channelDescription : undefined, nsfw: channelNSFW
+            server: channel.server,
+            name: channel.name,
+            type: channel.type,
+            description: channel.description.length > 0 ? channel.description : undefined,
+            nsfw: channel.nsfw
         }, { withCredentials: true });
 
         if(reply.data.status !== undefined) {
@@ -1059,7 +1063,9 @@ export default class API {
 
     async API_createChannelDM(channelName, channelMembers) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createChannel', {
-            name: channelName, type: 2, members: channelMembers
+            name: channelName,
+            type: 2,
+            members: channelMembers
         }, { withCredentials: true });
 
         if(reply.data.status !== undefined) {
@@ -1093,9 +1099,13 @@ export default class API {
         }
     }
 
-    async API_editChannel(channelID, channelName, channelDescription, channelNSFW) {
+    async API_editChannel(channel) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/editChannel', {
-            id: channelID, name: channelName, description: channelDescription.length > 0 ? channelDescription : undefined, nsfw: channelNSFW
+            id: channel.id,
+            name: channel.name,
+            description: channel.description !== undefined && channel.description.length > 0 ? channel.description : undefined,
+            nsfw: channel.nsfw,
+            position: channel.position
         }, { withCredentials: true });
 
         if(reply.data.status !== undefined) {

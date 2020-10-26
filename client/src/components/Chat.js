@@ -17,7 +17,7 @@ export default class Chat extends React.Component {
   handleEdit = async e => {
     e.preventDefault();
 
-    const res = await this.props.API.API_editMessage(this.props.editingMessage, this.props.editedMessage)
+    const res = await this.props.API.API_editMessage(this.props.editingMessage.id, this.props.editedMessage)
     if(res === 1) {
       this.props.setEditedMesage("");
     }

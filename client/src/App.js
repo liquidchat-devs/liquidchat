@@ -92,7 +92,7 @@ class App extends React.Component {
 
     switch(channel.type) {
       case 1:
-        this.state.API.API_joinVoiceChannel(channel)
+        this.state.API.API_joinVoiceChannel(channel.id)
         break;
     }
 
@@ -191,22 +191,10 @@ class App extends React.Component {
     channels.splice(newIndex, 0, channels.splice(oldIndex, 1)[0]);
     channels.forEach((c, index) => {
       c.position = index;
-    });
-
-    //Find channels that has been sorted and assign the new position to them, so we don't lose channels not included in the sorting
-    channels = new Map(channels.map(obj => [obj.id, obj]))
-    let newChannels = Array.from(this.state.channels.values());
-    newChannels = newChannels.reduce((acc, curr) => {
-      if(channels.has(curr.id)) {
-        curr.position = channels.get(curr.id).position;
-      }
-      
-      acc.set(curr.id, curr);
-      return acc;
-    }, new Map())
-
-    this.setState({
-        channels: newChannels
+      this.state.API.API_editChannel({
+        id: c.id,
+        position: index
+      });
     });
   }
 

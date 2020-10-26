@@ -7,7 +7,7 @@ export default class MessageOptionsDialog extends React.Component {
 
   handleDelete = async e => {
     e.preventDefault();
-    const res = await this.props.API.API_deleteMessage(this.props.selectedMessage);
+    const res = await this.props.API.API_deleteMessage(this.props.selectedMessage.id);
     this.setState({
       messageDeletionResult: res,
     });

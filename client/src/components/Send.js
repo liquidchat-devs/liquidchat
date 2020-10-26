@@ -53,7 +53,7 @@ export default class Send extends React.Component {
     let b = message.substring(b0 > -1 ? b0 + 1 : message.length)
     let possibleMentions = members.filter(e => { return b.length > 0 && e.username.startsWith(b); }).sort((a, b) => { return a.username.length - b.username.length; }).slice(0, 4)
 
-    this.props.API.API_typingIndicator(channel.id);
+    this.props.API.API_typingIndicator(channel);
     this.setState({
       message: message,
       currentEmotes: possibleEmotes,
@@ -74,7 +74,7 @@ export default class Send extends React.Component {
       this.handleChange({ target: { value: b + "<@" + this.state.currentMentions[this.state.currentMentionIndex].id + ">" }})
     } else {
       this.handleChange({ target: { value: "" }})
-      if(await this.props.API.API_sendMessage(this.state.message)) {
+      if(await this.props.API.API_sendMessage(this.props.currentChannel, this.state.message)) {
         this.setState({
           message: "",
         });
