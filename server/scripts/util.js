@@ -42,7 +42,7 @@ class Util {
 
         //SQL Setup
         const conn = this.app.sql.createConnection({
-            host: "35.189.74.206",
+            host: "localhost",
             user: "root",
             password: this.app.config.sqlPassword,
             database: "liquidchat",
