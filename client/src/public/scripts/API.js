@@ -221,7 +221,7 @@ export default class API {
             });
         });
 
-        socket.on('startTyping', (typingData) => {
+        socket.on('startTyping', async(typingData) => {
             var typing = JSON.parse(typingData);
             var newIndicators = this.mainClass.state.typingIndicators;
             newIndicators.get(typing.channel.id).push(typing.user.id);
@@ -229,7 +229,7 @@ export default class API {
                 typingIndicators: newIndicators
             });
         });
-        socket.on('endTyping', (typingData) => {
+        socket.on('endTyping', async(typingData) => {
             var typing = JSON.parse(typingData);
             var newIndicators = this.mainClass.state.typingIndicators;
             newIndicators.get(typing.channel.id).splice(newIndicators.get(typing.channel.id).indexOf(typing.user.id), 1);
@@ -1208,7 +1208,7 @@ export default class API {
         this.typingTimeoutID = setTimeout(() => {
             this.typingTimeoutID = -1;
             this.socket.emit('endTyping', { channel: { id: channelID } })
-        }, 1000);
+        }, 2000);
     }
     //#endregion
 }

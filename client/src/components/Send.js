@@ -138,9 +138,15 @@ export default class Send extends React.Component {
       </div>
     })
 
-    let typingContent = this.props.typingIndicators.get(this.props.currentChannel).map((id, i) => {
+    let ind = this.props.typingIndicators.get(this.props.currentChannel);
+    let typingContent = ind.map((id, i) => {
       let user = this.props.getUser(id);
-      return <b>{user.username}</b>
+
+      if(i === ind.length - 1) {
+        return <p className="margin0"><b>{user.username}</b> {ind.length > 1 ? "are" : "is"} typing...</p>;
+      } else {
+        return <p className="margin0"><b>{user.username}</b>, </p>;
+      }
     })
 
     return (
@@ -160,7 +166,7 @@ export default class Send extends React.Component {
             <input className="input-message chatColor" type="text" value={this.state.message} placeholder="Message..." required={true} onChange={this.handleChange}/>
           </form>
         </div>
-        <div className="tooltipColor text4">
+        <div className="tooltipColor text4" style={{ marginTop: 5, marginLeft: 2 }}>
           {typingContent}
         </div>
       </div>
