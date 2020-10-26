@@ -45,6 +45,7 @@ class App extends React.Component {
     invites: new Map(),
     unreadMessages: new Map(),
     emotes: new Map(),
+    typingIndicators: new Map(),
 
     //Channel selector
     firstChannelElement: -1,
@@ -426,7 +427,7 @@ class App extends React.Component {
                 selectedServer={this.state.selectedServer} getChannel={this.getChannel} getServer={this.getServer} currentChannel={this.state.currentChannel} switchDialogState={this.switchDialogState} setSelectedMessage={this.setSelectedMessage}
                 editingMessage={this.state.editingMessage} editedMessage={this.state.editedMessage} setEditedMessage={this.setEditedMessage} endEditingMessage={this.endEditingMessage} getUser={this.getUser} fileEndpoint={this.state.fileEndpoint}/>
                 <c.Send
-                getUser={this.getUser} getChannel={this.getChannel} getServer={this.getServer} isInServer={this.isInServer} isInChannel={this.isInChannel} session={this.state.session} fileEndpoint={this.state.fileEndpoint} emotes={this.state.emotes} API={this.state.API}
+                typingIndicators={this.state.typingIndicators} getUser={this.getUser} getChannel={this.getChannel} getServer={this.getServer} isInServer={this.isInServer} isInChannel={this.isInChannel} session={this.state.session} fileEndpoint={this.state.fileEndpoint} emotes={this.state.emotes} API={this.state.API}
                 currentChannel={this.state.currentChannel}
                 selectedServer={this.state.selectedServer}/>
               </div>

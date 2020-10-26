@@ -221,6 +221,23 @@ export default class API {
             });
         });
 
+        socket.on('startTyping', (typingData) => {
+            var typing = JSON.parse(typingData);
+            var newIndicators = this.mainClass.state.typingIndicators;
+            newIndicators.get(typing.channel.id).push(typing.user.id);
+            this.mainClass.setState({
+                typingIndicators: newIndicators
+            });
+        });
+        socket.on('endTyping', (typingData) => {
+            var typing = JSON.parse(typingData);
+            var newIndicators = this.mainClass.state.typingIndicators;
+            newIndicators.get(typing.channel.id).splice(newIndicators.get(typing.channel.id).indexOf(typing.user.id), 1);
+            this.mainClass.setState({
+                typingIndicators: newIndicators
+            });
+        });
+
         let stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         this.socket = socket;
         this.localStream = stream;
@@ -1112,12 +1129,15 @@ export default class API {
 
             var currentChannels = this.mainClass.state.channels;
             currentChannels.set(channel.id, channel);
+            var currentIndicators = this.mainClass.state.typingIndicators;
+            currentIndicators.set(channel.id, [])
 
             if(channel.members !== undefined) { this.API_fetchUsersForIDs(channel.members); }
             this.API_fetchEmotesForMessages(messages)
             this.API_fetchUsersForMessages(messages)
             this.mainClass.setState({
-                channels: currentChannels
+                channels: currentChannels,
+                typingIndicators: currentIndicators
             }, () => { console.log("set dm channels"); });
         });
     }
@@ -1149,12 +1169,15 @@ export default class API {
 
             var currentChannels = this.mainClass.state.channels;
             currentChannels.set(channel.id, channel)
+            var currentIndicators = this.mainClass.state.typingIndicators;
+            currentIndicators.set(channel.id, [])
 
             this.API_fetchEmotesForMessages(messages)
             this.API_fetchUsersForMessages(messages)
             this.API_fetchMentionsForMessages(messages)
             this.mainClass.setState({
-                channels: currentChannels
+                channels: currentChannels,
+                typingIndicators: currentIndicators
             }, () => { console.log("set server channels"); });
         });
     }

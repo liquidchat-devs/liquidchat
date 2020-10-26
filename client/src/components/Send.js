@@ -53,6 +53,7 @@ export default class Send extends React.Component {
     let b = message.substring(b0 > -1 ? b0 + 1 : message.length)
     let possibleMentions = members.filter(e => { return b.length > 0 && e.username.startsWith(b); }).sort((a, b) => { return a.username.length - b.username.length; }).slice(0, 4)
 
+    this.props.API.API_typingIndicator(channel.id);
     this.setState({
       message: message,
       currentEmotes: possibleEmotes,
@@ -98,6 +99,7 @@ export default class Send extends React.Component {
       return null;
     }
 
+    let channel = this.props.getChannel(this.props.currentChannel)
     let emoteList = this.state.currentEmotes.map((emote, i) => {
       let server = emote.server !== undefined ? this.props.getServer(emote.server.id) : undefined;
 
@@ -136,8 +138,13 @@ export default class Send extends React.Component {
       </div>
     })
 
+    let typingContent = this.props.typingIndicators.get(this.props.currentChannel).map((id, i) => {
+      let user = this.props.getUser(id);
+      return <b>{user.username}</b>
+    })
+
     return (
-      <div className="marginleft2 margintop1" style={{ marginTop: this.state.currentEmotes.length > 0 || this.state.currentMentions.length > 0 ? -232 : 10 }}>
+      <div className="marginleft2" style={{ marginTop: this.state.currentEmotes.length > 0 || this.state.currentMentions.length > 0 ? -232 : 0 }}>
         <div className="emoteSelector" style={{ display: this.state.currentEmotes.length > 0 || this.state.currentMentions.length > 0 ? "block" : "none" }}>
           {emoteList}
           {mentionList}
@@ -152,6 +159,9 @@ export default class Send extends React.Component {
           <form onSubmit={this.handleSubmit} className="full">
             <input className="input-message chatColor" type="text" value={this.state.message} placeholder="Message..." required={true} onChange={this.handleChange}/>
           </form>
+        </div>
+        <div className="tooltipColor text4">
+          {typingContent}
         </div>
       </div>
     );

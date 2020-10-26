@@ -139,13 +139,13 @@ class Util {
                         case 1:
                             var server = await this.app.db.db_fetch.fetchServer(this.app.db, channel.server.id);
                             server.members.forEach(id => {
-                                this.app.epFunc.emitToUser(id, "startTyping", { id: user.id })
+                                this.app.epFunc.emitToUser(id, "startTyping", { user: { id: user.id }, channel: { id: channel.id } })
                             });
                             break;
             
                         case 2:
                             channel.members.forEach(async(id) => {
-                                this.app.epFunc.emitToUser(id, "startTyping", { id: user.id })
+                                this.app.epFunc.emitToUser(id, "startTyping", { user: { id: user.id }, channel: { id: channel.id } })
                             });
                             break;
                     }
@@ -160,13 +160,13 @@ class Util {
                         case 1:
                             var server = await this.app.db.db_fetch.fetchServer(this.app.db, channel.server.id);
                             server.members.forEach(id => {
-                                this.app.epFunc.emitToUser(id, "endTyping", { id: user.id })
+                                this.app.epFunc.emitToUser(id, "endTyping", { user: { id: user.id }, channel: { id: channel.id } })
                             });
                             break;
             
                         case 2:
                             channel.members.forEach(async(id) => {
-                                this.app.epFunc.emitToUser(id, "endTyping", { id: user.id })
+                                this.app.epFunc.emitToUser(id, "endTyping", { user: { id: user.id }, channel: { id: channel.id } })
                             });
                             break;
                     }
