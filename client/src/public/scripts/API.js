@@ -16,6 +16,8 @@ export default class API {
 
         this.queuedServers = [];
         this.queuedInvites = [];
+
+        this.typingTimeoutIDs = -1;
     }
 
     async API_initWebsockets(userID) {
@@ -803,6 +805,9 @@ export default class API {
             return reply.data.status;
         } else {
             const transportData = reply.data;
+            transportData.consumerData.iceServers = [ { urls: "turn:nekonetwork.net:3478", username: "username1", credential: "password1" }, {"urls": "stun:stun.l.google.com:19302"} ]
+            transportData.producerData.iceServers = [ { urls: "turn:nekonetwork.net:3478", username: "username1", credential: "password1" }, {"urls": "stun:stun.l.google.com:19302"} ]
+
             const consumerTransport = this.device.createRecvTransport(transportData.consumerData);
             const producerTransport = this.device.createSendTransport(transportData.producerData);
             consumerTransport.on('connect', async({ dtlsParameters }, callback, errback) => {
@@ -1166,6 +1171,21 @@ export default class API {
         } else {
             return reply.data;
         }
+    }
+    //#endregion
+
+    //#region Typing
+    async API_typingIndicator(channelID) {
+        if(this.typingTimeoutID === -1) {
+            this.socket.emit('startTyping', { channel: { id: channelID } })
+        } else {
+            clearTimeout(this.typingTimeoutID);
+        }
+
+        this.typingTimeoutID = setTimeout(() => {
+            this.typingTimeoutID = -1;
+            this.socket.emit('endTyping', { channel: { id: channelID } })
+        }, 1000);
     }
     //#endregion
 }

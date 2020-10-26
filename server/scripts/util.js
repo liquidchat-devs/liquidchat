@@ -42,7 +42,7 @@ class Util {
 
         //SQL Setup
         const conn = this.app.sql.createConnection({
-            host: "localhost",
+            host: "35.189.74.206",
             user: "root",
             password: this.app.config.sqlPassword,
             database: "liquidchat",
@@ -129,6 +129,48 @@ class Util {
                     user.status = 0;
                     await this.app.epFunc.updateUser(user, true);
                 }.bind(this));
+
+                socket.on('startTyping', async(data) => {
+                    var channel = await this.app.db.db_fetch.fetchChannel(this.app.db, data.channel.id);
+                    if(channel === undefined) { return; }
+
+                    switch(channel.type) {
+                        case 0:
+                        case 1:
+                            var server = await this.app.db.db_fetch.fetchServer(this.app.db, channel.server.id);
+                            server.members.forEach(id => {
+                                this.app.epFunc.emitToUser(id, "startTyping", { id: user.id })
+                            });
+                            break;
+            
+                        case 2:
+                            channel.members.forEach(async(id) => {
+                                this.app.epFunc.emitToUser(id, "startTyping", { id: user.id })
+                            });
+                            break;
+                    }
+                });
+                
+                socket.on('endTyping', async(data) => {
+                    var channel = await this.app.db.db_fetch.fetchChannel(this.app.db, data.channel.id);
+                    if(channel === undefined) { return; }
+
+                    switch(channel.type) {
+                        case 0:
+                        case 1:
+                            var server = await this.app.db.db_fetch.fetchServer(this.app.db, channel.server.id);
+                            server.members.forEach(id => {
+                                this.app.epFunc.emitToUser(id, "endTyping", { id: user.id })
+                            });
+                            break;
+            
+                        case 2:
+                            channel.members.forEach(async(id) => {
+                                this.app.epFunc.emitToUser(id, "endTyping", { id: user.id })
+                            });
+                            break;
+                    }
+                });
             } catch(e) {
                 console.error(e)
             }
