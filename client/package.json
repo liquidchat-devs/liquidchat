@@ -13,7 +13,7 @@
     "electron-log": "^4.2.4",
     "electron-updater": "^4.3.4",
     "electron-webrtc": "^0.3.0",
-    "mediasoup-client": "^3.6.20",
+    "mediasoup-client": "^3.6.26",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-movable": "^2.5.1",
