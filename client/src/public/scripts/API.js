@@ -132,8 +132,12 @@ export default class API {
             var channel = JSON.parse(channelData);
             channel.messages = [];
             var newChannels = this.mainClass.state.channels.set(channel.id, channel);
+            var currentIndicators = this.mainClass.state.typingIndicators;
+            currentIndicators.set(channel.id, [])
+
             this.mainClass.setState({
-                channels: newChannels
+                channels: newChannels,
+                typingIndicators: currentIndicators
             });
         });
         socket.on('updateChannel', (channelData) => {
@@ -238,9 +242,9 @@ export default class API {
             });
         });
 
-        let stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        //let stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: false });
         this.socket = socket;
-        this.localStream = stream;
+        //this.localStream = stream;
         window.localStream = this.localStream;
     }
     

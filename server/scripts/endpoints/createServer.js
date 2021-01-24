@@ -31,7 +31,8 @@ class Endpoint {
             },
             channels: [],
             members: [ user.id ],
-            invites: []
+            invites: [],
+            emotes: []
         }
 
         server.members.forEach(async(id) => {

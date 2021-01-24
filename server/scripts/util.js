@@ -12,7 +12,7 @@ class Util {
         this.app.userSessions = new Map();
         this.app.sessionSockets = new Map();
         this.app.voiceGroups = new Map();
-        this.app.filesStorage = require("path").join(__dirname, "..", "..", "..", "liquidchat-fileserver", "public/")
+        this.app.filesStorage = require("path").join(__dirname, "..", "..", "liquidchat-fileserver", "public/")
 
         this.app.crypto = require("crypto")
         this.app.cookieParser = require('cookie-parser');
@@ -26,8 +26,9 @@ class Util {
         this.app.bcrypt = require('bcrypt');
         this.app.sql = require('mysql2');
         this.app.https = require("https");
+        this.app.http = require("http");
         this.app.path = require("path");
-        this.app.mediasoup = require("mediasoup");
+        //this.app.mediasoup = require("mediasoup");
         this.app.isSessionValid = this.isSessionValid;
 
         var Endpoint = require('./utils/epFunc');
@@ -85,7 +86,7 @@ class Util {
         this.app.mediaWorkers = [];
         this.app.voiceGroupRouters = new Map();
         this.app.voiceGroupTransports = new Map();
-        this.app.mediaFunc.createMediaWorker();
+        //this.app.mediaFunc.createMediaWorker();
     }
 
     //Setups a http server
@@ -99,6 +100,12 @@ class Util {
         console.log("[MAIN_SERVER] Started up https server on port 8080-");
     }
 
+    //Setups a http server
+    setupHTTPServer() {
+        this.app.server = this.app.http.createServer(this.app).listen(8080);
+        console.log("[MAIN_SERVER] Started up http server on port 8080-");
+    }
+
     //Setups a websocket server
     setupSocketServer() {
         this.app.io = require('socket.io')(this.app.server);
@@ -110,7 +117,8 @@ class Util {
        });
         this.app.io.on('connect', async(socket) => {
             try {
-                var cookies = this.app.cookie.parse(socket.handshake.headers.cookie);
+                var cookies = this.app.config.useHTTP ? { "sessionID": this.app.sessions.entries().next().value[0] } : this.app.cookie.parse(socket.handshake.headers.cookie);
+                console.log(JSON.stringify(cookies));
                 if(cookies['sessionID'] === undefined || !this.app.sessions.has(cookies['sessionID'])) {
                     console.log("> invalid socket.io session");
                     return;
@@ -182,6 +190,14 @@ class Util {
     //Setups routes for the express app
     setupRoutes() {
         var normalizedPath = this.app.path.join(__dirname, "endpoints");
+        this.app.all("*", function(req, res, next) {
+            if(this.app.config.useHTTP && this.app.sessions.size > 0) {
+                req.cookies = { "sessionID": this.app.sessions.entries().next().value[0] };
+            }
+
+            next();
+        }.bind(this));
+
         this.app.fs.readdirSync(normalizedPath).forEach(function(file) {
             var Endpoint = require("./endpoints/" + file);
             var ep = new Endpoint(this.app);
@@ -191,7 +207,8 @@ class Util {
 
     //Checks if incoming request is associated with a valid session
     isSessionValid(app, req, res) {
-        if(req.cookies['sessionID'] === undefined || !app.sessions.has(req.cookies['sessionID']) || !app.sessionSockets.has(req.cookies['sessionID']) ) {
+        var cookies = app.config.useHTTP ? { "sessionID": app.sessions.entries().next().value[0] } : req.cookies;
+        if(cookies['sessionID'] === undefined || !app.sessions.has(cookies['sessionID']) || !app.sessionSockets.has(cookies['sessionID']) ) {
             console.log("> invalid session");
             res.sendStatus(401);
             return false;

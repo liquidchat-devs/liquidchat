@@ -4,8 +4,8 @@ module.exports = {
             console.log(" - [db] Adding Server(id: " + server.id + ") into the database..."); 
         }
 
-        var query = "INSERT IGNORE INTO servers (id, name, createdAt, authorID, avatar, channels, members, invites) VALUES" + db.contructQuestionMarks(8);
-        db.sqlConn.promise().execute(query, [ server.id, db.escapeString(server.name), server.createdAt,  server.author.id, server.avatar, server.channels.join(","), server.members.join(","), server.invites.join(",") ])
+        var query = "INSERT IGNORE INTO servers (id, name, createdAt, authorID, avatar, channels, members, invites, emotes) VALUES" + db.contructQuestionMarks(9);
+        db.sqlConn.promise().execute(query, [ server.id, db.escapeString(server.name), server.createdAt, server.author.id, server.avatar, server.channels.join(","), server.members.join(","), server.invites.join(","), server.emotes.join(",") ])
         .then((result, err) => {
             if(err) { throw err; }
         });
@@ -16,8 +16,8 @@ module.exports = {
             console.log(" - [db] Adding User(id: " + user.id + ") into the database..."); 
         }
 
-        var query0 = "(id, username, createdAt, avatar, password, friends, dmChannels, servers, status, badges" + (user.customStatus == null ? ")" : ", customStatus)")
-        var query1 = [ user.id, db.escapeString(user.username), user.createdAt, user.avatar, user.password, user.friends.join(","), user.dmChannels.join(","), user.servers.join(","), user.status, user.badges.join(",") ]
+        var query0 = "(id, username, createdAt, avatar, password, friends, dmChannels, servers, status, badges, emotes" + (user.customStatus == null ? ")" : ", customStatus)")
+        var query1 = [ user.id, db.escapeString(user.username), user.createdAt, user.avatar, user.password, user.friends.join(","), user.dmChannels.join(","), user.servers.join(","), user.status, user.badges.join(","), user.emotes.join(",") ]
         if(user.customStatus != null) { query1.push(user.customStatus); }
 
         var query = "INSERT IGNORE INTO users " + query0 + " VALUES " + db.contructQuestionMarks(query1.length);

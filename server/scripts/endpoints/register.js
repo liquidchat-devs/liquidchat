@@ -15,7 +15,7 @@ class Endpoint {
             } else {
                 const userID = this.app.crypto.randomBytes(16).toString("hex");
                 const sessionID = this.app.crypto.randomBytes(16).toString("hex");
-                const passwordHash = this.app.bcrypt.hashSync(data.password, this.app.config.salt)
+                const passwordHash = this.app.bcrypt.hashSync(data.password, 10)
 
                 const session = {
                     id: sessionID,
@@ -32,6 +32,7 @@ class Endpoint {
                     dmChannels: [],
                     servers: [],
                     badges: [],
+                    emotes: [],
                     status: 0
                 }
         

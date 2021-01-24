@@ -16,6 +16,7 @@ class Endpoint {
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
         var message = await this.app.db.db_fetch.fetchMessage(this.app.db, _message.id);
+        var channel = await this.app.db.db_fetch.fetchChannel(this.app.db, message.channel.id);
 
         if(message === undefined) {
             res.send(JSON.stringify({ status: -1 }))
@@ -27,7 +28,7 @@ class Endpoint {
             res.sendStatus(200);
         }
 
-        switch(_channel.type) {
+        switch(channel.type) {
             case 0:
             case 1:
                 var server = await this.app.db.db_fetch.fetchServer(this.app.db, channel.server.id);
@@ -37,7 +38,6 @@ class Endpoint {
                 break;
 
             case 2:
-                var channel = await this.app.db.db_fetch.fetchChannel(this.app.db, message.channel.id);
                 channel.members.forEach(async(id) => {
                     this.app.epFunc.emitToUser(id, "deleteMessage", message);
                 });
