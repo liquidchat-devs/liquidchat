@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/jasscod/liquidchat/blob/master/liquidchat_githublogo.png?raw=true">
+<img src="https://qtlamkas.why-am-i-he.re/eWPzV8.png">
 </p>
 
 <p align="center">
