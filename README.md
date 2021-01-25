@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/jasscod/liquidchat/blob/master/liquidchat_githublogo.png?raw=true">
+<img src="https://qtlamkas.why-am-i-he.re/eWPzV8.png">
 </p>
 
 <p align="center">
@@ -7,7 +7,8 @@ Open-source chat application similar to Discord-
 </p>
 
 <p align="center" style="display :flex;">
-<img src="https://travis-ci.org/LamkasDev/liquidchat.svg?branch=master"/>
+<img src="https://img.shields.io/github/workflow/status/LamkasDev/liquidchat/Node.js%20CI"/>
+<img src="https://img.shields.io/github/downloads/LamkasDev/liquidchat/total"/>
 <img src="https://img.shields.io/github/contributors/LamkasDev/liquidchat"/>
 <img src="https://img.shields.io/uptimerobot/ratio/7/m786204603-8c2555ef72f2fddab53b181a"/>
 </p>
