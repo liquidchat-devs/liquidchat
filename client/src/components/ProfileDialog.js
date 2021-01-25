@@ -3,7 +3,30 @@ import * as dateFormatter from './../public/scripts/DateFormatter';
 
 export default class ProfileDialog extends React.Component {
   state = {
-    focusedSection: 0
+    focusedSection: 0,
+    note: ""
+  }
+
+  componentDidMount = () => {
+    const notes = Array.from(this.props.state.notes.values()).filter(e => { return e.author.id === this.props.state.session.userID && e.target.id === this.props.state.selectedUser; })
+    if(notes.length > 0) {
+      this.setState({
+        note: notes[0].text
+      })
+    }
+  }
+
+  handleNote = async e => {
+    e.preventDefault();
+    this.props.API.API_editNote(this.props.state.selectedUser, this.state.note);
+  }
+
+  handleNoteChange = e => {
+    let newNote = e.target.value;
+
+    this.setState({
+      note: newNote
+    })
   }
 
   render() {
@@ -36,6 +59,14 @@ export default class ProfileDialog extends React.Component {
 
     let content = null;
     switch(this.state.focusedSection) {
+      case 0:
+        content = <form className="full">
+          <div className="input-note chatColor">
+            <input class="input-note-text chatColor" type="text" value={this.state.note} placeholder="Edit note..." required={true} onBlur={this.handleNote} onChange={this.handleNoteChange} />
+          </div>
+        </form>
+        break;
+
       case 1:
         content = selectedUser.friends.map((id, i) => {
           if(loggedUser.friends.includes(id)) {

@@ -118,5 +118,10 @@ module.exports = {
         .then((result, err) => {
             if(err) { throw err; }
         });
+        query = "DELETE FROM notes";
+        db.sqlConn.promise().query(query)
+        .then((result, err) => {
+            if(err) { throw err; }
+        });
     }
 }

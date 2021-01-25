@@ -103,4 +103,16 @@ module.exports = {
             if(err) { throw err; }
         });
     },
+
+    addNote(db, note) {
+        if(db.DEBUG) {
+            console.log(" - [db] Adding Note(id: " + note.id + ") into the database..."); 
+        }
+        
+        var query = "INSERT IGNORE INTO notes (id, authorID, targetID, createdAt, text) VALUES('" + note.id + "', '" + note.author.id + "', '" + note.target.id + "', " + note.createdAt + ", '" + db.escapeString(note.text) + "')";
+        db.sqlConn.promise().query(query)
+        .then((result, err) => {
+            if(err) { throw err; }
+        });
+    }
 }

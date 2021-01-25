@@ -68,6 +68,30 @@ class Endpoint {
         res.send(JSON.stringify(user));
     }
 
+    async editNote(req, res, _note) {
+        var socket = this.app.sessionSockets.get(req.cookies['sessionID']);
+        
+        var note = await this.app.db.db_fetch.fetchNoteByAuthorAndTarget(this.app.db, _note.author.id, _note.target.id);
+        if(note === undefined) {
+            var noteData = {
+                id: this.app.crypto.randomBytes(16).toString("hex"),
+                author: { id: _note.author.id },
+                target: { id: _note.target.id },
+                createdAt: Date.now(),
+                text: _note.text
+            }
+
+            await this.app.db.db_add.addNote(this.app.db, noteData);
+            note = await this.app.db.db_fetch.fetchNote(this.app.db, noteData.id);
+        }
+
+        note.text = _note.text !== undefined ? _note.text : note.text;
+        await this.app.db.db_edit.editNote(this.app.db, note);
+        socket.emit("editNote", JSON.stringify(note))
+
+        res.send(JSON.stringify(note));
+    }
+
     async updateUser(user, broadcast) {
         await this.app.db.db_edit.editUser(this.app.db, user);
 

@@ -201,6 +201,53 @@ module.exports = {
         return this.formatInvite(result[0][0])
     },
 
+    async fetchNote(db, id) {
+        if(db.DEBUG) {
+            console.log(" - [db] Loading Note(id: " + id + ") from the database..."); 
+        }
+
+        var query0 = "SELECT * FROM notes WHERE id='" + id + "'";
+        var result = await db.sqlConn.promise().query(query0);
+        if(result.length < 1 || result[0].length < 1) {
+            return undefined;
+        }
+    
+        return this.formatNote(result[0][0])
+    },
+
+    async fetchNoteByAuthorAndTarget(db, authorID, targetID) {
+        if(db.DEBUG) {
+            console.log(" - [db] Loading Note from Author(id: " + authorID + ") to Target(id: " + targetID + ") from the database..."); 
+        }
+
+        var query0 = "SELECT * FROM notes WHERE authorID='" + authorID + "' AND targetID='" + targetID + "'";
+        var result = await db.sqlConn.promise().query(query0);
+        if(result.length < 1 || result[0].length < 1) {
+            return undefined;
+        }
+    
+        return this.formatNote(result[0][0])
+    },
+
+    async fetchNotes(db, id) {
+        if(db.DEBUG) {
+            console.log(" - [db] Loading Notes from User(id: " + id + ") from the database..."); 
+        }
+
+        var query0 = "SELECT * FROM notes WHERE authorID='" + id + "'";
+        var result = await db.sqlConn.promise().query(query0);
+        if(result.length < 1 || result[0].length < 1) {
+            return [];
+        }
+
+        var res = result[0]
+        res.forEach(_res => {
+            _res = this.formatNote(_res)
+        });
+    
+        return res
+    },
+
     formatServer(server) {
         server.channels = server.channels.split(",").filter(a => a.length > 0)
         server.members = server.members.split(",").filter(a => a.length > 0)
@@ -278,5 +325,14 @@ module.exports = {
         delete emote.serverID
         
         return emote;
+    },
+
+    formatNote(note) {
+        note.author = { id: note.authorID }
+        delete note.authorID
+        note.target = { id: note.targetID }
+        delete note.targetID
+
+        return note;
     }
 }

@@ -70,5 +70,20 @@ module.exports = {
         .then((result, err) => {
             if(err) { throw err; }
         });
+    },
+    
+    editNote(db, note) {
+        if(db.DEBUG) {
+            console.log(" - [db] Editing Note(id: " + note.id + ") in the database..."); 
+        }
+
+        var query0 = "text=?"
+        var query1 = [ db.escapeString(note.text) ]
+
+        var query = "UPDATE notes SET " + query0 + " WHERE id='" + note.id + "'";
+        db.sqlConn.promise().execute(query, query1)
+        .then((result, err) => {
+            if(err) { throw err; }
+        });
     }
 }

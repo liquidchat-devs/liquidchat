@@ -46,6 +46,7 @@ class App extends React.Component {
     unreadMessages: new Map(),
     emotes: new Map(),
     typingIndicators: new Map(),
+    notes: new Map(),
 
     //Channel selector
     firstChannelElement: -1,

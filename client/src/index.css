@@ -467,6 +467,25 @@ code {
   padding: 7px;
 }
 
+.input-note {
+  width: calc(100% - 35px);
+  height: 120px;
+  color: #acacac;
+  border: 0;
+  border-radius: 8px;
+  padding: 7px;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.input-note-text {
+  width: calc(100% - 15px);
+  color: #acacac;
+  border: 0;
+  padding: 7px;
+  background-color: transparent;
+}
+
 .message-wrapper {
   margin-bottom: 10px;
 }
@@ -927,6 +946,7 @@ code {
   background-color: rgb(0, 0, 0);
   z-index: 2;
   display: none;
+  cursor: pointer;
 }
 
 .avatarOverlay2 {
@@ -978,7 +998,7 @@ code {
 }
 
 .account {
-  width: calc(100% - 50px);
+  width: calc(100% - 90px);
   height: 100%;
   display: flex;
   align-items: center;
