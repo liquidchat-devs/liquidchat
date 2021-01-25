@@ -1197,6 +1197,7 @@ code {
 
 .overlaybg {
   background: url("https://nekonetwork.net:8081/bg.png");
+  z-index: -1;
 }
 
 .statusBorder {

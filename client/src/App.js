@@ -263,7 +263,7 @@ class App extends React.Component {
 
     //Setup menu bar
     if(window.navigator.userAgent.includes("LiquidChat")) {
-      if(this.state.registeredHooks === true) {
+      if(this.state.registeredHooks === false) {
         const minimizeButton = document.getElementById("minimize-btn");
         const maxUnmaxButton = document.getElementById("max-unmax-btn");
         const closeButton = document.getElementById("close-btn");
@@ -288,9 +288,9 @@ class App extends React.Component {
         closeButton.addEventListener("click", e => {
           window.closeWindow();
         });
-        
-        document.getElementById("web-header").remove();
       }
+
+      document.getElementById("web-header").remove();
     } else {
       document.getElementById("app-header").remove();
     }

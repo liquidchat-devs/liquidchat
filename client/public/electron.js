@@ -1,5 +1,4 @@
 const electron = require('electron');
-const isDev = require('electron-is-dev');
 const path = require('path');
 
 let app = electron.app;
@@ -9,13 +8,13 @@ let tray;
 function createWindow() {
   mainWindow = new electron.BrowserWindow({ width: 900, height: 680, webPreferences: { preload: path.join(__dirname, "preload.js"), zoomFactor: 0.8 }, frame: false });
   mainWindow.setMenu(null);
-  mainWindow.loadURL(isDev ? 'http://localhost:3000' : `https://nekonetwork.net`);
+  mainWindow.loadURL(`https://nekonetwork.net`);
 
   mainWindow.on('closed', () => mainWindow = null);
 }
 
 app.on('ready', () => {
-  tray = new electron.Tray(`${path.join(__dirname, '../logo192_.png')}`)
+  tray = new electron.Tray(`${path.join(__dirname, '../logo192.png')}`)
   const contextMenu = new electron.Menu();
   contextMenu.append(new electron.MenuItem({ label: "LiquidChat", type: "normal" }))
   contextMenu.append(new electron.MenuItem({ type: "separator" }))
