@@ -25,16 +25,16 @@ class Endpoint {
             return;
         }
 
-        switch(_channel.type) {
+        switch(channel.type) {
             case 0:
             case 1:
-                var server = await this.app.db.db_fetch.fetchServer(this.app.db, _channel.server.id);
-                if(server.channels.includes(_channel.id) === false) {
+                var server = await this.app.db.db_fetch.fetchServer(this.app.db, channel.server.id);
+                if(server.channels.includes(channel.id) === false) {
                     res.send(JSON.stringify({ status: -3 }))
                     return;
                 }
 
-                server.channels.splice(server.channels.indexOf(_channel.id), 1)
+                server.channels.splice(server.channels.indexOf(channel.id), 1)
                 server.members.forEach(id => {
                     this.app.epFunc.emitToUser(id, "deleteChannel", channel)
                 });
@@ -43,7 +43,7 @@ class Endpoint {
                 break;
 
             case 2:
-                channel.members = _channel.members;
+                channel.members = channel.members;
                 channel.members.forEach(async(id) => {
                     var user2 = await this.app.db.db_fetch.fetchUser(this.app.db, id);
                     user2.dmChannels.splice(user2.dmChannels.indexOf(channel.id), 1);
