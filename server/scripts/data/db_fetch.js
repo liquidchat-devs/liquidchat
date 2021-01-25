@@ -173,7 +173,7 @@ module.exports = {
             console.log(" - [db] Loading FriendRequests from User(id: " + id + ") from the database..."); 
         }
 
-        var query0 = type === 0 ? "SELECT * FROM friendrequests WHERE authorID='" + id + "'" : "SELECT * FROM friendRequests WHERE targetID='" + id + "'";
+        var query0 = type === 0 ? "SELECT * FROM friendrequests WHERE authorID='" + id + "'" : "SELECT * FROM friendrequests WHERE targetID='" + id + "'";
         var result = await db.sqlConn.promise().query(query0);
         if(result.length < 1 || result[0].length < 1) {
             return [];
