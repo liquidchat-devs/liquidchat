@@ -51,6 +51,10 @@ code {
   cursor: default;
 }
 
+.nopointerevents {
+  pointer-events: none;
+}
+
 .pointer {
   cursor: pointer;
 }

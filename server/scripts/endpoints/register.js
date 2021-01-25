@@ -12,6 +12,10 @@ class Endpoint {
                 res.send(JSON.stringify({ status: -1 }))
             } else if(data.password !== data.password2) {
                 res.send(JSON.stringify({ status: -2 }))
+            } else if(data.username.length < 3) {
+                res.send(JSON.stringify({ status: -3 }))
+            } else if(data.password.length < 8) {
+                res.send(JSON.stringify({ status: -4 }))
             } else {
                 const userID = this.app.crypto.randomBytes(16).toString("hex");
                 const sessionID = this.app.crypto.randomBytes(16).toString("hex");

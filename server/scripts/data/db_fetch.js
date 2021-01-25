@@ -93,7 +93,7 @@ module.exports = {
             console.log(" - [db] Loading Messages from Channel(id: " + id + ") from the database..."); 
         }
 
-        var query0 = "SELECT * FROM messages WHERE channelID='" + id + "'";
+        var query0 = "SELECT * FROM messages WHERE channelID='" + id + "' ORDER BY createdAT ASC";
         var result = await db.sqlConn.promise().query(query0);
         if(result.length < 1 || result[0].length < 1) {
             return [];

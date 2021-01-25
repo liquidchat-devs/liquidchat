@@ -87,6 +87,12 @@ class Util {
         this.app.voiceGroupRouters = new Map();
         this.app.voiceGroupTransports = new Map();
         //this.app.mediaFunc.createMediaWorker();
+
+        if(this.app.config.useHTTP == false) {
+            this.setupServer()
+        } else {
+            this.setupHTTPServer()
+        }
     }
 
     //Setups a http server

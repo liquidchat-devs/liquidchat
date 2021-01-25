@@ -4,6 +4,7 @@ client/node_modules
 
 server/node_modules
 server/data/config_persistent.txt
+server/keys
 
 icon/
 database.json
