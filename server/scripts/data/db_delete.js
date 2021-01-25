@@ -52,7 +52,7 @@ module.exports = {
             console.log(" - [db] Deleting FriendRequest(id: " + id + ") from the database..."); 
         }
 
-        var query = "DELETE FROM friendRequests WHERE id='" + id + "'";
+        var query = "DELETE FROM friendrequests WHERE id='" + id + "'";
         db.sqlConn.promise().query(query)
         .then((result, err) => {
             if(err) { throw err; }
@@ -103,7 +103,7 @@ module.exports = {
         .then((result, err) => {
             if(err) { throw err; }
         });
-        query = "DELETE FROM friendRequests";
+        query = "DELETE FROM friendrequests";
         db.sqlConn.promise().query(query)
         .then((result, err) => {
             if(err) { throw err; }

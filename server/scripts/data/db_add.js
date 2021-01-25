@@ -69,7 +69,7 @@ module.exports = {
             console.log(" - [db] Adding FriendRequest(id: " + friendRequest.id + ") into the database..."); 
         }
         
-        var query = "INSERT IGNORE INTO friendRequests (id, authorID, targetID, createdAt) VALUES('" + friendRequest.id + "', '" + friendRequest.author.id + "', '" + friendRequest.target.id + "', " + friendRequest.createdAt + ")";
+        var query = "INSERT IGNORE INTO friendrequests (id, authorID, targetID, createdAt) VALUES('" + friendRequest.id + "', '" + friendRequest.author.id + "', '" + friendRequest.target.id + "', " + friendRequest.createdAt + ")";
         db.sqlConn.promise().query(query)
         .then((result, err) => {
             if(err) { throw err; }
