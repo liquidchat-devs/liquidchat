@@ -7,7 +7,7 @@ export default class ChannelOptionsDialog extends React.Component {
 
   handleDelete = async e => {
     e.preventDefault();
-    const res = await this.props.API.API_deleteChannel(this.props.selectedChannel);
+    const res = await this.props.API.API_deleteChannel(this.props.state.selectedChannel);
     this.setState({
       channelDeletionResult: res,
     });
@@ -17,15 +17,15 @@ export default class ChannelOptionsDialog extends React.Component {
   }
 
   render() {
-    const channel = this.props.getChannel(this.props.selectedChannel)
+    const channel = this.props.getChannel(this.props.state.selectedChannel)
     if(channel === undefined) {  return null; }
 
     return (
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0); }} style={{ opacity: 0.3 }}></div>
-        <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY, height: channel.author.id === this.props.session.userID ? 45 : 30  }}>
+        <div className="absolutepos overlaybox2" style={{ left: this.props.state.boxX, top: this.props.state.boxY, height: channel.author.id === this.props.state.session.userID ? 45 : 30  }}>
           {
-            channel.author.id === this.props.session.userID ?
+            channel.author.id === this.props.state.session.userID ?
             <div>
               <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.switchDialogState(11); }}>
                 <p className="white text1">&gt; Edit Channel</p>
@@ -40,7 +40,7 @@ export default class ChannelOptionsDialog extends React.Component {
             </div> :
             ""
           }
-          <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.copyID(this.props.selectedChannel); }}>
+          <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.copyID(this.props.state.selectedChannel); }}>
             <p className="white text1">&gt; Copy ID</p>
           </div>
         </div>

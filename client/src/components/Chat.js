@@ -17,7 +17,7 @@ export default class Chat extends React.Component {
   handleEdit = async e => {
     e.preventDefault();
 
-    const res = await this.props.API.API_editMessage(this.props.editingMessage.id, this.props.editedMessage)
+    const res = await this.props.API.API_editMessage(this.props.state.editingMessage.id, this.props.state.editedMessage)
     if(res === 1) {
       this.props.setEditedMesage("");
     }
@@ -102,8 +102,8 @@ export default class Chat extends React.Component {
   }
 
   render() {
-    let server = this.props.getServer(this.props.selectedServer)
-    let channel = this.props.getChannel(this.props.currentChannel)
+    let server = this.props.getServer(this.props.state.selectedServer)
+    let channel = this.props.getChannel(this.props.state.currentChannel)
     if(this.props.isInChannel() === false) {
       return (
         <div className="flex">
@@ -124,7 +124,7 @@ export default class Chat extends React.Component {
           const user = this.props.getUser(message.author.id)
 
           messageHTML = <div className="flex marginleft2 fullwidth">
-            <img alt="" className="avatar" src={this.props.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
+            <img alt="" className="avatar" src={this.props.state.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
             <div className="marginleft2 fullwidth">
               <div className="flex">
                 <div className="allignMiddle hoverunderline" style={{margin: 0, color: (user !== undefined && server !== undefined && server.author.id === user.id ? "yellow" : "red"), fontSize: 16}}>
@@ -135,10 +135,10 @@ export default class Chat extends React.Component {
                 </div>
               </div>
               <div className="flex fullwidth">
-                {message.id === this.props.editingMessage.id ?
+                {message.id === this.props.state.editingMessage.id ?
                 <div className="fullwidth">
                     <form onSubmit={this.handleEdit} className="full fullwidth">
-                      <input className="input-message chatColor" type="text" value={this.props.editedMessage} required={true} onChange={(e) => { this.props.setEditedMessage(e.target.value) }}/>
+                      <input className="input-message chatColor" type="text" value={this.props.state.editedMessage} required={true} onChange={(e) => { this.props.setEditedMessage(e.target.value) }}/>
                     </form>
                   </div>
                 : formatMessage(this, message)
@@ -153,7 +153,7 @@ export default class Chat extends React.Component {
         case 3:
           messageHTML = <div className="flex marginleft2 fullwidth">
             <div className="marginleft2 alignmiddle">
-              <img alt="" className="messageIcon" src={this.props.fileEndpoint + "/" + (message.type === 1 || message.type === 3 ? "join.svg" : "leave.svg")}/>
+              <img alt="" className="messageIcon" src={this.props.state.fileEndpoint + "/" + (message.type === 1 || message.type === 3 ? "join.svg" : "leave.svg")}/>
             </div>
             <div className="marginleft2 fullwidth">
               <div className="flex">
@@ -162,10 +162,10 @@ export default class Chat extends React.Component {
                 </div>
               </div>
               <div className="flex fullwidth">
-                {message.id === this.props.editingMessage.id ?
+                {message.id === this.props.state.editingMessage.id ?
                 <div className="fullwidth">
                     <form onSubmit={this.handleEdit} className="full fullwidth">
-                      <input className="input-message chatColor" type="text" value={this.props.editedMessage} required={true} onChange={(e) => { this.props.setEditedMessage(e.target.value) }}/>
+                      <input className="input-message chatColor" type="text" value={this.props.state.editedMessage} required={true} onChange={(e) => { this.props.setEditedMessage(e.target.value) }}/>
                     </form>
                   </div>
                 : formatMessage(this, message)
@@ -189,7 +189,7 @@ export default class Chat extends React.Component {
       return (
         <div key={i} className="paddingtop2 paddingbot2 flex message hover" onContextMenu={(e) => { this.props.setSelectedUser(user.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="flex marginleft2">
-            <img alt="" className="avatar3" src={this.props.fileEndpoint + "/" + user.avatar}/>
+            <img alt="" className="avatar3" src={this.props.state.fileEndpoint + "/" + user.avatar}/>
             <div className="statusWrapper2">
               <div className="status2" style={{ backgroundColor: this.props.const.getStatusColor(user.status) }}/>
             </div>
@@ -219,10 +219,10 @@ export default class Chat extends React.Component {
       case 2:
         return (
           <div className="flex">
-            <div id="chat-container" style={{ overflowY: "scroll", height: this.props.pageHeight - 128 - this.props.pageHeightOffset, marginBottom: 10, width: membersList === -1 ? "100%" : "calc(100% - 200px)" }}>
+            <div id="chat-container" style={{ overflowY: "scroll", height: this.props.state.pageHeight - 128 - this.props.state.pageHeightOffset, marginBottom: 10, width: membersList === -1 ? "100%" : "calc(100% - 200px)" }}>
               {messageList}
               <div className="white">
-                {this.getUploadMessage(this.props.uploadFileID, this.props.uploadFileName, this.props.uploadReceived, this.props.uploadExpected, this.props.uploadFailed)}
+                {this.getUploadMessage(this.props.state.uploadFileID, this.props.state.uploadFileName, this.props.state.uploadReceived, this.props.state.uploadExpected, this.props.state.uploadFailed)}
               </div>
             </div>
             {membersList === -1 ? null :

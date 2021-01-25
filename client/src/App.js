@@ -107,6 +107,8 @@ class App extends React.Component {
   }
 
   switchDialogState = (id) => {
+    console.log("Switching dialog state from " + this.state.dialogState + " > " + id);
+
     this.setState({
       dialogState: id
     });
@@ -396,44 +398,35 @@ class App extends React.Component {
         {this.state.waitingForSession === false ?
           <div>
             <DialogManager
-            const={this.state.const} emotes={this.state.emotes} setSelectedServer={this.setSelectedServer} setSelectedAvatar={this.setSelectedAvatar} selectedAvatar={this.state.selectedAvatar} getChannel={this.getChannel} getServer={this.getServer} selectedServer={this.state.selectedServer} channels={this.state.channels} currentChannel={this.state.currentChannel} switchChannelTypes={this.switchChannelTypes} switchChannel={this.switchChannel} setSelectedChannel={this.setSelectedChannel} selectedChannel={this.state.selectedChannel} selectedImage={this.state.selectedImage} API={this.state.API}
-            dialogState={this.state.dialogState} switchDialogState={this.switchDialogState} startEditingMessage={this.startEditingMessage} setSelectedUser={this.setSelectedUser} getUser={this.getUser} selectedUser={this.state.selectedUser}
-            boxX={this.state.boxX} boxY={this.state.boxY} selectedMessage={this.state.selectedMessage} session={this.state.session} fileEndpoint={this.state.fileEndpoint} setEditedMessage={this.setEditedMessage} setSelectedMessage={this.setSelectedMessage}/>
+            state={this.state} const={this.state.const} setSelectedServer={this.setSelectedServer} setSelectedAvatar={this.setSelectedAvatar} getChannel={this.getChannel} getServer={this.getServer}
+            switchChannelTypes={this.switchChannelTypes} switchChannel={this.switchChannel} setSelectedChannel={this.setSelectedChannel} API={this.state.API}
+            switchDialogState={this.switchDialogState} startEditingMessage={this.startEditingMessage} setSelectedUser={this.setSelectedUser} getUser={this.getUser}
+            setEditedMessage={this.setEditedMessage} setSelectedMessage={this.setSelectedMessage}/>
             <div className="flex">
-              <c.ChannelSelector const={this.state.const} getChannel={this.getChannel} getOwnServers={this.getOwnServers} pageHeight={this.state.pageHeight} pageHeightOffset={this.state.pageHeightOffset} moveChannel={this.moveChannel} setBox={this.setBox} getServer={this.getServer} selectedServer={this.state.selectedServer} selectedChannel={this.state.selectedChannel} setSelectedServer={this.setSelectedServer} currentChannel={this.state.currentChannel}
-              setSelectedChannel={this.setSelectedChannel} API={this.state.API} switchDialogState={this.switchDialogState} channelTypes={this.state.channelTypes} switchChannelTypes={this.switchChannelTypes}
-              session={this.state.session} fileEndpoint={this.state.fileEndpoint} friendRequests={this.state.friendRequests} setSelectedUser={this.setSelectedUser}
-              channels={this.state.channels} setFirstChannel={this.setFirstChannel} switchChannel={this.switchChannel} currentVoiceGroup={this.state.currentVoiceGroup} getUser={this.getUser}/>
+              <c.ChannelSelector
+              state={this.state} const={this.state.const} getChannel={this.getChannel} getOwnServers={this.getOwnServers} moveChannel={this.moveChannel} setBox={this.setBox} getServer={this.getServer}
+              setSelectedServer={this.setSelectedServer} setSelectedChannel={this.setSelectedChannel} API={this.state.API} switchDialogState={this.switchDialogState} switchChannelTypes={this.switchChannelTypes}
+              setSelectedUser={this.setSelectedUser} setFirstChannel={this.setFirstChannel} switchChannel={this.switchChannel} getUser={this.getUser}/>
               <div className="chat-wrapper">
                 <c.ChannelHeader
                 API={this.state.API} currentChannel={this.state.currentChannel} getChannel={this.getChannel} selectedServer={this.state.selectedServer} getServer={this.getServer} currentVoiceGroup={this.state.currentVoiceGroup}/>
                 <c.Chat
-                const={this.state.const} setBox={this.setBox} users={this.state.users} isInChannel={this.isInChannel} emotes={this.state.emotes} pageHeightOffset={this.state.pageHeightOffset}
-                session={this.state.session} uploadReceived={this.state.uploadReceived} uploadExpected={this.state.uploadExpected}
-                uploadFileID={this.state.uploadFileID} uploadFileName={this.state.uploadFileName} uploadFailed={this.state.uploadFailed}
-                pageHeight={this.state.pageHeight} API={this.state.API} setSelectedUser={this.setSelectedUser} currentVoiceGroup={this.state.currentVoiceGroup} setSelectedImage={this.setSelectedImage}
-                selectedServer={this.state.selectedServer} getChannel={this.getChannel} getServer={this.getServer} currentChannel={this.state.currentChannel} switchDialogState={this.switchDialogState} setSelectedMessage={this.setSelectedMessage}
-                editingMessage={this.state.editingMessage} editedMessage={this.state.editedMessage} setEditedMessage={this.setEditedMessage} endEditingMessage={this.endEditingMessage} getUser={this.getUser} fileEndpoint={this.state.fileEndpoint}/>
-                <c.Send
-                typingIndicators={this.state.typingIndicators} getUser={this.getUser} getChannel={this.getChannel} getServer={this.getServer} isInServer={this.isInServer} isInChannel={this.isInChannel} session={this.state.session} fileEndpoint={this.state.fileEndpoint} emotes={this.state.emotes} API={this.state.API}
-                currentChannel={this.state.currentChannel}
-                selectedServer={this.state.selectedServer}/>
+                state={this.state} const={this.state.const} setBox={this.setBox} isInChannel={this.isInChannel}
+                API={this.state.API} setSelectedUser={this.setSelectedUser} setSelectedImage={this.setSelectedImage}
+                getChannel={this.getChannel} getServer={this.getServer} switchDialogState={this.switchDialogState} setSelectedMessage={this.setSelectedMessage}
+                setEditedMessage={this.setEditedMessage} endEditingMessage={this.endEditingMessage} getUser={this.getUser}/>
+                <c.Send state={this.state} getUser={this.getUser} getChannel={this.getChannel} getServer={this.getServer} isInServer={this.isInServer} isInChannel={this.isInChannel} API={this.state.API}/>
               </div>
             </div>
           </div> :
         (this.state.formState === 0 ?
           <div>
-            <DialogManager dialogState={this.state.dialogState} switchDialogState={this.switchDialogState} />
-            <c.LoginForm
-            fileEndpoint={this.state.fileEndpoint} API={this.state.API} switchDialogState={this.switchDialogState}
-            session={this.state.session} getUser={this.getUser}
-            formState={this.state.formState} switchFormState={this.switchFormState}/>
+            <DialogManager state={this.state} switchDialogState={this.switchDialogState} />
+            <c.LoginForm state={this.state} API={this.state.API} switchDialogState={this.switchDialogState} getUser={this.getUser} switchFormState={this.switchFormState}/>
           </div> :
           <div>
             <div className="margintop2 fullwidth textcenter text0" style={{color: "white"}}>Register</div>
-            <c.RegisterForm
-            fileEndpoint={this.state.fileEndpoint} API={this.state.API}
-            formState={this.state.formState} switchFormState={this.switchFormState}/>
+            <c.RegisterForm API={this.state.API} switchDialogState={this.switchDialogState} getUser={this.getUser} switchFormState={this.switchFormState}/>
           </div>
         )}
       </div>

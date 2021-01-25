@@ -41,14 +41,14 @@ export default class Send extends React.Component {
 
   handleChange = e => {
     let message = e.target.value;
-    let server = this.props.getServer(this.props.selectedServer)
-    let channel = this.props.getChannel(this.props.currentChannel)
+    let server = this.props.getServer(this.props.state.selectedServer)
+    let channel = this.props.getChannel(this.props.state.currentChannel)
     let members = server !== undefined ? server.members : channel.members;
     members = members.reduce((acc, curr) => { acc.push(this.props.getUser(curr)); return acc; }, [])
 
     let a0 = message.lastIndexOf(":");
     let a = message.substring(a0 > -1 ? a0 + 1 : message.length)
-    let possibleEmotes = Array.from(this.props.emotes.values()).filter(e => { return (e.author.id === this.props.session.userID || (e.server !== undefined && this.props.isInServer(e.server.id))) && a.length > 0 && e.name.startsWith(a); }).sort((a, b) => { return a.name.length - b.name.length; }).slice(0, 4)
+    let possibleEmotes = Array.from(this.props.state.emotes.values()).filter(e => { return (e.author.id === this.props.state.session.userID || (e.server !== undefined && this.props.isInServer(e.server.id))) && a.length > 0 && e.name.startsWith(a); }).sort((a, b) => { return a.name.length - b.name.length; }).slice(0, 4)
     let b0 = message.lastIndexOf("@");
     let b = message.substring(b0 > -1 ? b0 + 1 : message.length)
     let possibleMentions = members.filter(e => { return b.length > 0 && e.username.startsWith(b); }).sort((a, b) => { return a.username.length - b.username.length; }).slice(0, 4)
@@ -74,7 +74,7 @@ export default class Send extends React.Component {
       this.handleChange({ target: { value: b + "<@" + this.state.currentMentions[this.state.currentMentionIndex].id + ">" }})
     } else {
       this.handleChange({ target: { value: "" }})
-      if(await this.props.API.API_sendMessage(this.props.currentChannel, this.state.message)) {
+      if(await this.props.API.API_sendMessage(this.props.state.currentChannel, this.state.message)) {
         this.setState({
           message: "",
         });
@@ -99,14 +99,14 @@ export default class Send extends React.Component {
       return null;
     }
 
-    let channel = this.props.getChannel(this.props.currentChannel)
+    let channel = this.props.getChannel(this.props.state.currentChannel)
     let emoteList = this.state.currentEmotes.map((emote, i) => {
       let server = emote.server !== undefined ? this.props.getServer(emote.server.id) : undefined;
 
       return <div className="emoteItemWrapper" key={i}>
         <div className={this.state.currentEmoteIndex === i ? "emoteItem bgColor" : "emoteItem"} onClick={(e) => { this.setState({ currentEmoteIndex: i }); this.handleSubmit(e); }}>
           <div className="flex" style={{ flex: "1 1 auto" }}>
-            <img alt="" className="emoteImage marginleft2" src={this.props.fileEndpoint + "/" + emote.file} />
+            <img alt="" className="emoteImage marginleft2" src={this.props.state.fileEndpoint + "/" + emote.file} />
             <div className="white text5 marginleft2">
               :{emote.name}:
             </div>
@@ -124,7 +124,7 @@ export default class Send extends React.Component {
       return <div className="emoteItemWrapper" key={i}>
         <div className={this.state.currentMentionIndex === i ? "emoteItem bgColor" : "emoteItem"} onClick={(e) => { this.setState({ currentMentionIndex: i }); this.handleSubmit(e); }}>
           <div className="flex" style={{ flex: "1 1 auto" }}>
-            <img alt="" className="emoteImage marginleft2" src={this.props.fileEndpoint + "/" + member.avatar} />
+            <img alt="" className="emoteImage marginleft2" src={this.props.state.fileEndpoint + "/" + member.avatar} />
             <div className="white text5 marginleft2">
               @{member.username}
             </div>
@@ -138,7 +138,7 @@ export default class Send extends React.Component {
       </div>
     })
 
-    let ind = this.props.typingIndicators.get(this.props.currentChannel);
+    let ind = this.props.state.typingIndicators.get(this.props.state.currentChannel);
     let typingContent = ind.map((id, i) => {
       let user = this.props.getUser(id);
 

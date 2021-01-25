@@ -32,6 +32,7 @@ export default class API {
             await this.API_fetchUsersForFriends(userID);
             await this.API_fetchEmotesForIDs(user.emotes);
             await this.API_fetchDefaultEmotes();
+            await this.API_fetchNotes();
         });
         
         socket.on('message', (messageData) => {
@@ -241,6 +242,13 @@ export default class API {
                 typingIndicators: newIndicators
             });
         });
+        socket.on('editNote', (noteData) => {
+            var note = JSON.parse(noteData);
+            var newNotes = this.mainClass.state.notes.set(note.id, note);
+            this.mainClass.setState({
+                notes: newNotes
+            });
+        });
 
         //let stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: false });
         this.socket = socket;
@@ -300,7 +308,8 @@ export default class API {
 
     async API_fetchFriendRequests() {
         const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchFriendRequests', { withCredentials: true }));
-        var friendRequests = reply.data
+        var friendRequests = reply.data;
+        friendRequests = new Map(friendRequests.map(obj => [obj.id, obj]));
 
         this.API_fetchUsersForFriendRequests(friendRequests)
         this.mainClass.setState({
@@ -375,6 +384,16 @@ export default class API {
         }
 
         return defaultEmotes;
+    }
+
+    async API_fetchNotes() {
+        const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchNotes', { withCredentials: true }));
+        var notes = reply.data;
+        notes = new Map(notes.map(obj => [obj.id, obj]));
+
+        this.mainClass.setState({
+            notes: notes
+        });
     }
     //#endregion
 
@@ -1223,6 +1242,20 @@ export default class API {
             this.typingTimeoutID = -1;
             this.socket.emit('endTyping', { channel: { id: channelID } })
         }, 2000);
+    }
+    //#endregion
+
+    //#region Notes
+    async API_editNote(targetID, text) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/editNote', {
+            author: { id: this.mainClass.state.session.userID }, target: { id: targetID }, text: text
+        }, { withCredentials: true });
+
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return reply.data;
+        }
     }
     //#endregion
 }

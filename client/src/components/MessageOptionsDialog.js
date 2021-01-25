@@ -7,7 +7,7 @@ export default class MessageOptionsDialog extends React.Component {
 
   handleDelete = async e => {
     e.preventDefault();
-    const res = await this.props.API.API_deleteMessage(this.props.selectedMessage.id);
+    const res = await this.props.API.API_deleteMessage(this.props.state.selectedMessage.id);
     this.setState({
       messageDeletionResult: res,
     });
@@ -19,8 +19,8 @@ export default class MessageOptionsDialog extends React.Component {
   handleEdit = async e => {
     e.preventDefault();
     const res = 1
-    this.props.setEditedMessage(this.props.selectedMessage.text == null ? "" : this.props.selectedMessage.text);
-    this.props.startEditingMessage(this.props.selectedMessage);
+    this.props.setEditedMessage(this.props.state.selectedMessage.text == null ? "" : this.props.state.selectedMessage.text);
+    this.props.startEditingMessage(this.props.state.selectedMessage);
     
     if(res === 1) { this.props.switchDialogState(-1); }
     return true;
@@ -30,28 +30,28 @@ export default class MessageOptionsDialog extends React.Component {
     return (
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0); }} style={{ opacity: 0.3 }}></div>
-        <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY, height: this.props.selectedMessage.author.id === this.props.session.userID ? 90 : 30 }}>
+        <div className="absolutepos overlaybox2" style={{ left: this.props.state.boxX, top: this.props.state.boxY, height: this.props.state.selectedMessage.author.id === this.props.state.session.userID ? 90 : 30 }}>
           {
-            this.props.selectedMessage.author.id === this.props.session.userID ?
+            this.props.state.selectedMessage.author.id === this.props.state.session.userID ?
             <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleDelete(e); }}>
               <p className="declineColor text1">&gt; Delete</p>
             </div> :
             ""
           }
           {
-            this.props.selectedMessage.author.id === this.props.session.userID ?
+            this.props.state.selectedMessage.author.id === this.props.state.session.userID ?
             <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleEdit(e); }}>
               <p className="white text1">&gt; Edit</p>
             </div> :
             ""
           }
           {
-            this.props.selectedMessage.file == null ? "" :
-            <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.props.copyID(this.props.fileEndpoint + "/" + this.props.selectedMessage.file.name); }}>
+            this.props.state.selectedMessage.file == null ? "" :
+            <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.props.copyID(this.props.state.fileEndpoint + "/" + this.props.state.selectedMessage.file.name); }}>
               <p className="white text1">&gt; Copy link to file</p>
             </div>
           }
-          <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.copyID(this.props.selectedMessage.id); }}>
+          <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.copyID(this.props.state.selectedMessage.id); }}>
             <p className="white text1">&gt; Copy ID</p>
           </div>
         </div>

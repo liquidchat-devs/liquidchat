@@ -41,9 +41,9 @@ export default class InviteFriendsDialog extends React.Component {
   }
 
   render() {
-    let loggedUser = this.props.getUser(this.props.session.userID);
-    let server = this.props.getServer(this.props.selectedServer);
-    let channel = this.props.getChannel(this.props.selectedChannel);
+    let loggedUser = this.props.getUser(this.props.state.session.userID);
+    let server = this.props.getServer(this.props.state.selectedServer);
+    let channel = this.props.getChannel(this.props.state.selectedChannel);
     let target = channel === undefined || channel.members === undefined ? server : channel;
     let type = channel === undefined || channel.members === undefined ? 1 : 0;
 
@@ -57,7 +57,7 @@ export default class InviteFriendsDialog extends React.Component {
         <div key={i} className="friendEntry selectedColor" onContextMenu={(e) => { this.props.setSelectedUser(friend.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="flex">
             <div className="aligny" style={{ height: 55 }}>
-              <img alt="" className="avatar marginleft2" src={this.props.fileEndpoint + "/" + friend.avatar}/>
+              <img alt="" className="avatar marginleft2" src={this.props.state.fileEndpoint + "/" + friend.avatar}/>
               <div className="white marginleft2">
                 {friend.username}
               </div>

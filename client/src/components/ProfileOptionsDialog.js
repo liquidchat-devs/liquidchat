@@ -27,15 +27,15 @@ export default class ProfileOptionsDialog extends React.Component {
   }
 
   render() {
-    let loggedUser = this.props.getUser(this.props.session.userID);
-    let selectedUser = this.props.getUser(this.props.selectedUser);
-    let currentChannel = this.props.getChannel(this.props.currentChannel)
-    let currentServer = this.props.getServer(this.props.selectedServer)
+    let loggedUser = this.props.getUser(this.props.state.session.userID);
+    let selectedUser = this.props.getUser(this.props.state.selectedUser);
+    let currentChannel = this.props.getChannel(this.props.state.currentChannel)
+    let currentServer = this.props.getServer(this.props.state.selectedServer)
 
     return (
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0); }} style={{ opacity: 0.3 }}></div>
-        <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY, height: selectedUser.id === this.props.session.userID ? 30 : 45  }}>
+        <div className="absolutepos overlaybox2" style={{ left: this.props.state.boxX, top: this.props.state.boxY, height: selectedUser.id === this.props.state.session.userID ? 30 : 45  }}>
           <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.switchDialogState(5); }}>
             <p className="white text1">&gt; Profile</p>
           </div>

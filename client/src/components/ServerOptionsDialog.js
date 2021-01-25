@@ -7,7 +7,7 @@ export default class ServerOptionsDialog extends React.Component {
 
   handleDelete = async e => {
     e.preventDefault();
-    const res = await this.props.API.API_deleteServer(this.props.selectedServer);
+    const res = await this.props.API.API_deleteServer(this.props.state.selectedServer);
     this.setState({
       serverDeletionResult: res,
     });
@@ -17,15 +17,15 @@ export default class ServerOptionsDialog extends React.Component {
   }
 
   render() {
-    const server = this.props.getServer(this.props.selectedServer)
+    const server = this.props.getServer(this.props.state.selectedServer)
     if(server === undefined) {  return null; }
 
     return (
       <div>
         <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0); }} style={{ opacity: 0.3 }}></div>
-        <div className="absolutepos overlaybox2" style={{ left: this.props.boxX, top: this.props.boxY, height: server.author.id === this.props.session.userID ? 45 : 30  }}>
+        <div className="absolutepos overlaybox2" style={{ left: this.props.state.boxX, top: this.props.state.boxY, height: server.author.id === this.props.state.session.userID ? 45 : 30  }}>
           {
-            server.author.id === this.props.session.userID ?
+            server.author.id === this.props.state.session.userID ?
             <div>
               <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.switchDialogState(18); }}>
                 <p className="white text1">&gt; Edit Server</p>
@@ -40,7 +40,7 @@ export default class ServerOptionsDialog extends React.Component {
             <p className="declineColor text1">&gt; Leave Server</p>
           </div>
           {
-            server.author.id === this.props.session.userID ?
+            server.author.id === this.props.state.session.userID ?
             <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleDelete(e); }}>
                 <p className="declineColor text1">&gt; Delete Server</p>
             </div>:

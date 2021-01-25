@@ -19,18 +19,18 @@ export default class SettingsDialog extends React.Component {
   }
 
   render() {
-    let loggedUser = this.props.getUser(this.props.session.userID);
+    let loggedUser = this.props.getUser(this.props.state.session.userID);
 
     let emotes = []
     loggedUser.emotes.forEach(emoteID => {
-      if(this.props.emotes.has(emoteID)) {
-        emotes.push(this.props.emotes.get(emoteID));
+      if(this.props.state.emotes.has(emoteID)) {
+        emotes.push(this.props.state.emotes.get(emoteID));
       }
     })
 
     let emoteList = emotes.map((emote, i) => {
       return <div key={i} className="emoteImage2 tooltipWrapper">
-          <img alt="" className="emoteImage2" src={this.props.fileEndpoint + "/" + emote.file} />
+          <img alt="" className="emoteImage2" src={this.props.state.fileEndpoint + "/" + emote.file} />
           <span className="tooltipText">:{emote.name}:</span>
         </div>
     }, "")
@@ -43,10 +43,10 @@ export default class SettingsDialog extends React.Component {
           <div className="accountBox">
             <div className="flex">
               <form onSubmit={this.handleSubmit} className="flex margintop1">
-                <img alt="" className="avatar2 margintop3 marginleft3" src={this.props.fileEndpoint + "/" + loggedUser.avatar} onMouseEnter={() => this.refs["userEditOverlay"].style = "display: flex;" }/>
+                <img alt="" className="avatar2 margintop3 marginleft3" src={this.props.state.fileEndpoint + "/" + loggedUser.avatar} onMouseEnter={() => this.refs["userEditOverlay"].style = "display: flex;" }/>
                 <label for="avatar-input">
                   <div className="avatar2 avatarOverlay avatarOverlay2 margintop3 marginleft3 alignmiddle" ref="userEditOverlay" onMouseLeave={() => this.refs["userEditOverlay"].style = "display: none;" }>
-                    <div className="white text4 nopointer">Change Avatar</div>
+                    <div className="white text4 nopointerevents">Change Avatar</div>
                   </div>
                 </label>
                 <input id="avatar-input" className="hide" onChange={(e) => this.handleAvatar(e) } type='file' name="fileUploaded"/>

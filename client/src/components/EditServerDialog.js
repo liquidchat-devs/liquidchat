@@ -9,7 +9,7 @@ export default class EditServerDialog extends React.Component {
   };
 
   componentDidMount = () => {
-    const server = this.props.getServer(this.props.selectedServer);
+    const server = this.props.getServer(this.props.state.selectedServer);
     if(server !== undefined) {
       this.setState({
         serverName: server.name
@@ -41,14 +41,14 @@ export default class EditServerDialog extends React.Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    let res = await this.props.API.API_editServer(this.props.selectedServer, this.state.serverName);
+    let res = await this.props.API.API_editServer(this.props.state.selectedServer, this.state.serverName);
     this.setState({
       serverEditResult: res,
     });
 
     if(isNaN(res)) {
       if(this.state.serverAvatar !== -1) {
-        res = await this.props.API.API_updateServerAvatar(this.props.selectedServer, this.state.serverAvatar)
+        res = await this.props.API.API_updateServerAvatar(this.props.state.selectedServer, this.state.serverAvatar)
         this.setState({
           serverEditResult: res,
         });
@@ -79,21 +79,21 @@ export default class EditServerDialog extends React.Component {
   }
 
   render() {
-    const server = this.props.getServer(this.props.selectedServer);
+    const server = this.props.getServer(this.props.state.selectedServer);
     if(server === undefined) {
       return null;
     }
 
     let emotes = []
     server.emotes.forEach(emoteID => {
-      if(this.props.emotes.has(emoteID)) {
-        emotes.push(this.props.emotes.get(emoteID));
+      if(this.props.state.emotes.has(emoteID)) {
+        emotes.push(this.props.state.emotes.get(emoteID));
       }
     })
 
     let emoteList = emotes.map((emote, i) => {
       return <div key={i} className="emoteImage2 tooltipWrapper">
-          <img alt="" className="emoteImage2" src={this.props.fileEndpoint + "/" + emote.file} />
+          <img alt="" className="emoteImage2" src={this.props.state.fileEndpoint + "/" + emote.file} />
           <span className="tooltipText">:{emote.name}:</span>
         </div>
     }, "")
@@ -104,13 +104,13 @@ export default class EditServerDialog extends React.Component {
         <div className="absolutepos overlaybox4">
           <div className="white text3 marginleft2 margintop1a">Edit server-</div>
           <form onSubmit={this.handleSubmit} className="flex margintop1">
-            <img alt="" className="avatar2 marginleft4 marginright2" ref="serverImage" src={this.props.fileEndpoint + "/" + server.avatar} onMouseEnter={() => this.refs["serverEditOverlay"].style = "display: flex;" }/>
+            <img alt="" className="avatar2 marginleft4 marginright2" ref="serverImage" src={this.props.state.fileEndpoint + "/" + server.avatar} onMouseEnter={() => this.refs["serverEditOverlay"].style = "display: flex;" }/>
             <div className="cropButton alignmiddle" onClick={() => { this.props.setSelectedAvatar(server.avatar); this.props.switchDialogState(19) }}>
                 <div className="white text7">Crop</div>
             </div>
             <label for="avatar-input">
               <div className="avatar2 avatarOverlay marginleft4 alignmiddle" ref="serverEditOverlay" onMouseLeave={() => this.refs["serverEditOverlay"].style = "display: none;" }>
-                <div className="white text4 nopointer">Change Icon</div>
+                <div className="white text4 nopointerevents">Change Icon</div>
               </div>
             </label>
             <input id="avatar-input" className="hide" onChange={(e) => this.handleAvatar(this, e) } type='file' name="fileUploaded"/>

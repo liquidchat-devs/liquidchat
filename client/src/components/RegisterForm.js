@@ -25,14 +25,36 @@ export default class RegisterForm extends React.Component {
   
     getErrorText(code) {
       switch(code) {
+        case -4:
+          return "Password is too short, atleast 8 characters.";
+
+        case -3:
+          return "Username is too short, atleast 3 characters.";
+
         case -2:
           return "Passwords don't match-";
   
         case -1:
           return "Username already taken-";
   
+        case 0:
         default:
           return "";
+      }
+    }
+
+    getSuccessText(code) {
+      const user = this.props.getUser(this.props.state.session.userID)
+      switch(code) {
+        case 0:
+        case -4:
+        case -3:
+        case -2:
+        case -1:
+          return "";
+
+        default:
+          return "Registering as " + (user !== undefined ? user.username : "Loading") + "...";
       }
     }
   
@@ -50,7 +72,7 @@ export default class RegisterForm extends React.Component {
           <div className="absolutepos overlaybox0">
             <div style={{ width: "100%", padding: 24 }}>
               <div className="aligny marginbot2" style={{ height: 45 }}>
-                <img alt="" className="avatar6 marginright2" src={this.props.fileEndpoint + "/defaultAvatar.png"}/>
+                <img alt="" className="avatar6 marginright2" src={this.props.state.fileEndpoint + "/defaultAvatar.png"}/>
                 <div className="text0" style={{color: "white"}}>Register</div>
               </div>
               {form}
@@ -61,8 +83,15 @@ export default class RegisterForm extends React.Component {
               <p className="text5 marginbot0 margintop0 link" onClick={() => { this.props.switchFormState(); }}>Login?</p>
               {
                 (this.getErrorText(this.state.registerResult).length > 0 ?
-                <div className="margintop1 errorColor textcenter">
+                <div className="margintop1 errorColor">
                   {this.getErrorText(this.state.registerResult)}
+                </div>
+                : "")
+              }
+              {
+                (this.getSuccessText(this.state.registerResult).length > 0 ?
+                <div className="margintop1 successColor">
+                  {this.getSuccessText(this.state.registerResult)}
                 </div>
                 : "")
               }

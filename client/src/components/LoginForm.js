@@ -40,14 +40,16 @@ export default class LoginForm extends React.Component {
         case -1:
           return "Invalid password-";
   
+        case 0:
         default:
           return "";
       }
     }
   
     getSuccessText(code) {
-      const user = this.props.getUser(this.props.session.userID)
+      const user = this.props.getUser(this.props.state.session.userID)
       switch(code) {
+        case 0:
         case -3:
         case -2:
         case -1:
@@ -71,7 +73,7 @@ export default class LoginForm extends React.Component {
           <div className="absolutepos overlaybox0">
             <div style={{ width: "100%", padding: 24 }}>
               <div className="aligny marginbot2" style={{ height: 40 }}>
-                <img alt="" className="avatar6 marginright2" src={this.props.fileEndpoint + "/defaultAvatar.png"}/>
+                <img alt="" className="avatar6 marginright2" src={this.props.state.fileEndpoint + "/defaultAvatar.png"}/>
                 <div className="text0" style={{color: "white"}}>Login</div>
               </div>
               {form}

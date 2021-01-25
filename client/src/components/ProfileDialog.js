@@ -7,26 +7,26 @@ export default class ProfileDialog extends React.Component {
   }
 
   render() {
-    let selectedUser = this.props.getUser(this.props.selectedUser);
-    let loggedUser = this.props.getUser(this.props.session.userID);
+    let selectedUser = this.props.getUser(this.props.state.selectedUser);
+    let loggedUser = this.props.getUser(this.props.state.session.userID);
 
     let badgeList = selectedUser.badges.map((badge, i) => {
       switch(badge) {
         case "0":
           return <div key={i} className="tooltipWrapper pointer marginright3 badge">
-            <img className="badgeImage" alt="" src={this.props.fileEndpoint + "/badge_staff.svg"}/>
+            <img className="badgeImage" alt="" src={this.props.state.fileEndpoint + "/badge_staff.svg"}/>
             <span className="tooltipText tooltipText3">Staff</span>
           </div>
 
         case "1":
           return <div key={i} className="tooltipWrapper pointer marginright3 badge">
-            <img className="badgeImage" alt="" src={this.props.fileEndpoint + "/badge_verified.svg"}/>
+            <img className="badgeImage" alt="" src={this.props.state.fileEndpoint + "/badge_verified.svg"}/>
             <span className="tooltipText tooltipText3">Verified</span>
           </div>
 
         case "2":
           return <div key={i} className="tooltipWrapper pointer marginright3 badge">
-            <img className="badgeImage" alt="" src={this.props.fileEndpoint + "/badge_developer.svg"}/>
+            <img className="badgeImage" alt="" src={this.props.state.fileEndpoint + "/badge_developer.svg"}/>
             <span className="tooltipText tooltipText3">Developer</span>
           </div>
       }
@@ -41,7 +41,7 @@ export default class ProfileDialog extends React.Component {
           if(loggedUser.friends.includes(id)) {
             let user = this.props.getUser(id);
             return <div key={i} className="mutual" onClick={() => { this.props.setSelectedUser(id); }}>
-              <img alt="" className="avatar marginleft2" src={this.props.fileEndpoint + "/" + user.avatar}/>
+              <img alt="" className="avatar marginleft2" src={this.props.state.fileEndpoint + "/" + user.avatar}/>
               <div className="tooltipColor text5 marginleft2">{user.username}</div>
             </div>
           }
@@ -55,7 +55,7 @@ export default class ProfileDialog extends React.Component {
           if(loggedUser.servers.includes(id)) {
             let server = this.props.getServer(id);
             return <div key={i} className="mutual" onClick={() => { this.props.setSelectedServer(id); this.props.switchDialogState(-1); }}>
-              <img alt="" className="avatar marginleft2" src={this.props.fileEndpoint + "/" + server.avatar}/>
+              <img alt="" className="avatar marginleft2" src={this.props.state.fileEndpoint + "/" + server.avatar}/>
               <div className="tooltipColor text5 marginleft2">{server.name}</div>
             </div>
           }
@@ -71,7 +71,7 @@ export default class ProfileDialog extends React.Component {
         <div className="absolutepos overlaybox3">
             <div className="section chatColor">
               <div className="flex marginleft3 paddingtop3">
-                <img alt="" className="avatar2" src={this.props.fileEndpoint + "/" + selectedUser.avatar}/>
+                <img alt="" className="avatar2" src={this.props.state.fileEndpoint + "/" + selectedUser.avatar}/>
                 <div className="tooltipWrapper statusWrapper">
                   <div className="status" style={{ backgroundColor: this.props.const.getStatusColor(selectedUser.status) }}/>
                   <span className="tooltipText tooltipText2">{selectedUser.status === 1 ? "Online" : "Offline"}</span>

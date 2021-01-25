@@ -39,7 +39,7 @@ export default class CreateEmoteDialog extends React.Component {
         break;
 
       case 0:
-        res = await this.props.API.API_createServerEmote(this.state.emoteAvatar, this.state.emoteName, this.props.selectedServer);
+        res = await this.props.API.API_createServerEmote(this.state.emoteAvatar, this.state.emoteName, this.props.state.selectedServer);
         break;
     }
 
@@ -74,10 +74,10 @@ export default class CreateEmoteDialog extends React.Component {
         <div className="absolutepos overlaybox">
           <div className="white text3 marginleft2 margintop1a">Create new{this.props.type === 0 ? " server" : ""} emote-</div>
           <form onSubmit={this.handleSubmit} className="flex margintop1">
-            <img alt="" className="avatar2 marginleft4 marginright1" ref="emoteImage" src={this.props.fileEndpoint + "/defaultAvatar.png"} onMouseEnter={() => this.refs["emoteEditOverlay"].style = "display: flex;" }/>
+            <img alt="" className="avatar2 marginleft4 marginright1" ref="emoteImage" src={this.props.state.fileEndpoint + "/defaultAvatar.png"} onMouseEnter={() => this.refs["emoteEditOverlay"].style = "display: flex;" }/>
             <label for="avatar-input">
               <div className="avatar2 avatarOverlay marginleft4 alignmiddle" ref="emoteEditOverlay" onMouseLeave={() => this.refs["emoteEditOverlay"].style = "display: none;" }>
-                <div className="white text4 nopointer">Change Image</div>
+                <div className="white text4 nopointerevents">Change Image</div>
               </div>
             </label>
             <input id="avatar-input" className="hide" onChange={(e) => this.handleAvatar(this, e) } type='file' name="fileUploaded"/>

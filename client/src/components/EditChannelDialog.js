@@ -9,7 +9,7 @@ export default class EditChannelDialog extends React.Component {
   };
 
   componentDidMount = () => {
-    const channel = this.props.getChannel(this.props.selectedChannel);
+    const channel = this.props.getChannel(this.props.state.selectedChannel);
     if(channel !== undefined) {
       this.setState({
         channelName: channel.name,
@@ -61,7 +61,7 @@ export default class EditChannelDialog extends React.Component {
   }
 
   render() {
-    const channel = this.props.getChannel(this.props.selectedChannel)
+    const channel = this.props.getChannel(this.props.state.selectedChannel)
 
     return (
       <div>

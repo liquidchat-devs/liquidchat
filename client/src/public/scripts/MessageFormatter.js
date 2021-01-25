@@ -116,7 +116,7 @@ function formatFile(chat, file) {
     const imageExtensions = getImageExtensions()
     var isImage = imageExtensions.filter((ext) => { return file.name.endsWith(ext) }).length > 0
     if(isImage) {
-        return <span><img alt="" className="message-image" src={chat.props.fileEndpoint + "/" + file.name} onClick={(e) => { chat.props.setSelectedImage(file); chat.props.switchDialogState(8); }}/></span>
+        return <span><img alt="" className="message-image" src={chat.props.state.fileEndpoint + "/" + file.name} onClick={(e) => { chat.props.setSelectedImage(file); chat.props.switchDialogState(8); }}/></span>
     }
     
     var extension = file.name.substring(file.name.lastIndexOf("."))
@@ -178,7 +178,7 @@ function formatFile(chat, file) {
                     onEnded={() => {
                         chat.videoAction(chat.refs["video-" + file.name], file, "pause");
                     }}>
-                    <source src={chat.props.fileEndpoint + "/" + file.name} type={mimeType}/>
+                    <source src={chat.props.state.fileEndpoint + "/" + file.name} type={mimeType}/>
                 </video>
                 <div className="opacity0 stopped" ref={"videoOverlay-" + file.name} style={{ width: 0 }}>
                     <div className="video-overlay white marginleft2 margintop1" style={{ width: 420, position: "relative" }}>
@@ -232,7 +232,7 @@ function formatFile(chat, file) {
 
         return <div>
             <div className="audio-wrapper chatColor">
-                <div className="link file-link" onClick={() => window.open(chat.props.fileEndpoint + "/" + file.name) }>{file.name}</div>
+                <div className="link file-link" onClick={() => window.open(chat.props.state.fileEndpoint + "/" + file.name) }>{file.name}</div>
                 <br/>
                 <div className="tipColor">({formatBytes(file.size, true)})</div>
                 <audio className="audio" ref={"audio-" + file.name}
@@ -254,7 +254,7 @@ function formatFile(chat, file) {
                     onClick={() => {
                         chat.videoAction(chat.refs["audio-" + file.name], file, "playpause");
                     }}>
-                    <source src={chat.props.fileEndpoint + "/" + file.name} type={mimeType}/>
+                    <source src={chat.props.state.fileEndpoint + "/" + file.name} type={mimeType}/>
                 </audio>
                 <div className="audioControls aligny margintop1">
                     <div className="button button1 marginleft2 videoButton" ref={"playButtonWrapper-" + file.name} onClick={() => { chat.videoAction(chat.refs["audio-" + file.name], file, "playpause"); }}>
@@ -299,7 +299,7 @@ function formatFile(chat, file) {
 
     return <div>
         <div className="file-wrapper chatColor">
-            <div className="link file-link" onClick={() => window.open(chat.props.fileEndpoint + "/" + file.name) }>{file.name}</div>
+            <div className="link file-link" onClick={() => window.open(chat.props.state.fileEndpoint + "/" + file.name) }>{file.name}</div>
             <br/>
             <div className="tipColor">({formatBytes(file.size, true)})</div>
         </div>
@@ -330,14 +330,14 @@ function formatMessage(chat, message) {
                 <div className="invite-wrapper chatColor">
                     <p className="tooltipColor text9 margin0 marginleft2 marginbot0b">{author.username} invited you to a server-</p>
                     <div className="flex">
-                        <img alt="" className="avatar4 marginleft2 margintop1a" src={chat.props.fileEndpoint + "/" + server.avatar}/>
+                        <img alt="" className="avatar4 marginleft2 margintop1a" src={chat.props.state.fileEndpoint + "/" + server.avatar}/>
                         <div>
                             <div className="white marginleft2 margintop1a">{server.name}</div>
                             <div className="tipColor marginleft2">{server.members.length} members</div>
                         </div>
                     </div>
-                    <div className="button inviteButton marginleft2 margintop1b" style={server.members.includes(chat.props.session.userID) === false ? {} : {color: "#b3b3b3", border: "1px solid #b3b3b3", cursor: "default", position: "relative" }}
-                    onClick={() => { if(server.members.includes(chat.props.session.userID) === false) { chat.props.API.API_joinServer(server.id); } }}>Join</div>
+                    <div className="button inviteButton marginleft2 margintop1b" style={server.members.includes(chat.props.state.session.userID) === false ? {} : {color: "#b3b3b3", border: "1px solid #b3b3b3", cursor: "default", position: "relative" }}
+                    onClick={() => { if(server.members.includes(chat.props.state.session.userID) === false) { chat.props.API.API_joinServer(server.id); } }}>Join</div>
                 </div>
             </div>)
             customMessage = true;
@@ -348,11 +348,11 @@ function formatMessage(chat, message) {
         });
         messageFormatted = toFormatLink(chat, messageFormatted == null ? "" : messageFormatted);
 
-        chat.props.emotes.forEach(e => {
-            let link = chat.props.fileEndpoint + "/" + e.file;
+        chat.props.state.emotes.forEach(e => {
+            let link = chat.props.state.fileEndpoint + "/" + e.file;
             messageFormatted = messageFormatted.split("<:" + e.id + ":>").join(`<img class='emoteImage3' src=${link}>`)
         });
-        chat.props.users.forEach(e => {
+        chat.props.state.users.forEach(e => {
             messageFormatted = messageFormatted.split("<@" + e.id + ">").join(`<div class='white margin0 mention'>@${e.username}</div>`)
         });
     }

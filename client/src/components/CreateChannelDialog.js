@@ -30,7 +30,7 @@ export default class CreateChannelDialog extends React.Component {
   handleSubmit = async e => {
     e.preventDefault();
     const res = await this.props.API.API_createChannel({
-      server: { id: this.props.selectedServer },
+      server: { id: this.props.state.selectedServer },
       name: this.state.channelName, 
       type: this.state.channelType,
       description: this.state.channelDescription,

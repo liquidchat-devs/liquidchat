@@ -7,7 +7,7 @@ export default class SetCustomStatusDialog extends React.Component {
   };
 
   componentDidMount = () => {
-    const user = this.props.getUser(this.props.session.userID);
+    const user = this.props.getUser(this.props.state.session.userID);
     if(user !== undefined) {
       this.setState({
         status: user.customStatus
