@@ -65,8 +65,8 @@ class App extends React.Component {
 
     //API
     API: new API(this),
-    APIEndpoint: "https://nekonetwork.net:8080",
-    fileEndpoint: "https://nekonetwork.net:8081",
+    APIEndpoint: "http://localhost:8080",
+    fileEndpoint: "http://localhost:8081",
     
     //Utils
     const: new Constants(this),
@@ -410,7 +410,7 @@ class App extends React.Component {
               setSelectedUser={this.setSelectedUser} setFirstChannel={this.setFirstChannel} switchChannel={this.switchChannel} getUser={this.getUser}/>
               <div className="chat-wrapper">
                 <c.ChannelHeader
-                API={this.state.API} currentChannel={this.state.currentChannel} getChannel={this.getChannel} selectedServer={this.state.selectedServer} getServer={this.getServer} currentVoiceGroup={this.state.currentVoiceGroup}/>
+                 state={this.state} API={this.state.API} currentChannel={this.state.currentChannel} getChannel={this.getChannel} selectedServer={this.state.selectedServer} getServer={this.getServer} currentVoiceGroup={this.state.currentVoiceGroup}/>
                 <c.Chat
                 state={this.state} const={this.state.const} setBox={this.setBox} isInChannel={this.isInChannel}
                 API={this.state.API} setSelectedUser={this.setSelectedUser} setSelectedImage={this.setSelectedImage}
@@ -427,7 +427,7 @@ class App extends React.Component {
           </div> :
           <div>
             <div className="margintop2 fullwidth textcenter text0" style={{color: "white"}}>Register</div>
-            <c.RegisterForm API={this.state.API} switchDialogState={this.switchDialogState} getUser={this.getUser} switchFormState={this.switchFormState}/>
+            <c.RegisterForm state={this.state} API={this.state.API} switchDialogState={this.switchDialogState} getUser={this.getUser} switchFormState={this.switchFormState}/>
           </div>
         )}
       </div>

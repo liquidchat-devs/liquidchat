@@ -29,6 +29,18 @@ export default class ProfileDialog extends React.Component {
     })
   }
 
+  getConnection(icon, name, link) {
+    return <div className="connection chatColor">
+    <div className="connectionSection1">
+      <img className="connectionIcon" src={icon}/>
+      <div className="connectionText">{name}</div>
+    </div>
+    <div className="connectionLink" onClick={() => { window.open(link, "-1"); }}>
+      <svg viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M18.364 15.536L16.95 14.12l1.414-1.414a5 5 0 1 0-7.071-7.071L9.879 7.05 8.464 5.636 9.88 4.222a7 7 0 0 1 9.9 9.9l-1.415 1.414zm-2.828 2.828l-1.415 1.414a7 7 0 0 1-9.9-9.9l1.415-1.414L7.05 9.88l-1.414 1.414a5 5 0 1 0 7.071 7.071l1.414-1.414 1.415 1.414zm-.708-10.607l1.415 1.415-7.071 7.07-1.415-1.414 7.071-7.07z" fill="rgba(183,183,183,1)"/></svg>
+    </div>
+  </div>
+  }
+
   render() {
     let selectedUser = this.props.getUser(this.props.state.selectedUser);
     let loggedUser = this.props.getUser(this.props.state.session.userID);
@@ -57,14 +69,32 @@ export default class ProfileDialog extends React.Component {
       return null;
     })
 
+    let connections = [];
+    if(selectedUser.connections.github !== undefined) {
+      connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/ujDmtl.png", selectedUser.connections.github.username, "https://github.com/" + selectedUser.connections.github.username))
+    }
+    if(selectedUser.connections.reddit !== undefined) {
+      connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/4LiOlB.png", selectedUser.connections.reddit.username, "https://www.reddit.com/user/" + selectedUser.connections.reddit.username))
+    }
+    if(selectedUser.connections.osu !== undefined) {
+      connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/AJj49O.png", selectedUser.connections.osu.username, "https://osu.ppy.sh/users/" + selectedUser.connections.osu.username))
+    }
+    if(selectedUser.connections.twitch !== undefined) {
+      connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/VZ5PN5.png", selectedUser.connections.twitch.username, "https://twitch.tv/" + selectedUser.connections.twitch.username))
+    }
+
     let content = null;
     switch(this.state.focusedSection) {
       case 0:
-        content = <form className="full">
+        content = <div className="full">
           <div className="input-note chatColor">
             <input class="input-note-text chatColor" type="text" value={this.state.note} placeholder="Edit note..." required={true} onBlur={this.handleNote} onChange={this.handleNoteChange} />
           </div>
-        </form>
+          <div className="userinfo-line"/>
+          <div className="connections">
+           {connections}
+          </div>
+        </div>
         break;
 
       case 1:

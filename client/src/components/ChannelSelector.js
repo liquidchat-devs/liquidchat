@@ -109,9 +109,12 @@ export default class ChannelSelector extends React.Component {
             DMs
           </div>
           {serverList}
-          <div className="white headerColor server2" onClick={() => { this.props.switchDialogState(16) }}>
+          <div className="white errorColor server2" onClick={() => { this.props.switchDialogState(16) }}>
             + Server
           </div>
+          {false ? <div className="white errorColor server2" onClick={() => { this.props.switchDialogState(24) }}>
+            Discovery
+          </div> : ""}
         </div>
         {this.props.state.channelTypes === 1 || this.props.state.channelTypes === 2 ?
         <div>

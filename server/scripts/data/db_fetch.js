@@ -267,6 +267,20 @@ module.exports = {
         user.badges = user.badges.split(",").filter(a => a.length > 0)
         user.customStatus = user.customStatus == null ? undefined : user.customStatus
 
+        user.connections = {}
+        user.connections.github = user.gh_username == null ? undefined : { username: user.gh_username }
+        delete user.gh_username
+        delete user.gh_token
+        user.connections.reddit = user.reddit_username == null ? undefined : { username: user.reddit_username }
+        delete user.reddit_username
+        delete user.reddit_token
+        user.connections.osu = user.osu_username == null ? undefined : { username: user.osu_username }
+        delete user.osu_username
+        delete user.osu_token
+        user.connections.twitch = user.twitch_username == null ? undefined : { username: user.twitch_username }
+        delete user.twitch_username
+        delete user.twitch_token
+
         if(containPassword !== true) {
             delete user.password
         }

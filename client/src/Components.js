@@ -84,6 +84,9 @@ export default class DialogManager extends React.Component {
       case 23:
         return <c.SetCustomStatusDialog state={this.props.state} getUser={this.props.getUser} API={this.props.API} switchDialogState={this.props.switchDialogState}/>
 
+      case 24:
+        return <c.ServerDiscoveryDialog state={this.props.state} getUser={this.props.getUser} API={this.props.API} switchDialogState={this.props.switchDialogState}/>
+
       default:
         return null;
     }

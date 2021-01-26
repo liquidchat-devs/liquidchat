@@ -18,10 +18,20 @@ module.exports = {
         }
 
         var query0 = "username=?, avatar=?, friends=?, dmChannels=?, servers=?, status=?, badges=?, emotes=?" + (user.email == null ? "" : ", email=?") + (user.password == null ? "" : ", password=?") + (user.customStatus == null || user.customStatus.length < 1 ? "" : ", customStatus=?")
+        + (user.gh_username == null ? "" : ", gh_username=?") + (user.gh_token == null ? "" : ", gh_token=?") + (user.reddit_username == null ? "" : ", reddit_username=?") + (user.reddit_token == null ? "" : ", reddit_token=?")
+        + (user.osu_username == null ? "" : ", osu_username=?") + (user.osu_token == null ? "" : ", osu_token=?")+ (user.twitch_username == null ? "" : ", twitch_username=?") + (user.twitch_token == null ? "" : ", twitch_token=?")
         var query1 = [ db.escapeString(user.username), user.avatar, user.friends.join(","), user.dmChannels.join(","), user.servers.join(","), user.status, user.badges.join(","), user.emotes.join(",") ]
         if(user.email != null) { query1.push(db.escapeString(user.email)); }
         if(user.password != null) { query1.push(user.password); }
         if(user.customStatus != null) { if(user.customStatus.length < 1) { this.clearUserStatus(db, user); } else { query1.push(user.customStatus); } }
+        if(user.gh_username != null) { query1.push(user.gh_username); }
+        if(user.gh_token != null) { query1.push(user.gh_token); }
+        if(user.reddit_username != null) { query1.push(user.reddit_username); }
+        if(user.reddit_token != null) { query1.push(user.reddit_token); }
+        if(user.osu_username != null) { query1.push(user.osu_username); }
+        if(user.osu_token != null) { query1.push(user.osu_token); }
+        if(user.twitch_username != null) { query1.push(user.twitch_username); }
+        if(user.twitch_token != null) { query1.push(user.twitch_token); }
 
         var query = "UPDATE users SET " + query0 + " WHERE id='" + user.id + "'";
         db.sqlConn.promise().execute(query, query1)

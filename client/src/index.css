@@ -427,7 +427,7 @@ code {
 }
 
 .successColor {
-  color: var(--color8);
+  color: var(--color9);
 }
 
 .pendingColor {
@@ -469,7 +469,7 @@ code {
 
 .input-note {
   width: calc(100% - 35px);
-  height: 120px;
+  height: 60px;
   color: #acacac;
   border: 0;
   border-radius: 8px;
@@ -484,6 +484,60 @@ code {
   border: 0;
   padding: 7px;
   background-color: transparent;
+}
+
+.userinfo-line {
+  width: calc(100% + 14px);
+  height: 2px;
+  margin-top: 20px;
+  margin-left: -7px;
+  background-color: var(--color5);
+}
+
+.connection {
+  width: 240px;
+  height: 50px;
+  border-radius: 8px;
+  margin-top: 10px;
+  margin-left: 10px;
+
+  display: flex;
+  align-items: center;
+}
+
+.connectionIcon {
+  width: 32px;
+  height: 32px;
+  margin-left: 8px;
+}
+
+.connectionText {
+  margin-left: 10px;
+  color: white;
+  font-size: 15px;
+}
+
+.connectionSection1 {
+  display: flex;
+  align-items: center;
+
+  width: calc(100% - 40px);
+  height: 100%;
+}
+
+.connectionLink {
+  width: 24px;
+  height: 24px;
+  transform: scale(0.8);
+  cursor: pointer;
+}
+
+.connections {
+  display: inline-grid;
+  grid-template-columns: repeat(3, 260px);
+  grid-template-rows: repeat(3, 60px);
+  height: 180px;
+  width: 100%;
 }
 
 .message-wrapper {
@@ -696,6 +750,15 @@ code {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.overlaybox8 {
+  width: 90%;
+  height: 90%;
+  background-color: #353535;
+  border-radius: 10px;
+  z-index: 3;
+  padding: 5px;
 }
 
 .cropOverlay {

@@ -28,6 +28,7 @@ class Util {
         this.app.https = require("https");
         this.app.http = require("http");
         this.app.path = require("path");
+        this.app.axios = require("axios");
         //this.app.mediasoup = require("mediasoup");
         this.app.isSessionValid = this.isSessionValid;
 

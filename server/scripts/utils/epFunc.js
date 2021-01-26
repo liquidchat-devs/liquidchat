@@ -60,6 +60,15 @@ class Endpoint {
             return;
         }
 
+        user.gh_username = _user.gh_username !== undefined ? _user.gh_username : user.gh_username;
+        user.gh_token = _user.gh_token !== undefined ? _user.gh_token : user.gh_token;
+        user.reddit_username = _user.reddit_username !== undefined ? _user.reddit_username : user.reddit_username;
+        user.reddit_token = _user.reddit_token !== undefined ? _user.reddit_token : user.reddit_token;
+        user.osu_username = _user.osu_username !== undefined ? _user.osu_username : user.osu_username;
+        user.osu_token = _user.osu_token !== undefined ? _user.osu_token : user.osu_token;
+        user.twitch_username = _user.twitch_username !== undefined ? _user.twitch_username : user.twitch_username;
+        user.twitch_token = _user.twitch_token !== undefined ? _user.twitch_token : user.twitch_token;
+       
         user.email = _user.email !== undefined ? _user.email : user.email;
         user.status = _user.status !== undefined ? _user.status : user.status;
         user.customStatus = _user.customStatus !== undefined ? _user.customStatus : user.customStatus;
