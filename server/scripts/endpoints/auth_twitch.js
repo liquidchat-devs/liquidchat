@@ -12,7 +12,8 @@ class Endpoint {
 
             //https://id.twitch.tv/oauth2/authorize?client_id=3oxkg8rjxqox7kkx4qu9b7d441mzse&redirect_uri=https://nekonetwork.net:8080/auth_twitch&response_type=code&scope=user:read:email
             this.app.axios.post("https://id.twitch.tv/oauth2/token",
-            "client_id=" + this.app.config["auth_twitch_id"] + "&client_secret=" + this.app.config["auth_twitch_token"] + "&code=" + data.code + "&grant_type=authorization_code&redirect_uri=https://nekonetwork.net:8080/auth_twitch",{
+            "client_id=" + this.app.config["auth_twitch_id"] + "&client_secret=" + this.app.config["auth_twitch_token"] + "&code=" + data.code + "&grant_type=authorization_code&redirect_uri=https://nekonetwork.net:8080/auth_twitch",
+            {
                 headers: { "Accept": "application/json" }
             }).then(res1 => {
                 if(res1.data["access_token"] !== undefined) {

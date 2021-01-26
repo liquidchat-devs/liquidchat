@@ -11,7 +11,8 @@ class Endpoint {
             var data = req.query;
 
             //https://github.com/login/oauth/authorize?client_id=91bcd730211830731d9a
-            this.app.axios.post("https://github.com/login/oauth/access_token?client_id=" + this.app.config["auth_gh_id"] + "&client_secret=" + this.app.config["auth_gh_token"] + "&code=" + data.code, {}, {
+            this.app.axios.post("https://github.com/login/oauth/access_token?client_id=" + this.app.config["auth_gh_id"] + "&client_secret=" + this.app.config["auth_gh_token"] + "&code=" + data.code, {},
+            {
                 headers: { "Accept": "application/json" }
             }).then(res1 => {
                 if(res1.data["access_token"] !== undefined) {

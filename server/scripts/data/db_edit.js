@@ -19,7 +19,9 @@ module.exports = {
 
         var query0 = "username=?, avatar=?, friends=?, dmChannels=?, servers=?, status=?, badges=?, emotes=?" + (user.email == null ? "" : ", email=?") + (user.password == null ? "" : ", password=?") + (user.customStatus == null || user.customStatus.length < 1 ? "" : ", customStatus=?")
         + (user.gh_username == null ? "" : ", gh_username=?") + (user.gh_token == null ? "" : ", gh_token=?") + (user.reddit_username == null ? "" : ", reddit_username=?") + (user.reddit_token == null ? "" : ", reddit_token=?")
-        + (user.osu_username == null ? "" : ", osu_username=?") + (user.osu_token == null ? "" : ", osu_token=?")+ (user.twitch_username == null ? "" : ", twitch_username=?") + (user.twitch_token == null ? "" : ", twitch_token=?")
+        + (user.osu_username == null ? "" : ", osu_username=?") + (user.osu_token == null ? "" : ", osu_token=?") + (user.twitch_username == null ? "" : ", twitch_username=?") + (user.twitch_token == null ? "" : ", twitch_token=?")
+        + (user.blizzard_username == null ? "" : ", blizzard_username=?") + (user.blizzard_token == null ? "" : ", blizzard_token=?") + (user.spotify_username == null ? "" : ", spotify_username=?") + (user.spotify_token == null ? "" : ", spotify_token=?")
+        + (user.discord_username == null ? "" : ", discord_username=?") + (user.discord_token == null ? "" : ", discord_token=?")
         var query1 = [ db.escapeString(user.username), user.avatar, user.friends.join(","), user.dmChannels.join(","), user.servers.join(","), user.status, user.badges.join(","), user.emotes.join(",") ]
         if(user.email != null) { query1.push(db.escapeString(user.email)); }
         if(user.password != null) { query1.push(user.password); }
@@ -32,6 +34,12 @@ module.exports = {
         if(user.osu_token != null) { query1.push(user.osu_token); }
         if(user.twitch_username != null) { query1.push(user.twitch_username); }
         if(user.twitch_token != null) { query1.push(user.twitch_token); }
+        if(user.blizzard_username != null) { query1.push(user.blizzard_username); }
+        if(user.blizzard_token != null) { query1.push(user.blizzard_token); }
+        if(user.spotify_username != null) { query1.push(user.spotify_username); }
+        if(user.spotify_token != null) { query1.push(user.spotify_token); }
+        if(user.discord_username != null) { query1.push(user.discord_username); }
+        if(user.discord_token != null) { query1.push(user.discord_token); }
 
         var query = "UPDATE users SET " + query0 + " WHERE id='" + user.id + "'";
         db.sqlConn.promise().execute(query, query1)

@@ -280,6 +280,15 @@ module.exports = {
         user.connections.twitch = user.twitch_username == null ? undefined : { username: user.twitch_username }
         delete user.twitch_username
         delete user.twitch_token
+        user.connections.blizzard = user.blizzard_username == null ? undefined : { username: user.blizzard_username }
+        delete user.blizzard_username
+        delete user.blizzard_token
+        user.connections.spotify = user.spotify_username == null ? undefined : { username: user.spotify_username }
+        delete user.spotify_username
+        delete user.spotify_token
+        user.connections.discord = user.discord_username == null ? undefined : { username: user.discord_username }
+        delete user.discord_username
+        delete user.discord_token
 
         if(containPassword !== true) {
             delete user.password

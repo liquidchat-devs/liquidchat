@@ -12,7 +12,8 @@ class Endpoint {
 
             //https://www.reddit.com/api/v1/authorize?client_id=g8QfIB742iwMKw&response_type=code&state=a&redirect_uri=https://nekonetwork.net:8080/auth_reddit&duration=permanent&scope=identity
             this.app.axios.post("https://www.reddit.com/api/v1/access_token",
-            "grant_type=authorization_code&code=" + data.code + "&redirect_uri=https://nekonetwork.net:8080/auth_reddit", {
+            "grant_type=authorization_code&code=" + data.code + "&redirect_uri=https://nekonetwork.net:8080/auth_reddit",
+            {
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
                     "Authorization": "Basic " + Buffer.from(this.app.config["auth_reddit_id"] + ":" + this.app.config["auth_reddit_token"]).toString("base64"),

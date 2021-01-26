@@ -68,6 +68,12 @@ class Endpoint {
         user.osu_token = _user.osu_token !== undefined ? _user.osu_token : user.osu_token;
         user.twitch_username = _user.twitch_username !== undefined ? _user.twitch_username : user.twitch_username;
         user.twitch_token = _user.twitch_token !== undefined ? _user.twitch_token : user.twitch_token;
+        user.blizzard_username = _user.blizzard_username !== undefined ? _user.blizzard_username : user.blizzard_username;
+        user.blizzard_token = _user.blizzard_token !== undefined ? _user.blizzard_token : user.blizzard_token;
+        user.spotify_username = _user.spotify_username !== undefined ? _user.spotify_username : user.spotify_username;
+        user.spotify_token = _user.spotify_token !== undefined ? _user.spotify_token : user.spotify_token;
+        user.discord_username = _user.discord_username !== undefined ? _user.discord_username : user.discord_username;
+        user.discord_token = _user.discord_token !== undefined ? _user.discord_token : user.discord_token;
        
         user.email = _user.email !== undefined ? _user.email : user.email;
         user.status = _user.status !== undefined ? _user.status : user.status;
