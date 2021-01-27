@@ -125,7 +125,6 @@ class Util {
         this.app.io.on('connect', async(socket) => {
             try {
                 var cookies = this.app.config.useHTTP ? { "sessionID": this.app.sessions.entries().next().value[0] } : this.app.cookie.parse(socket.handshake.headers.cookie);
-                console.log(JSON.stringify(cookies));
                 if(cookies['sessionID'] === undefined || !this.app.sessions.has(cookies['sessionID'])) {
                     console.log("> invalid socket.io session");
                     return;
@@ -138,6 +137,10 @@ class Util {
                 var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
                 user.status = 1;
                 await this.app.epFunc.updateUser(user, true);
+
+                socket.on('message', async(data, callback) => {
+                    this.app.epFunc.sendWebsocketMessage(cookies['sessionID'], data, callback)
+                });
 
                 socket.on('disconnect', async function() {
                     var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);

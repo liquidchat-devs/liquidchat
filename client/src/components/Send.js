@@ -72,9 +72,9 @@ export default class Send extends React.Component {
     } else if(this.state.currentMentions[this.state.currentMentionIndex] !== undefined) {
       let b = this.state.message.substring(0, this.state.message.lastIndexOf("@"))
       this.handleChange({ target: { value: b + "<@" + this.state.currentMentions[this.state.currentMentionIndex].id + ">" }})
-    } else {
+    } else if(this.state.message.length > 0) {
       this.handleChange({ target: { value: "" }})
-      if(await this.props.API.API_sendMessage(this.props.state.currentChannel, this.state.message)) {
+      if(await this.props.API.API_sendWebsocketMessage(this.props.state.currentChannel, this.state.message)) {
         this.setState({
           message: "",
         });
@@ -163,7 +163,7 @@ export default class Send extends React.Component {
           </label>
           <input id="file-input" className="hide" onChange={this.handleFile} type='file' name="fileUploaded"/>
           <form onSubmit={this.handleSubmit} className="full">
-            <input className="input-message chatColor" type="text" value={this.state.message} placeholder="Message..." required={true} onChange={this.handleChange}/>
+            <input className="input-message chatColor" type="text" value={this.state.message} placeholder="Message..." onChange={this.handleChange}/>
           </form>
         </div>
         <div className="tooltipColor text4" style={{ marginTop: 5, marginLeft: 2 }}>

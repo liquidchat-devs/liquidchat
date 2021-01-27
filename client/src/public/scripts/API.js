@@ -736,6 +736,19 @@ export default class API {
         return suitableChannels[0];
     }
 
+    async API_sendWebsocketMessage(channelID, text) {
+        return new Promise((res, rej) => {
+            this.socket.emit('message', {
+                text: text,
+                channel: {
+                    id: channelID
+                }
+            }, (string) => {
+                res(JSON.parse(string))
+            })
+        });
+    }
+
     async API_sendMessage(channelID, text) {
         const reply = await axios.post(this.mainClass.state.APIEndpoint + '/message', {
             text: text,

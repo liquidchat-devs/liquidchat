@@ -138,6 +138,16 @@ class Endpoint {
         }
     }
 
+    async sendWebsocketMessage(sessionID, _message, callback) {
+        var newReq = { cookies: { "sessionID": sessionID } }
+        var newRes = {}
+        newRes.send = (string) => {
+            callback(string);
+        };
+
+        this.sendMessage(newReq, newRes, _message);
+    }
+
     async sendMessage(req, res, _message) {
         var session = this.app.sessions.get(req.cookies['sessionID']);
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
