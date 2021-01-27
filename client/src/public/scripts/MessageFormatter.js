@@ -341,6 +341,20 @@ function formatMessage(chat, message) {
                 </div>
             </div>)
             customMessage = true;
+        } else {
+            messageFormatted = (
+            <div>
+                <div className="invite-wrapper invite-wrapper2 chatColor">
+                    <div className="flex">
+                        <img alt="" className="avatar4 marginleft2 margintop1a" src={chat.props.state.fileEndpoint + "/defaultAvatar.png"}/>
+                        <div>
+                            <div className="white marginleft2 margintop1a">Invalid invite-</div>
+                            <div className="tipColor marginleft2">Ask for an invite again-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>)
+            customMessage = true;
         }
     } else {
         styles.forEach((val, i) => {

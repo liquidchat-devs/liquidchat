@@ -149,7 +149,7 @@ export default class API {
             channel.name = _channel.name;
             channel.members = _channel.members;
             newChannels.set(channel.id, channel);
-            
+
             this.mainClass.setState({
                 channels: newChannels
             });
@@ -262,17 +262,21 @@ export default class API {
         if(this.mainClass.state.users.has(id)) {
           return this.mainClass.state.users.get(id)
         } else {
-          //Fetch user
-          const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchUser?id=' + id + (containSensitive === true ? "&containSensitive=true" : ""), { withCredentials: true });
-          var user = reply.data
+            //Fetch user
+            const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchUser?id=' + id + (containSensitive === true ? "&containSensitive=true" : ""), { withCredentials: true });
+            var user = reply.data
     
-          //Cache user
-          var newUsers = this.mainClass.state.users.set(user.id, user);
-          this.mainClass.setState({
-            users: newUsers
-          });
+            if(user.status !== undefined) {
+                //Cache user
+                var newUsers = this.mainClass.state.users.set(user.id, user);
+                this.mainClass.setState({
+                    users: newUsers
+                });
 
-          return user;
+                return user;
+            } else {
+                return undefined;
+            }
         }
     }
 
@@ -283,14 +287,18 @@ export default class API {
             //Fetch user
             const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchServer?id=' + id, { withCredentials: true });
             var server = reply.data
-      
-            //Cache user
-            var newServers = this.mainClass.state.servers.set(server.id, server);
-            this.mainClass.setState({
-                servers: newServers
-            });
-  
-            return server;
+            
+            if(server.status !== undefined) {
+                //Cache user
+                var newServers = this.mainClass.state.servers.set(server.id, server);
+                this.mainClass.setState({
+                    servers: newServers
+                });
+    
+                return server;
+            } else {
+                return undefined;
+            }
         }
     }
 
@@ -322,18 +330,22 @@ export default class API {
         if(this.mainClass.state.invites.has(id)) {
             return this.mainClass.state.invites.get(id)
         } else {
-            //Fetch user
+            //Fetch invite
             const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchInvite?id=' + id, { withCredentials: true });
             var invite = reply.data
       
-            //Cache user
-            var newInvites = this.mainClass.state.invites.set(invite.id, invite);
-            this.API_fetchAllForInvites([ invite ])
-            this.mainClass.setState({
-                invites: newInvites
-            });
-  
-            return invite;
+            if(invite.status !== undefined) {
+                //Cache invite
+                var newInvites = this.mainClass.state.invites.set(invite.id, invite);
+                this.API_fetchAllForInvites([ invite ])
+                this.mainClass.setState({
+                    invites: newInvites
+                });
+    
+                return invite;
+            } else {
+                return undefined;
+            }
         }
     }
 
@@ -358,15 +370,17 @@ export default class API {
             const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchEmote?id=' + id, { withCredentials: true });
             var emote = reply.data
         
-            //Cache emote
-            if(emote.status === undefined) {
+            if(emote.status !== undefined) {
+                //Cache emote
                 var newEmotes = this.mainClass.state.emotes.set(emote.id, emote);
                 this.mainClass.setState({
                     emotes: newEmotes
                 });
-            }
 
-            return emote;
+                return emote;
+            } else {
+                return undefined;
+            }
         }
     }
 

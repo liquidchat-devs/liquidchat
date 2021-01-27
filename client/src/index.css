@@ -1043,6 +1043,11 @@ code {
   height: 115px;
   padding: 12px;
   border-radius: 5px;
+  margin-top: 5px;
+}
+
+.invite-wrapper2 {
+  height: 55px;
 }
 
 .cropButton {
