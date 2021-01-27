@@ -29,6 +29,15 @@ code {
   margin-top: 3px;
 }
 
+/* App Settings */
+* {
+  --serverSize: 150px;
+  --channelSize: 200px;
+  --dmSize: 150px;
+  --friendSize: 150px;
+  --membersSize: 200px;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
@@ -643,9 +652,10 @@ code {
   color: white;
 }
 
+.friend,
+.dmChannel,
 .channel {
   height: 36px;
-  width: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -653,9 +663,21 @@ code {
   transform: scale(0.9);
 }
 
+.friend {
+  width: var(--friendSize);
+}
+
+.dmChannel {
+  width: var(--dmSize);
+}
+
+.channel {
+  width: var(--channelSize);
+}
+
 .server {
   height: 52px;
-  width: 145px;
+  width: var(--serverSize);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -665,18 +687,26 @@ code {
 
 .server2 {
   height: 36px;
-  width: 145px;
+  width: var(--serverSize);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .channels {
-  width: 150px;
+  width: var(--channelSize);
+}
+
+.dmChannels {
+  width: var(--dmSize);
+}
+
+.friends {
+  width: var(--friendSize);
 }
 
 .servers {
-  width: 145px;
+  width: var(--serverSize);
 }
 
 .chat-wrapper {
@@ -888,7 +918,7 @@ code {
 }
 
 .membersList {
-  width: 200px;
+  width: var(--membersSize);
   height: 100%;
 }
 
@@ -923,7 +953,7 @@ code {
   bottom: 0px;
   left: 0px;
   position: absolute;
-  width: 295px;
+  width: calc(var(--serverSize) + var(--channelSize));
   height: 55px;
 }
 

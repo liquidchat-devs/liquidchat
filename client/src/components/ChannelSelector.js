@@ -98,6 +98,20 @@ export default class ChannelSelector extends React.Component {
 
     let voiceGroupChannel = voiceGroup !== -1 ? this.props.getChannel(voiceGroup.id) : undefined;
     let voiceGroupServer = voiceGroupChannel !== undefined ? this.props.getServer(voiceGroupChannel.server.id) : undefined;
+    let channelWidth = "";
+    switch(this.props.state.channelTypes) {
+      case 1:
+        channelWidth = "--dmSize"
+        break;
+
+      case 2:
+        channelWidth = "--channelSize"
+        break;
+
+      case 3:
+        channelWidth = "--friendSize"
+        break;
+    }
 
     return (
       <div className="flex">
@@ -118,7 +132,7 @@ export default class ChannelSelector extends React.Component {
         </div>
         {this.props.state.channelTypes === 1 || this.props.state.channelTypes === 2 ?
         <div>
-          <div className="channels headerColor" style={{ height: this.props.state.pageHeight - 83 - this.props.state.pageHeightOffset - (voiceGroup !== -1 ? 83 : 0) }}>
+          <div className={(this.props.state.channelTypes === 2 ? "channels" : "dmChannels") + " headerColor"} style={{ height: this.props.state.pageHeight - 83 - this.props.state.pageHeightOffset - (voiceGroup !== -1 ? 83 : 0) }}>
             <List
             onChange={({ oldIndex, newIndex }) =>
               this.props.moveChannel(channels, oldIndex, newIndex)
@@ -161,7 +175,7 @@ export default class ChannelSelector extends React.Component {
               }
 
               return (
-                <div {...props} key={index} className={this.props.state.currentChannel === value.id ? "white headerColor channel selectedColor" : "white headerColor channel"} onContextMenu={(e) => { this.props.setSelectedChannel(value.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } }>
+                <div {...props} key={index} className={this.props.state.currentChannel === value.id ? "white headerColor " + (this.props.state.channelTypes === 2 ? "channel" : "dmChannel") + " selectedColor" : "white headerColor channel"} onContextMenu={(e) => { this.props.setSelectedChannel(value.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } }>
                   #{channelName}
                   {value.nsfw ?
                   <svg width="24" height="24" viewBox="0 0 24 24" style={{ marginTop: 20, marginLeft: -10 }}><path fill="currentColor" d="M21.025 5V4C21.025 2.88 20.05 2 19 2C17.95 2 17 2.88 17 4V5C16.4477 5 16 5.44772 16 6V9C16 9.55228 16.4477 10 17 10H19H21C21.5523 10 22 9.55228 22 9V5.975C22 5.43652 21.5635 5 21.025 5ZM20 5H18V4C18 3.42857 18.4667 3 19 3C19.5333 3 20 3.42857 20 4V5Z"></path></svg>
@@ -202,14 +216,14 @@ export default class ChannelSelector extends React.Component {
           }
           </div>
         :
-        <div className="channels headerColor" style={{ height: this.props.state.pageHeight - 78 - this.props.state.pageHeightOffset }}>
+        <div className="friends headerColor" style={{ height: this.props.state.pageHeight - 83 - this.props.state.pageHeightOffset }}>
           {friendList}
           {friendRequestsList}
-          <div className="white headerColor channel" onClick={() => { this.props.switchDialogState(7) }}>
+          <div className="white headerColor friend" onClick={() => { this.props.switchDialogState(7) }}>
             Add Friend
           </div>
         </div>}
-        <div className="accountSettings chatColor aligny">
+        <div className="accountSettings chatColor aligny" style={{ width: "calc(var(--serverSize) + var(" + channelWidth + "))" }}>
             <div className="account">
               <img alt="" className="marginleft2 avatar pointer" src={this.props.state.fileEndpoint + "/" + loggedUser.avatar} onContextMenu={(e) => { this.props.switchDialogState(4); this.props.setBox(e.pageX, e.pageY); e.preventDefault(); }} onClick={(e) => { this.props.switchDialogState(22); this.props.setBox(e.currentTarget.getBoundingClientRect().left, e.currentTarget.getBoundingClientRect().top - 20); e.preventDefault(); }}/>
               <div className="statusWrapper2 statusBorder">

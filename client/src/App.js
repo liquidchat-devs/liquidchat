@@ -65,8 +65,8 @@ class App extends React.Component {
 
     //API
     API: new API(this),
-    APIEndpoint: "https://nekonetwork.net:8080",
-    fileEndpoint: "https://nekonetwork.net:8081",
+    APIEndpoint: "http://localhost:8080",
+    fileEndpoint: "http://localhost:8081",
     
     //Utils
     const: new Constants(this),
