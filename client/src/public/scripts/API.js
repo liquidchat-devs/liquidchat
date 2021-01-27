@@ -149,6 +149,7 @@ export default class API {
             channel.name = _channel.name;
             channel.members = _channel.members;
             newChannels.set(channel.id, channel);
+            
             this.mainClass.setState({
                 channels: newChannels
             });
@@ -1270,6 +1271,20 @@ export default class API {
             return reply.data;
         }
     }
+    //#endregion
+
+    //#region Connections
+    async API_removeConnection(type) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/removeConnection', {
+            type: type
+        }, { withCredentials: true });
+
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return reply.data;
+        }
+    } 
     //#endregion
 }
 

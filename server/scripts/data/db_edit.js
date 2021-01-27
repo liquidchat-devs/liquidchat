@@ -54,6 +54,13 @@ module.exports = {
             if(err) { throw err; }
         });
     },
+
+    removeUserConnection(db, user, type) {
+        db.sqlConn.promise().query("UPDATE users SET " + db.escapeString(type) + "_token=NULL, " + db.escapeString(type) + "_username=NULL WHERE id='" + user.id + "'")
+        .then((result, err) => {
+            if(err) { throw err; }
+        });
+    },
     
     editMessage(db, message) {
         if(db.DEBUG) {
