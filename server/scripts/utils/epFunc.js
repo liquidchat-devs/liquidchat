@@ -15,7 +15,7 @@ class Endpoint {
         } else if(friendRequest.target.id !== user.id && friendRequest.author.id !== user.id) {
             res.send(JSON.stringify({ status: -2 }))
             return;
-        }  else {
+        } else {
             res.sendStatus(200);
         }
 
@@ -32,21 +32,17 @@ class Endpoint {
         await this.app.db.db_edit.editUser(this.app.db, authorUser);
         await this.app.db.db_edit.editUser(this.app.db, targetUser);
 
-        if(socket.connected) {
-            var friendRequestsOut = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, user.id, 0);
-            var friendRequestsIn = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, user.id, 1);
-            var friendRequests = friendRequestsOut.concat(friendRequestsIn);
+        var friendRequestsOut = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, user.id, 0);
+        var friendRequestsIn = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, user.id, 1);
+        var friendRequests = friendRequestsOut.concat(friendRequestsIn);
+        this.app.epFunc.emitToUser(user.id, "updateUser", user);
+        this.app.epFunc.emitToUser(user.id, "updateFriendRequests", friendRequests);
 
-            socket.emit("updateUser", JSON.stringify(user))
-            socket.emit("updateFriendRequests", JSON.stringify(friendRequests))
-
-            friendRequestsOut = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, targetUser.id, 0);
-            friendRequestsIn = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, targetUser.id, 1);
-            friendRequests = friendRequestsOut.concat(friendRequestsIn);
-
-            this.app.epFunc.emitToUser(targetUser.id, "updateUser", targetUser);
-            this.app.epFunc.emitToUser(targetUser.id, "updateFriendRequests", friendRequests);
-        }
+        friendRequestsOut = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, targetUser.id, 0);
+        friendRequestsIn = await this.app.db.db_fetch.fetchFriendRequests(this.app.db, targetUser.id, 1);
+        friendRequests = friendRequestsOut.concat(friendRequestsIn);
+        this.app.epFunc.emitToUser(targetUser.id, "updateUser", targetUser);
+        this.app.epFunc.emitToUser(targetUser.id, "updateFriendRequests", friendRequests);
     }
 
     async editUser(req, res, _user) {
