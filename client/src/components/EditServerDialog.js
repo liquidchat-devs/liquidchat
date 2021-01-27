@@ -33,6 +33,22 @@ export default class EditServerDialog extends React.Component {
     reader.readAsDataURL(file);
   }
 
+  handleBanner = async (box, e) => {
+    if(e.target.files.length < 1) { return; }
+    
+    var file = e.target.files[0];
+    e.target.value = ""
+    this.setState({
+      serverBanner: file,
+    });
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      box.refs["serverBannerImage"].src = e.target.result;
+    }
+    reader.readAsDataURL(file);
+  }
+
   handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value,
@@ -49,6 +65,15 @@ export default class EditServerDialog extends React.Component {
     if(isNaN(res)) {
       if(this.state.serverAvatar !== -1) {
         res = await this.props.API.API_updateServerAvatar(this.props.state.selectedServer, this.state.serverAvatar)
+        this.setState({
+          serverEditResult: res,
+        });
+      }
+    }
+
+    if(isNaN(res)) {
+      if(this.state.serverBanner !== -1) {
+        res = await this.props.API.API_updateServerBanner(this.props.state.selectedServer, this.state.serverBanner)
         this.setState({
           serverEditResult: res,
         });
@@ -124,6 +149,22 @@ export default class EditServerDialog extends React.Component {
               +
             </div>
           </div>
+          <div className="white text3 marginleft2b margintop1a">Server Banner</div>
+          <form onSubmit={this.handleSubmit} className="flex margintop1">
+            {server.banner == null && this.state.serverBanner == null ?
+            <div className="banner2 marginleft3 marginright2" onMouseEnter={() => this.refs["serverBannerEditOverlay"].style = "display: flex;" }></div>
+            : <img alt="" className="banner2 marginleft3 marginright2" ref="serverBannerImage" src={this.props.state.fileEndpoint + "/" + server.banner} onMouseEnter={() => this.refs["serverBannerEditOverlay"].style = "display: flex;" }/>}
+            <div className="cropButton alignmiddle" onClick={() => { this.props.setSelectedBanner(server.banner); this.props.switchDialogState(19) }}>
+                <div className="white text7">Crop</div>
+            </div>
+            <label for="banner-input">
+              <div className="banner2 bannerOverlay marginleft4 alignmiddle" ref="serverBannerEditOverlay" onMouseLeave={() => this.refs["serverBannerEditOverlay"].style = "display: none;" }>
+                <div className="white text4 nopointerevents">Change Banner</div>
+              </div>
+            </label>
+            <input id="banner-input" className="hide" onChange={(e) => this.handleBanner(this, e) } type='file' name="fileUploaded"/>
+            <br />
+          </form>
           <div className="marginleft2 margintop1" style={{ height: 40 }}>
             <div onClick={this.handleSubmit} className="button button1" style={{ marginTop: 15, marginLeft: 10 }} value="vsvsd">Edit!</div>
           </div>

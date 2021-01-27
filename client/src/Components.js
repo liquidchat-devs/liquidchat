@@ -67,7 +67,7 @@ export default class DialogManager extends React.Component {
         return <c.ServerOptionsDialog state={this.props.state} getServer={this.props.getServer} API={this.props.API} copyID={this.copyID} switchDialogState={this.props.switchDialogState}/>
 
       case 18:
-        return <c.EditServerDialog state={this.props.state} setSelectedAvatar={this.props.setSelectedAvatar} getServer={this.props.getServer} API={this.props.API} switchDialogState={this.props.switchDialogState} />
+        return <c.EditServerDialog state={this.props.state} setSelectedBanner={this.props.setSelectedBanner} setSelectedAvatar={this.props.setSelectedAvatar} getServer={this.props.getServer} API={this.props.API} switchDialogState={this.props.switchDialogState} />
 
       case 19:
         return <c.CropImageDialog state={this.props.state} API={this.props.API} switchDialogState={this.props.switchDialogState}/>

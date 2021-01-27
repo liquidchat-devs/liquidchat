@@ -176,6 +176,12 @@ class App extends React.Component {
     });
   }
 
+  setSelectedBanner =  (banner) => {
+    this.setState({
+      selectedBanner: banner
+    });
+  }
+
   setBox = (x, y) => {
     this.setState({
       boxX: x,

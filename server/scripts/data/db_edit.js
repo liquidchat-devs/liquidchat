@@ -4,9 +4,12 @@ module.exports = {
             console.log(" - [db] Editing Server(id: " + server.id + ") in the database..."); 
         }
 
-        var query0 = "name=?, avatar=?, channels=?, members=?, emotes=?"
+        var query0 = "name=?, avatar=?, channels=?, members=?, emotes=?" + (server.banner == null ? "" : ", banner=?")
+        var query1 = [ db.escapeString(server.name), server.avatar, server.channels.join(","), server.members.join(","), server.emotes.join(",") ]
+        if(server.banner != null) { query1.push(server.banner); }
+
         var query = "UPDATE servers SET " + query0 + " WHERE id='" + server.id + "'";
-        db.sqlConn.promise().execute(query, [ db.escapeString(server.name), server.avatar, server.channels.join(","), server.members.join(","), server.emotes.join(",") ])
+        db.sqlConn.promise().execute(query, query1)
         .then((result, err) => {
             if(err) { throw err; }
         });

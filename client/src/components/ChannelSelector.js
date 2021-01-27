@@ -21,6 +21,7 @@ export default class ChannelSelector extends React.Component {
     let friendRequests = Array.from(this.props.state.friendRequests.values());
     let voiceGroup = this.props.state.currentVoiceGroup;
     let loggedUser = this.props.getUser(this.props.state.session.userID);
+    let selectedServer = this.props.state.selectedServer == -1 ? undefined : this.props.getServer(this.props.state.selectedServer);
     channels = channels.filter(channel => { return ((channel.type === 0 || channel.type === 1) && this.props.state.channelTypes === 2 && channel.server.id === this.props.state.selectedServer) || (channel.type === 2 && this.props.state.channelTypes === 1); })
     channels = channels.sort((a, b) => a.position - b.position)
 
@@ -133,6 +134,10 @@ export default class ChannelSelector extends React.Component {
         {this.props.state.channelTypes === 1 || this.props.state.channelTypes === 2 ?
         <div>
           <div className={(this.props.state.channelTypes === 2 ? "channels" : "dmChannels") + " headerColor"} style={{ height: this.props.state.pageHeight - 83 - this.props.state.pageHeightOffset - (voiceGroup !== -1 ? 83 : 0) }}>
+            {
+              selectedServer == null || selectedServer.banner == null ? "" :
+              <img className="banner" src={this.props.state.fileEndpoint + "/" + selectedServer.banner} />
+            }
             <List
             onChange={({ oldIndex, newIndex }) =>
               this.props.moveChannel(channels, oldIndex, newIndex)
@@ -167,7 +172,8 @@ export default class ChannelSelector extends React.Component {
                   return (
                     <div key={index}>
                       <div {...props} className="white headerColor channel" style={{ backgroundColor: (voiceGroup !== -1 && voiceGroupChannel.id === value.id ? "#67b167" : "var(--color4)") }} onContextMenu={(e) => { this.props.setSelectedChannel(value.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } }>
-                        .{channelName}
+                        <div className="channelSign">.</div>
+                        {channelName}
                       </div>
                       {userList}
                     </div>
@@ -176,7 +182,8 @@ export default class ChannelSelector extends React.Component {
 
               return (
                 <div {...props} key={index} className={this.props.state.currentChannel === value.id ? "white headerColor " + (this.props.state.channelTypes === 2 ? "channel" : "dmChannel") + " selectedColor" : "white headerColor channel"} onContextMenu={(e) => { this.props.setSelectedChannel(value.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } }>
-                  #{channelName}
+                  <div className="channelSign">#</div>
+                  {channelName}
                   {value.nsfw ?
                   <svg width="24" height="24" viewBox="0 0 24 24" style={{ marginTop: 20, marginLeft: -10 }}><path fill="currentColor" d="M21.025 5V4C21.025 2.88 20.05 2 19 2C17.95 2 17 2.88 17 4V5C16.4477 5 16 5.44772 16 6V9C16 9.55228 16.4477 10 17 10H19H21C21.5523 10 22 9.55228 22 9V5.975C22 5.43652 21.5635 5 21.025 5ZM20 5H18V4C18 3.42857 18.4667 3 19 3C19.5333 3 20 3.42857 20 4V5Z"></path></svg>
                   : ""}
@@ -186,7 +193,7 @@ export default class ChannelSelector extends React.Component {
             </List>
             {this.props.state.channelTypes === 2 ?
               <div className="white headerColor channel" onClick={() => { this.props.switchDialogState(1) }}>
-              + Channel
+                <div className="addChannelText">+ Channel</div>
               </div>
             : null}
           </div>

@@ -107,6 +107,7 @@ export default class API {
             var server = newServers.get(_server.id);
             server.name = _server.name;
             server.avatar = _server.avatar;
+            server.banner = _server.banner;
             server.members = _server.members;
             server.channels = _server.channels;
             server.invites = _server.invites;
@@ -997,6 +998,28 @@ export default class API {
         const reply = await axios({
             method: 'post',
             url: this.mainClass.state.APIEndpoint + '/updateServerAvatar?serverID=' + serverID + '&fileName=' + file.name,
+            processData: false,
+            contentType: false,
+            cache: false,
+            enctype: 'multipart/form-data',
+            data: data,
+            withCredentials: true
+        });
+
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return 1;
+        }
+    }
+
+    async API_updateServerBanner(serverID, file) {
+        var data = new FormData();
+        data.append("fileUploaded", file)
+
+        const reply = await axios({
+            method: 'post',
+            url: this.mainClass.state.APIEndpoint + '/updateServerBanner?serverID=' + serverID + '&fileName=' + file.name,
             processData: false,
             contentType: false,
             cache: false,
