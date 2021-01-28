@@ -164,6 +164,15 @@ export default class API {
                 channels: newChannels
             });
         });
+        socket.on('deleteEmote', (emoteData) => {
+            var emote = JSON.parse(emoteData);
+
+            var newEmotes = new Map(this.mainClass.state.emotes)
+            newEmotes.delete(emote.id);
+            this.mainClass.setState({
+                emotes: newEmotes
+            });
+        });
 
         socket.on('uploadStart', (fileID, fileName) => {
             console.log("> upload start")
@@ -267,7 +276,7 @@ export default class API {
             const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchUser?id=' + id + (containSensitive === true ? "&containSensitive=true" : ""), { withCredentials: true });
             var user = reply.data
     
-            if(user.status !== undefined) {
+            if(user.status !== undefined && user.status >= 0) {
                 //Cache user
                 var newUsers = this.mainClass.state.users.set(user.id, user);
                 this.mainClass.setState({
@@ -289,7 +298,7 @@ export default class API {
             const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchServer?id=' + id, { withCredentials: true });
             var server = reply.data
             
-            if(server.status !== undefined) {
+            if(server.status === undefined) {
                 //Cache user
                 var newServers = this.mainClass.state.servers.set(server.id, server);
                 this.mainClass.setState({
@@ -335,7 +344,7 @@ export default class API {
             const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchInvite?id=' + id, { withCredentials: true });
             var invite = reply.data
       
-            if(invite.status !== undefined) {
+            if(invite.status === undefined) {
                 //Cache invite
                 var newInvites = this.mainClass.state.invites.set(invite.id, invite);
                 this.API_fetchAllForInvites([ invite ])
@@ -371,7 +380,7 @@ export default class API {
             const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchEmote?id=' + id, { withCredentials: true });
             var emote = reply.data
         
-            if(emote.status !== undefined) {
+            if(emote.status === undefined) {
                 //Cache emote
                 var newEmotes = this.mainClass.state.emotes.set(emote.id, emote);
                 this.mainClass.setState({
@@ -397,9 +406,11 @@ export default class API {
             this.mainClass.setState({
                 emotes: newEmotes
             });
-        }
 
-        return defaultEmotes;
+            return defaultEmotes;
+        } else {
+            return undefined;
+        }
     }
 
     async API_fetchNotes() {
@@ -670,6 +681,18 @@ export default class API {
             return reply.data.status;
         } else {
             return reply.data;
+        }
+    }
+
+    async API_deleteEmote(id) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/deleteEmote', {
+            id: id
+        }, { withCredentials: true });
+
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return 1;
         }
     }
     //#endregion

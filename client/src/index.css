@@ -1204,6 +1204,22 @@ code {
   margin-right: 10px;
 }
 
+.emoteDeletionOverlay {
+  background-color: red;
+  height: 30px;
+  width: 30px;
+  margin-top: -35px;
+  object-fit: cover;
+  margin-right: 10px;
+  opacity: 0.2;
+  cursor: pointer;
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .emoteImage3 {
   height: 40px;
   width: 40px;

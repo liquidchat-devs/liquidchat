@@ -5,7 +5,8 @@ export default class EditServerDialog extends React.Component {
     serverName: "",
     serverAvatar: -1,
     serverEditResult: 0,
-    avatarChangeResult: 0
+    avatarChangeResult: 0,
+    deletingEmotesEnabled: false
   };
 
   componentDidMount = () => {
@@ -117,10 +118,15 @@ export default class EditServerDialog extends React.Component {
     })
 
     let emoteList = emotes.map((emote, i) => {
-      return <div key={i} className="emoteImage2 tooltipWrapper">
-          <img alt="" className="emoteImage2" src={this.props.state.fileEndpoint + "/" + emote.file} />
-          <span className="tooltipText">:{emote.name}:</span>
+      return <div key={i} className="emoteImage2 tooltipWrapper" onClick={() => { if(this.state.deletingEmotesEnabled) { this.props.API.API_deleteEmote(emote.id); } }}>
+        <img alt="" className="emoteImage2" src={this.props.state.fileEndpoint + "/" + emote.file} />
+        {this.state.deletingEmotesEnabled ?
+        <div className="emoteDeletionOverlay">
+          <svg viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z" fill="rgba(255,255,255,1)"/></svg>
         </div>
+        : ""}
+        <span className="tooltipText">:{emote.name}:</span>
+      </div>
     }, "")
 
     return (
@@ -145,8 +151,11 @@ export default class EditServerDialog extends React.Component {
           <div className="white text3 marginleft2b margintop1a">Server Emotes ({emotes.length})</div>
           <div className="flex marginleft2b">
             {emoteList}
-            <div className="button2 hover addEmoteButton alignmiddle chatColor" onClick={() => { this.props.switchDialogState(21); }}>
+            <div className="button2 marginright1 hover addEmoteButton alignmiddle chatColor" onClick={() => { this.props.switchDialogState(21); }}>
               +
+            </div>
+            <div className="button2 hover addEmoteButton alignmiddle chatColor" onClick={() => { this.setState({ deletingEmotesEnabled: !this.state.deletingEmotesEnabled }) }}>
+              -
             </div>
           </div>
           <div className="white text3 marginleft2b margintop1a">Server Banner</div>

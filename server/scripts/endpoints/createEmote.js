@@ -24,11 +24,11 @@ class Endpoint {
                 id: user.id
             },
             name: emoteName,
-            type: type
+            type: parseInt(type)
         }
 
-        switch(type) {
-            case "0":
+        switch(emote.type) {
+            case 0:
                 var server = await this.app.db.db_fetch.fetchServer(this.app.db, serverID);
 
                 if(server === undefined) {
@@ -63,7 +63,7 @@ class Endpoint {
                 }.bind(this));
                 break;
 
-            case "1":
+            case 1:
                 form.uploadDir = this.app.filesStorage;
                 form.keepExtensions = true;
         
@@ -87,7 +87,7 @@ class Endpoint {
                 }.bind(this));
                 break;
 
-            case "2":
+            case 2:
                 form.uploadDir = this.app.filesStorage;
                 form.keepExtensions = true;
         
