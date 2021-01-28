@@ -12,7 +12,7 @@ class Endpoint {
 
             //https://osu.ppy.sh/oauth/authorize?client_id=4883&redirect_uri=https://nekonetwork.net:8080/auth_osu&response_type=code&scope=public
             this.app.axios.post("https://osu.ppy.sh/oauth/token",
-            "client_id=" + this.app.config["auth_osu_id"] + "&client_secret=" + this.app.config["auth_osu_token"] + "&code=" + data.code + "&grant_type=authorization_code&redirect_uri=https://nekonetwork.net/auth_osu",
+            "client_id=" + this.app.config["auth_osu_id"] + "&client_secret=" + this.app.config["auth_osu_token"] + "&code=" + data.code + "&grant_type=authorization_code&redirect_uri=https://nekonetwork.net:8080/auth_osu",
             {
                 headers: { "Accept": "application/json" }
             }).then(res1 => {

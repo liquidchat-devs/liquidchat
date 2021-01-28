@@ -95,7 +95,7 @@ export default class SettingsDialog extends React.Component {
     if(loggedUser.connections.blizzard !== undefined) {
       connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/3QuD8o.png", loggedUser.connections.blizzard.username, () => { this.props.API.API_removeConnection("blizzard"); }))
     } else {
-      connectionButtons.push(this.getConnectionButton("https://qtlamkas.why-am-i-he.re/3QuD8o.png", "Blizzard", "https://us.battle.net/oauth/authorize?client_id=24428d45ed4b42448c9a33f1161585c5&redirect_uri=https://nekonetwork:8080/auth_blizzard&response_type=code&scope=openid"));
+      connectionButtons.push(this.getConnectionButton("https://qtlamkas.why-am-i-he.re/3QuD8o.png", "Blizzard", "https://us.battle.net/oauth/authorize?client_id=24428d45ed4b42448c9a33f1161585c5&redirect_uri=https://nekonetwork.net:8080&response_type=code&scope=openid"));
     }
     if(loggedUser.connections.discord !== undefined) {
       connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/XfNe77.png", loggedUser.connections.discord.username, () => { this.props.API.API_removeConnection("discord"); }))

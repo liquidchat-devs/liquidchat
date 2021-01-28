@@ -10,9 +10,9 @@ class Endpoint {
             var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
             var data = req.query;
 
-            //https://us.battle.net/oauth/authorize?client_id=24428d45ed4b42448c9a33f1161585c5&redirect_uri=https://nekonetwork:8080/auth_blizzard&response_type=code&scope=openid
+            //https://us.battle.net/oauth/authorize?client_id=24428d45ed4b42448c9a33f1161585c5&redirect_uri=https://nekonetwork.net:8080/auth_blizzard&response_type=code&scope=openid
             this.app.axios.post("https://us.battle.net/oauth/token",
-            "code=" + data.code + "&grant_type=authorization_code&redirect_uri=https://nekonetwork:8080/auth_blizzard&scope=openid",
+            "code=" + data.code + "&grant_type=authorization_code&redirect_uri=https://https://nekonetwork.net:8080/auth_blizzard&scope=openid",
             {
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
