@@ -171,7 +171,7 @@ export default class ChannelSelector extends React.Component {
 
                   return (
                     <div key={index}>
-                      <div {...props} className="white headerColor channel" style={{ backgroundColor: (voiceGroup !== -1 && voiceGroupChannel.id === value.id ? "#67b167" : "var(--color4)") }} onContextMenu={(e) => { this.props.setSelectedChannel(value.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } }>
+                      <div {...props} className={"white headerColor channel"} style={{ backgroundColor: (voiceGroup !== -1 && voiceGroupChannel.id === value.id ? "#67b167" : "var(--color4)") }} onContextMenu={(e) => { this.props.setSelectedChannel(value.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } }>
                         <div className="channelSign">.</div>
                         {channelName}
                       </div>
@@ -181,7 +181,7 @@ export default class ChannelSelector extends React.Component {
               }
 
               return (
-                <div {...props} key={index} className={this.props.state.currentChannel === value.id ? "white headerColor " + (this.props.state.channelTypes === 2 ? "channel" : "dmChannel") + " selectedColor" : "white headerColor channel"} onContextMenu={(e) => { this.props.setSelectedChannel(value.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } }>
+                <div {...props} key={index} className={this.props.state.currentChannel === value.id ? "white headerColor " + (this.props.state.channelTypes === 2 ? "channel" : "dmChannel") + " selectedColor" : "white headerColor " + (this.props.state.channelTypes === 2 ? "channel" : "dmChannel")} onContextMenu={(e) => { this.props.setSelectedChannel(value.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(10); e.preventDefault(); e.stopPropagation(); } }>
                   <div className="channelSign">#</div>
                   {channelName}
                   {value.nsfw ?

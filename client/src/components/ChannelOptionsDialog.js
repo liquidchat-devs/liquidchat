@@ -2,7 +2,8 @@ import React from 'react';
 
 export default class ChannelOptionsDialog extends React.Component {
   state = {
-    channelDeletionResult: 0
+    channelDeletionResult: 0,
+    channelCloneResult: 0
   };
 
   handleDelete = async e => {
@@ -10,6 +11,17 @@ export default class ChannelOptionsDialog extends React.Component {
     const res = await this.props.API.API_deleteChannel(this.props.state.selectedChannel);
     this.setState({
       channelDeletionResult: res,
+    });
+    
+    if(res === 1) { this.props.switchDialogState(-1); }
+    return true;
+  }
+
+  handleClone = async e => {
+    e.preventDefault();
+    const res = await this.props.API.API_cloneChannel(this.props.state.selectedChannel);
+    this.setState({
+      channelCloneResult: res,
     });
     
     if(res === 1) { this.props.switchDialogState(-1); }
@@ -34,6 +46,9 @@ export default class ChannelOptionsDialog extends React.Component {
               <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.switchDialogState(12); }}>
                 <p className="white text1">&gt; Add Friends</p>
               </div> : ""}
+              <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleClone(e); }}>
+                <p className="white text1">&gt; Clone Channel</p>
+              </div>
               <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleDelete(e); }}>
                 <p className="declineColor text1">&gt; Delete Channel</p>
               </div>
