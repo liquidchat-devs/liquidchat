@@ -41,14 +41,14 @@ export default class Send extends React.Component {
 
   handleChange = e => {
     let message = e.target.value;
-    let server = this.props.getServer(this.props.state.selectedServer)
-    let channel = this.props.getChannel(this.props.state.currentChannel)
+    let server = this.props.functions.getServer(this.props.state.selectedServer)
+    let channel = this.props.functions.getChannel(this.props.state.currentChannel)
     let members = server !== undefined ? server.members : channel.members;
-    members = members.reduce((acc, curr) => { acc.push(this.props.getUser(curr)); return acc; }, [])
+    members = members.reduce((acc, curr) => { acc.push(this.props.functions.getUser(curr)); return acc; }, [])
 
     let a0 = message.lastIndexOf(":");
     let a = message.substring(a0 > -1 ? a0 + 1 : message.length)
-    let possibleEmotes = Array.from(this.props.state.emotes.values()).filter(e => { return (e.author.id === this.props.state.session.userID || (e.server !== undefined && this.props.isInServer(e.server.id))) && a.length > 0 && e.name.startsWith(a); }).sort((a, b) => { return a.name.length - b.name.length; }).slice(0, 4)
+    let possibleEmotes = Array.from(this.props.state.emotes.values()).filter(e => { return (e.author.id === this.props.state.session.userID || (e.server !== undefined && this.props.functions.isInServer(e.server.id))) && a.length > 0 && e.name.startsWith(a); }).sort((a, b) => { return a.name.length - b.name.length; }).slice(0, 4)
     let b0 = message.lastIndexOf("@");
     let b = message.substring(b0 > -1 ? b0 + 1 : message.length)
     let possibleMentions = members.filter(e => { return b.length > 0 && e.username.startsWith(b); }).sort((a, b) => { return a.username.length - b.username.length; }).slice(0, 4)
@@ -95,13 +95,13 @@ export default class Send extends React.Component {
   }
 
   render() {
-    if(this.props.isInChannel() === false) {
+    if(this.props.functions.isInChannel() === false) {
       return null;
     }
 
-    let channel = this.props.getChannel(this.props.state.currentChannel)
+    let channel = this.props.functions.getChannel(this.props.state.currentChannel)
     let emoteList = this.state.currentEmotes.map((emote, i) => {
-      let server = emote.server !== undefined ? this.props.getServer(emote.server.id) : undefined;
+      let server = emote.server !== undefined ? this.props.functions.getServer(emote.server.id) : undefined;
 
       return <div className="emoteItemWrapper" key={i}>
         <div className={this.state.currentEmoteIndex === i ? "emoteItem bgColor" : "emoteItem"} onClick={(e) => { this.setState({ currentEmoteIndex: i }); this.handleSubmit(e); }}>
@@ -140,7 +140,7 @@ export default class Send extends React.Component {
 
     let ind = this.props.state.typingIndicators.get(this.props.state.currentChannel);
     let typingContent = ind.map((id, i) => {
-      let user = this.props.getUser(id);
+      let user = this.props.functions.getUser(id);
 
       if(i === ind.length - 1) {
         return <p className="margin0"><b>{user.username}</b> {ind.length > 1 ? "are" : "is"} typing...</p>;

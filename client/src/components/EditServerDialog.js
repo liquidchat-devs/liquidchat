@@ -10,7 +10,7 @@ export default class EditServerDialog extends React.Component {
   };
 
   componentDidMount = () => {
-    const server = this.props.getServer(this.props.state.selectedServer);
+    const server = this.props.functions.getServer(this.props.state.selectedServer);
     if(server !== undefined) {
       this.setState({
         serverName: server.name
@@ -82,7 +82,7 @@ export default class EditServerDialog extends React.Component {
     }
     
     if(isNaN(res)) {
-      this.props.switchDialogState(-1);
+      this.props.functions.switchDialogState(-1);
       return true;
     } else {
       this.setState({
@@ -105,7 +105,7 @@ export default class EditServerDialog extends React.Component {
   }
 
   render() {
-    const server = this.props.getServer(this.props.state.selectedServer);
+    const server = this.props.functions.getServer(this.props.state.selectedServer);
     if(server === undefined) {
       return null;
     }
@@ -131,12 +131,12 @@ export default class EditServerDialog extends React.Component {
 
     return (
       <div>
-        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlay" onClick={() => { this.props.functions.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox4">
           <div className="white text3 marginleft2 margintop1a">Edit server-</div>
           <form onSubmit={this.handleSubmit} className="flex margintop1">
             <img alt="" className="avatar2 marginleft4 marginright2" ref="serverImage" src={this.props.state.fileEndpoint + "/" + server.avatar} onMouseEnter={() => this.refs["serverEditOverlay"].style = "display: flex;" }/>
-            <div className="cropButton alignmiddle" onClick={() => { this.props.setSelectedAvatar(server.avatar); this.props.switchDialogState(19) }}>
+            <div className="cropButton alignmiddle" onClick={() => { this.props.functions.setSelectedAvatar(server.avatar); this.props.functions.switchDialogState(19) }}>
                 <div className="white text7">Crop</div>
             </div>
             <label for="avatar-input">
@@ -151,7 +151,7 @@ export default class EditServerDialog extends React.Component {
           <div className="white text3 marginleft2b margintop1a">Server Emotes ({emotes.length})</div>
           <div className="flex marginleft2b">
             {emoteList}
-            <div className="button2 marginright1 hover addEmoteButton alignmiddle chatColor" onClick={() => { this.props.switchDialogState(21); }}>
+            <div className="button2 marginright1 hover addEmoteButton alignmiddle chatColor" onClick={() => { this.props.functions.switchDialogState(21); }}>
               +
             </div>
             <div className="button2 hover addEmoteButton alignmiddle chatColor" onClick={() => { this.setState({ deletingEmotesEnabled: !this.state.deletingEmotesEnabled }) }}>
@@ -163,7 +163,7 @@ export default class EditServerDialog extends React.Component {
             {server.banner == null && this.state.serverBanner == null ?
             <div className="banner2 marginleft3 marginright2" onMouseEnter={() => this.refs["serverBannerEditOverlay"].style = "display: flex;" }></div>
             : <img alt="" className="banner2 marginleft3 marginright2" ref="serverBannerImage" src={this.props.state.fileEndpoint + "/" + server.banner} onMouseEnter={() => this.refs["serverBannerEditOverlay"].style = "display: flex;" }/>}
-            <div className="cropButton alignmiddle" onClick={() => { this.props.setSelectedBanner(server.banner); this.props.switchDialogState(19) }}>
+            <div className="cropButton alignmiddle" onClick={() => { this.props.functions.setSelectedBanner(server.banner); this.props.functions.switchDialogState(19) }}>
                 <div className="white text7">Crop</div>
             </div>
             <label for="banner-input">

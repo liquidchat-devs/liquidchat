@@ -41,20 +41,20 @@ export default class InviteFriendsDialog extends React.Component {
   }
 
   render() {
-    let loggedUser = this.props.getUser(this.props.state.session.userID);
-    let server = this.props.getServer(this.props.state.selectedServer);
-    let channel = this.props.getChannel(this.props.state.selectedChannel);
+    let loggedUser = this.props.functions.getUser(this.props.state.session.userID);
+    let server = this.props.functions.getServer(this.props.state.selectedServer);
+    let channel = this.props.functions.getChannel(this.props.state.selectedChannel);
     let target = channel === undefined || channel.members === undefined ? server : channel;
     let type = channel === undefined || channel.members === undefined ? 1 : 0;
 
     const friendList = loggedUser.friends.map((friendID, i) => {
-    const friend = this.props.getUser(friendID);
+    const friend = this.props.functions.getUser(friendID);
       if(friend === undefined) {
         return null;
       }
 
       return (
-        <div key={i} className="friendEntry selectedColor" onContextMenu={(e) => { this.props.setSelectedUser(friend.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
+        <div key={i} className="friendInviteEntry selectedColor" onContextMenu={(e) => { this.props.functions.setSelectedUser(friend.id); this.props.functions.setBox(e.pageX, e.pageY); this.props.functions.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="flex">
             <div className="aligny" style={{ height: 55 }}>
               <img alt="" className="avatar marginleft2" src={this.props.state.fileEndpoint + "/" + friend.avatar}/>
@@ -77,7 +77,7 @@ export default class InviteFriendsDialog extends React.Component {
 
     return (
       <div>
-        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlay" onClick={() => { this.props.functions.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox">
           <div className="white text3 marginleft2 margintop1a">{type === 0 ? "> Add Friends-" : "> Invite Friends-"}</div>
           {friendList}

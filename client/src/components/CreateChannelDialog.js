@@ -40,7 +40,7 @@ export default class CreateChannelDialog extends React.Component {
       channelCreationResult: res,
     });
     
-    if(isNaN(res)) { this.props.switchDialogState(-1); }
+    if(isNaN(res)) { this.props.functions.switchDialogState(-1); }
     return true;
   }
 
@@ -57,7 +57,7 @@ export default class CreateChannelDialog extends React.Component {
   render() {
     return (
       <div>
-        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlay" onClick={() => { this.props.functions.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox">
           <div className="white text3 marginleft2 margintop1a">Create new channel-</div>
           <form onSubmit={this.handleSubmit} className="margintop1">

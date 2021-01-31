@@ -46,7 +46,7 @@ export default class CreateServerDialog extends React.Component {
     }
     
     if(isNaN(res)) {
-      this.props.switchDialogState(-1);
+      this.props.functions.switchDialogState(-1);
       return true;
     } else {
       this.setState({
@@ -68,12 +68,12 @@ export default class CreateServerDialog extends React.Component {
   render() {
     return (
       <div>
-        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlay" onClick={() => { this.props.functions.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox">
           <div className="white text3 marginleft2 margintop1a">Create new server-</div>
           <form onSubmit={this.handleSubmit} className="flex margintop1">
             <img alt="" className="avatar2 marginleft4 marginright2" ref="serverImage" src={this.props.state.fileEndpoint + "/defaultAvatar.png"} onMouseEnter={() => this.refs["serverEditOverlay"].style = "display: flex;" }/>
-            <div className="cropButton alignmiddle" onClick={() => { this.props.setSelectedAvatar(this.state.serverAvatar); this.props.switchDialogState(19) }}>
+            <div className="cropButton alignmiddle" onClick={() => { this.props.functions.setSelectedAvatar(this.state.serverAvatar); this.props.functions.switchDialogState(19) }}>
                 <div className="white text7">Crop</div>
             </div>
             <label for="avatar-input">

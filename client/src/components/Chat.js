@@ -22,7 +22,7 @@ export default class Chat extends React.Component {
       this.props.setEditedMesage("");
     }
 
-    this.props.endEditingMessage();
+    this.props.functions.endEditingMessage();
   }
 
   isFullScreen() {
@@ -102,9 +102,9 @@ export default class Chat extends React.Component {
   }
 
   render() {
-    let server = this.props.getServer(this.props.state.selectedServer)
-    let channel = this.props.getChannel(this.props.state.currentChannel)
-    if(this.props.isInChannel() === false) {
+    let server = this.props.functions.getServer(this.props.state.selectedServer)
+    let channel = this.props.functions.getChannel(this.props.state.currentChannel)
+    if(this.props.functions.isInChannel() === false) {
       return (
         <div className="flex">
           <h3 className="white margin1 marginleft2"> No Channel Selected</h3>
@@ -121,10 +121,10 @@ export default class Chat extends React.Component {
       let messageHTML;
       switch(message.type) {
         case 0:
-          const user = this.props.getUser(message.author.id)
+          const user = this.props.functions.getUser(message.author.id)
 
           messageHTML = <div className="flex marginleft2 fullwidth">
-            <img alt="" className="avatar" src={this.props.state.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.setSelectedUser(user.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
+            <img alt="" className="avatar" src={this.props.state.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.functions.setSelectedUser(user.id); this.props.functions.setBox(e.pageX, e.pageY); this.props.functions.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
             <div className="marginleft2 fullwidth">
               <div className="flex">
                 <div className="allignMiddle hoverunderline" style={{margin: 0, color: (user !== undefined && server !== undefined && server.author.id === user.id ? "yellow" : "red"), fontSize: 16}}>
@@ -138,7 +138,7 @@ export default class Chat extends React.Component {
                 {message.id === this.props.state.editingMessage.id ?
                 <div className="fullwidth">
                     <form onSubmit={this.handleEdit} className="full fullwidth">
-                      <input className="input-message chatColor" type="text" value={this.props.state.editedMessage} required={true} onChange={(e) => { this.props.setEditedMessage(e.target.value) }}/>
+                      <input className="input-message chatColor" type="text" value={this.props.state.editedMessage} required={true} onChange={(e) => { this.props.functions.setEditedMessage(e.target.value) }}/>
                     </form>
                   </div>
                 : formatMessage(this, message)
@@ -165,7 +165,7 @@ export default class Chat extends React.Component {
                 {message.id === this.props.state.editingMessage.id ?
                 <div className="fullwidth">
                     <form onSubmit={this.handleEdit} className="full fullwidth">
-                      <input className="input-message chatColor" type="text" value={this.props.state.editedMessage} required={true} onChange={(e) => { this.props.setEditedMessage(e.target.value) }}/>
+                      <input className="input-message chatColor" type="text" value={this.props.state.editedMessage} required={true} onChange={(e) => { this.props.functions.setEditedMessage(e.target.value) }}/>
                     </form>
                   </div>
                 : formatMessage(this, message)
@@ -177,17 +177,17 @@ export default class Chat extends React.Component {
       }
 
       return (
-        <div key={i} className="paddingtop2 paddingbot2 flex message hover" onContextMenu={(e) => { this.props.switchDialogState(2); this.props.setSelectedMessage(message, e.pageX, e.pageY); e.preventDefault(); } }>
+        <div key={i} className="paddingtop2 paddingbot2 flex message hover" onContextMenu={(e) => { this.props.functions.switchDialogState(2); this.props.functions.setSelectedMessage(message); this.props.functions.setBox(e.pageX, e.pageY); e.preventDefault(); } }>
           {messageHTML}
         </div>
       )
     });
 
     membersList = members === undefined ? -1 : members.map((memberID, i) => {
-      const user = this.props.getUser(memberID)
+      const user = this.props.functions.getUser(memberID)
 
       return (
-        <div key={i} className="paddingtop2 paddingbot2 flex message hover" onContextMenu={(e) => { this.props.setSelectedUser(user.id); this.props.setBox(e.pageX, e.pageY); this.props.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
+        <div key={i} className="paddingtop2 paddingbot2 flex message hover" onContextMenu={(e) => { this.props.functions.setSelectedUser(user.id); this.props.functions.setBox(e.pageX, e.pageY); this.props.functions.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }>
           <div className="flex marginleft2">
             <img alt="" className="avatar3" src={this.props.state.fileEndpoint + "/" + user.avatar}/>
             <div className="statusWrapper2">

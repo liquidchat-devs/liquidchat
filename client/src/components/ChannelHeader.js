@@ -2,8 +2,8 @@ import React from 'react';
 
 export default class ChannelHeader extends React.Component {
   render() {
-    let server = this.props.getServer(this.props.selectedServer)
-    let channel = this.props.getChannel(this.props.currentChannel)
+    let server = this.props.functions.getServer(this.props.state.selectedServer)
+    let channel = this.props.functions.getChannel(this.props.state.currentChannel)
     if(channel === undefined || (server !== undefined && server.channels.includes(channel.id) === false) || (channel.type !== 2 && server === undefined)) {
       return null;
     }
@@ -18,7 +18,7 @@ export default class ChannelHeader extends React.Component {
         break;
 
       case 1:
-        tip = "." + channel.name + " " + (this.props.currentVoiceGroup !== -1 ? this.props.currentVoiceGroup.users.length : "Connecting...");
+        tip = "." + channel.name + " " + (this.props.state.currentVoiceGroup !== -1 ? this.props.state.currentVoiceGroup.users.length : "Connecting...");
         break;
     }
 

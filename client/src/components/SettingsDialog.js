@@ -44,7 +44,7 @@ export default class SettingsDialog extends React.Component {
   }
 
   render() {
-    let loggedUser = this.props.getUser(this.props.state.session.userID);
+    let loggedUser = this.props.functions.getUser(this.props.state.session.userID);
 
     let emotes = []
     loggedUser.emotes.forEach(emoteID => {
@@ -105,7 +105,7 @@ export default class SettingsDialog extends React.Component {
 
     return (
       <div>
-        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlay" onClick={() => { this.props.functions.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox4">
           <div className="white text3 marginleft2b margintop1a">My Account</div>
           <div className="accountBox">
@@ -128,7 +128,7 @@ export default class SettingsDialog extends React.Component {
                 <div className="margintop1c marginleft2b" style={{ height: 40 }}>
                   <p className="tooltipColor text6 margintop0 marginbot0">Email</p>
                   {loggedUser.email == null ? 
-                  <p className="text5 margintop0 margintop0b link" onClick={() => { this.props.switchDialogState(14); }}>Set an email-</p>
+                  <p className="text5 margintop0 margintop0b link" onClick={() => { this.props.functions.switchDialogState(14); }}>Set an email-</p>
                   : <p className="white text5 margintop0 margintop0b">{loggedUser.email}</p>}
                 </div>
               </div>
@@ -137,7 +137,7 @@ export default class SettingsDialog extends React.Component {
           <div className="white text3 marginleft2b margintop1a">Emotes ({emotes.length})</div>
           <div className="flex marginleft2b">
             {emoteList}
-            <div className="button2 marginright1 hover addEmoteButton alignmiddle chatColor" onClick={() => { this.props.switchDialogState(20); }}>
+            <div className="button2 marginright1 hover addEmoteButton alignmiddle chatColor" onClick={() => { this.props.functions.switchDialogState(20); }}>
               +
             </div>
             <div className="button2 hover addEmoteButton alignmiddle chatColor" onClick={() => { this.setState({ deletingEmotesEnabled: !this.state.deletingEmotesEnabled }) }}>

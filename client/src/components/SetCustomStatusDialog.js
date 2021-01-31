@@ -7,7 +7,7 @@ export default class SetCustomStatusDialog extends React.Component {
   };
 
   componentDidMount = () => {
-    const user = this.props.getUser(this.props.state.session.userID);
+    const user = this.props.functions.getUser(this.props.state.session.userID);
     if(user !== undefined) {
       this.setState({
         status: user.customStatus
@@ -28,7 +28,7 @@ export default class SetCustomStatusDialog extends React.Component {
         statusChangeResult: res,
     });
     
-    if(isNaN(res)) { this.props.switchDialogState(-1); }
+    if(isNaN(res)) { this.props.functions.switchDialogState(-1); }
     return true;
   }
 
@@ -45,7 +45,7 @@ export default class SetCustomStatusDialog extends React.Component {
   render() {
     return (
       <div>
-        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlay" onClick={() => { this.props.functions.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox">
           <div className="white text3 marginleft2 margintop1a">Set a custom status</div>
           <form onSubmit={this.handleSubmit} className="flex margintop1">

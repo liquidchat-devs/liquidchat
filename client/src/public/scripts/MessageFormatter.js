@@ -116,7 +116,7 @@ function formatFile(chat, file) {
     const imageExtensions = getImageExtensions()
     var isImage = imageExtensions.filter((ext) => { return file.name.endsWith(ext) }).length > 0
     if(isImage) {
-        return <span><img alt="" className="message-image" src={chat.props.state.fileEndpoint + "/" + file.name} onClick={(e) => { chat.props.setSelectedImage(file); chat.props.switchDialogState(8); }}/></span>
+        return <span><img alt="" className="message-image" src={chat.props.state.fileEndpoint + "/" + file.name} onClick={(e) => { chat.props.functions.setSelectedImage(file); chat.props.functions.switchDialogState(8); }}/></span>
     }
     
     var extension = file.name.substring(file.name.lastIndexOf("."))
@@ -321,8 +321,8 @@ function formatMessage(chat, message) {
     if(messageFormatted.startsWith("http://nekonetwork.net/invite/")) {
         let id = messageFormatted.substring("http://nekonetwork.net/invite/".length)
         let invite = chat.props.API.API_fetchInviteSync(id);
-        let author = invite === -1 ? undefined : chat.props.getUser(invite.author.id);
-        let server = invite === -1 ? undefined : chat.props.getServer(invite.server.id);
+        let author = invite === -1 ? undefined : chat.props.functions.getUser(invite.author.id);
+        let server = invite === -1 ? undefined : chat.props.functions.getServer(invite.server.id);
 
         if(server !== undefined) {
             messageFormatted = (

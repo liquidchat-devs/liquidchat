@@ -13,7 +13,7 @@ export default class ChannelOptionsDialog extends React.Component {
       channelDeletionResult: res,
     });
     
-    if(res === 1) { this.props.switchDialogState(-1); }
+    if(res === 1) { this.props.functions.switchDialogState(-1); }
     return true;
   }
 
@@ -24,40 +24,29 @@ export default class ChannelOptionsDialog extends React.Component {
       channelCloneResult: res,
     });
     
-    if(res === 1) { this.props.switchDialogState(-1); }
+    if(res === 1) { this.props.functions.switchDialogState(-1); }
     return true;
   }
 
   render() {
-    const channel = this.props.getChannel(this.props.state.selectedChannel)
+    const channel = this.props.functions.getChannel(this.props.state.selectedChannel)
     if(channel === undefined) {  return null; }
 
     return (
       <div>
-        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0); }} style={{ opacity: 0.3 }}></div>
+        <div className="absolutepos overlay" onClick={() => { this.props.functions.switchDialogState(0); }} style={{ opacity: 0.3 }}></div>
         <div className="absolutepos overlaybox2" style={{ left: this.props.state.boxX, top: this.props.state.boxY, height: channel.author.id === this.props.state.session.userID ? 45 : 30  }}>
           {
             channel.author.id === this.props.state.session.userID ?
             <div>
-              <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.switchDialogState(11); }}>
-                <p className="white text1">&gt; Edit Channel</p>
-              </div>
-              {channel.type === 2 ?
-              <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.switchDialogState(12); }}>
-                <p className="white text1">&gt; Add Friends</p>
-              </div> : ""}
-              <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleClone(e); }}>
-                <p className="white text1">&gt; Clone Channel</p>
-              </div>
-              <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleDelete(e); }}>
-                <p className="declineColor text1">&gt; Delete Channel</p>
-              </div>
+              {this.props.elements.getContextButton("Edit Channel", (e) => { this.props.functions.switchDialogState(11); })}
+              {channel.type === 2 ? this.props.elements.getContextButton("Add Friends", (e) => { this.props.functions.switchDialogState(12); }) : ""}
+              {this.props.elements.getContextButton("Clone Channel", (e) => { this.handleClone(e); })}
+              {this.props.elements.getContextButton("Delete Channel", (e) => { this.handleDelete(e); }, "var(--color8)")}
             </div> :
             ""
           }
-          <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.copyID(this.props.state.selectedChannel); }}>
-            <p className="white text1">&gt; Copy ID</p>
-          </div>
+          {this.props.elements.getContextButton("Copy ID", (e) => { this.props.functions.copyID(this.props.state.selectedChannel); })}
         </div>
       </div>
     );

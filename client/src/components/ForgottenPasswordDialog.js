@@ -20,7 +20,7 @@ export default class ForgottenPasswordDialog extends React.Component {
       accountEditResult: res,
     });
     
-    if(res === 1) { this.props.switchDialogState(-1); }*/
+    if(res === 1) { this.props.functions.switchDialogState(-1); }*/
     return true;
   }
 
@@ -34,7 +34,7 @@ export default class ForgottenPasswordDialog extends React.Component {
   render() {
     return (
       <div>
-        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlay" onClick={() => { this.props.functions.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox">
           <div className="white text3 marginleft2b margintop1a">Password Recovery</div>
           {this.state.state === 1 ?
@@ -54,7 +54,7 @@ export default class ForgottenPasswordDialog extends React.Component {
           :
             <div>
               <div className="marginleft2b" style={{ height: 40 }}>
-                <p className="white text5 margintop0 margintop0b" onClick={() => { this.props.switchDialogState(14); }}>To recover your account enter a code that was sent to your email-</p>
+                <p className="white text5 margintop0 margintop0b" onClick={() => { this.props.functions.switchDialogState(14); }}>To recover your account enter a code that was sent to your email-</p>
               </div>
               <div className="button button1 marginleft2b" style={{ marginTop: 15 }} onClick={() => { this.setState({ state: 1 }) }}>I'm ready!</div>
               {

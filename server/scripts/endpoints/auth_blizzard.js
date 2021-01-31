@@ -12,7 +12,7 @@ class Endpoint {
 
             //https://us.battle.net/oauth/authorize?client_id=24428d45ed4b42448c9a33f1161585c5&redirect_uri=https://nekonetwork.net:8080/auth_blizzard&response_type=code&scope=openid
             this.app.axios.post("https://us.battle.net/oauth/token",
-            "code=" + data.code + "&grant_type=authorization_code&redirect_uri=https://https://nekonetwork.net:8080/auth_blizzard&scope=openid",
+            "code=" + data.code + "&grant_type=authorization_code&redirect_uri=https://nekonetwork.net:8080/auth_blizzard&scope=openid",
             {
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",

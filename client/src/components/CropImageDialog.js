@@ -15,7 +15,7 @@ export default class CropImageDialog extends React.Component {
   render() {
     return (
       <div>
-        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlay" onClick={() => { this.props.functions.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox5 alignmiddle">
           <div style={{ width: "90%", height: "90%", position: "relative" }}>
             <img alt="" className="avatar5" ref="serverImage" src={this.props.state.fileEndpoint + "/" + this.props.state.selectedAvatar}/>

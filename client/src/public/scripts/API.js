@@ -433,7 +433,7 @@ export default class API {
     }
 
     async API_fetchUsersForFriends(userID) {
-        var user = this.mainClass.getUser(userID);
+        var user = this.mainClass.state.functions.getUser(userID);
         user.friends.forEach(friendID => {
             this.API_fetchUser(friendID);
         });

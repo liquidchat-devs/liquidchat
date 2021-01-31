@@ -46,7 +46,7 @@ export default class ServerDiscoveryDialog extends React.Component {
     }
     
     if(isNaN(res)) {
-      this.props.switchDialogState(-1);
+      this.props.functions.switchDialogState(-1);
       return true;
     } else {
       this.setState({
@@ -68,7 +68,7 @@ export default class ServerDiscoveryDialog extends React.Component {
   render() {
     return (
       <div>
-        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlay" onClick={() => { this.props.functions.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox8">
           <div className="white text0 marginleft2 margintop1a">Server Discovery</div>
           <form onSubmit={this.handleSubmit} className="margintop1">

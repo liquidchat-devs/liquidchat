@@ -19,7 +19,7 @@ export default class EditAccountDialog extends React.Component {
       accountEditResult: res,
     });
     
-    if(res === 1) { this.props.switchDialogState(-1); }
+    if(res === 1) { this.props.functions.switchDialogState(-1); }
     return true;
   }
 
@@ -33,7 +33,7 @@ export default class EditAccountDialog extends React.Component {
   render() {
     return (
       <div>
-        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlay" onClick={() => { this.props.functions.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox">
           <div className="white text3 marginleft2 margintop1a">Manage Account-</div>
           <form onSubmit={this.handleSubmit} className="flex margintop1">

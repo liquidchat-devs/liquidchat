@@ -460,14 +460,6 @@ code {
   background-color: var(--color3);
 }
 
-.selectedColor.server {
-  border-radius: 5px;
-}
-
-.selectedColor.channel {
-  border-radius: 5px;
-}
-
 /* Chat */
 .input-message {
   width: calc(100% - 25px);
@@ -654,13 +646,16 @@ code {
 
 .friend,
 .dmChannel,
-.channel {
+.channel,
+.channel2 {
   height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transform: scale(0.9);
+  border-radius: 5px;
+  position: relative;
 }
 
 .friend {
@@ -674,6 +669,10 @@ code {
 .channel {
   width: var(--channelSize);
   justify-content: end;
+}
+
+.channel2 {
+  width: var(--channelSize);
 }
 
 .channelSign {
@@ -696,6 +695,27 @@ code {
   justify-content: center;
   cursor: pointer;
   transform: scale(0.9);
+  border-radius: 5px;
+}
+
+.itemData {
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.itemOverlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  border-radius: 5px;
+}
+
+.itemOverlay:hover {
+  background-color: var(--color3);
+  opacity: 0.3;
 }
 
 .server2 {
@@ -929,6 +949,20 @@ code {
   width: 100%;
   height: 55px;
   margin-bottom: 1px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.friendInviteEntry {
+  width: 100%;
+  height: 55px;
+  margin-bottom: 1px;
+
+  display: flex;
+  position: relative;
 }
 
 .vcInfo {

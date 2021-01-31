@@ -43,8 +43,8 @@ export default class ProfileDialog extends React.Component {
   }
 
   render() {
-    let selectedUser = this.props.getUser(this.props.state.selectedUser);
-    let loggedUser = this.props.getUser(this.props.state.session.userID);
+    let selectedUser = this.props.functions.getUser(this.props.state.selectedUser);
+    let loggedUser = this.props.functions.getUser(this.props.state.session.userID);
 
     let badgeList = selectedUser.badges.map((badge, i) => {
       switch(badge) {
@@ -110,8 +110,8 @@ export default class ProfileDialog extends React.Component {
       case 1:
         content = selectedUser.friends.map((id, i) => {
           if(loggedUser.friends.includes(id)) {
-            let user = this.props.getUser(id);
-            return <div key={i} className="mutual" onClick={() => { this.props.setSelectedUser(id); }}>
+            let user = this.props.functions.getUser(id);
+            return <div key={i} className="mutual" onClick={() => { this.props.functions.setSelectedUser(id); }}>
               <img alt="" className="avatar marginleft2" src={this.props.state.fileEndpoint + "/" + user.avatar}/>
               <div className="tooltipColor text5 marginleft2">{user.username}</div>
             </div>
@@ -124,8 +124,8 @@ export default class ProfileDialog extends React.Component {
       case 2:
         content = selectedUser.servers.map((id, i) => {
           if(loggedUser.servers.includes(id)) {
-            let server = this.props.getServer(id);
-            return <div key={i} className="mutual" onClick={() => { this.props.setSelectedServer(id); this.props.switchDialogState(-1); }}>
+            let server = this.props.functions.getServer(id);
+            return <div key={i} className="mutual" onClick={() => { this.props.functions.setSelectedServer(id); this.props.functions.switchDialogState(-1); }}>
               <img alt="" className="avatar marginleft2" src={this.props.state.fileEndpoint + "/" + server.avatar}/>
               <div className="tooltipColor text5 marginleft2">{server.name}</div>
             </div>
@@ -138,7 +138,7 @@ export default class ProfileDialog extends React.Component {
 
     return (
       <div>
-        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlay" onClick={() => { this.props.functions.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox3">
             <div className="section chatColor">
               <div className="flex marginleft3 paddingtop3">

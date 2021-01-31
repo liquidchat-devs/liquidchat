@@ -47,7 +47,7 @@ export default class LoginForm extends React.Component {
     }
   
     getSuccessText(code) {
-      const user = this.props.getUser(this.props.state.session.userID)
+      const user = this.props.functions.getUser(this.props.state.session.userID)
       switch(code) {
         case 0:
         case -3:
@@ -81,7 +81,7 @@ export default class LoginForm extends React.Component {
                 <div onClick={this.handleSubmit} className="button button1">Login!</div>
               </div>
               <div className="margintop1" style={{ height: 5 }}></div>
-              <p className="text5 marginbot0 margintop0 link" onClick={() => { this.props.switchFormState(); }}>Register?</p>
+              <p className="text5 marginbot0 margintop0 link" onClick={() => { this.props.functions.switchFormState(); }}>Register?</p>
               {
                 (this.getErrorText(this.state.loginResult).length > 0 ?
                 <div className="margintop1 errorColor">

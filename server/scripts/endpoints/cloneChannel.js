@@ -33,7 +33,7 @@ class Endpoint {
             case 1:
                 var server = await this.app.db.db_fetch.fetchServer(this.app.db, channel.server.id);
                 if(server === undefined) {
-                    res.send(JSON.stringify({ status: -2 }))
+                    res.send(JSON.stringify({ status: -3 }))
                     return;
                 }
                 

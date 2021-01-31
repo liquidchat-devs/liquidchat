@@ -9,7 +9,7 @@ export default class EditChannelDialog extends React.Component {
   };
 
   componentDidMount = () => {
-    const channel = this.props.getChannel(this.props.state.selectedChannel);
+    const channel = this.props.functions.getChannel(this.props.state.selectedChannel);
     if(channel !== undefined) {
       this.setState({
         channelName: channel.name,
@@ -43,7 +43,7 @@ export default class EditChannelDialog extends React.Component {
       channelEditResult: res,
     });
     
-    if(res === 1) { this.props.switchDialogState(-1); }
+    if(res === 1) { this.props.functions.switchDialogState(-1); }
     return true;
   }
 
@@ -61,11 +61,11 @@ export default class EditChannelDialog extends React.Component {
   }
 
   render() {
-    const channel = this.props.getChannel(this.props.state.selectedChannel)
+    const channel = this.props.functions.getChannel(this.props.state.selectedChannel)
 
     return (
       <div>
-        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlay" onClick={() => { this.props.functions.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox">
           <div className="white text3 marginleft2 margintop1a">Edit channel-</div>
           <form onSubmit={this.handleSubmit} className="margintop1">

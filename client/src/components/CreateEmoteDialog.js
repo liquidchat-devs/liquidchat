@@ -48,7 +48,7 @@ export default class CreateEmoteDialog extends React.Component {
     });
     
     if(isNaN(res)) {
-      this.props.switchDialogState(-1);
+      this.props.functions.switchDialogState(-1);
       return true;
     } else {
       this.setState({
@@ -70,7 +70,7 @@ export default class CreateEmoteDialog extends React.Component {
   render() {
     return (
       <div>
-        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0) }}></div>
+        <div className="absolutepos overlay" onClick={() => { this.props.functions.switchDialogState(0) }}></div>
         <div className="absolutepos overlaybox">
           <div className="white text3 marginleft2 margintop1a">Create new{this.props.type === 0 ? " server" : ""} emote-</div>
           <form onSubmit={this.handleSubmit} className="flex margintop1">

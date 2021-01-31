@@ -1,5 +1,7 @@
 import React from 'react';
+import ElementBuilder from './public/scripts/ElementBuilder';
 import API from './public/scripts/API';
+import Functions from './public/scripts/Functions';
 import Constants from './public/scripts/Constants';
 import DialogManager from './Components.js';
 import * as c from './components/index';
@@ -70,154 +72,11 @@ class App extends React.Component {
     
     //Utils
     const: new Constants(this),
-    registeredHooks: false
+    elements: new ElementBuilder(this),
+    functions: new Functions(this),
+    registeredHooks: false,
+    copiedID: -1
   };
-
-  setFirstChannel = (_e, _channelID) => {
-    this.setState({
-      firstChannel: _channelID,
-      firstChannelElement: _e,
-    }, () => {
-      this.state.firstChannelElement.click();
-    });
-  }
-
-  switchChannel = (_channelID) => {
-    this.setState({
-      previousChannel: this.state.currentChannel,
-      currentChannel: _channelID
-    });
-
-    let channel = this.state.channels.get(_channelID)
-    if(channel === undefined) { return; }
-
-    switch(channel.type) {
-      case 1:
-        this.state.API.API_joinVoiceChannel(channel.id)
-        break;
-    }
-
-    let chat = document.getElementById('chat-container');
-    if(chat !== null) { chat.scrollTop = chat.scrollHeight; }
-  }
-
-  switchFormState = () => {
-    this.setState({
-      formState: this.state.formState === 0 ? 1 : 0,
-    });
-  }
-
-  switchDialogState = (id) => {
-    console.log("Switching dialog state from " + this.state.dialogState + " > " + id);
-
-    this.setState({
-      dialogState: id
-    });
-  }
-
-  switchChannelTypes = (id) => {
-    this.setState({
-      channelTypes: id,
-      selectedServer: -1,
-    });
-
-    this.switchChannel(-1);
-  }
-
-  setSelectedMessage = (message, x, y) => {
-    this.setState({
-      selectedMessage: message,
-      boxX: x,
-      boxY: y
-    });
-  }
-
-  startEditingMessage = (message) => {
-    this.setState({
-      editingMessage: message
-    });
-  }
-
-  endEditingMessage = () => {
-    this.setState({
-      editingMessage: -1
-    });
-  }
-
-  setEditedMessage = val => {
-    this.setState({
-      editedMessage: val
-    });
-  }
-
-  setSelectedImage = val => {
-    this.setState({
-      selectedImage: val
-    });
-  }
-
-  setSelectedServer = val => {
-    if(this.state.selectedServer !== val) { this.switchChannel(-1); }
-    this.setState({
-      channelTypes: 2,
-      selectedServer: val
-    });
-  }
-
-  setSelectedChannel =  (channel) => {
-    this.setState({
-      selectedChannel: channel
-    });
-  }
-
-  setSelectedAvatar =  (avatar) => {
-    this.setState({
-      selectedAvatar: avatar
-    });
-  }
-
-  setSelectedBanner =  (banner) => {
-    this.setState({
-      selectedBanner: banner
-    });
-  }
-
-  setBox = (x, y) => {
-    this.setState({
-      boxX: x,
-      boxY: y
-    });
-  }
-
-  setSelectedUser = (user) => {
-    this.setState({
-      selectedUser: user
-    });
-  }
-
-  moveChannel = (channels, oldIndex, newIndex) => {
-    //Sort the channels
-    channels.splice(newIndex, 0, channels.splice(oldIndex, 1)[0]);
-    channels.forEach((c, index) => {
-      c.position = index;
-      this.state.API.API_editChannel({
-        id: c.id,
-        position: index
-      });
-    });
-  }
-
-  getUser = (id) => {
-    return this.state.users.get(id)
-  }
-
-  getChannel = (id) => {
-    return this.state.channels.get(id)
-  }
-
-  getServer = (id) => {
-    return this.state.servers.get(id)
-  }
 
   componentDidMount = () => {
     //Page dimensions hook
@@ -232,7 +91,7 @@ class App extends React.Component {
     if(this.state.registeredHooks === false) {
       window.addEventListener("keydown", (evt) => {
         evt = evt || window.event;
-        if (evt.keyCode === 27) { this.endEditingMessage(); }
+        if (evt.keyCode === 27) { this.state.functions.endEditingMessage(); }
       });
     }
 
@@ -315,7 +174,7 @@ class App extends React.Component {
   }
 
   onFileEnter = function(e) {
-    if(this.isInChannel()) {
+    if(this.state.functions.isInChannel()) {
       e.preventDefault();
       e.stopPropagation();
       this.setState({ isFileDraggingOver: true });
@@ -323,7 +182,7 @@ class App extends React.Component {
   }
 
   onFileLeave = function(e) {
-    if(this.isInChannel()) {
+    if(this.state.functions.isInChannel()) {
       e.preventDefault();
       e.stopPropagation();
       this.setState({ isFileDraggingOver: false });
@@ -331,7 +190,7 @@ class App extends React.Component {
   }.bind(this);
 
   onFileDrop = function(e) {
-    if(this.isInChannel()) {
+    if(this.state.functions.isInChannel()) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -344,35 +203,16 @@ class App extends React.Component {
     }
   }.bind(this);
 
-  getOwnServers = function() {
-    let servers = new Map();
-    this.state.servers.forEach(server => {
-      if(server.members.includes(this.state.session.userID)) {
-        servers.set(server.id, server);
-      }
-    })
-
-    return servers;
-  }.bind(this);
-
-  isInChannel = function() {
-    let server = this.getServer(this.state.selectedServer)
-    let channel = this.getChannel(this.state.currentChannel)
-    return !(channel === undefined || (server !== undefined && server.channels.includes(channel.id) === false) || (channel.type !== 2 && server === undefined) || channel.type === 1);
-  }.bind(this);
-
-  isInServer = function(id) {
-    return this.getOwnServers().has(id);
-  }.bind(this);
+  
 
   render() {
-    let server = this.getServer(this.state.selectedServer)
-    let channel = this.getChannel(this.state.currentChannel)
+    let server = this.state.functions.getServer(this.state.selectedServer)
+    let channel = this.state.functions.getChannel(this.state.currentChannel)
 
     return (
       <div className="App">
         {
-          this.state.isFileDraggingOver === true && this.isInChannel() ?
+          this.state.isFileDraggingOver === true && this.state.functions.isInChannel() ?
           <div className="absolutepos overlay" onDragLeave={this.onFileLeave} onDrop={this.onFileDrop}>
               <div className="absolutepos overlaybox6">
                 <div>
@@ -404,36 +244,24 @@ class App extends React.Component {
        </div>
         {this.state.waitingForSession === false ?
           <div>
-            <DialogManager
-            state={this.state} const={this.state.const} setSelectedServer={this.setSelectedServer} setSelectedAvatar={this.setSelectedAvatar} getChannel={this.getChannel} getServer={this.getServer}
-            switchChannelTypes={this.switchChannelTypes} switchChannel={this.switchChannel} setSelectedChannel={this.setSelectedChannel} API={this.state.API}
-            switchDialogState={this.switchDialogState} startEditingMessage={this.startEditingMessage} setSelectedUser={this.setSelectedUser} getUser={this.getUser}
-            setEditedMessage={this.setEditedMessage} setSelectedMessage={this.setSelectedMessage}/>
+            <DialogManager state={this.state} const={this.state.const} API={this.state.API} elements={this.state.elements} functions={this.state.functions} />
             <div className="flex">
-              <c.ChannelSelector
-              state={this.state} const={this.state.const} getChannel={this.getChannel} getOwnServers={this.getOwnServers} moveChannel={this.moveChannel} setBox={this.setBox} getServer={this.getServer}
-              setSelectedServer={this.setSelectedServer} setSelectedChannel={this.setSelectedChannel} API={this.state.API} switchDialogState={this.switchDialogState} switchChannelTypes={this.switchChannelTypes}
-              setSelectedUser={this.setSelectedUser} setFirstChannel={this.setFirstChannel} switchChannel={this.switchChannel} getUser={this.getUser}/>
+              <c.ChannelSelector state={this.state} const={this.state.const} API={this.state.API} elements={this.state.elements} functions={this.state.functions} />
               <div className="chat-wrapper">
-                <c.ChannelHeader
-                 state={this.state} API={this.state.API} currentChannel={this.state.currentChannel} getChannel={this.getChannel} selectedServer={this.state.selectedServer} getServer={this.getServer} currentVoiceGroup={this.state.currentVoiceGroup}/>
-                <c.Chat
-                state={this.state} const={this.state.const} setBox={this.setBox} isInChannel={this.isInChannel}
-                API={this.state.API} setSelectedUser={this.setSelectedUser} setSelectedImage={this.setSelectedImage}
-                getChannel={this.getChannel} getServer={this.getServer} switchDialogState={this.switchDialogState} setSelectedMessage={this.setSelectedMessage}
-                setEditedMessage={this.setEditedMessage} endEditingMessage={this.endEditingMessage} getUser={this.getUser}/>
-                <c.Send state={this.state} getUser={this.getUser} getChannel={this.getChannel} getServer={this.getServer} isInServer={this.isInServer} isInChannel={this.isInChannel} API={this.state.API}/>
+                <c.ChannelHeader state={this.state} const={this.state.const} API={this.state.API} elements={this.state.elements} functions={this.state.functions} />
+                <c.Chat state={this.state} const={this.state.const} API={this.state.API} elements={this.state.elements} functions={this.state.functions} />
+                <c.Send state={this.state} const={this.state.const} API={this.state.API} elements={this.state.elements} functions={this.state.functions} />
               </div>
             </div>
           </div> :
         (this.state.formState === 0 ?
           <div>
-            <DialogManager state={this.state} switchDialogState={this.switchDialogState} />
-            <c.LoginForm state={this.state} API={this.state.API} switchDialogState={this.switchDialogState} getUser={this.getUser} switchFormState={this.switchFormState}/>
+            <DialogManager state={this.state} const={this.state.const} API={this.state.API} elements={this.state.elements} functions={this.state.functions} />
+            <c.LoginForm state={this.state} const={this.state.const} API={this.state.API} elements={this.state.elements} functions={this.state.functions} />
           </div> :
           <div>
             <div className="margintop2 fullwidth textcenter text0" style={{color: "white"}}>Register</div>
-            <c.RegisterForm state={this.state} API={this.state.API} switchDialogState={this.switchDialogState} getUser={this.getUser} switchFormState={this.switchFormState}/>
+            <c.RegisterForm state={this.state} const={this.state.const} API={this.state.API} elements={this.state.elements} functions={this.state.functions} />
           </div>
         )}
       </div>

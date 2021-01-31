@@ -12,43 +12,29 @@ export default class ServerOptionsDialog extends React.Component {
       serverDeletionResult: res,
     });
     
-    if(res === 1) { this.props.switchDialogState(-1); }
+    if(res === 1) { this.props.functions.switchDialogState(-1); }
     return true;
   }
 
   render() {
-    const server = this.props.getServer(this.props.state.selectedServer)
+    const server = this.props.functions.getServer(this.props.state.selectedServer)
     if(server === undefined) {  return null; }
 
     return (
       <div>
-        <div className="absolutepos overlay" onClick={() => { this.props.switchDialogState(0); }} style={{ opacity: 0.3 }}></div>
+        <div className="absolutepos overlay" onClick={() => { this.props.functions.switchDialogState(0); }} style={{ opacity: 0.3 }}></div>
         <div className="absolutepos overlaybox2" style={{ left: this.props.state.boxX, top: this.props.state.boxY, height: server.author.id === this.props.state.session.userID ? 45 : 30  }}>
           {
             server.author.id === this.props.state.session.userID ?
             <div>
-              <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.switchDialogState(18); }}>
-                <p className="white text1">&gt; Edit Server</p>
-              </div>
-              <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.switchDialogState(12); }}>
-                <p className="white text1">&gt; Invite Friends</p>
-              </div>
+              {this.props.elements.getContextButton("Edit Server", (e) => { this.props.functions.switchDialogState(18); })}
+              {this.props.elements.getContextButton("Invite Friends", (e) => { this.props.functions.switchDialogState(12); })}
             </div> :
             ""
           }
-          <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.API.API_leaveServer(server.id); }}>
-            <p className="declineColor text1">&gt; Leave Server</p>
-          </div>
-          {
-            server.author.id === this.props.state.session.userID ?
-            <div className="button2 hover alignmiddle chatColor" onClick={(e) => { this.handleDelete(e); }}>
-                <p className="declineColor text1">&gt; Delete Server</p>
-            </div>:
-            ""
-          }
-          <div className="button2 hover alignmiddle chatColor" onClick={() => { this.props.copyID(server.id); }}>
-            <p className="white text1">&gt; Copy ID</p>
-          </div>
+          {this.props.elements.getContextButton("Leave Server", (e) => { this.props.API.API_leaveServer(server.id); }, "var(--color8)")}
+          {server.author.id === this.props.state.session.userID ? this.props.elements.getContextButton("Delete Server", (e) => { this.handleDelete(e); }, "var(--color8)") : "" }
+          {this.props.elements.getContextButton("Copy ID", (e) => { this.props.functions.copyID(server.id); })}
         </div>
       </div>
     );
