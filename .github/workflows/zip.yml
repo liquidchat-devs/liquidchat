@@ -1,0 +1,20 @@
+name: Create Web Release
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Create Web Release
+      uses: liquidchat-devs/liquidchat-web-action@master
+      with:
+        directory: 'client'
+        filename: 'build.zip'
+    - name: Upload build.zip
+      uses: actions/upload-artifact@v2
+      with:
+        name: build.zip
+        path: client/build/build.zip
