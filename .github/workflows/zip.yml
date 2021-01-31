@@ -1,10 +1,5 @@
 name: Create Web Release
-uses: LamkasDev/zip-release@0.4.1
-
-on:
-  push:
-    branches: [ master ]
-
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
