@@ -1,0 +1,21 @@
+name: Create Web Release
+uses: TheDoctor0/zip-release@0.4.1
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Create Web Release
+      run: cd client && yarn && CI=false npm run build
+      uses: thedoctor0/zip-release@master
+      with:
+        directory: 'client/build'
+        filename: 'build.zip'
