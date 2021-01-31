@@ -65,7 +65,7 @@
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.10.4",
     "babel-loader": "^8.1.0",
-    "electron": "7.0.0",
+    "electron": "9.4.0",
     "electron-builder": "^22.9.1",
     "webpack-cli": "^4.4.0",
 	  "react-scripts": "3.4.1"
