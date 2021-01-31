@@ -34,6 +34,7 @@ export default class MessageOptionsDialog extends React.Component {
           {this.props.state.selectedMessage.author.id === this.props.state.session.userID ? this.props.elements.getContextButton("Delete", (e) => { this.handleDelete(e); }, "var(--color8)") : "" }
           {this.props.state.selectedMessage.author.id === this.props.state.session.userID ? this.props.elements.getContextButton("Edit", (e) => { this.handleEdit(e); }) : ""}
           {this.props.state.selectedMessage.file == null ? "" : this.props.elements.getContextButton("Copy link to file", (e) => { this.props.functions.copyID(this.props.state.fileEndpoint + "/" + this.props.state.selectedMessage.file.name); })}
+          {this.props.state.selectedMessage.file == null ? "" : this.props.elements.getContextButton("Open link to file", (e) => { window.open(this.props.state.fileEndpoint + "/" + this.props.state.selectedMessage.file.name, -1); })}
           {this.props.elements.getContextButton("Copy ID", (e) => { this.props.functions.copyID(this.props.state.selectedMessage.id); })}
         </div>
       </div>
