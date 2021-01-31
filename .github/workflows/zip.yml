@@ -7,9 +7,13 @@ jobs:
       matrix:
         node-version: [14.x]
     steps:
-    - uses: actions/checkout@v2
     - name: Create Web Release
       uses: lamkasdev/zip-release@master
       with:
-        directory: 'client'
+        directory: 'client/build'
         filename: 'build.zip'
+    - name: Create Web Release
+      uses: actions/upload-artifact@v2
+      with:
+        name: build.zip
+        path: client/build/build.zip
