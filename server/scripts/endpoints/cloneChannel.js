@@ -35,6 +35,9 @@ class Endpoint {
                 if(server === undefined) {
                     res.send(JSON.stringify({ status: -3 }))
                     return;
+                } else if(server.author.id !== user.id) {
+                    res.send(JSON.stringify({ status: -4 }))
+                    return;
                 }
                 
                 channel.position = server.channels.length;

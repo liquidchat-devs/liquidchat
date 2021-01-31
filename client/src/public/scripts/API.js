@@ -1240,7 +1240,7 @@ export default class API {
         const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchDMChannels', { withCredentials: true }));
         var newChannels = reply.data;
         newChannels = new Map(newChannels.map(obj => [obj.id, obj]));
-
+        
         newChannels.forEach(async(channel) => {
             const reply2 = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannelMessages?id=' + channel.id, { withCredentials: true }));
             var messages = reply2.data;

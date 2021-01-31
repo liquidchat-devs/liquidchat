@@ -39,6 +39,9 @@ class Endpoint {
                 if(server === undefined) {
                     res.send(JSON.stringify({ status: -2 }))
                     return;
+                } else if(server.author.id !== user.id) {
+                    res.send(JSON.stringify({ status: -4 }))
+                    return;
                 }
 
                 channel.server = { id: _channel.server.id };

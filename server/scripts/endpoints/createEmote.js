@@ -88,6 +88,11 @@ class Endpoint {
                 break;
 
             case 2:
+                if (user.badges.includes("2")) {
+                    res.send(JSON.stringify({ status: -2 }))
+                    return;
+                }
+
                 form.uploadDir = this.app.filesStorage;
                 form.keepExtensions = true;
         
