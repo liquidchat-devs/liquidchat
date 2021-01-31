@@ -68,7 +68,7 @@
     "electron": "9.4.0",
     "electron-builder": "^22.9.1",
     "webpack-cli": "^4.4.0",
-	  "react-scripts": "3.4.1"
+	  "react-scripts": "4.0.1"
   },
   "postinstall": "electron-builder install-app-deps",
   "main": "./public/electron.js",
