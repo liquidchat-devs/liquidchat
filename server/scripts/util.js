@@ -115,13 +115,17 @@ class Util {
 
     //Setups a websocket server
     setupSocketServer() {
-        this.app.io = require('socket.io')(this.app.server);
-        this.app.io.origins((origin, callback) => {  
-            if (origin !== 'http://localhost:3000' && origin !== 'http://nekonetwork.net' && origin !== 'https://nekonetwork.net' && origin !== 'file://') {    
-                return callback('origin not allowed', false);  
-            }  
-           callback(null, true);
-       });
+        this.app.io = require('socket.io')(this.app.server, {
+            allowRequest: (req, callback) => {
+                let origin = req.headers.origin;
+                if (origin !== 'http://localhost:3000' && origin !== 'http://nekonetwork.net' && origin !== 'https://nekonetwork.net') {
+                    return callback('origin not allowed', false);
+                }
+
+                callback(null, true);
+            }
+        });
+
         this.app.io.on('connect', async(socket) => {
             try {
                 var cookies = this.app.config.useHTTP ? { "sessionID": this.app.sessions.entries().next().value[0] } : this.app.cookie.parse(socket.handshake.headers.cookie);

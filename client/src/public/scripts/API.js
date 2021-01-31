@@ -25,7 +25,7 @@ export default class API {
         const socket = io(this.mainClass.state.APIEndpoint, {
             transports: ['websocket']
         });
-
+        
         socket.on('connect', async() => {
             console.log("> socket.io connected!");
             let user = await this.API_fetchUser(userID, true);
