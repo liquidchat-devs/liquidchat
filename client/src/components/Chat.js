@@ -2,6 +2,7 @@ import React from 'react';
 import { formatMessage } from '../public/scripts/MessageFormatter';
 import { formatDate } from '../public/scripts/DateFormatter';
 import { formatBytes } from '../public/scripts/SizeFormatter';
+import Send from './Send';
 
 export default class Chat extends React.Component {
   componentDidMount = async() => {
@@ -214,19 +215,23 @@ export default class Chat extends React.Component {
       )
     });
 
+    // style={{ height: this.props.state.pageHeight - 118 - this.props.state.pageHeightOffset }}
     switch(channel.type) {
       case 0:
       case 2:
         return (
           <div className="flex">
-            <div className="chatContainer" id="chat-container" style={{ overflowY: "scroll", height: this.props.state.pageHeight - 128 - this.props.state.pageHeightOffset, marginBottom: 10, width: membersList === -1 ? "100%" : "calc(100% - var(--membersSize))" }}>
-              {messageList}
-              <div className="white">
-                {this.getUploadMessage(this.props.state.uploadFileID, this.props.state.uploadFileName, this.props.state.uploadReceived, this.props.state.uploadExpected, this.props.state.uploadFailed)}
+            <div style={{ width: membersList === -1 ? "100%" : "calc(100% - var(--membersSize))" }}>
+              <div className="chatContainer" id="chat-container" style={{ height: this.props.state.pageHeight - 128 - this.props.state.pageHeightOffset, overflowY: "scroll" }}>
+                {messageList}
+                <div className="white">
+                  {this.getUploadMessage(this.props.state.uploadFileID, this.props.state.uploadFileName, this.props.state.uploadReceived, this.props.state.uploadExpected, this.props.state.uploadFailed)}
+                </div>
               </div>
+              <Send state={this.props.state} const={this.props.state.const} API={this.props.state.API} elements={this.props.state.elements} functions={this.props.state.functions} />
             </div>
             {membersList === -1 ? null :
-            <div className="membersList paddingtop2b">
+            <div className="membersList">
               <div className="marginleft2">
                 <div className="flex">
                   <div className="allignMiddle" style={{ margin: 0, color: "white", fontSize: 16, marginBottom: 5 }}>

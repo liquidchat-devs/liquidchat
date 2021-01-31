@@ -250,7 +250,6 @@ class App extends React.Component {
               <div className="chat-wrapper">
                 <c.ChannelHeader state={this.state} const={this.state.const} API={this.state.API} elements={this.state.elements} functions={this.state.functions} />
                 <c.Chat state={this.state} const={this.state.const} API={this.state.API} elements={this.state.elements} functions={this.state.functions} />
-                <c.Send state={this.state} const={this.state.const} API={this.state.API} elements={this.state.elements} functions={this.state.functions} />
               </div>
             </div>
           </div> :

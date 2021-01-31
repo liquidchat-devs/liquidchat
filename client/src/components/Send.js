@@ -150,7 +150,7 @@ export default class Send extends React.Component {
     })
 
     return (
-      <div className="marginleft2" style={{ marginTop: this.state.currentEmotes.length > 0 || this.state.currentMentions.length > 0 ? -232 : 0 }}>
+      <div className="sendContainer">
         <div className="emoteSelector" style={{ display: this.state.currentEmotes.length > 0 || this.state.currentMentions.length > 0 ? "block" : "none" }}>
           {emoteList}
           {mentionList}

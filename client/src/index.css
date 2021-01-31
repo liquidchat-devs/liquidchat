@@ -462,7 +462,7 @@ code {
 
 /* Chat */
 .input-message {
-  width: calc(100% - 25px);
+  width: calc(100% - 35px);
   color: #acacac;
   border: 0;
   padding: 7px;
@@ -981,7 +981,19 @@ code {
 
 .membersList {
   width: var(--membersSize);
-  height: 100%;
+  padding-top: 10px;
+  height: calc(100% - 10px);
+}
+
+.chatContainer {
+  height: calc(100% - 10px);
+  padding-bottom: 10px;
+}
+
+.sendContainer {
+  height: 55px;
+  padding-left: 10px;
+  position: relative;
 }
 
 .button {
@@ -1197,15 +1209,14 @@ code {
 
 .emoteSelector {
   height: 222px;
-  width: calc(100% - 220px);
-  background-color: white;
+  width: calc(100% - 40px);
   z-index: 10;
-  margin-bottom: 10px;
-  position: relative;
+  position: absolute;
   background-color: var(--color4);
   border-radius: 10px;
-  padding-top: 10px;
-  overflow-y: scroll;
+  padding: 5px;
+
+  top: -245px;
 }
 
 .emoteItemWrapper {
@@ -1217,7 +1228,7 @@ code {
 }
 
 .emoteItem {
-  width: calc(100% - 20px);
+  width: calc(100% - 10px);
   height: 44px;
   border-radius: 10px;
   display: flex;
