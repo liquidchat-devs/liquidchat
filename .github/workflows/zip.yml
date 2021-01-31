@@ -1,5 +1,5 @@
 name: Create Web Release
-uses: TheDoctor0/zip-release@0.4.1
+uses: LamkasDev/zip-release@0.4.1
 
 on:
   push:
@@ -14,8 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Create Web Release
-      run: cd client && yarn && CI=false npm run build
-      uses: thedoctor0/zip-release@master
+      uses: lamkasdev/zip-release@master
       with:
-        directory: 'client/build'
+        directory: 'client'
         filename: 'build.zip'
