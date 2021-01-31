@@ -10,7 +10,7 @@ jobs:
     - name: Create Web Release
       uses: lamkasdev/zip-release@master
       with:
-        directory: 'client/build'
+        directory: 'client'
         filename: 'build.zip'
     - name: Upload build.zip
       uses: actions/upload-artifact@v2
