@@ -76,6 +76,10 @@ export default class DialogManager extends React.Component {
       case 24:
         return <c.ServerDiscoveryDialog state={this.props.state} API={this.props.API} const={this.props.const} elements={this.props.elements} functions={this.props.functions} />
 
+
+      case 26:
+        return <c.SearchMessagesDialog state={this.props.state} API={this.props.API} const={this.props.const} elements={this.props.elements} functions={this.props.functions} />
+
       default:
         return null;
     }

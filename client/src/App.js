@@ -29,6 +29,10 @@ class App extends React.Component {
     boxX: 0,
     boxY: 0,
 
+    //Search
+    searchedTerm: "",
+    searches: -1,
+
     //Selected IDs
     selectedMessage: -1,
     editingMessage: -1,

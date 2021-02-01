@@ -37,6 +37,7 @@ code {
   --dmSize: 150px;
   --friendSize: 150px;
   --membersSize: 200px;
+  --channelHeaderSize: 40px;
 }
 
 /* Scrollbar */
@@ -274,6 +275,38 @@ code {
   width: 100%;
   height: 36px;
   cursor: pointer;
+}
+
+.button4 {
+  width: 28px;
+  height: 70%;
+  cursor: pointer;
+}
+
+.searchbar {
+  width: 200px;
+  height: 60%;
+  margin-left: 10px;
+  background-color: var(--color3);
+  z-index: 3;
+  border-radius: 5px;
+}
+
+.searchbarInputfield {
+  background-color: transparent;
+  border: none;
+  color: var(--color2);
+  height: 100%;
+  width: calc(100% - 10px);
+  padding-left: 10px;
+}
+
+.headerButton {
+  transform: scale(0.7);
+}
+
+.headerButton2 {
+  transform: scale(0.5);
 }
 
 /* Paddings */
@@ -727,6 +760,17 @@ code {
   justify-content: center;
 }
 
+.channelSection1 {
+  width: calc(100% - 320px);
+  padding-left: 20px;
+}
+
+.channelSection2 {
+  width: 300px;
+  flex-direction: row-reverse;
+  padding-right: 10px;
+}
+
 .channels {
   width: var(--channelSize);
 }
@@ -759,6 +803,10 @@ code {
 .overlay {
   opacity: 0.65;
   background-color: rgb(0, 0, 0);
+  z-index: 2;
+}
+
+.overlay2 {
   z-index: 2;
 }
 
@@ -843,6 +891,21 @@ code {
   border-radius: 10px;
   z-index: 3;
   padding: 5px;
+}
+
+
+.overlaybox10 {
+  position: absolute;
+  top: 75px;
+  left: auto;
+  right: 10px;
+  width: 410px;
+  height: 610px;
+  margin: 0;
+
+  background-color: var(--color5);
+  border-radius: 10px;
+  z-index: 3;
 }
 
 .cropOverlay {
@@ -931,8 +994,45 @@ code {
   border-bottom-right-radius: 10px;
 }
 
+
+.searchSection1 {
+  width: calc(100% - 10px);
+  height: 40px;
+  background-color: var(--color4);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding-left: 10px;
+
+  display: flex;
+  align-items: center;
+}
+
+.searchSection2 {
+  width: 100%;
+  height: calc(100% - 40px);
+  background-color: var(--color5);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  overflow-y: scroll;
+}
+
+.searchedTermText {
+  color: var(--color2);
+}
+
+.searchedTermText2 {
+  color: var(--color7);
+  white-space: pre;
+}
+
+.searchedTermText3 {
+  color: var(--color8);
+  white-space: pre;
+}
+
 .channelHeader {
-  height: 35px;
+  height: var(--channelHeaderSize);
+  display: flex;
 }
 
 .voiceUserEntry {

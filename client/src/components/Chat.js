@@ -1,6 +1,4 @@
 import React from 'react';
-import { formatMessage } from '../public/scripts/MessageFormatter';
-import { formatDate } from '../public/scripts/DateFormatter';
 import { formatBytes } from '../public/scripts/SizeFormatter';
 import Send from './Send';
 
@@ -75,6 +73,9 @@ export default class Chat extends React.Component {
             else if (element.msRequestFullscreen) element.msRequestFullscreen();
         }
         break;
+
+      default:
+        break;
     }
   }
 
@@ -119,64 +120,7 @@ export default class Chat extends React.Component {
     let membersList = -1;
 
     messageList = messages.map((message, i) => {
-      let messageHTML;
-      switch(message.type) {
-        case 0:
-          const user = this.props.functions.getUser(message.author.id)
-
-          messageHTML = <div className="flex marginleft2 fullwidth">
-            <img alt="" className="avatar" src={this.props.state.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.props.functions.setSelectedUser(user.id); this.props.functions.setBox(e.pageX, e.pageY); this.props.functions.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
-            <div className="marginleft2 fullwidth">
-              <div className="flex">
-                <div className="allignMiddle hoverunderline" style={{margin: 0, color: (user !== undefined && server !== undefined && server.author.id === user.id ? "yellow" : "red"), fontSize: 16}}>
-                  {user !== undefined ? user.username : "Loading"}
-                </div>
-                <div className="allignMiddle margintop1a" style={{marginLeft: 5, fontSize: 10, color: "#acacac"}}>
-                  {formatDate(message.createdAt)}
-                </div>
-              </div>
-              <div className="flex fullwidth">
-                {message.id === this.props.state.editingMessage.id ?
-                <div className="fullwidth">
-                    <form onSubmit={this.handleEdit} className="full fullwidth">
-                      <input className="input-message chatColor" type="text" value={this.props.state.editedMessage} required={true} onChange={(e) => { this.props.functions.setEditedMessage(e.target.value) }}/>
-                    </form>
-                  </div>
-                : formatMessage(this, message)
-                }
-              </div>
-            </div>
-          </div>
-          break;
-
-        case 1:
-        case 2:
-        case 3:
-          messageHTML = <div className="flex marginleft2 fullwidth">
-            <div className="marginleft2 alignmiddle">
-              <img alt="" className="messageIcon" src={this.props.state.fileEndpoint + "/" + (message.type === 1 || message.type === 3 ? "join.svg" : "leave.svg")}/>
-            </div>
-            <div className="marginleft2 fullwidth">
-              <div className="flex">
-                <div className="allignMiddle margintop1a" style={{fontSize: 10, color: "#acacac"}}>
-                  {formatDate(message.createdAt)}
-                </div>
-              </div>
-              <div className="flex fullwidth">
-                {message.id === this.props.state.editingMessage.id ?
-                <div className="fullwidth">
-                    <form onSubmit={this.handleEdit} className="full fullwidth">
-                      <input className="input-message chatColor" type="text" value={this.props.state.editedMessage} required={true} onChange={(e) => { this.props.functions.setEditedMessage(e.target.value) }}/>
-                    </form>
-                  </div>
-                : formatMessage(this, message)
-                }
-              </div>
-            </div>
-          </div>
-          break;
-      }
-
+      let messageHTML = this.props.functions.getFormattedMessage(this, message);
       return (
         <div key={i} className="paddingtop2 paddingbot2 flex message hover" onContextMenu={(e) => { this.props.functions.switchDialogState(2); this.props.functions.setSelectedMessage(message); this.props.functions.setBox(e.pageX, e.pageY); e.preventDefault(); } }>
           {messageHTML}
@@ -215,14 +159,13 @@ export default class Chat extends React.Component {
       )
     });
 
-    // style={{ height: this.props.state.pageHeight - 118 - this.props.state.pageHeightOffset }}
     switch(channel.type) {
       case 0:
       case 2:
         return (
           <div className="flex">
             <div style={{ width: membersList === -1 ? "100%" : "calc(100% - var(--membersSize))" }}>
-              <div className="chatContainer" id="chat-container" style={{ height: this.props.state.pageHeight - 128 - this.props.state.pageHeightOffset, overflowY: "scroll" }}>
+              <div className="chatContainer" id="chat-container" style={{ height: "calc(" + (this.props.state.pageHeight - 93 - this.props.state.pageHeightOffset) + "px - var(--channelHeaderSize))", overflowY: "scroll" }}>
                 {messageList}
                 <div className="white">
                   {this.getUploadMessage(this.props.state.uploadFileID, this.props.state.uploadFileName, this.props.state.uploadReceived, this.props.state.uploadExpected, this.props.state.uploadFailed)}
@@ -271,6 +214,9 @@ export default class Chat extends React.Component {
             </div>
           </div>
         );
+
+      default:
+        return null;
     }
   }
 }

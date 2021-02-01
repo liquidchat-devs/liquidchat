@@ -4,9 +4,9 @@ class Endpoint {
     }
 
     handle() {
-        this.app.get('/fetchChannelMessages', (async(req, res) => {
+        this.app.post('/fetchChannelMessages', (async(req, res) => {
             if(!this.app.isSessionValid(this.app, req, res)) { return; }
-            const data = req.query;
+            const data = req.body;
             var session = this.app.sessions.get(req.cookies['sessionID']);
             var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
 
@@ -18,6 +18,7 @@ class Endpoint {
                 if(channel.members.includes(user.id) === false) {
                     res.send(JSON.stringify({ status: -2 }))
                 } else {
+                    messages = this.filterMessages(messages, data.filters);
                     res.send(JSON.stringify(messages));
                 }
             } else {
@@ -25,10 +26,21 @@ class Endpoint {
                 if(server.members.includes(user.id) === false) {
                     res.send(JSON.stringify({ status: -2 }))
                 } else {
+                    messages = this.filterMessages(messages, data.filters);
                     res.send(JSON.stringify(messages));
                 }
             }
         }).bind(this));
+    }
+
+    filterMessages(messages, filters) {
+        if(filters !== undefined) {
+            if(filters.term !== undefined) {
+                messages = messages.filter(m => { return m.text.includes(filters.term); })
+            }
+        }
+
+        return messages;
     }
 }
 

@@ -1,4 +1,6 @@
 import React from 'react';
+import { formatMessage } from './MessageFormatter';
+import { formatDate } from './DateFormatter';
 
 export default class Functions {
     constructor(_main) {
@@ -26,6 +28,9 @@ export default class Functions {
         switch(channel.type) {
             case 1:
                 this.mainClass.state.API.API_joinVoiceChannel(channel.id)
+                break;
+
+            default:
                 break;
         }
 
@@ -125,6 +130,18 @@ export default class Functions {
         });
     }
 
+    setSearchedTerm = (term) => {
+        this.mainClass.setState({
+            searchedTerm: term
+        });
+    }
+
+    setSearches = (searches) => {
+        this.mainClass.setState({
+            searches: searches
+        });
+    }
+
     moveChannel = (channels, oldIndex, newIndex) => {
         //Sort the channels
         channels.splice(newIndex, 0, channels.splice(oldIndex, 1)[0]);
@@ -176,5 +193,66 @@ export default class Functions {
           copiedID: id
         }, () => { this.switchDialogState(3); });
     };
+
+    getFormattedMessage(chat, message) {
+        let server = this.mainClass.state.functions.getServer(this.mainClass.state.selectedServer)
+
+        switch(message.type) {
+            case 0:
+              const user = this.mainClass.state.functions.getUser(message.author.id);
+              return <div className="flex marginleft2 fullwidth">
+                <img alt="" className="avatar" src={this.mainClass.state.fileEndpoint + "/" + user.avatar} onContextMenu={(e) => { this.mainClass.state.functions.setSelectedUser(user.id); this.mainClass.state.functions.setBox(e.pageX, e.pageY); this.mainClass.state.functions.switchDialogState(6); e.preventDefault(); e.stopPropagation(); } }/>
+                <div className="marginleft2 fullwidth">
+                  <div className="flex">
+                    <div className="allignMiddle hoverunderline" style={{margin: 0, color: (user !== undefined && server !== undefined && server.author.id === user.id ? "yellow" : "red"), fontSize: 16}}>
+                      {user !== undefined ? user.username : "Loading"}
+                    </div>
+                    <div className="allignMiddle margintop1a" style={{marginLeft: 5, fontSize: 10, color: "#acacac"}}>
+                      {formatDate(message.createdAt)}
+                    </div>
+                  </div>
+                  <div className="flex fullwidth">
+                    {message.id === this.mainClass.state.editingMessage.id ?
+                    <div className="fullwidth">
+                        <form onSubmit={this.handleEdit} className="full fullwidth">
+                          <input className="input-message chatColor" type="text" value={this.mainClass.state.editedMessage} required={true} onChange={(e) => { this.mainClass.state.functions.setEditedMessage(e.target.value) }}/>
+                        </form>
+                      </div>
+                    : formatMessage(chat, message)
+                    }
+                  </div>
+                </div>
+              </div>
+    
+            case 1:
+            case 2:
+            case 3:
+              return <div className="flex marginleft2 fullwidth">
+                <div className="marginleft2 alignmiddle">
+                  <img alt="" className="messageIcon" src={this.mainClass.state.fileEndpoint + "/" + (message.type === 1 || message.type === 3 ? "join.svg" : "leave.svg")}/>
+                </div>
+                <div className="marginleft2 fullwidth">
+                  <div className="flex">
+                    <div className="allignMiddle margintop1a" style={{fontSize: 10, color: "#acacac"}}>
+                      {formatDate(message.createdAt)}
+                    </div>
+                  </div>
+                  <div className="flex fullwidth">
+                    {message.id === this.mainClass.state.editingMessage.id ?
+                    <div className="fullwidth">
+                        <form onSubmit={this.handleEdit} className="full fullwidth">
+                          <input className="input-message chatColor" type="text" value={this.mainClass.state.editedMessage} required={true} onChange={(e) => { this.mainClass.state.functions.setEditedMessage(e.target.value) }}/>
+                        </form>
+                      </div>
+                    : formatMessage(chat, message)
+                    }
+                  </div>
+                </div>
+              </div>
+
+            default:
+                return null
+        }
+    }
 
 }

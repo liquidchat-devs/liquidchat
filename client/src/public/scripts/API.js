@@ -1242,7 +1242,7 @@ export default class API {
         newChannels = new Map(newChannels.map(obj => [obj.id, obj]));
         
         newChannels.forEach(async(channel) => {
-            const reply2 = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannelMessages?id=' + channel.id, { withCredentials: true }));
+            const reply2 = (await axios.post(this.mainClass.state.APIEndpoint + '/fetchChannelMessages', { id: channel.id }, { withCredentials: true }));
             var messages = reply2.data;
             channel.messages = messages;
 
@@ -1282,7 +1282,7 @@ export default class API {
         newChannels = new Map(newChannels.map(obj => [obj.id, obj]));
 
         newChannels.forEach(async(channel) => {
-            const reply2 = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannelMessages?id=' + channel.id, { withCredentials: true }));
+            const reply2 = (await axios.post(this.mainClass.state.APIEndpoint + '/fetchChannelMessages', { id: channel.id }, { withCredentials: true }));
             var messages = reply2.data;
             channel.messages = messages;
 
@@ -1299,6 +1299,18 @@ export default class API {
                 typingIndicators: currentIndicators
             }, () => { console.log("set server channels"); });
         });
+    }
+
+    async API_searchMessages(filters) {
+        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/fetchChannelMessages', {
+            id: filters.channels[0], filters: filters
+        }, { withCredentials: true });
+        
+        if(reply.data.status !== undefined) {
+            return reply.data.status;
+        } else {
+            return reply.data;
+        }
     }
     //#endregion
 
