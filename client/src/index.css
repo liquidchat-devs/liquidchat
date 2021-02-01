@@ -427,6 +427,7 @@ code {
   --color11: #63307d;
   --color12: #2f2e2e;
   --color13: #6767ff;
+  --color14: rgba(103, 103, 255, 0.15);
 }
 
 .white {
@@ -893,6 +894,19 @@ code {
   padding: 5px;
 }
 
+.overlaybox9 {
+  position: absolute;
+  top: 75px;
+  left: auto;
+  right: 10px;
+  width: 310px;
+  height: 210px;
+  margin: 0;
+
+  background-color: var(--color5);
+  border-radius: 10px;
+  z-index: 3;
+}
 
 .overlaybox10 {
   position: absolute;
@@ -994,6 +1008,17 @@ code {
   border-bottom-right-radius: 10px;
 }
 
+.pinnedSection1 {
+  width: 100%;
+  height: 40px;
+  background-color: var(--color4);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding-left: 10px;
+
+  display: flex;
+  align-items: center;
+}
 
 .searchSection1 {
   width: calc(100% - 10px);
@@ -1087,7 +1112,6 @@ code {
 }
 
 .chatContainer {
-  height: calc(100% - 10px);
   padding-bottom: 10px;
 }
 
@@ -1448,7 +1472,11 @@ code {
 
 .mention {
   color: var(--color13);
+  background-color: var(--color14);
   cursor: pointer;
+  border-radius: 5px;
+  padding-left: 3px;
+  padding-right: 3px;
 }
 
 .mention:hover {
