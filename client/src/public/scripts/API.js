@@ -321,6 +321,7 @@ export default class API {
     async lc_fetch(url, opts = {}) {
         const response = await fetch(url, {
             ...opts,
+            credentials: "include",
             headers: {
                 ...opts.headers
             },
