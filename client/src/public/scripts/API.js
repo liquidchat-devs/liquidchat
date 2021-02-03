@@ -1,4 +1,3 @@
-import axios from 'axios';
 import io from "socket.io-client";
 import { Device } from "mediasoup-client";
 
@@ -18,6 +17,452 @@ export default class API {
         this.queuedInvites = [];
 
         this.typingTimeoutIDs = -1;
+
+        this.queues = {
+            servers: [],
+            users: [],
+            emotes: [],
+            invites: []
+        };
+
+        this.endpoints = {};
+        this.endpoints["removeFromDMChannel"] = this.createAPIEndpoint("/removeFromDMChannel", "POST", true);
+        this.endpoints["addToDMChannel"] = this.createAPIEndpoint("/addToDMChannel", "POST", true);
+        this.endpoints["editChannel"] = this.createAPIEndpoint("/editChannel", "POST", true);
+        this.endpoints["deleteChannel"] = this.createAPIEndpoint("/deleteChannel", "POST", true);
+        this.endpoints["cloneChannel"] = this.createAPIEndpoint("/cloneChannel", "POST", false);
+        this.endpoints["editServer"] = this.createAPIEndpoint("/editServer", "POST", true);
+        this.endpoints["deleteServer"] = this.createAPIEndpoint("/deleteServer", "POST", false);
+        this.endpoints["leaveServer"] = this.createAPIEndpoint("/leaveServer", "POST", true);
+        this.endpoints["joinServer"] = this.createAPIEndpoint("/joinServer", "POST", true);
+        this.endpoints["kickFromServer"] = this.createAPIEndpoint("/kickFromServer", "POST", false);
+        this.endpoints["createChannel"] = this.createAPIEndpoint("/createChannel", "POST", true);
+        this.endpoints["createChannelDM"] = this.createAPIEndpoint("/createChannel", "POST", true);
+        this.endpoints["updateStatus"] = this.createAPIEndpoint("/updateStatus", "POST", true);
+        this.endpoints["updateCustomStatus"] = this.createAPIEndpoint("/updateCustomStatus", "POST", true);
+        this.endpoints["sendFriendRequest"] = this.createAPIEndpoint("/sendFriendRequest", "POST", true);
+        this.endpoints["sendFriendRequestByUsername"] = this.createAPIEndpoint("/sendFriendRequest", "POST", true);
+        this.endpoints["removeFriend"] = this.createAPIEndpoint("/removeFriend", "POST", false);
+        this.endpoints["acceptFriendRequest"] = this.createAPIEndpoint("/acceptFriendRequest", "POST", false);
+        this.endpoints["declineFriendRequest"] = this.createAPIEndpoint("/declineFriendRequest", "POST", false);
+        this.endpoints["editMessage"] = this.createAPIEndpoint("/editMessage", "POST", true);
+        this.endpoints["deleteMessage"] = this.createAPIEndpoint("/deleteMessage", "POST", false);
+        this.endpoints["createInvite"] = this.createAPIEndpoint("/createInvite", "POST", true);
+        this.endpoints["createServer"] = this.createAPIEndpoint("/createServer", "POST", true);
+        this.endpoints["editNote"] = this.createAPIEndpoint("/editNote", "POST", true);
+        this.endpoints["removeConnection"] = this.createAPIEndpoint("/removeConnection", "POST", true);
+        this.endpoints["editUser"] = this.createAPIEndpoint("/editUser", "POST", true);
+        this.endpoints["searchMessages"] = this.createAPIEndpoint("/fetchChannelMessages", "POST", true);
+        this.endpoints["deleteEmote"] = this.createAPIEndpoint("/deleteEmote", "POST", false);
+        this.endpoints["sendMessage"] = this.createAPIEndpoint("/message", "POST", true);
+        this.endpoints["produceVoiceTransports"] = this.createAPIEndpoint("/produceVoiceTransports", "POST", true);
+        this.endpoints["consumeVoiceTransports"] = this.createAPIEndpoint("/consumeVoiceTransports", "POST", true);
+        this.endpoints["leaveVoiceChannel"] = this.createAPIEndpoint("/leaveVoiceChannel", "POST", false);
+        this.endpoints["connectVoiceTransports"] = this.createAPIEndpoint("/connectVoiceTransports", "POST", true);
+        this.endpoints["joinVoiceChannel"] = this.createAPIEndpoint("/joinVoiceChannel", "POST", true, async(voiceGroup, data) => {
+            this.device = new Device();
+            await this.device.load({ routerRtpCapabilities: voiceGroup.rtpCapabilities })
+            await this.endpoints["createVoiceTransports"]({ channel: { id: data.channel.id }});
+        });
+        this.endpoints["createVoiceTransports"] = this.createAPIEndpoint("/createVoiceTransports", "POST", true, async(transportData, requestData) => {
+            transportData.consumerData.iceServers = [ { urls: "turn:nekonetwork.net:3478", username: "username1", credential: "password1" }, {"urls": "stun:stun.l.google.com:19302"} ]
+            transportData.producerData.iceServers = [ { urls: "turn:nekonetwork.net:3478", username: "username1", credential: "password1" }, {"urls": "stun:stun.l.google.com:19302"} ]
+
+            const consumerTransport = this.device.createRecvTransport(transportData.consumerData);
+            const producerTransport = this.device.createSendTransport(transportData.producerData);
+            consumerTransport.on('connect', async({ dtlsParameters }, callback, errback) => {
+                this.consumerParameters = dtlsParameters;
+                if(this.consumerParameters !== -1 && this.producerParameters !== -1) {
+                    await this.endpoints["connectVoiceTransports"]({ channel: { id: requestData.channel.id }, consumerDTLS: this.consumerParameters, producerDTLS: this.producerParameters });
+                }
+                callback();
+            });
+            producerTransport.on('connect', async({ dtlsParameters }, callback, errback) => {
+                this.producerParameters = dtlsParameters;
+                if(this.consumerParameters !== -1 && this.producerParameters !== -1) {
+                    await this.endpoints["connectVoiceTransports"]({ channel: { id: requestData.channel.id }, consumerDTLS: this.consumerParameters, producerDTLS: this.producerParameters });
+                }
+                callback();
+            });
+            producerTransport.on('produce', async({ kind, rtpParameters }, callback, errback) => {
+                const data = await this.endpoints["produceVoiceTransports"]({ channel: { id: requestData.channel.id }, kind: kind, rtpParameters: rtpParameters });
+                callback(data.id);
+            });
+            consumerTransport.on('connectionstatechange', (state) => {
+                console.log("con: " + state);
+            });
+            producerTransport.on('connectionstatechange', (state) => {
+                console.log("prod: " + state);
+            });
+
+            this.consumerTransport = consumerTransport;
+            this.producerTransport = producerTransport;
+            const track = this.localStream.getAudioTracks()[0];
+            var a = await this.producerTransport.produce({ track: track });
+
+            window.transports = [];
+            window.transports.push(consumerTransport);
+            window.transports.push(producerTransport);
+            console.log(this.device);
+            console.log(consumerTransport);
+            console.log(producerTransport);
+
+            return { consumerTransport, producerTransport };
+        });
+
+        this.endpoints["updateServerAvatar"] = this.createAPIFileEndpoint("/updateServerAvatar", "POST", false);
+        this.endpoints["updateServerBanner"] = this.createAPIFileEndpoint("/updateServerBanner", "POST", false);
+        this.endpoints["updateAvatar"] = this.createAPIFileEndpoint("/updateAvatar", "POST", false);
+        this.endpoints["createEmote"] = this.createAPIFileEndpoint("/createEmote", "POST", true);
+        this.endpoints["createServerEmote"] = this.createAPIFileEndpoint("/createServerEmote", "POST", true);
+        this.endpoints["sendFile"] = this.createAPIFileEndpoint("/upload", "POST", true);
+
+        this.endpoints["fetchServer"] = this.createFetchEndpoint("/fetchServer", "servers");
+        this.endpoints["fetchUser"] = this.createFetchEndpoint("/fetchUser", "users");
+        this.endpoints["fetchEmote"] = this.createFetchEndpoint("/fetchEmote", "emotes");
+        this.endpoints["fetchInvite"] = this.createFetchEndpoint("/fetchInvite", "invites", (invite) => {
+            this.endpoints["fetchServer"](invite.server.id)
+            this.endpoints["fetchUser"](invite.author.id)
+        });
+
+        this.endpoints["fetchFriendRequests"] = this.createFetchMultipleEndpoint("/fetchFriendRequests", "friendRequests", (friendRequests) => { this.endpoints["fetchUsersForFriendRequests"](friendRequests); });
+        this.endpoints["fetchDefaultEmotes"] = this.createFetchMultipleEndpoint("/fetchDefaultEmotes", "emotes");
+        this.endpoints["fetchNotes"] = this.createFetchMultipleEndpoint("/fetchNotes", "notes");
+        this.endpoints["fetchServers"] = this.createFetchMultipleEndpoint("/fetchServers", "servers", (servers) => {
+            servers.forEach(server => {
+                this.endpoints["fetchServerChannels"]({ id: server.id });
+                this.endpoints["fetchEmotesForIDs"](server.emotes);
+                if(server.members !== undefined) { this.endpoints["fetchUsersForIDs"](server.members); }
+            });
+        });
+        this.endpoints["fetchDMChannels"] = this.createFetchMultipleEndpoint("/fetchDMChannels", "channels", (channels) => {
+            channels.forEach(async(channel) => {
+                const messages = await this.endpoints["fetchChannelMessages"]({ id: channel.id });
+                channel.messages = messages;
+    
+                var currentChannels = this.mainClass.state.channels;
+                currentChannels.set(channel.id, channel);
+                var currentIndicators = this.mainClass.state.typingIndicators;
+                currentIndicators.set(channel.id, [])
+    
+                if(channel.members !== undefined) { this.endpoints["fetchUsersForIDs"](channel.members); }
+                this.endpoints["fetchEmotesForMessages"](messages)
+                this.endpoints["fetchUsersForMessages"](messages)
+                this.endpoints["fetchMentionsForMessages"](messages)
+                this.mainClass.setState({
+                    channels: currentChannels,
+                    typingIndicators: currentIndicators
+                }, () => { console.log("set dm channels"); });
+            });
+        });
+        this.endpoints["fetchServerChannels"] = this.createFetchMultipleEndpoint("/fetchChannels", "channels", (channels) => {
+            channels.forEach(async(channel) => {
+                const messages = await this.endpoints["fetchChannelMessages"]({ id: channel.id });
+                channel.messages = messages;
+    
+                var currentChannels = this.mainClass.state.channels;
+                currentChannels.set(channel.id, channel);
+                var currentIndicators = this.mainClass.state.typingIndicators;
+                currentIndicators.set(channel.id, [])
+    
+                if(channel.members !== undefined) { this.endpoints["fetchUsersForIDs"](channel.members); }
+                this.endpoints["fetchEmotesForMessages"](messages)
+                this.endpoints["fetchUsersForMessages"](messages)
+                this.endpoints["fetchMentionsForMessages"](messages)
+                this.mainClass.setState({
+                    channels: currentChannels,
+                    typingIndicators: currentIndicators
+                }, () => { console.log("set server channels"); });
+            });
+        });
+        this.endpoints["fetchChannelMessages"] = this.createAPIEndpoint("/fetchChannelMessages", "POST", true);
+
+        this.endpoints["fetchEmotesForMessages"] = (messages) => {
+            messages.forEach(message => {
+                if(message.text !== undefined) {
+                    let i = 0;
+                    while(i < message.text.length) {
+                        let currMessage = message.text.substring(i);
+                        let a = currMessage.indexOf("<:")
+                        let b = currMessage.indexOf(":>")
+                        
+                        if(a === -1 || b === -1) {
+                            i = message.text.length;
+                        } else {
+                            let id = currMessage.substring(a + "<:".length, b)
+                            if(id.length !== 32) {
+                                i = message.text.length;
+                                break;
+                            }
+    
+                            this.endpoints["fetchEmote"]({ id: id });
+                            i += b + 2;
+                        }
+                    }
+                }
+            })
+        }
+        this.endpoints["fetchMentionsForMessages"] = (messages) => {
+            messages.forEach(message => {
+                if(message.text !== undefined) {
+                    let i = 0;
+                    while(i < message.text.length) {
+                        let currMessage = message.text.substring(i);
+                        let a = currMessage.indexOf("<@")
+                        let b = currMessage.indexOf(">")
+                        
+                        if(a === -1 || b === -1) {
+                            i = message.text.length;
+                        } else {
+                            let id = currMessage.substring(a + "<@".length, b)
+                            if(id.length !== 32) {
+                                i = message.text.length;
+                                break;
+                            }
+
+                            this.endpoints["fetchUser"]({ id: id })
+                            i += b + 1;
+                        }
+                    }
+                }
+            })
+        }
+        this.endpoints["getSuitableDMChannel"] = async(userID) => {
+            var suitableChannels = Array.from(this.mainClass.state.channels.values()).filter(channel => { return channel.members !== undefined && channel.members.length === 2 && channel.members.includes(this.mainClass.state.session.userID) && channel.members.includes(userID); });
+            var channel = -1;
+            if(suitableChannels.length < 1) {
+                channel = await this.endpoints["createChannelDM"]({ name: "autogenerated DM", type: 2, members: [ this.mainClass.state.session.userID, userID ]})
+                if(isNaN(channel) === false) {
+                    return undefined;
+                } else {
+                    suitableChannels = [ channel ]
+                }
+            }
+    
+            return suitableChannels[0];
+        }
+
+        this.endpoints["fetchServerSync"] = this.createFetchSync("servers", this.endpoints["fetchServer"]);
+        this.endpoints["fetchInviteSync"] = this.createFetchSync("invites", this.endpoints["fetchInvite"]);
+
+        this.endpoints["sendDMPre"] = this.createAPIEndpoint("/message", "POST", true);
+        this.endpoints["sendDM"] = async(data) => {
+            var channel = await this.endpoints["getSuitableDMChannel"](data.user.id)
+            if(channel === undefined) { return false; }
+            
+            data.channel = { id: channel.id }
+            var reply = await this.endpoints["sendDMPre"](data);
+            return reply;
+        }
+
+        this.endpoints["authPost"] = async(session) => {
+            this.mainClass.setState({
+                session: session
+            })
+    
+            setTimeout(() => {
+                this.mainClass.setState({
+                    waitingForSession: false
+                })
+            }, 3000)
+
+            this.API_initWebsockets(session.userID);
+        }
+
+        this.endpoints["loginPre"] = this.createAPIEndpoint("/login", "POST", true, this.endpoints["authPost"]);
+        this.endpoints["login"] = async(data) => {
+            this.mainClass.setState({
+                waitingForSession: true
+            })
+            
+            this.endpoints["loginPre"](data);
+        }
+
+        this.endpoints["registerPre"] = this.createAPIEndpoint("/register", "POST", true, this.endpoints["authPost"]);
+        this.endpoints["register"] = async(data) => {
+            this.mainClass.setState({
+                waitingForSession: true
+            })
+            
+            this.endpoints["registerPre"](data);
+        }
+
+        this.endpoints["fetchUsersForMessages"] = async(messages) => {
+            messages.forEach(message => {
+                this.endpoints["fetchUser"]({ id: message.author.id });
+            })
+        }
+        this.endpoints["fetchUsersForIDs"] = async(ids) => {
+            ids.forEach(id => {
+                this.endpoints["fetchUser"]({ id: id});
+            })
+        }
+        this.endpoints["fetchEmotesForIDs"] = async(ids) => {
+            ids.forEach(id => {
+                this.endpoints["fetchEmote"]({ id: id});
+            })
+        }
+        this.endpoints["fetchUsersForFriendRequests"] = async(friendRequests) => {
+            friendRequests.forEach(friendRequest => {
+                var id = friendRequest.author.id === this.mainClass.state.session.userID ? friendRequest.target.id : friendRequest.author.id;
+                this.endpoints["fetchUser"]({ id: id });
+            })
+        }
+        this.endpoints["fetchUsersForFriends"] = async(userID) => {
+            var user = this.mainClass.state.functions.getUser(userID);
+            user.friends.forEach(friendID => {
+                this.endpoints["fetchUser"]({ id: friendID });
+            })
+        }
+
+        this.endpoints["logout"] = this.createAPIEndpoint("/logout", "POST", true, () => { window.location.reload(false); });
+    }
+
+    async lc_fetch(url, opts = {}) {
+        const response = await fetch(url, {
+            ...opts,
+            headers: {
+                ...opts.headers
+            },
+        });
+        
+        return response;
+    }
+
+    createFetchSync(mapName, fetchEndpoint) {
+        var func = (id) => {
+            if(this.mainClass.state[mapName].has(id)) {
+                return this.mainClass.state[mapName].get(id)
+            } else {
+                if(this.queues[mapName].includes(id)) {
+                    return -1;
+                } else {
+                    fetchEndpoint({ id: id });
+                    return -1
+                }
+            }
+        }
+
+        return func;
+    }
+
+    createAPIEndpoint(path, type, returnsData, additionalFunc) {
+        var endpoint = async(data) => {
+            var reply = await this.lc_fetch(this.mainClass.state.APIEndpoint + path + (type === "GET" ? this.createQuery(data) : ""), {
+                method: type,
+                headers: {
+                    "Origin": "https://nekonetwork.net",
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: (type === "POST" ? JSON.stringify(data) : null)
+            });
+            reply = await reply.json();
+
+            if(reply.status !== undefined) {
+                return reply.status;
+            } else {
+                if(additionalFunc !== undefined) { additionalFunc(reply, data); }
+                return returnsData ? reply : 1;
+            }
+        }
+
+        return endpoint;
+    }
+
+    createAPIFileEndpoint(path, type, returnsData) {
+        var endpoint = async(file, data) => {
+            var reply = await this.lc_fetch(this.mainClass.state.APIEndpoint + path + this.createQuery(data), {
+                method: type,
+                headers: {
+                    "Origin": "https://nekonetwork.net",
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+            reply = await reply.json();
+
+            if(reply.status !== undefined) {
+                return reply.status;
+            } else {
+                return returnsData ? reply : 1;
+            }
+        }
+
+        return endpoint;
+    }
+
+    createFetchEndpoint(path, mapName, additionalFetchFunc) {
+        var endpoint = async(data) => {
+            if(this.mainClass.state[mapName].has(data.id)) {
+                return this.mainClass.state[mapName].get(data.id)
+            } else {
+                var reply = await this.lc_fetch(this.mainClass.state.APIEndpoint + path + this.createQuery(data), {
+                    method: "GET",
+                    headers: {
+                        "Origin": "https://nekonetwork.net",
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                reply = await reply.json();
+
+                if(reply.status === undefined) {
+                    //Cache item
+                    var newItems = this.mainClass.state[mapName].set(reply.id, reply);
+                    if(additionalFetchFunc !== undefined) { additionalFetchFunc(reply, data); }
+                    this.mainClass.setState({
+                        [mapName]: newItems
+                    });
+        
+                    return reply;
+                } else {
+                    return undefined;
+                }
+            }
+        }
+
+        return endpoint;
+    }
+
+    createFetchMultipleEndpoint(path, mapName, additionalFetchFunc) {
+        var endpoint = async(data) => {
+            var reply = await this.lc_fetch(this.mainClass.state.APIEndpoint + path + this.createQuery(data), {
+                method: "GET",
+                headers: {
+                    "Origin": "https://nekonetwork.net",
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+            reply = await reply.json();
+
+            if(reply.status === undefined) {
+                let items = new Map(reply.map(obj => [obj.id, obj]));
+                if(additionalFetchFunc !== undefined) { additionalFetchFunc(items, data); }
+    
+                //Cache items
+                let newItems = new Map([...this.mainClass.state[mapName], ...items]);
+                this.mainClass.setState({
+                    [mapName]: newItems
+                });
+                return items;
+            } else {
+                return undefined;
+            }
+        }
+
+        return endpoint;
+    }
+
+    createQuery(data) {
+        var query = "";
+        for (let key in data) {
+            let value = data[key];
+            query += (key + "=" + value) + "&";
+        }
+
+        return query.length > 0 ? "?" + query.substring(0, query.length - 1) : query;
     }
 
     async API_initWebsockets(userID) {
@@ -28,11 +473,11 @@ export default class API {
         
         socket.on('connect', async() => {
             console.log("> socket.io connected!");
-            let user = await this.API_fetchUser(userID, true);
-            await this.API_fetchUsersForFriends(userID);
-            await this.API_fetchEmotesForIDs(user.emotes);
-            await this.API_fetchDefaultEmotes();
-            await this.API_fetchNotes();
+            let user = await this.endpoints["fetchUser"]({ id: userID, containSensitive: true });
+            await this.endpoints["fetchUsersForFriends"](userID);
+            await this.endpoints["fetchEmotesForIDs"](user.emotes);
+            await this.endpoints["fetchDefaultEmotes"]({});
+            await this.endpoints["fetchNotes"]({});
         });
         
         socket.on('message', (messageData) => {
@@ -51,8 +496,8 @@ export default class API {
                 if(chat !== null) { chat.scrollTop = chat.scrollHeight; }
             }
 
-            this.API_fetchEmotesForMessages([ message ])
-            this.API_fetchUsersForMessages([ message ])
+            this.endpoints["fetchEmotesForMessages"]([ message ])
+            this.endpoints["fetchUsersForMessages"]([ message ])
         });
         socket.on('editMessage', (messageData) => {
             var message = JSON.parse(messageData);
@@ -93,9 +538,9 @@ export default class API {
             var server = JSON.parse(serverData);
             var newServers = this.mainClass.state.servers.set(server.id, server);
 
-            this.API_fetchChannelsForServer(server);
-            this.API_fetchEmotesForIDs(server.emotes)
-            if(server.members !== undefined) { this.API_fetchUsersForIDs(server.members); }
+            this.endpoints["fetchServerChannels"]({ id: server.id });
+            this.endpoints["fetchEmotesForIDs"](server.emotes)
+            if(server.members !== undefined) { this.endpoints["fetchUsersForIDs"](server.members); }
             this.mainClass.setState({
                 servers: newServers
             });
@@ -114,8 +559,8 @@ export default class API {
             server.emotes = _server.emotes;
             newServers.set(server.id, server);
 
-            this.API_fetchEmotesForIDs(server.emotes)
-            if(server.members !== undefined) { this.API_fetchUsersForIDs(server.members); }
+            this.endpoints["fetchEmotesForIDs"](server.emotes)
+            if(server.members !== undefined) { this.endpoints["fetchUsersForIDs"](server.members); }
             this.mainClass.setState({
                 servers: newServers
             });
@@ -205,7 +650,7 @@ export default class API {
             var user = JSON.parse(userData);
             if(this.mainClass.state.users.has(user.id)) {
                 var newUsers = this.mainClass.state.users.set(user.id, user);
-                if(this.mainClass.state.session.userID === user.id) { this.API_fetchEmotesForIDs(user.emotes); }
+                if(this.mainClass.state.session.userID === user.id) { this.endpoints["fetchEmotesForIDs"](user.emotes); }
 
                 this.mainClass.setState({
                     users: newUsers
@@ -220,7 +665,7 @@ export default class API {
         });
         socket.on('newProducer', async(producerData) => {
             var producer = JSON.parse(producerData);
-            var data = await this.API_consumeVoiceTransports(producer.channel.id, producer.id, this.device.rtpCapabilities);
+            var data = await this.endpoints["consumeVoiceTransports"]({ channel: { id: producer.channel.id }, producerID: producer.id, rtpCapabilities: this.device.rtpCapabilities });
             var a = await this.consumerTransport.consume({ id: data.id, producerId: data.producerID, kind: data.kind, rtpParameters: data.rtpParameters, codecOptions: data.codecOptions });
             const stream = new MediaStream();
             stream.addTrack(a.track);
@@ -231,7 +676,7 @@ export default class API {
         });
         socket.on('updateFriendRequests', (friendRequestsData) => {
             var friendRequests = JSON.parse(friendRequestsData);
-            this.API_fetchUsersForFriendRequests(friendRequests);
+            this.endpoints["fetchUsersForFriendRequests"](friendRequests);
             this.mainClass.setState({
                 friendRequests: friendRequests
             });
@@ -266,514 +711,6 @@ export default class API {
         //this.localStream = stream;
         window.localStream = this.localStream;
     }
-    
-    //#region Fetching
-    async API_fetchUser(id, containSensitive) {
-        if(this.mainClass.state.users.has(id)) {
-          return this.mainClass.state.users.get(id)
-        } else {
-            //Fetch user
-            const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchUser?id=' + id + (containSensitive === true ? "&containSensitive=true" : ""), { withCredentials: true });
-            var user = reply.data
-    
-            if(user.status !== undefined && user.status >= 0) {
-                //Cache user
-                var newUsers = this.mainClass.state.users.set(user.id, user);
-                this.mainClass.setState({
-                    users: newUsers
-                });
-
-                return user;
-            } else {
-                return undefined;
-            }
-        }
-    }
-
-    async API_fetchServer(id) {
-        if(this.mainClass.state.servers.has(id)) {
-            return this.mainClass.state.servers.get(id)
-        } else {
-            //Fetch user
-            const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchServer?id=' + id, { withCredentials: true });
-            var server = reply.data
-            
-            if(server.status === undefined) {
-                //Cache user
-                var newServers = this.mainClass.state.servers.set(server.id, server);
-                this.mainClass.setState({
-                    servers: newServers
-                });
-    
-                return server;
-            } else {
-                return undefined;
-            }
-        }
-    }
-
-    API_fetchServerSync(id) {
-        if(this.mainClass.state.servers.has(id)) {
-            return this.mainClass.state.servers.get(id)
-        } else {
-            if(this.queuedServers.includes(id)) {
-                return -1;
-            } else {
-                this.API_fetchServer(id);
-                return -1
-            }
-        }
-    }
-
-    async API_fetchFriendRequests() {
-        const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchFriendRequests', { withCredentials: true }));
-        var friendRequests = reply.data;
-        friendRequests = new Map(friendRequests.map(obj => [obj.id, obj]));
-
-        this.API_fetchUsersForFriendRequests(friendRequests)
-        this.mainClass.setState({
-            friendRequests: friendRequests
-        });
-    }
-
-    async API_fetchInvite(id) {
-        if(this.mainClass.state.invites.has(id)) {
-            return this.mainClass.state.invites.get(id)
-        } else {
-            //Fetch invite
-            const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchInvite?id=' + id, { withCredentials: true });
-            var invite = reply.data
-      
-            if(invite.status === undefined) {
-                //Cache invite
-                var newInvites = this.mainClass.state.invites.set(invite.id, invite);
-                this.API_fetchAllForInvites([ invite ])
-                this.mainClass.setState({
-                    invites: newInvites
-                });
-    
-                return invite;
-            } else {
-                return undefined;
-            }
-        }
-    }
-
-    API_fetchInviteSync(id) {
-        if(this.mainClass.state.invites.has(id)) {
-            return this.mainClass.state.invites.get(id)
-        } else {
-            if(this.queuedInvites.includes(id)) {
-                return -1;
-            } else {
-                this.API_fetchInvite(id);
-                return -1
-            }
-        }
-    }
-
-    async API_fetchEmote(id) {
-        if(this.mainClass.state.emotes.has(id)) {
-          return this.mainClass.state.emotes.get(id)
-        } else {
-            //Fetch emote
-            const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchEmote?id=' + id, { withCredentials: true });
-            var emote = reply.data
-        
-            if(emote.status === undefined) {
-                //Cache emote
-                var newEmotes = this.mainClass.state.emotes.set(emote.id, emote);
-                this.mainClass.setState({
-                    emotes: newEmotes
-                });
-
-                return emote;
-            } else {
-                return undefined;
-            }
-        }
-    }
-
-    async API_fetchDefaultEmotes() {
-        //Fetch emotes
-        const reply = await axios.get(this.mainClass.state.APIEndpoint + '/fetchDefaultEmotes', { withCredentials: true });
-        var defaultEmotes = reply.data;
-    
-        //Cache emotes
-        if(defaultEmotes.status === undefined) {
-            defaultEmotes = new Map(defaultEmotes.map(obj => [obj.id, obj]))
-            var newEmotes = new Map([...this.mainClass.state.emotes, ...defaultEmotes]);
-            this.mainClass.setState({
-                emotes: newEmotes
-            });
-
-            return defaultEmotes;
-        } else {
-            return undefined;
-        }
-    }
-
-    async API_fetchNotes() {
-        const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchNotes', { withCredentials: true }));
-        var notes = reply.data;
-        notes = new Map(notes.map(obj => [obj.id, obj]));
-
-        this.mainClass.setState({
-            notes: notes
-        });
-    }
-    //#endregion
-
-    //#region Fetching Utils
-    async API_fetchUsersForFriendRequests(friendRequests) {
-        friendRequests.forEach(friendRequest => {
-            var id = friendRequest.author.id === this.mainClass.state.session.userID ? friendRequest.target.id : friendRequest.author.id;
-            this.API_fetchUser(id)
-        })
-    }
-
-    async API_fetchUsersForFriends(userID) {
-        var user = this.mainClass.state.functions.getUser(userID);
-        user.friends.forEach(friendID => {
-            this.API_fetchUser(friendID);
-        });
-    }
-
-    async API_fetchUsersForMessages(messages) {
-        const queue = new Map();
-        messages.forEach(message => {
-          if(!queue.has(message.author.id)) {
-            this.API_fetchUser(message.author.id)
-            queue.set(message.author.id, 1)
-          }
-        })
-    }
-
-    async API_fetchUsersForIDs(obj) {
-        const queue = new Map();
-        obj.forEach(userID => {
-            if(!queue.has(userID)) {
-                this.API_fetchUser(userID);
-                queue.set(userID, 1);
-            }
-        });
-    }
-
-    async API_fetchEmotesForIDs(obj) {
-        const queue = new Map();
-        obj.forEach(emoteID => {
-            if(!queue.has(emoteID)) {
-                this.API_fetchEmote(emoteID);
-                queue.set(emoteID, 1);
-            }
-        });
-    }
-
-    async API_fetchEmotesForMessages(obj) {
-        obj.forEach(message => {
-            if(message.text !== undefined) {
-                let i = 0;
-                while(i < message.text.length) {
-                    let currMessage = message.text.substring(i);
-                    let a = currMessage.indexOf("<:")
-                    let b = currMessage.indexOf(":>")
-                    
-                    if(a === -1 || b === -1) {
-                        i = message.text.length;
-                    } else {
-                        let id = currMessage.substring(a + "<:".length, b)
-                        if(id.length !== 32) {
-                            i = message.text.length;
-                            break;
-                        }
-
-                        this.API_fetchEmote(id);
-                        i += b + 2;
-                    }
-                }
-            }
-        })
-    }
-
-    async API_fetchMentionsForMessages(obj) {
-        obj.forEach(message => {
-            if(message.text !== undefined) {
-                let i = 0;
-                while(i < message.text.length) {
-                    let currMessage = message.text.substring(i);
-                    let a = currMessage.indexOf("<@")
-                    let b = currMessage.indexOf(">")
-                    
-                    if(a === -1 || b === -1) {
-                        i = message.text.length;
-                    } else {
-                        let id = currMessage.substring(a + "<@".length, b)
-                        if(id.length !== 32) {
-                            i = message.text.length;
-                            break;
-                        }
-
-                        this.API_fetchUser(id);
-                        i += b + 1;
-                    }
-                }
-            }
-        })
-    }
-
-    async API_fetchAllForInvites(invites) {
-        const queue = new Map();
-        invites.forEach(invite => {
-          if(!queue.has(invite.server.id)) {
-            this.API_fetchServer(invite.server.id)
-            queue.set(invite.server.id, 1)
-          }
-
-          if(!queue.has(invite.author.id)) {
-            this.API_fetchUser(invite.author.id)
-            queue.set(invite.author.id, 1)
-          }
-        })
-    }
-    //#endregion
-
-    //#region User Actions
-    async API_updateAvatar(file) {
-        var data = new FormData();
-        data.append("fileUploaded", file)
-
-        const reply = await axios({
-            method: 'post',
-            url: this.mainClass.state.APIEndpoint + '/updateAvatar?fileName=' + file.name,
-            processData: false,
-            contentType: false,
-            cache: false,
-            enctype: 'multipart/form-data',
-            data: data,
-            withCredentials: true
-        });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return 1;
-        }
-    }
-
-    async API_editUser(email) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/editUser', {
-            email: email
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_updateStatus(type) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/editUser', {
-            status: type
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_updateCustomStatus(status) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/editUser', {
-            customStatus: status
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_sendFriendRequest(userID) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/sendFriendRequest', {
-            target: {
-                id: userID
-            }
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_removeFriend(userID) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/removeFriend', {
-            target: {
-                id: userID
-            }
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return 1;
-        }
-    }
-
-    async API_sendFriendRequestByUsername(username) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/sendFriendRequest', {
-            target: {
-                username: username
-            }
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_acceptFriendRequest(id) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/acceptFriendRequest', {
-            id: id
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return 1;
-        }
-    }
-
-    async API_declineFriendRequest(id) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/declineFriendRequest', {
-            id: id
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return 1;
-        }
-    }
-
-    async API_createEmote(file, emoteName) {
-        var data = new FormData();
-        data.append("fileUploaded", file)
-
-        const reply = await axios({
-            method: 'post',
-            url: this.mainClass.state.APIEndpoint + '/createEmote?fileName=' + file.name + '&emoteName=' + emoteName + '&type=1',
-            processData: false,
-            contentType: false,
-            cache: false,
-            enctype: 'multipart/form-data',
-            data: data,
-            withCredentials: true
-        });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_deleteEmote(id) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/deleteEmote', {
-            id: id
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return 1;
-        }
-    }
-    //#endregion
-
-    //#region Authorization
-    async API_login(_username, _password, _type) {
-        this.mainClass.setState({
-          waitingForSession: true
-        })
-    
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/login', {
-          authType: _type,
-          username: _username,
-          password: _password
-        }, { withCredentials: true });
-    
-        if(reply.data.status !== undefined) {
-          return reply.data.status;
-        } else {
-          this.mainClass.setState({
-            session: reply.data
-          })
-    
-          setTimeout(() => {
-            this.mainClass.setState({
-              waitingForSession: false
-            })
-          }, 3000)
-
-          this.API_initWebsockets(reply.data.userID);
-          return reply.data;
-        }
-    }
-
-    async API_register(_username, _password, _password2) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/register', {
-            username: _username,
-            password: _password,
-            password2: _password2
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            this.mainClass.setState({
-                session: reply.data
-            });
-
-            setTimeout(() => {
-                this.mainClass.setState({
-                  waitingForSession: false
-                })
-            }, 3000)
-
-            this.API_initWebsockets(reply.data.userID);
-            return reply.data;
-        }
-    }
-
-    async API_logout() {
-        await axios.post(this.mainClass.state.APIEndpoint + '/logout', {}, { withCredentials: true });
-        window.location.reload(false);
-        return true;
-    }
-    //#endregion
-
-    //#region Messages
-    async API_getSuitableDMChannel(userID) {
-        var suitableChannels = Array.from(this.mainClass.state.channels.values()).filter(channel => { return channel.members !== undefined && channel.members.length === 2 && channel.members.includes(this.mainClass.state.session.userID) && channel.members.includes(userID); });
-        var channel = -1;
-        if(suitableChannels.length < 1) {
-            channel = await this.API_createChannelDM("autogenerated DM", [ this.mainClass.state.session.userID, userID ])
-            if(isNaN(channel) === false) {
-                return undefined;
-            } else {
-                suitableChannels = [ channel ]
-            }
-        }
-
-        return suitableChannels[0];
-    }
 
     async API_sendWebsocketMessage(channelID, text) {
         return new Promise((res, rej) => {
@@ -788,547 +725,6 @@ export default class API {
         });
     }
 
-    async API_sendMessage(channelID, text) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/message', {
-            text: text,
-            channel: {
-                id: channelID
-            }
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_sendDM(userID, text) {
-        var channel = await this.API_getSuitableDMChannel(userID)
-        if(channel === undefined) { return false; }
-
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/message', {
-            text: text,
-            channel: {
-                id: channel.id
-            }
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_sendFile(file, text) {
-        var data = new FormData();
-        data.append("fileUploaded", file)
-        data.append("text", text)
-        data.append("channel.id", this.mainClass.state.currentChannel)
-
-        const reply = await axios({
-            method: 'post',
-            url: this.mainClass.state.APIEndpoint + '/upload?fileName=' + file.name,
-            processData: false,
-            contentType: false,
-            cache: false,
-            enctype: 'multipart/form-data',
-            data: data,
-            withCredentials: true
-        });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return 1;
-        }
-    }
-
-    async API_editMessage(originalMessageID, newText) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/editMessage', {
-            id: originalMessageID,
-            text: newText
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_deleteMessage(messageID) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/deleteMessage', {
-            id: messageID
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return 1;
-        }
-    }
-
-    async API_joinVoiceChannel(channelID) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/joinVoiceChannel', {
-            channel: {
-                id: channelID
-            }
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            var voiceGroup = reply.data;
-            this.device = new Device();
-            await this.device.load({ routerRtpCapabilities: voiceGroup.rtpCapabilities })
-            await this.API_createVoiceTransports(channelID);
-            return voiceGroup;
-        }
-    }
-
-    async API_createVoiceTransports(channelID) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createVoiceTransports', {
-            channel: { id: channelID }
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            const transportData = reply.data;
-            transportData.consumerData.iceServers = [ { urls: "turn:nekonetwork.net:3478", username: "username1", credential: "password1" }, {"urls": "stun:stun.l.google.com:19302"} ]
-            transportData.producerData.iceServers = [ { urls: "turn:nekonetwork.net:3478", username: "username1", credential: "password1" }, {"urls": "stun:stun.l.google.com:19302"} ]
-
-            const consumerTransport = this.device.createRecvTransport(transportData.consumerData);
-            const producerTransport = this.device.createSendTransport(transportData.producerData);
-            consumerTransport.on('connect', async({ dtlsParameters }, callback, errback) => {
-                this.consumerParameters = dtlsParameters;
-                if(this.consumerParameters !== -1 && this.producerParameters !== -1) {
-                    await this.API_connectVoiceTransports(channelID, this.consumerParameters, this.producerParameters);
-                }
-                callback();
-            });
-            producerTransport.on('connect', async({ dtlsParameters }, callback, errback) => {
-                this.producerParameters = dtlsParameters;
-                if(this.consumerParameters !== -1 && this.producerParameters !== -1) {
-                    await this.API_connectVoiceTransports(channelID, this.consumerParameters, this.producerParameters);
-                }
-                callback();
-            });
-            producerTransport.on('produce', async({ kind, rtpParameters }, callback, errback) => {
-                const data = await this.API_produceVoiceTransports(channelID, kind, rtpParameters);
-                callback(data.id);
-            });
-            consumerTransport.on('connectionstatechange', (state) => {
-                console.log("con: " + state);
-            });
-            producerTransport.on('connectionstatechange', (state) => {
-                console.log("prod: " + state);
-            });
-
-            this.consumerTransport = consumerTransport;
-            this.producerTransport = producerTransport;
-            const track = this.localStream.getAudioTracks()[0];
-            var a = await this.producerTransport.produce({ track: track });
-
-            window.transports = [];
-            window.transports.push(consumerTransport);
-            window.transports.push(producerTransport);
-            console.log(this.device);
-            console.log(consumerTransport);
-            console.log(producerTransport);
-
-            return { consumerTransport, producerTransport };
-        }
-    }
-
-    async API_connectVoiceTransports(channelID, consumerDTLS, producerDTLS) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/connectVoiceTransports', {
-            channel: { id: channelID },
-            consumerDTLS: consumerDTLS,
-            producerDTLS: producerDTLS
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_produceVoiceTransports(channelID, kind, rtpParameters) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/produceVoiceTransports', {
-            channel: { id: channelID },
-            kind: kind,
-            rtpParameters : rtpParameters 
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_consumeVoiceTransports(channelID, id, rtpCapabilities) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/consumeVoiceTransports', {
-            channel: { id: channelID },
-            producerID: id,
-            rtpCapabilities : rtpCapabilities 
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_leaveVoiceChannel(channel) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/leaveVoiceChannel', {
-            channel: {
-                id: channel.id
-            }
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            this.mainClass.setState({ currentVoiceGroup: -1 });
-            return 1;
-        }
-    }
-    //#endregion
-
-    //#region Servers
-    async API_createServer(serverName) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createServer', {
-            name: serverName
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_updateServerAvatar(serverID, file) {
-        var data = new FormData();
-        data.append("fileUploaded", file)
-
-        const reply = await axios({
-            method: 'post',
-            url: this.mainClass.state.APIEndpoint + '/updateServerAvatar?serverID=' + serverID + '&fileName=' + file.name,
-            processData: false,
-            contentType: false,
-            cache: false,
-            enctype: 'multipart/form-data',
-            data: data,
-            withCredentials: true
-        });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return 1;
-        }
-    }
-
-    async API_updateServerBanner(serverID, file) {
-        var data = new FormData();
-        data.append("fileUploaded", file)
-
-        const reply = await axios({
-            method: 'post',
-            url: this.mainClass.state.APIEndpoint + '/updateServerBanner?serverID=' + serverID + '&fileName=' + file.name,
-            processData: false,
-            contentType: false,
-            cache: false,
-            enctype: 'multipart/form-data',
-            data: data,
-            withCredentials: true
-        });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return 1;
-        }
-    }
-
-    async API_editServer(serverID, serverName) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/editServer', {
-            id: serverID, name: serverName
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_deleteServer(serverID) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/deleteServer', {
-            id: serverID
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return 1;
-        }
-    }
-
-    async API_leaveServer(serverID) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/leaveServer', {
-            id: serverID
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_joinServer(serverID) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/joinServer', {
-            id: serverID
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_kickFromServer(serverID, userID) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/kickFromServer', {
-            server: { id: serverID }, user: { id: userID }
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return 1;
-        }
-    }
-
-    async API_createServerEmote(file, emoteName, serverID) {
-        var data = new FormData();
-        data.append("fileUploaded", file)
-
-        const reply = await axios({
-            method: 'post',
-            url: this.mainClass.state.APIEndpoint + '/createEmote?fileName=' + file.name + '&emoteName=' + emoteName + '&type=0&serverID=' + serverID,
-            processData: false,
-            contentType: false,
-            cache: false,
-            enctype: 'multipart/form-data',
-            data: data,
-            withCredentials: true
-        });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-    //#endregion
-
-    //#region Channels
-    async API_createChannel(channel) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createChannel', {
-            server: channel.server,
-            name: channel.name,
-            type: channel.type,
-            description: channel.description.length > 0 ? channel.description : undefined,
-            nsfw: channel.nsfw
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_createChannelDM(channelName, channelMembers) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createChannel', {
-            name: channelName,
-            type: 2,
-            members: channelMembers
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_removeFromDMChannel(channelID, userID) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/removeFromDMChannel', {
-            channel: { id: channelID }, user: { id: userID }
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_addToDMChannel(channelID, userID) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/addToDMChannel', {
-            channel: { id: channelID }, user: { id: userID }
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_editChannel(channel) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/editChannel', {
-            id: channel.id,
-            name: channel.name,
-            description: channel.description !== undefined && channel.description.length > 0 ? channel.description : undefined,
-            nsfw: channel.nsfw,
-            position: channel.position
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-
-    async API_deleteChannel(channelID) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/deleteChannel', {
-            id: channelID
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return 1;
-        }
-    }
-
-    async API_cloneChannel(channelID) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/cloneChannel', {
-            id: channelID
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return 1;
-        }
-    }
-
-    async API_fetchDMChannels() {
-        const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchDMChannels', { withCredentials: true }));
-        var newChannels = reply.data;
-        newChannels = new Map(newChannels.map(obj => [obj.id, obj]));
-        
-        newChannels.forEach(async(channel) => {
-            const reply2 = (await axios.post(this.mainClass.state.APIEndpoint + '/fetchChannelMessages', { id: channel.id }, { withCredentials: true }));
-            var messages = reply2.data;
-            channel.messages = messages;
-
-            var currentChannels = this.mainClass.state.channels;
-            currentChannels.set(channel.id, channel);
-            var currentIndicators = this.mainClass.state.typingIndicators;
-            currentIndicators.set(channel.id, [])
-
-            if(channel.members !== undefined) { this.API_fetchUsersForIDs(channel.members); }
-            this.API_fetchEmotesForMessages(messages)
-            this.API_fetchUsersForMessages(messages)
-            this.mainClass.setState({
-                channels: currentChannels,
-                typingIndicators: currentIndicators
-            }, () => { console.log("set dm channels"); });
-        });
-    }
-
-    async API_fetchServers() {
-        const reply0 = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchServers', { withCredentials: true }));
-        var newServers = reply0.data;
-        newServers = new Map(newServers.map(obj => [obj.id, obj]));
-        newServers.forEach(async(server) => {
-            this.API_fetchChannelsForServer(server);
-
-            this.API_fetchEmotesForIDs(server.emotes)
-            if(server.members !== undefined) { this.API_fetchUsersForIDs(server.members); }
-            this.mainClass.setState({
-                servers: newServers
-            });
-        });
-    }
-
-    async API_fetchChannelsForServer(server) {
-        const reply = (await axios.get(this.mainClass.state.APIEndpoint + '/fetchChannels?id=' + server.id, { withCredentials: true }));
-        var newChannels = reply.data;
-        newChannels = new Map(newChannels.map(obj => [obj.id, obj]));
-
-        newChannels.forEach(async(channel) => {
-            const reply2 = (await axios.post(this.mainClass.state.APIEndpoint + '/fetchChannelMessages', { id: channel.id }, { withCredentials: true }));
-            var messages = reply2.data;
-            channel.messages = messages;
-
-            var currentChannels = this.mainClass.state.channels;
-            currentChannels.set(channel.id, channel)
-            var currentIndicators = this.mainClass.state.typingIndicators;
-            currentIndicators.set(channel.id, [])
-
-            this.API_fetchEmotesForMessages(messages)
-            this.API_fetchUsersForMessages(messages)
-            this.API_fetchMentionsForMessages(messages)
-            this.mainClass.setState({
-                channels: currentChannels,
-                typingIndicators: currentIndicators
-            }, () => { console.log("set server channels"); });
-        });
-    }
-
-    async API_searchMessages(filters) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/fetchChannelMessages', {
-            id: filters.channels[0], filters: filters
-        }, { withCredentials: true });
-        
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-    //#endregion
-
-    //#region Invites
-    async API_createInvite(serverID) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/createInvite', {
-            server: { id: serverID }
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-    //#endregion
-
-    //#region Typing
     async API_typingIndicator(channelID) {
         if(this.typingTimeoutID === -1) {
             this.socket.emit('startTyping', { channel: { id: channelID } })
@@ -1341,35 +737,6 @@ export default class API {
             this.socket.emit('endTyping', { channel: { id: channelID } })
         }, 2000);
     }
-    //#endregion
-
-    //#region Notes
-    async API_editNote(targetID, text) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/editNote', {
-            author: { id: this.mainClass.state.session.userID }, target: { id: targetID }, text: text
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    }
-    //#endregion
-
-    //#region Connections
-    async API_removeConnection(type) {
-        const reply = await axios.post(this.mainClass.state.APIEndpoint + '/removeConnection', {
-            type: type
-        }, { withCredentials: true });
-
-        if(reply.data.status !== undefined) {
-            return reply.data.status;
-        } else {
-            return reply.data;
-        }
-    } 
-    //#endregion
 }
 
 export { API }

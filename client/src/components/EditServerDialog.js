@@ -58,14 +58,14 @@ export default class EditServerDialog extends React.Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    let res = await this.props.API.API_editServer(this.props.state.selectedServer, this.state.serverName);
+    let res = await this.props.API.endpoints["editServer"]({ id: this.props.state.selectedServer, name: this.state.serverName });
     this.setState({
       serverEditResult: res,
     });
 
     if(isNaN(res)) {
       if(this.state.serverAvatar !== -1) {
-        res = await this.props.API.API_updateServerAvatar(this.props.state.selectedServer, this.state.serverAvatar)
+        res = await this.props.API.endpoints["updateServerAvatar"](this.state.serverAvatar, { serverID: this.props.state.selectedServer });
         this.setState({
           serverEditResult: res,
         });
@@ -74,7 +74,7 @@ export default class EditServerDialog extends React.Component {
 
     if(isNaN(res)) {
       if(this.state.serverBanner !== -1) {
-        res = await this.props.API.API_updateServerBanner(this.props.state.selectedServer, this.state.serverBanner)
+        res = await this.props.API.endpoints["updateServerBanner"](this.state.serverBanner, { serverID: this.props.state.selectedServer });
         this.setState({
           serverEditResult: res,
         });
@@ -118,7 +118,7 @@ export default class EditServerDialog extends React.Component {
     })
 
     let emoteList = emotes.map((emote, i) => {
-      return <div key={i} className="emoteImage2 tooltipWrapper" onClick={() => { if(this.state.deletingEmotesEnabled) { this.props.API.API_deleteEmote(emote.id); } }}>
+      return <div key={i} className="emoteImage2 tooltipWrapper" onClick={() => { if(this.state.deletingEmotesEnabled) { this.props.API.endpoints["deleteEmote"]({ id: emote.id }); } }}>
         <img alt="" className="emoteImage2" src={this.props.state.fileEndpoint + "/" + emote.file} />
         {this.state.deletingEmotesEnabled ?
         <div className="emoteDeletionOverlay">

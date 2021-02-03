@@ -8,7 +8,7 @@ export default class ChannelOptionsDialog extends React.Component {
 
   handleDelete = async e => {
     e.preventDefault();
-    const res = await this.props.API.API_deleteChannel(this.props.state.selectedChannel);
+    const res = await this.props.API.endpoints["deleteChannel"]({ id: this.props.state.selectedChannel });
     this.setState({
       channelDeletionResult: res,
     });
@@ -19,7 +19,7 @@ export default class ChannelOptionsDialog extends React.Component {
 
   handleClone = async e => {
     e.preventDefault();
-    const res = await this.props.API.API_cloneChannel(this.props.state.selectedChannel);
+    const res = await this.props.API.endpoints["cloneChannel"]({ id: this.props.state.selectedChannel });
     this.setState({
       channelCloneResult: res,
     });

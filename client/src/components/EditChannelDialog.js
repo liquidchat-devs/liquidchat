@@ -3,7 +3,7 @@ import React from 'react';
 export default class EditChannelDialog extends React.Component {
   state = {
     channelName: "",
-    channelDescription: "",
+    channelDescription: undefined,
     isNSFW: false,
     channelEditResult: 0
   };
@@ -13,7 +13,7 @@ export default class EditChannelDialog extends React.Component {
     if(channel !== undefined) {
       this.setState({
         channelName: channel.name,
-        channelDescription: channel.description === undefined ? "" : channel.description,
+        channelDescription: channel.description,
         isNSFW: channel.nsfw
       })
     }
@@ -33,7 +33,7 @@ export default class EditChannelDialog extends React.Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    const res = await this.props.API.API_editChannel({
+    const res = await this.props.API.endpoints["editChannel"]({
       id: this.props.state.selectedChannel,
       name: this.state.channelName,
       description: this.state.channelDescription,
@@ -42,7 +42,7 @@ export default class EditChannelDialog extends React.Component {
     this.setState({
       channelEditResult: res,
     });
-    
+
     if(res === 1) { this.props.functions.switchDialogState(-1); }
     return true;
   }

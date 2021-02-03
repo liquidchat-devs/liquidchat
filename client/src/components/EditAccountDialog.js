@@ -14,7 +14,7 @@ export default class EditAccountDialog extends React.Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    const res = await this.props.API.API_editUser(this.state.email);
+    const res = await this.props.API.endpoints["editUser"]({ email: this.state.email });
     this.setState({
       accountEditResult: res,
     });

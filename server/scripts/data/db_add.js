@@ -16,8 +16,8 @@ module.exports = {
             console.log(" - [db] Adding User(id: " + user.id + ") into the database..."); 
         }
 
-        var query0 = "(id, username, createdAt, avatar, password, friends, dmChannels, servers, status, badges, emotes" + (user.customStatus == null ? ")" : ", customStatus)")
-        var query1 = [ user.id, db.escapeString(user.username), user.createdAt, user.avatar, user.password, user.friends.join(","), user.dmChannels.join(","), user.servers.join(","), user.status, user.badges.join(","), user.emotes.join(",") ]
+        var query0 = "(id, username, createdAt, avatar, password, friends, dmChannels, servers, userStatus, badges, emotes" + (user.customStatus == null ? ")" : ", customStatus)")
+        var query1 = [ user.id, db.escapeString(user.username), user.createdAt, user.avatar, user.password, user.friends.join(","), user.dmChannels.join(","), user.servers.join(","), user.userStatus, user.badges.join(","), user.emotes.join(",") ]
         if(user.customStatus != null) { query1.push(user.customStatus); }
 
         var query = "INSERT IGNORE INTO users " + query0 + " VALUES " + db.contructQuestionMarks(query1.length);

@@ -320,7 +320,7 @@ function formatMessage(chat, message) {
     
     if(messageFormatted.startsWith("http://nekonetwork.net/invite/")) {
         let id = messageFormatted.substring("http://nekonetwork.net/invite/".length)
-        let invite = chat.props.API.API_fetchInviteSync(id);
+        let invite = chat.props.API.endpoints["fetchInviteSync"](id);
         let author = invite === -1 ? undefined : chat.props.functions.getUser(invite.author.id);
         let server = invite === -1 ? undefined : chat.props.functions.getServer(invite.server.id);
 
@@ -337,7 +337,7 @@ function formatMessage(chat, message) {
                         </div>
                     </div>
                     <div className="button inviteButton marginleft2 margintop1b" style={server.members.includes(chat.props.state.session.userID) === false ? {} : {color: "#b3b3b3", border: "1px solid #b3b3b3", cursor: "default", position: "relative" }}
-                    onClick={() => { if(server.members.includes(chat.props.state.session.userID) === false) { chat.props.API.API_joinServer(server.id); } }}>Join</div>
+                    onClick={() => { if(server.members.includes(chat.props.state.session.userID) === false) { chat.props.API.endpoints["joinServer"]({ id: server.id }); } }}>Join</div>
                 </div>
             </div>)
             customMessage = true;

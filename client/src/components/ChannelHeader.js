@@ -17,7 +17,7 @@ export default class ChannelHeader extends React.Component {
   handleSubmit = async e => {
     e.preventDefault();
 
-    var res = await this.props.API.API_searchMessages({ channels: [ this.props.state.currentChannel ], term: this.state.searchTerm });
+    var res = await this.props.API.endpoints["searchMessages"]({ id: this.props.state.currentChannel, filters: { term: this.state.searchTerm }});
     if(isNaN(res) || res.length === 0) {
       this.props.functions.setSearches(res);
       this.props.functions.setSearchedTerm(this.state.searchTerm);

@@ -27,7 +27,7 @@ export default class Functions {
 
         switch(channel.type) {
             case 1:
-                this.mainClass.state.API.API_joinVoiceChannel(channel.id)
+                this.mainClass.state.API.endpoints["joinVoiceChannel"]({ id: channel.id })
                 break;
 
             default:
@@ -147,7 +147,7 @@ export default class Functions {
         channels.splice(newIndex, 0, channels.splice(oldIndex, 1)[0]);
         channels.forEach((c, index) => {
             c.position = index;
-            this.mainClass.state.API.API_editChannel({
+            this.mainClass.state.API.endpoints["editChannel"]({
                 id: c.id,
                 position: index
             });

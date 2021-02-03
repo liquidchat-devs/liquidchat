@@ -14,7 +14,7 @@ export default class AddFriendsDialog extends React.Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    const res = await this.props.API.API_sendFriendRequestByUsername(this.state.friendUsername);
+    const res = await this.props.API.endpoints["sendFriendRequestByUsername"]({ target: { username: this.state.friendUsername }});
     this.setState({
       friendRequestResult: res,
     });

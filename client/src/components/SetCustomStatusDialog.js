@@ -23,7 +23,7 @@ export default class SetCustomStatusDialog extends React.Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    const res = await this.props.API.API_updateCustomStatus(this.state.status);
+    const res = await this.props.API.endpoints["updateCustomStatus"]({ customStatus: this.state.status });
     this.setState({
         statusChangeResult: res,
     });

@@ -10,13 +10,13 @@ export default class InviteFriendsDialog extends React.Component {
     let res = -1;
     switch(type) {
       case 0:
-        res = await this.props.API.API_addToDMChannel(id, userID);
+        res = await this.props.API.endpoints["addToDMChannel"]({ channel: id, user: userID });
         break;
 
       case 1:
-        res = await this.props.API.API_createInvite(id);
+        res = await this.props.API.endpoints["createInvite"]({ server: { id: id }});
         if(isNaN(res)) {
-          res = await this.props.API.API_sendDM(userID, 'http://nekonetwork.net/invite/' + res.id);
+          res = await this.props.API.endpoints["sendDM"]({ user: { id: userID }, text: 'http://nekonetwork.net/invite/' + res.id });
           this.setState({
             invitationResult: res,
           });
@@ -36,7 +36,11 @@ export default class InviteFriendsDialog extends React.Component {
           });
         }
         break;
+
+      default:
+        break;
     }
+
     return true;
   }
 

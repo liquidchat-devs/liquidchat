@@ -35,11 +35,14 @@ export default class CreateEmoteDialog extends React.Component {
     let res = -1;
     switch(this.props.type) {
       case 1:
-        res = await this.props.API.API_createEmote(this.state.emoteAvatar, this.state.emoteName);
+        res = await this.props.API.endpoints["createEmote"](this.state.emoteAvatar, { emoteName: this.state.emoteName, type: 1 });
         break;
 
       case 0:
-        res = await this.props.API.API_createServerEmote(this.state.emoteAvatar, this.state.emoteName, this.props.state.selectedServer);
+        res = await this.props.API.endpoints["createServerEmote"](this.state.emoteAvatar, { emoteName: this.state.emoteName, serverID: this.props.state.selectedServer, type: 0 });
+        break;
+
+      default:
         break;
     }
 

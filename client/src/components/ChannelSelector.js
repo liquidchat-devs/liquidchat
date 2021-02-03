@@ -9,11 +9,11 @@ export default class ChannelSelector extends React.Component {
   }
 
   acceptFriendRequest(id) {
-    this.props.API.API_acceptFriendRequest(id);
+    this.props.API.endpoints["acceptFriendRequest"]({ id: id });
   }
 
   declineFriendRequest(id) {
-    this.props.API.API_declineFriendRequest(id);
+    this.props.API.endpoints["declineFriendRequest"]({ id: id });
   }
 
   render() {
@@ -226,7 +226,10 @@ export default class ChannelSelector extends React.Component {
                   </div>
                 }
               </div>
-              <div className="white chatColor channel alignmiddle" onClick={() => { this.props.API.API_leaveVoiceChannel(voiceGroupChannel); }}>
+              <div className="white chatColor channel alignmiddle" onClick={() => {
+                  this.props.API.endpoints["leaveVoiceChannel"]({ channel: { id: voiceGroupChannel }});
+                  this.mainClass.setState({ currentVoiceGroup: -1 });
+                }}>
                 <p className="white declineColor text1">&gt; Disconnect</p>
               </div>
             </div> : null
@@ -244,7 +247,7 @@ export default class ChannelSelector extends React.Component {
             <div className="account">
               <img alt="" className="marginleft2 avatar pointer" src={this.props.state.fileEndpoint + "/" + loggedUser.avatar} onContextMenu={(e) => { this.props.functions.switchDialogState(4); this.props.functions.setBox(e.pageX, e.pageY); e.preventDefault(); }} onClick={(e) => { this.props.functions.switchDialogState(22); this.props.functions.setBox(e.currentTarget.getBoundingClientRect().left, e.currentTarget.getBoundingClientRect().top - 20); e.preventDefault(); }}/>
               <div className="statusWrapper2 statusBorder">
-                <div className="status2" style={{ backgroundColor: this.props.const.getStatusColor(loggedUser.status) }}/>
+                <div className="status2" style={{ backgroundColor: this.props.const.getStatusColor(loggedUser.userStatus) }}/>
               </div>
               <div className="flex marginleft2">
                 <div>
@@ -253,7 +256,7 @@ export default class ChannelSelector extends React.Component {
                 </div>
               </div>
             </div>
-            <div className="button settingsButton marginleft2" style={{ width: 28, height: 28, position: "relative", transform: "scale(0.85)" }} onClick={() => { this.props.API.API_logout(); }}>
+            <div className="button settingsButton marginleft2" style={{ width: 28, height: 28, position: "relative", transform: "scale(0.85)" }} onClick={() => { this.props.API.endpoints["logout"]({}); }}>
               <svg width="24" height="24" viewBox="0 0 24 24"><path strokeWidth="5" fill="none" d="M0 0h24v24H0z"/><path strokeWidth="5" d="M4 18h2v2h12V4H6v2H4V3a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3zm2-7h7v2H6v3l-5-4 5-4v3z" fill="rgba(255,97,97,1)"/></svg>
             </div>
             <div className="button settingsButton marginleft2" style={{ width: 28, height: 28, position: "relative", transform: "scale(0.85)" }} onClick={() => { this.props.functions.switchDialogState(13) }}>

@@ -9,7 +9,7 @@ export default class LoginForm extends React.Component {
     };
   
     componentDidMount = async() => {
-      const res = await this.props.API.API_login("", "", "autologin");
+      const res = await this.props.API.endpoints["login"]({ username: this.state.username, password: this.state.password, authType: "autologin" });
       this.setState({
         loginResult: res,
       });
@@ -23,7 +23,7 @@ export default class LoginForm extends React.Component {
   
     handleSubmit = async e => {
       e.preventDefault();
-      const res = await this.props.API.API_login(this.state.username, this.state.password, "default");
+      const res = await this.props.API.endpoints["login"]({ username: this.state.username, password: this.state.password, authType: "default" });
       this.setState({
         loginResult: res,
       });

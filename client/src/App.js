@@ -202,12 +202,10 @@ class App extends React.Component {
       if(droppedFiles.length < 1) { return; }
 
       var file = droppedFiles[0];
-      this.state.API.API_sendFile(file, "")
+      this.state.API.endpoints["sendFile"](file, { text: "" });
       this.setState({ isFileDraggingOver: false });
     }
   }.bind(this);
-
-  
 
   render() {
     let server = this.state.functions.getServer(this.state.selectedServer)

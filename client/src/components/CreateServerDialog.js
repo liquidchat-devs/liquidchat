@@ -31,14 +31,14 @@ export default class CreateServerDialog extends React.Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    let res = await this.props.API.API_createServer(this.state.serverName);
+    let res = await this.props.API.endpoints["createServer"]({ name: this.state.serverName });
     this.setState({
       serverCreationResult: res,
     });
     
     if(isNaN(res)) {
       if(this.state.serverAvatar !== -1) {
-        res = await this.props.API.API_updateServerAvatar(res.id, this.state.serverAvatar)
+        res = await this.props.API.endpoints["updateServerAvatar"](this.state.serverAvatar, { serverID: res.id })
         this.setState({
           serverCreationResult: res,
         });

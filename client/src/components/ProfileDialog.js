@@ -18,7 +18,7 @@ export default class ProfileDialog extends React.Component {
 
   handleNote = async e => {
     e.preventDefault();
-    this.props.API.API_editNote(this.props.state.selectedUser, this.state.note);
+    this.props.API.endpoints["editNote"]({ author: { id: this.props.state.session.userID }, target: { id: this.props.state.selectedUser }, text: this.state.note });
   }
 
   handleNoteChange = e => {
@@ -144,8 +144,8 @@ export default class ProfileDialog extends React.Component {
               <div className="flex marginleft3 paddingtop3">
                 <img alt="" className="avatar2" src={this.props.state.fileEndpoint + "/" + selectedUser.avatar}/>
                 <div className="tooltipWrapper statusWrapper">
-                  <div className="status" style={{ backgroundColor: this.props.const.getStatusColor(selectedUser.status) }}/>
-                  <span className="tooltipText tooltipText2">{selectedUser.status === 1 ? "Online" : "Offline"}</span>
+                  <div className="status" style={{ backgroundColor: this.props.const.getStatusColor(selectedUser.userStatus) }}/>
+                  <span className="tooltipText tooltipText2">{selectedUser.userStatus === 1 ? "Online" : "Offline"}</span>
                 </div>
                 <div className="marginleft3">
                   <div className="flex margintop1">

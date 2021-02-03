@@ -2,23 +2,23 @@ import React from 'react';
 
 export default class ProfileOptionsDialog extends React.Component {
   sendFriendRequest(id) {
-    this.props.API.API_sendFriendRequest(id);
+    this.props.API.endpoints["sendFriendRequest"]({ id: id });
   }
 
   removeFriend(id) {
-    this.props.API.API_removeFriend(id);
+    this.props.API.endpoints["removeFriend"]({ id: id });
   }
 
-  removeFromDMChannel(channelID, id) {
-    this.props.API.API_removeFromDMChannel(channelID, id);
+  removeFromDMChannel(channelID, userID) {
+    this.props.API.endpoints["removeFromDMChannel"]({ channel: { id: channelID }, user: { id: userID } });
   }
 
-  removeFromServer(serverID, id) {
-    this.props.API.API_kickFromServer(serverID, id);
+  removeFromServer(serverID, userID) {
+    this.props.API.endpoints["kickFromServer"]({ server: { id: serverID }, user: { id: userID }});
   }
 
   async dmUser(id) {
-    var channel = await this.props.API.API_getSuitableDMChannel(id);
+    var channel = await this.props.API.endpoints["getSuitableDMChannel"](id);
     if(channel !== undefined) {
       this.props.functions.switchDialogState(0);
       this.props.functions.switchChannelTypes(1);

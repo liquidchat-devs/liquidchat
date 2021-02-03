@@ -139,7 +139,7 @@ class Util {
 
                 var session = this.app.sessions.get(cookies['sessionID']);
                 var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
-                user.status = 1;
+                user.userStatus = 1;
                 await this.app.epFunc.updateUser(user, true);
 
                 socket.on('message', async(data, callback) => {
@@ -148,7 +148,7 @@ class Util {
 
                 socket.on('disconnect', async function() {
                     var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
-                    user.status = 0;
+                    user.userStatus = 0;
                     await this.app.epFunc.updateUser(user, true);
                 }.bind(this));
 

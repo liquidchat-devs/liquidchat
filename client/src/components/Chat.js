@@ -8,15 +8,15 @@ export default class Chat extends React.Component {
       this["video" + type] = element;
     };
     
-    await this.props.API.API_fetchFriendRequests();
-    await this.props.API.API_fetchServers();
-    this.props.API.API_fetchDMChannels();
+    await this.props.API.endpoints["fetchFriendRequests"]({});
+    await this.props.API.endpoints["fetchServers"]({});
+    await this.props.API.endpoints["fetchDMChannels"]({});
   }
 
   handleEdit = async e => {
     e.preventDefault();
 
-    const res = await this.props.API.API_editMessage(this.props.state.editingMessage.id, this.props.state.editedMessage)
+    const res = await this.props.API.endpoints["editMessage"]({ id: this.props.state.editingMessage.id, text: this.props.state.editedMessage })
     if(res === 1) {
       this.props.setEditedMesage("");
     }
@@ -136,7 +136,7 @@ export default class Chat extends React.Component {
           <div className="flex marginleft2">
             <img alt="" className="avatar3" src={this.props.state.fileEndpoint + "/" + user.avatar}/>
             <div className="statusWrapper2">
-              <div className="status2" style={{ backgroundColor: this.props.const.getStatusColor(user.status) }}/>
+              <div className="status2" style={{ backgroundColor: this.props.const.getStatusColor(user.userStatus) }}/>
             </div>
             <div className="marginleft2">
               <div className="flex">

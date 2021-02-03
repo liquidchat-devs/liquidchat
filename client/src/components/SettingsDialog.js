@@ -11,7 +11,7 @@ export default class SettingsDialog extends React.Component {
     
     var file = e.target.files[0];
     e.target.value = ""
-    const res = await this.props.API.API_updateAvatar(file)
+    const res = await this.props.API.endpoints["updateAvatar"](file, {})
     this.setState({
       avatarChangeResult: res,
     });
@@ -54,7 +54,7 @@ export default class SettingsDialog extends React.Component {
     })
 
     let emoteList = emotes.map((emote, i) => {
-      return <div key={i} className="emoteImage2 tooltipWrapper" onClick={() => { if(this.state.deletingEmotesEnabled) { this.props.API.API_deleteEmote(emote.id); } }}>
+      return <div key={i} className="emoteImage2 tooltipWrapper" onClick={() => { if(this.state.deletingEmotesEnabled) { this.props.API.endpoints["deleteEmote"]({ id: emote.id }); } }}>
           <img alt="" className="emoteImage2" src={this.props.state.fileEndpoint + "/" + emote.file} />
           {this.state.deletingEmotesEnabled ?
           <div className="emoteDeletionOverlay">
@@ -68,37 +68,37 @@ export default class SettingsDialog extends React.Component {
     let connections = [];
     let connectionButtons = [];
     if(loggedUser.connections.github !== undefined) {
-      connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/ujDmtl.png", loggedUser.connections.github.username, () => { this.props.API.API_removeConnection("gh"); }))
+      connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/ujDmtl.png", loggedUser.connections.github.username, () => { this.props.API.endpoints["removeConnection"]({ type: "gh" }); }))
     } else {
       connectionButtons.push(this.getConnectionButton("https://qtlamkas.why-am-i-he.re/ujDmtl.png", "Github", "https://github.com/login/oauth/authorize?client_id=91bcd730211830731d9a"));
     }
     if(loggedUser.connections.reddit !== undefined) {
-      connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/4LiOlB.png", loggedUser.connections.reddit.username, () => { this.props.API.API_removeConnection("reddit"); }))
+      connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/4LiOlB.png", loggedUser.connections.reddit.username, () => { this.props.API.endpoints["removeConnection"]({ type: "reddit" }); }))
     } else {
       connectionButtons.push(this.getConnectionButton("https://qtlamkas.why-am-i-he.re/4LiOlB.png", "Reddit", "https://www.reddit.com/api/v1/authorize?client_id=g8QfIB742iwMKw&response_type=code&state=a&redirect_uri=https://nekonetwork.net:8080/auth_reddit&duration=permanent&scope=identity"));
     }
     if(loggedUser.connections.osu !== undefined) {
-      connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/AJj49O.png", loggedUser.connections.osu.username, () => { this.props.API.API_removeConnection("osu"); }))
+      connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/AJj49O.png", loggedUser.connections.osu.username, () => { this.props.API.endpoints["removeConnection"]({ type: "osu" }); }))
     } else {
       connectionButtons.push(this.getConnectionButton("https://qtlamkas.why-am-i-he.re/AJj49O.png", "Osu!", "https://osu.ppy.sh/oauth/authorize?client_id=4883&redirect_uri=https://nekonetwork.net:8080/auth_osu&response_type=code&scope=public"));
     }
     if(loggedUser.connections.twitch !== undefined) {
-      connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/VZ5PN5.png", loggedUser.connections.twitch.username, () => { this.props.API.API_removeConnection("twitch"); }))
+      connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/VZ5PN5.png", loggedUser.connections.twitch.username, () => { this.props.API.endpoints["removeConnection"]({ type: "twitch" }); }))
     } else {
       connectionButtons.push(this.getConnectionButton("https://qtlamkas.why-am-i-he.re/VZ5PN5.png", "Twitch", "https://id.twitch.tv/oauth2/authorize?client_id=3oxkg8rjxqox7kkx4qu9b7d441mzse&redirect_uri=https://nekonetwork.net:8080/auth_twitch&response_type=code&scope=user:read:email"));
     }
     if(loggedUser.connections.spotify !== undefined) {
-      connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/XgHLDJ.png", loggedUser.connections.spotify.username, () => { this.props.API.API_removeConnection("spotify"); }))
+      connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/XgHLDJ.png", loggedUser.connections.spotify.username, () => { this.props.API.endpoints["removeConnection"]({ type: "spotify" }); }))
     } else {
       connectionButtons.push(this.getConnectionButton("https://qtlamkas.why-am-i-he.re/XgHLDJ.png", "Spotify", "https://accounts.spotify.com/authorize?client_id=d10fc3159d9c4c3ea3c307df4b04ca43&redirect_uri=https://nekonetwork.net:8080/auth_spotify&response_type=code"));
     }
     if(loggedUser.connections.blizzard !== undefined) {
-      connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/3QuD8o.png", loggedUser.connections.blizzard.username, () => { this.props.API.API_removeConnection("blizzard"); }))
+      connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/3QuD8o.png", loggedUser.connections.blizzard.username, () => { this.props.API.endpoints["removeConnection"]({ type: "blizzard" }); }))
     } else {
       connectionButtons.push(this.getConnectionButton("https://qtlamkas.why-am-i-he.re/3QuD8o.png", "Blizzard", "https://us.battle.net/oauth/authorize?client_id=24428d45ed4b42448c9a33f1161585c5&redirect_uri=https://nekonetwork.net:8080&response_type=code&scope=openid"));
     }
     if(loggedUser.connections.discord !== undefined) {
-      connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/XfNe77.png", loggedUser.connections.discord.username, () => { this.props.API.API_removeConnection("discord"); }))
+      connections.push(this.getConnection("https://qtlamkas.why-am-i-he.re/XfNe77.png", loggedUser.connections.discord.username, () => { this.props.API.endpoints["removeConnection"]({ type: "discord" }); }))
     } else {
       connectionButtons.push(this.getConnectionButton("https://qtlamkas.why-am-i-he.re/XfNe77.png", "Discord", "https://discord.com/api/oauth2/authorize?client_id=803587850762453072&redirect_uri=https://nekonetwork.net:8080/auth_discord&response_type=code&scope=identify"));
     }

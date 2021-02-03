@@ -51,7 +51,7 @@ class Endpoint {
         var user = await this.app.db.db_fetch.fetchUser(this.app.db, session.userID);
 
         let availableStatuses = [0, 1, 2, 3]
-        if(_user.status !== undefined && availableStatuses.includes(_user.status) === false) {
+        if(_user.userStatus !== undefined && availableStatuses.includes(_user.userStatus) === false) {
             res.send(JSON.stringify({ error: -1 }))
             return;
         }
@@ -72,7 +72,7 @@ class Endpoint {
         user.discord_token = _user.discord_token !== undefined ? _user.discord_token : user.discord_token;
        
         user.email = _user.email !== undefined ? _user.email : user.email;
-        user.status = _user.status !== undefined ? _user.status : user.status;
+        user.userStatus = _user.userStatus !== undefined ? _user.userStatus : user.userStatus;
         user.customStatus = _user.customStatus !== undefined ? _user.customStatus : user.customStatus;
         this.updateUser(user, true);
 

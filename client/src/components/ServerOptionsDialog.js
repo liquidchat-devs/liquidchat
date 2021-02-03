@@ -7,7 +7,7 @@ export default class ServerOptionsDialog extends React.Component {
 
   handleDelete = async e => {
     e.preventDefault();
-    const res = await this.props.API.API_deleteServer(this.props.state.selectedServer);
+    const res = await this.props.API.endpoints["deleteServer"]({ id: this.props.state.selectedServer });
     this.setState({
       serverDeletionResult: res,
     });
@@ -32,7 +32,7 @@ export default class ServerOptionsDialog extends React.Component {
             </div> :
             ""
           }
-          {this.props.elements.getContextButton("Leave Server", (e) => { this.props.API.API_leaveServer(server.id); }, "var(--color8)")}
+          {this.props.elements.getContextButton("Leave Server", (e) => { this.props.API.endpoints["leaveServer"]({ id: server.id }); }, "var(--color8)")}
           {server.author.id === this.props.state.session.userID ? this.props.elements.getContextButton("Delete Server", (e) => { this.handleDelete(e); }, "var(--color8)") : "" }
           {this.props.elements.getContextButton("Copy ID", (e) => { this.props.functions.copyID(server.id); })}
         </div>

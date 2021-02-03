@@ -17,7 +17,7 @@ export default class RegisterForm extends React.Component {
   
     handleSubmit = async e => {
       e.preventDefault();
-      const res = await this.props.API.API_register(this.state.username, this.state.password, this.state.password2);
+      const res = await this.props.API.endpoints["register"]({ username: this.state.username, password: this.state.password, password2: this.state.password2 });
       this.setState({
         registerResult: res,
       });

@@ -3,7 +3,7 @@ import React from 'react';
 export default class CreateChannelDialog extends React.Component {
   state = {
     channelName: "",
-    channelDescription: "",
+    channelDescription: undefined,
     channelType: 0,
     isNSFW: false,
     channelCreationResult: 0
@@ -29,7 +29,7 @@ export default class CreateChannelDialog extends React.Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    const res = await this.props.API.API_createChannel({
+    const res = await this.props.API.endpoints["createChannel"]({
       server: { id: this.props.state.selectedServer },
       name: this.state.channelName, 
       type: this.state.channelType,
