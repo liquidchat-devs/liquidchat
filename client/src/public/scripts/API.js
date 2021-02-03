@@ -372,14 +372,21 @@ export default class API {
     }
 
     createAPIFileEndpoint(path, type, returnsData) {
-        var endpoint = async(file, data) => {
+        var endpoint = async(file, formFields, data) => {
+            let formData = new FormData();
+            formData.append("fileUploaded", file);
+            for (let key in formFields) {
+                formData.append(key, formFields[key]);
+            }
+
+            data.fileName = file.name;
             var reply = await this.lc_fetch(this.mainClass.state.APIEndpoint + path + this.createQuery(data), {
                 method: type,
                 headers: {
                     "Origin": "https://nekonetwork.net",
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
+                    'Accept': 'application/json'
+                },
+                body: formData
             });
             reply = await reply.json();
 

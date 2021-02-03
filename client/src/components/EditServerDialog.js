@@ -65,7 +65,7 @@ export default class EditServerDialog extends React.Component {
 
     if(isNaN(res)) {
       if(this.state.serverAvatar !== -1) {
-        res = await this.props.API.endpoints["updateServerAvatar"](this.state.serverAvatar, { serverID: this.props.state.selectedServer });
+        res = await this.props.API.endpoints["updateServerAvatar"](this.state.serverAvatar, {}, { serverID: this.props.state.selectedServer });
         this.setState({
           serverEditResult: res,
         });
@@ -74,7 +74,7 @@ export default class EditServerDialog extends React.Component {
 
     if(isNaN(res)) {
       if(this.state.serverBanner !== -1) {
-        res = await this.props.API.endpoints["updateServerBanner"](this.state.serverBanner, { serverID: this.props.state.selectedServer });
+        res = await this.props.API.endpoints["updateServerBanner"](this.state.serverBanner, {}, { serverID: this.props.state.selectedServer });
         this.setState({
           serverEditResult: res,
         });

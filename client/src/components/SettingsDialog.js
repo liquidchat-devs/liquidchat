@@ -11,7 +11,7 @@ export default class SettingsDialog extends React.Component {
     
     var file = e.target.files[0];
     e.target.value = ""
-    const res = await this.props.API.endpoints["updateAvatar"](file, {})
+    const res = await this.props.API.endpoints["updateAvatar"](file, {}, {})
     this.setState({
       avatarChangeResult: res,
     });

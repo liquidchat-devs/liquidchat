@@ -87,7 +87,7 @@ export default class Send extends React.Component {
     
     var file = e.target.files[0];
     e.target.value = ""
-    if(await this.props.API.endpoints["sendFile"](file, { text: this.state.message })) {
+    if(await this.props.API.endpoints["sendFile"](file, { "text": this.state.message, "channel.id": this.props.state.currentChannel }, {})) {
       this.setState({
         message: "",
       });

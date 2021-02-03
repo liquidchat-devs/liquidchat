@@ -38,7 +38,7 @@ export default class ServerDiscoveryDialog extends React.Component {
     
     if(isNaN(res)) {
       if(this.state.serverAvatar !== -1) {
-        res = await this.props.API.endpoints["updateServerAvatar"](this.state.serverAvatar, { serverID: res.id })
+        res = await this.props.API.endpoints["updateServerAvatar"](this.state.serverAvatar, {}, { serverID: res.id })
         this.setState({
           serverCreationResult: res,
         });

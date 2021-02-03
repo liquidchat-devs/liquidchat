@@ -71,8 +71,8 @@ class App extends React.Component {
 
     //API
     API: new API(this),
-    APIEndpoint: "http://localhost:8080",
-    fileEndpoint: "http://localhost:8081",
+    APIEndpoint: "https://nekonetwork.net:8080",
+    fileEndpoint: "https://nekonetwork.net:8081",
     
     //Utils
     const: new Constants(this),
@@ -202,7 +202,7 @@ class App extends React.Component {
       if(droppedFiles.length < 1) { return; }
 
       var file = droppedFiles[0];
-      this.state.API.endpoints["sendFile"](file, { text: "" });
+      this.state.API.endpoints["sendFile"](file, { "text": "", "channel.id": this.props.state.currentChannel }, {});
       this.setState({ isFileDraggingOver: false });
     }
   }.bind(this);
