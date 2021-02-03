@@ -30,7 +30,7 @@ Open-source chat application similar to Discord-
 
 
 🏁 **Features:**
-- [x] Servers with Text Channels
+- [x] Servers with Text and Voice Channels
 - [x] DM Channels
 - [x] Group Chats
 - [x] File Support (up to 100MB by default)
@@ -39,9 +39,13 @@ Open-source chat application similar to Discord-
 - [x] Idle/DND/Invisible Status
 - [x] Custom Statuses
 - [x] Friend Features (Adding/Removing friends)
+- [x] Searches, Pinned Messages, Connections, Notes
+- [x] Server banners and animated avatars for free
 - [ ] Better Server Management (Built-in bans, mutes, assigning server moderators)
 - [ ] Server Discovery
 - [ ] Voice Channels
+- [ ] Android/IOS Support
+- [ ] Rich Presence
 - [ ]  a lot more...
 
 
@@ -75,18 +79,24 @@ run <b>yarn start</b>
       /keys
       <a href="https://pastebin.com/zXxF1PGx">server.js</a>
   
- 2) Get a certificate and key for your server's domain, if you don't have one already
- 3) Put key.pem and cert.pem into each /keys directories
- 4) Run <b>sudo lc-full.sh /home/YOUR_USERNAME/lc/</b>
+ 2) (Alternative, but recommended) Get a certificate and key for your server's domain, if you don't have one already
+ 3) (Alternative, but recommended) Put key.pem and cert.pem into each /keys directories
+ 4) You will need MySQL installed so do it if you don't have it already (<a href="https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04">for Ubuntu here</a>)
+ 5) Import the MySQL template file from here to create the needed datebase structure (will add later™)
+ 6) Create a /data folder in liquidchat/server and a file named config_persistent.txt
+ 7) Edit this file to fit the format (will add later™)
+ 8) Run <b>sudo lc-full.sh /home/YOUR_USERNAME/lc/</b>
 </pre>
 
-##### d) How to deploy web versions
+##### d) How to deploy web versions...
 <pre>
 1) On your local machine, in the /client directory run <b>npm run build</b>
 2) Zip all the files in the /client/build folder (not the folder) into a file named build.zip
 3) Place this file into /lc folder on your server
 4) Restart your server (that'll unpack the assets from build.zip and place them into /liquidchat-web/public)
 </pre>
+
+##### or alternatively use Github Actions where web versions are built automatically
 
 ##### f) Additional setup
 <pre>
@@ -95,9 +105,15 @@ change <b>fileEnpoint</b> in /client/App.js to your server's domain:8081
 change <b>filesStorage</b> in /server/server.js to directory where you run your file server 
 </pre>
 
-### Example Screenshots:  
-> Client (2020/10/11)
-![example1](https://qtlamkas.why-am-i-he.re/4h4YAh.png)
+##### g) Known issues
+<pre>
+if using the insecure useHTTP flag, websocket sessions can't exchange browser cookies,
+so server uses the first logged in session
+</pre>
 
-> Documentation (2020/10/11)
-![example2](https://qtlamkas.why-am-i-he.re/3LsFwA.png)
+### Example Screenshots:  
+> Client (2021/2/1)
+![example1](https://qtlamkas.why-am-i-he.re/5X3X1x.png)
+
+> Documentation (2021/2/1)
+![example2](https://qtlamkas.why-am-i-he.re/RL0Ksh.png)
