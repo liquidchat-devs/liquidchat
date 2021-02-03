@@ -60,7 +60,7 @@ class Util {
         this.app.DatabaseManager = require('./data/db_manager');
         this.app.db = new this.app.DatabaseManager(this.app, this.app.sql, conn);
 
-        var origins = ["http://localhost:3000", "http://nekonetwork.net", "https://nekonetwork.net"]
+        var origins = ["http://localhost:3000", "https://nekonetwork.net"]
         var corsOptionsDelegate = function (req, callback) {
             var corsOptions;
             if (origins.indexOf(req.header('Origin')) !== -1) {
@@ -118,7 +118,7 @@ class Util {
         this.app.io = require('socket.io')(this.app.server, {
             allowRequest: (req, callback) => {
                 let origin = req.headers.origin;
-                if (origin !== 'http://localhost:3000' && origin !== 'http://nekonetwork.net' && origin !== 'https://nekonetwork.net') {
+                if (origin !== 'http://localhost:3000' && origin !== 'https://nekonetwork.net' && origin !== 'https://nekonetwork.net:8080') {
                     return callback('origin not allowed', false);
                 }
 
